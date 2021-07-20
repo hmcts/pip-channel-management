@@ -24,7 +24,8 @@ public class GlobalExceptionHandler {
      * @return The error response, modelled using the ExceptionResponse object.
      */
     @ExceptionHandler(ChannelNotFoundException.class)
-    ResponseEntity<ExceptionResponse> handleChannelNotFound(ChannelNotFoundException ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponse> handleChannelNotFound(
+        ChannelNotFoundException ex, WebRequest request) {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
