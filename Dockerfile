@@ -8,4 +8,4 @@ COPY lib/AI-Agent.xml /opt/app/
 COPY build/libs/$APP /opt/app/
 
 EXPOSE 4550
-CMD [ "pip-subscription-management.jar" ]
+CMD [ "pip-channel-management.jar" ]
