@@ -5,10 +5,10 @@ import uk.gov.hmcts.reform.demo.errorhandling.exceptions.ChannelNotFoundExceptio
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ChannelNotFoundExceptionTest {
+class ChannelNotFoundExceptionTest {
 
     @Test
-    public void testCreationOfSubscriptionNotFoundException() {
+    void testCreationOfSubscriptionNotFoundException() {
 
         ChannelNotFoundException subscriptionNotFoundException
             = new ChannelNotFoundException("This is a test message");
