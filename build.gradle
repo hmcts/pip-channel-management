@@ -169,6 +169,9 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
 
+  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.0.0'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
   implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
