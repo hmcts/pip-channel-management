@@ -15,7 +15,6 @@ public class SpringSecurityConfigTest {
     @Test
     public void testSpringSecurityConfigCreation() {
         SpringSecurityConfig springSecurityConfig = new SpringSecurityConfig();
-        springSecurityConfig
         assertNotNull(springSecurityConfig, "Spring security config class not created");
     }
 
