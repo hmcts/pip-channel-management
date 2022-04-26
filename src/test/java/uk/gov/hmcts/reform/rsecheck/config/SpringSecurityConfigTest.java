@@ -5,7 +5,7 @@ import uk.gov.hmcts.reform.demo.config.SpringSecurityConfig;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SpringSecurityConfigTest {
+class SpringSecurityConfigTest {
 
     /**
      * This test checks the creation of the config. Ideally this test isn't needed and we would just test the configure
@@ -13,7 +13,7 @@ public class SpringSecurityConfigTest {
      * this file globally, this test has been added as a placeholder.
      */
     @Test
-    public void testSpringSecurityConfigCreation() {
+    void testSpringSecurityConfigCreation() {
         SpringSecurityConfig springSecurityConfig = new SpringSecurityConfig();
         assertNotNull(springSecurityConfig, "Spring security config class not created");
     }
