@@ -9,10 +9,10 @@ java:
       resourceGroup: pip-ss-{{ .Values.global.environment }}-rg
       usePodIdentity: true
       secrets:
-        - name: app-pip-channel-management-stg-id
+        - name: app-pip-channel-management-id
           alias: CLIENT_ID
         - name: app-tenant-id
           alias: TENANT_ID
-        - name: app-pip-channel-management-stg-api-id
+        - name: app-pip-channel-management-scope
           alias: APP_URI
   environment:
