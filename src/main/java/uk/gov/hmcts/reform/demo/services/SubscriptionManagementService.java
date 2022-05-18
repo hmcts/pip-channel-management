@@ -8,40 +8,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
+import uk.gov.hmcts.reform.demo.models.Subscription;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Component
 public class SubscriptionManagementService {
 
-    @Autowired
-    private WebClient webClient;
-
-    @Value("${service-to-service.subscription-management}")
-    private String url;
-
-
-    public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
-        try {
-            Map<String, Optional<String>> returnedMap = webClient.post().uri(new URI(String.format(
-                    "%s/account/emails/", url))).body(BodyInserters.fromValue(listOfUserIds))
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, Optional<String>>>() {}).block();
-            if (returnedMap.size() == 0){
-                return null;
+    public Map<String, List<Subscription>> deduplicateSubscriptions(List<Subscription> listOfSubs) {
+        Map<String, List<Subscription>> mapOfSubscriptions = new HashMap<>();
+        listOfSubs.forEach(subscription -> {
+            List<Subscription> currentList = new ArrayList<>();
+            if (mapOfSubscriptions.get(subscription.getUserId()) != null) {
+                    currentList = mapOfSubscriptions.get(subscription.getUserId());
             }
-
-        } catch (WebClientException | URISyntaxException ex) {
-            log.error("Account management request failed for this map. Response: {}",
-                      ex.getMessage()
-            );
-            return null;
-        }
-        return null;
+            currentList.add(subscription);
+            mapOfSubscriptions.put(subscription.getUserId(), currentList);
+        });
+        return mapOfSubscriptions;
     }
+
+
 }
