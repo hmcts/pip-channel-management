@@ -173,9 +173,12 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
   implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
+
+  implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
 
   implementation 'org.apache.tomcat.embed:tomcat-embed-core:9.0.58'
   implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:9.0.58'

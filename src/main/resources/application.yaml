@@ -51,3 +51,6 @@ spring:
 azure:
   application-insights:
     instrumentation-key: ${rpe.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
+service-to-service:
+  account-management: ${ACCOUNT_MANAGEMENT_URL:https://pip-publication-services.staging.platform.hmcts.net}
+  subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-publication-services.staging.platform.hmcts.net}
