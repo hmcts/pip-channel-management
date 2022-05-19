@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 /*Configures the Web Client that is used in requests to external services.*/
 @Configuration
-@Profile({"!test", "!non-async"})
 @EnableAsync
 public class WebClientConfig {
 

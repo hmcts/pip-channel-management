@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @Api(tags = "Account management API")
 @RequestMapping("/account")
-public class AccountManagementController {
+public class SubscriptionManagementController {
 
     @Autowired
     AccountManagementService accountManagementService;
