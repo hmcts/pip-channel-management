@@ -18,11 +18,10 @@ import uk.gov.hmcts.reform.demo.services.AccountManagementService;
 import uk.gov.hmcts.reform.demo.services.SubscriptionManagementService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RestController
@@ -42,7 +41,8 @@ public class AccountManagementController {
     })
     @ApiOperation("Takes in artefact to build subscriber list.")
     @PostMapping("/emails")
-    public ResponseEntity<Map<String, List<Subscription>>> buildSubscriberList(@RequestBody List<Subscription> listOfSubscriptions){
+    public ResponseEntity<Map<String, List<Subscription>>> buildSubscriberList(
+        @RequestBody List<Subscription> listOfSubscriptions) {
         log.info(String.format("Received a list of subscribers of length %s", listOfSubscriptions.size()));
 
         Map<String, List<Subscription>> mappedSubscriptions =
@@ -51,17 +51,16 @@ public class AccountManagementController {
         List<String> userIds = new ArrayList<>(mappedSubscriptions.keySet());
 
         Map<String, Optional<String>> mapOfUsersAndEmails = accountManagementService.getEmails(userIds);
-        if (mapOfUsersAndEmails == null){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mappedSubscriptions);
+        if (mapOfUsersAndEmails.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mappedSubscriptions);
         }
-        Map<String, List<Subscription>> cloneMap = new HashMap<>(mappedSubscriptions);
+        Map<String, List<Subscription>> cloneMap = new ConcurrentHashMap<>(mappedSubscriptions);
 
         cloneMap.forEach((userId, subscriptions) -> {
 
-            if(mapOfUsersAndEmails.get(userId).isEmpty()) {
+            if (mapOfUsersAndEmails.get(userId).isEmpty()) {
                 log.info(userId + "- no email found.");
-            }
-            else {
+            } else {
                 mappedSubscriptions.put(mapOfUsersAndEmails.get(userId).get(), subscriptions);
             }
             mappedSubscriptions.remove(userId);
