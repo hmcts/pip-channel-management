@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.rsecheck.services;
 
 import com.azure.core.http.ContentType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import nl.altindag.log.LogCaptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest(classes = {Application.class})
@@ -26,6 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountManagementServiceTest {
 
     private static MockWebServer mockAccountManagementGetEmailsEndpoint;
+    private final ObjectWriter ow = new ObjectMapper().findAndRegisterModules().writer().withDefaultPrettyPrinter();
+    private static final String BAD_MAP_ERROR = "Map does not match expected result.";
+
     @Autowired
     WebClient webClient;
 
@@ -42,43 +50,55 @@ class AccountManagementServiceTest {
         mockAccountManagementGetEmailsEndpoint = new MockWebServer();
         mockAccountManagementGetEmailsEndpoint.start(6969);
         mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().addHeader(
-                "Content-Type",
-                ContentType.APPLICATION_JSON
-            )
-                                                           .setBody("{\"test123\":{\"empty\":false,"
-                                                                        + "\"present\":true}}"));
+            "Content-Type",
+            ContentType.APPLICATION_JSON
+        ).setBody(ow.writeValueAsString(testMap)));
 
+        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
+        assertEquals(
+            testMap,
+            returnedMap,
+            BAD_MAP_ERROR
+        );
         mockAccountManagementGetEmailsEndpoint.shutdown();
-        assertEquals(true, true, "yes");
+    }
+
+    @Test
+    void testEmptyList() throws IOException {
+        Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
+
+        mockAccountManagementGetEmailsEndpoint = new MockWebServer();
+        mockAccountManagementGetEmailsEndpoint.start(6969);
+        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().addHeader(
+            "Content-Type",
+            ContentType.APPLICATION_JSON
+        ).setBody(ow.writeValueAsString(testMap)));
+
+        List<String> emailList = new ArrayList<>();
+        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
+        assertEquals(
+            testMap,
+            returnedMap,
+            BAD_MAP_ERROR
+        );
+        mockAccountManagementGetEmailsEndpoint.shutdown();
+    }
+
+    @Test
+    void testException() throws IOException {
+
+        List<String> emailList = new ArrayList<>();
+
+        mockAccountManagementGetEmailsEndpoint = new MockWebServer();
+        mockAccountManagementGetEmailsEndpoint.start(6969);
+        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().setResponseCode(404));
+        try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
+            assertNull(accountManagementService.getEmails(emailList), "should be null when an exception is thrown");
+            assertTrue(logCaptor.getErrorLogs().get(0).contains("Account management request failed for this map"),
+                       "Messages do not match");
+        } catch (Exception ex) {
+            throw new IOException(ex);
+        }
+        mockAccountManagementGetEmailsEndpoint.shutdown();
     }
 }
-
-//        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
-//        assertEquals(
-//            testMap,
-//            returnedMap,
-//            "Court name does not match returned value"
-//        );
-
-//    @Test
-//    void testNullCourt() throws IOException {
-//        mockAccountManagementGetEmailsEndpoint = new MockWebServer();
-//        mockAccountManagementGetEmailsEndpoint.start(4550);
-//        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse());
-//
-//        String courtName = dataManagementService.getCourtName("1");
-//        assertNull(courtName, "Court return is null");
-//        mockAccountManagementGetEmailsEndpoint.shutdown();
-//    }
-//
-//    @Test
-//    void testGetCourtThrows() throws IOException {
-//        mockAccountManagementGetEmailsEndpoint = new MockWebServer();
-//        mockAccountManagementGetEmailsEndpoint.start(4550);
-//        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().setResponseCode(404));
-//        String courtName = dataManagementService.getCourtName(INVALID);
-//        assertNull(courtName, "Court name not null when error occured");
-//        mockAccountManagementGetEmailsEndpoint.shutdown();
-//    }
-//
-//}
