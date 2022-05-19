@@ -27,12 +27,12 @@ public class AccountManagementService {
 
     public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
         try {
-            Map<String, Optional<String>> output =  webClient.post().uri(new URI(String.format(
+            return  webClient.post().uri(new URI(String.format(
                     "%s/account/emails/", url))).body(BodyInserters.fromValue(listOfUserIds))
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Optional<String>>>() {
                 }).block();
-            return output;
+
 
         } catch (WebClientException | URISyntaxException ex) {
             log.error(
