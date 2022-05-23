@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
+/**
+ * Connects to the account management service to request emails corresponding with subscription userIds.
+ */
 @Slf4j
 @Component
 public class AccountManagementService {
