@@ -33,7 +33,7 @@ public class AccountManagementService {
 
         } catch (WebClientException ex) {
             log.error(
-                "Account management request failed for this map. Response: {}",
+                "Account management request failed to get emails. Response: {}",
                 ex.getMessage()
             );
             return null;
