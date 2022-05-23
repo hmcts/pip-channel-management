@@ -1,10 +1,12 @@
 package uk.gov.hmcts.reform.channel.management.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.channel.management.models.external.subscriptionmanagement.Subscription;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +14,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
-public class DuplicationAndEmptyHandlerService {
+public class BuildSubscriberListService {
+
+    @Autowired
+    AccountManagementService accountManagementService;
+
+    public Map<String, List<Subscription>> buildEmailSubMap(List<Subscription> listOfSubs) {
+        Map<String, List<Subscription>> mappedSubscriptions =
+            deduplicateSubscriptions(listOfSubs);
+
+        List<String> userIds = new ArrayList<>(mappedSubscriptions.keySet());
+
+        Map<String, Optional<String>> mapOfUsersAndEmails = accountManagementService.getEmails(userIds);
+
+        if (mapOfUsersAndEmails.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        return finalSubscriptionEmailMapHandler(mappedSubscriptions, mapOfUsersAndEmails);
+    }
 
     public Map<String, List<Subscription>> deduplicateSubscriptions(List<Subscription> listOfSubs) {
         Map<String, List<Subscription>> mapOfSubscriptions = new ConcurrentHashMap<>();
@@ -27,7 +47,8 @@ public class DuplicationAndEmptyHandlerService {
         return mapOfSubscriptions;
     }
 
-    public Map<String, List<Subscription>> mapCleaner(Map<String, List<Subscription>> userIdMap, Map<String,
+    public Map<String, List<Subscription>> finalSubscriptionEmailMapHandler(Map<String, List<Subscription>> userIdMap,
+                                                                     Map<String,
         Optional<String>> userEmailMap) {
 
         Map<String, List<Subscription>> cloneMap = new ConcurrentHashMap<>(userIdMap);

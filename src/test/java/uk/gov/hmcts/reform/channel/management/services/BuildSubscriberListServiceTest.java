@@ -2,6 +2,10 @@ package uk.gov.hmcts.reform.channel.management.services;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.channel.management.models.external.subscriptionmanagement.Subscription;
 
 import java.util.ArrayList;
@@ -11,10 +15,18 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
-class DuplicationAndEmptyHandlerServiceTest {
+@ExtendWith(MockitoExtension.class)
+class BuildSubscriberListServiceTest {
 
-    DuplicationAndEmptyHandlerService duplicationAndEmptyHandlerService = new DuplicationAndEmptyHandlerService();
+    @Mock
+    private AccountManagementService accountManagementService;
+
+    @InjectMocks
+    BuildSubscriberListService buildSubscriberListService;
+
 
     private static final Subscription SUB1 = new Subscription();
     private static final Subscription SUB2 = new Subscription();
@@ -24,6 +36,23 @@ class DuplicationAndEmptyHandlerServiceTest {
     private static final String TEST_EMAIL_1 = "test@user.com";
     private static final String TEST_EMAIL_2 = "dave@email.com";
 
+
+    @Test
+    void buildEmailSubMap() {
+        Map<String, Optional<String>> userEmailsMap = new ConcurrentHashMap<>();
+        userEmailsMap.put(USER2, Optional.of(TEST_EMAIL_2));
+        userEmailsMap.put(USER1, Optional.of(TEST_EMAIL_1));
+
+        SUB1.setUserId(USER1);
+        SUB2.setUserId(USER2);
+        Map<String, List<Subscription>> expectedMap = new ConcurrentHashMap<>();
+        expectedMap.put(TEST_EMAIL_1, List.of(SUB1));
+        expectedMap.put(TEST_EMAIL_2, List.of(SUB2));
+        doReturn(userEmailsMap).when(accountManagementService).getEmails(any());
+        List<Subscription> initialList = List.of(SUB1, SUB2);
+        assertEquals(buildSubscriberListService.buildEmailSubMap(initialList), expectedMap,
+                     "the final map produced is not equivalent to the expected output");
+    }
 
     @Test
     void unduplicatedSubsMap() {
@@ -37,9 +66,8 @@ class DuplicationAndEmptyHandlerServiceTest {
         expectedResponse.put(USER2, List.of(SUB2));
 
         Map<String, List<Subscription>> response =
-            duplicationAndEmptyHandlerService.deduplicateSubscriptions(subscriptionList);
+            buildSubscriberListService.deduplicateSubscriptions(subscriptionList);
         assertEquals(response, expectedResponse, "should return a map of users to subscription lists");
-
     }
 
     @Test
@@ -56,7 +84,7 @@ class DuplicationAndEmptyHandlerServiceTest {
         expectedResponse.put(USER2, List.of(SUB3));
 
         Map<String, List<Subscription>> response =
-            duplicationAndEmptyHandlerService.deduplicateSubscriptions(subscriptionList);
+            buildSubscriberListService.deduplicateSubscriptions(subscriptionList);
         assertEquals(response, expectedResponse, "should return a deduplicated map of users to subscription "
             + "lists");
     }
@@ -71,7 +99,7 @@ class DuplicationAndEmptyHandlerServiceTest {
         subsMap.put(USER1, List.of(SUB1, SUB2));
         subsMap.put(USER2, List.of(SUB3));
 
-        Map<String, List<Subscription>> response = duplicationAndEmptyHandlerService.mapCleaner(subsMap, emailMap);
+        Map<String, List<Subscription>> response = buildSubscriberListService.logMissingEmailsAndBuildFinalSubscriptionEmailMap(subsMap, emailMap);
 
         Map<String, List<Subscription>> expectedResponse = new ConcurrentHashMap<>();
         expectedResponse.put(TEST_EMAIL_1, List.of(SUB1, SUB2));
@@ -90,7 +118,7 @@ class DuplicationAndEmptyHandlerServiceTest {
         subsMap.put(USER1, List.of(SUB1, SUB2));
         subsMap.put(USER2, List.of(SUB3));
 
-        Map<String, List<Subscription>> response = duplicationAndEmptyHandlerService.mapCleaner(subsMap, emailMap);
+        Map<String, List<Subscription>> response = buildSubscriberListService.logMissingEmailsAndBuildFinalSubscriptionEmailMap(subsMap, emailMap);
 
         Map<String, List<Subscription>> expectedResponse = new ConcurrentHashMap<>();
         expectedResponse.put(TEST_EMAIL_1, List.of(SUB1, SUB2));

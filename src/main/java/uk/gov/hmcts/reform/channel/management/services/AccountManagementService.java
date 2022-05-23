@@ -31,7 +31,6 @@ public class AccountManagementService {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Optional<String>>>() {
                 }).block();
 
-
         } catch (WebClientException ex) {
             log.error(
                 "Account management request failed for this map. Response: {}",

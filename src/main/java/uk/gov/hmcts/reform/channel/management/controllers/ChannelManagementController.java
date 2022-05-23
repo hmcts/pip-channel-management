@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.channel.management.services.AccountManagementService;
-import uk.gov.hmcts.reform.channel.management.services.DuplicationAndEmptyHandlerService;
+import uk.gov.hmcts.reform.channel.management.services.BuildSubscriberListService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -32,7 +30,7 @@ public class ChannelManagementController {
     AccountManagementService accountManagementService;
 
     @Autowired
-    DuplicationAndEmptyHandlerService duplicationAndEmptyHandlerService;
+    BuildSubscriberListService buildSubscriberListService;
 
     @ApiResponses({
         @ApiResponse(code = 202, message = "Subscriber request has been accepted"),
@@ -44,19 +42,12 @@ public class ChannelManagementController {
         @RequestBody List<Subscription> listOfSubscriptions) {
         log.info(String.format("Received a list of subscribers of length %s", listOfSubscriptions.size()));
 
-        Map<String, List<Subscription>> mappedSubscriptions =
-            duplicationAndEmptyHandlerService.deduplicateSubscriptions(listOfSubscriptions);
+        Map<String, List<Subscription>> returnMap = buildSubscriberListService.buildEmailSubMap(listOfSubscriptions);
 
-        List<String> userIds = new ArrayList<>(mappedSubscriptions.keySet());
-
-        Map<String, Optional<String>> mapOfUsersAndEmails = accountManagementService.getEmails(userIds);
-        if (mapOfUsersAndEmails.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mappedSubscriptions);
+        if (returnMap.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(returnMap);
+        } else {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(returnMap);
         }
-
-        Map<String, List<Subscription>> cleanedMap = duplicationAndEmptyHandlerService.mapCleaner(mappedSubscriptions,
-                                                                                                  mapOfUsersAndEmails);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(cleanedMap);
     }
 }
