@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.demo.Application;
 import uk.gov.hmcts.reform.demo.services.AccountManagementService;
+import uk.gov.hmcts.reform.rsecheck.config.WebClientConfigurationTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
 @ActiveProfiles({"test", "non-async"})
 class AccountManagementServiceTest {
 

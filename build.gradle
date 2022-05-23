@@ -172,6 +172,7 @@ dependencies {
 
   implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.0.0'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
   implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
