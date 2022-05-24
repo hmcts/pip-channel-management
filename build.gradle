@@ -186,7 +186,7 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
-  testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+  testCompile 'com.github.hmcts:fortify-client:1.2.0'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
