@@ -186,6 +186,8 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
 
+  testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
@@ -215,3 +217,9 @@ wrapper {
 }
 
 ext['log4j2.version'] = '2.17.1'
+
+task fortifyScan(type: JavaExec)  {
+    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    classpath += sourceSets.test.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+}
