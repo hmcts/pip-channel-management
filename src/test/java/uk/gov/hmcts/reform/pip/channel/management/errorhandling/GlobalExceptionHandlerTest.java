@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.errorhandling;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.ServletWebRequest;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,15 +15,10 @@ class GlobalExceptionHandlerTest {
 
         GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
 
-        ChannelNotFoundException channelNotFoundException
-            = new ChannelNotFoundException("This is a test message");
-
-
-        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
-        ServletWebRequest servletWebRequest = new ServletWebRequest(mockHttpServletRequest);
+        ChannelNotFoundException channelNotFoundException = new ChannelNotFoundException("This is a test message");
 
         ResponseEntity<ExceptionResponse> responseEntity =
-            globalExceptionHandler.handleChannelNotFound(channelNotFoundException, servletWebRequest);
+            globalExceptionHandler.handleChannelNotFound(channelNotFoundException);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), "Status code should be not found");
         assertNotNull(responseEntity.getBody(), "Response should contain a body");

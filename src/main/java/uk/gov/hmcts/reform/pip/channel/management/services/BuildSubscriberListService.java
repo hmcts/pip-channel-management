@@ -3,10 +3,10 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class BuildSubscriberListService {
      * @param listOfSubs - a list of subscription objects associated with a publication
      * @return A map of user emails to list of subscriptions
      */
-    public Map<String, List<Subscription>> buildEmailSubMap(List<Subscription> listOfSubs) {
+    public Map<String, List<Subscription>> buildEmailSubscriptionMap(List<Subscription> listOfSubs) {
         Map<String, List<Subscription>> mappedSubscriptions =
             deduplicateSubscriptions(listOfSubs);
 
@@ -42,10 +42,10 @@ public class BuildSubscriberListService {
 
         Map<String, Optional<String>> mapOfUsersAndEmails = accountManagementService.getEmails(userIds);
 
-        if (mapOfUsersAndEmails.isEmpty()) {
-            return Collections.emptyMap();
+        if (mapOfUsersAndEmails.values().stream().allMatch(Optional::isEmpty)) {
+            throw new ChannelNotFoundException("No email channel found for any of the users provided");
         }
-        return finalSubscriptionEmailMapHandler(mappedSubscriptions, mapOfUsersAndEmails);
+        return userIdToUserEmailSwitcher(mappedSubscriptions, mapOfUsersAndEmails);
     }
 
     /**
@@ -72,16 +72,16 @@ public class BuildSubscriberListService {
      * @param userIdMap - A map of userIds to the list of subscription objects associated with them.
      * @param userEmailMap - a map of userIds to their email addresses (optional in case they don't exist in account
      *                     management.)
-     * @return Builds a final map of email addresses to subscription objects.
+     * @return Map of email addresses to subscription objects.
      */
-    public Map<String, List<Subscription>> finalSubscriptionEmailMapHandler(Map<String, List<Subscription>> userIdMap,
-                                                                        Map<String, Optional<String>> userEmailMap) {
+    public Map<String, List<Subscription>> userIdToUserEmailSwitcher(Map<String, List<Subscription>> userIdMap,
+                                                                     Map<String, Optional<String>> userEmailMap) {
         Map<String, List<Subscription>> cloneMap = new ConcurrentHashMap<>(userIdMap);
 
         cloneMap.forEach((userId, subscriptions) -> {
 
             if (userEmailMap.get(userId).isEmpty()) {
-                log.info(userId + "- no email found.");
+                log.error(userId + "- no email found.");
             } else {
                 userIdMap.put(userEmailMap.get(userId).get(), subscriptions);
             }

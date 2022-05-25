@@ -38,24 +38,12 @@ class ChannelManagementControllerTest {
         Map<String, List<Subscription>> finalMap = new ConcurrentHashMap<>();
         finalMap.put(TEST_EMAIL_1, subscriptionList);
         finalMap.put(TEST_EMAIL_2, subscriptionList);
-        when(buildSubscriberListService.buildEmailSubMap(subscriptionList)).thenReturn(finalMap);
+        when(buildSubscriberListService.buildEmailSubscriptionMap(subscriptionList)).thenReturn(finalMap);
         ResponseEntity<Map<String, List<Subscription>>> response =
             channelManagementController.buildSubscriberList(subscriptionList);
         assertEquals(response.getBody(), finalMap, "Map does not match with output");
-        assertEquals(response.getStatusCode(), HttpStatus.ACCEPTED, STATUS_CODE_MATCH);
+        assertEquals(response.getStatusCode(), HttpStatus.OK, STATUS_CODE_MATCH);
         assertEquals(response.getBody().get(TEST_EMAIL_1), subscriptionList, "Subs list does not match");
-    }
-
-    @Test
-    void noEmailsReturned() {
-        List<Subscription> subscriptionList = new ArrayList<>();
-        subscriptionList.add(new Subscription());
-        Map<String, List<Subscription>> returnedSubMap = new ConcurrentHashMap<>();
-        when(buildSubscriberListService.buildEmailSubMap(subscriptionList)).thenReturn(returnedSubMap);
-        ResponseEntity<Map<String, List<Subscription>>> response =
-            channelManagementController.buildSubscriberList(subscriptionList);
-        assertEquals(response.getBody(), returnedSubMap, "Map should be empty");
-        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND, STATUS_CODE_MATCH);
     }
 
 }
