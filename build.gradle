@@ -201,7 +201,7 @@ dependencies {
   smokeTestImplementation sourceSets.test.runtimeClasspath
 }
 
-mainClassName = 'uk.gov.hmcts.reform.demo.Application'
+mainClassName = 'uk.gov.hmcts.reform.pip.channel.management.Application'
 
 bootJar {
   archiveFileName = "pip-channel-management.jar"
