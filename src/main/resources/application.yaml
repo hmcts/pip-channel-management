@@ -21,7 +21,13 @@ spring:
           tenant-id: ${TENANT_ID}
         credential:
           client-id: ${CLIENT_ID}
+          client-secret: ${CLIENT_SECRET}
         app-id-uri: ${APP_URI}
+        authorization-clients:
+          accountManagementApi:
+            authorization-grant-type: client_credentials
+            scopes:
+              - ${ACCOUNT_MANAGEMENT_AZ_API}/.default
   config:
     import: "optional:configtree:/mnt/secrets/"
   application:
@@ -51,3 +57,6 @@ spring:
 azure:
   application-insights:
     instrumentation-key: ${INSTRUMENTATION_KEY:00000000-0000-0000-0000-000000000000}
+service-to-service:
+  account-management: ${ACCOUNT_MANAGEMENT_URL:https://pip-account-management.staging.platform.hmcts.net}
+  subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-subscription-management.staging.platform.hmcts.net}
