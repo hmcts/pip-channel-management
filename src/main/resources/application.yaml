@@ -60,3 +60,6 @@ azure:
 service-to-service:
   account-management: ${ACCOUNT_MANAGEMENT_URL:https://pip-account-management.staging.platform.hmcts.net}
   subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-subscription-management.staging.platform.hmcts.net}
+
+third-party-api:
+  courtel: ${COURTEL_API:testCourtelApi}

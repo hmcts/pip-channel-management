@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
+import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Component
-public class BuildSubscriberListService {
+public class SubscriberListService {
 
     @Autowired
     AccountManagementService accountManagementService;
+
+    @Autowired
+    private ThirdPartyApi thirdPartyApi;
 
     /**
      * Parent method which handles the flow through the service, initially capturing duplicate users, then sending a
@@ -46,6 +50,15 @@ public class BuildSubscriberListService {
             throw new ChannelNotFoundException("No email channel found for any of the users provided");
         }
         return userIdToUserEmailSwitcher(mappedSubscriptions, mapOfUsersAndEmails);
+    }
+
+    /**
+     * Creates map of third party api urls and a list of Subscriptions associated with them.
+     * @param subscriptions list of subscriptions to be trimmed of duplications and associated with an api.
+     * @return Map of Url to list of subscriptions.
+     */
+    public Map<String, List<Subscription>> buildApiSubscriptionsMap(List<Subscription> subscriptions) {
+        return userIdToApiValueSwitcher(deduplicateSubscriptions(subscriptions));
     }
 
     /**
@@ -89,5 +102,26 @@ public class BuildSubscriberListService {
         });
         log.info(userIdMap.toString());
         return userIdMap;
+    }
+
+    /**
+     * Takes in Map and replaces the user id thats not needed for third party, to the URL the subscription needs to
+     * be sent to.
+     * @param subscriptions Map of user id's to list of subscriptions.
+     * @return Map of URL's to list of subscriptions.
+     */
+    private Map<String, List<Subscription>> userIdToApiValueSwitcher(Map<String, List<Subscription>> subscriptions) {
+        Map<String, List<Subscription>> switchedMap = new ConcurrentHashMap<>();
+        subscriptions.forEach((recipient, subscriptionList)  -> {
+            switch (subscriptionList.get(0).getChannel()) {
+                case API_COURTEL:
+                    switchedMap.put(thirdPartyApi.getCourtel(), subscriptionList);
+                    break;
+                default:
+                    throw new ChannelNotFoundException("Invalid channel for API subscriptions: "
+                                                           + subscriptionList.get(0).getChannel());
+            }
+        });
+        return switchedMap;
     }
 }

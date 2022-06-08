@@ -3,5 +3,5 @@ package uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionm
 public enum Channel {
     // add as required
     EMAIL,
-    API;
+    API_COURTEL;
 }

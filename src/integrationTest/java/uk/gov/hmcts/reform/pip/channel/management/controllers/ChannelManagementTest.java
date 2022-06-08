@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class ChannelManagementTest {
 
     private static final String ROOT_URL = "/channel";
     private static final String EMAILS_URL = ROOT_URL + "/emails";
+    private static final String API_URL = ROOT_URL + "/api";
 
     //test accounts ids and emails that exist in account man staging
     private static final String VALID_USER_ID_1 = "651bbefc-f856-46a2-a7da-ed248cf1775b";
@@ -48,7 +50,7 @@ class ChannelManagementTest {
 
     private final ObjectMapper om = new ObjectMapper();
 
-    Subscription subscriptionBuilder(Channel channel, String userId) {
+    static Subscription subscriptionBuilder(Channel channel, String userId) {
         Subscription subscription = new Subscription();
         subscription.setChannel(channel);
         subscription.setUserId(userId);
@@ -121,5 +123,40 @@ class ChannelManagementTest {
         assertTrue(response.getResponse().getContentAsString()
                        .contains("No email channel found for any of the users provided"),
                    "Should contain expected not found message");
+    }
+
+    @Test
+    void testReturnThirdPartyApi() throws Exception {
+        List<Subscription> subscriptions = List.of(subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1),
+                                                   subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1));
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post(API_URL)
+            .content(om.writeValueAsString(subscriptions))
+            .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult response = mockMvc.perform(request).andExpect(status().isOk()).andReturn();
+
+        Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
+        expected.put("testCourtelApi", subscriptions);
+
+        Map<String, List<Subscription>> mappedResponse = om.readValue(response.getResponse().getContentAsString(),
+                                                                      new TypeReference<>() {});
+
+        assertEquals(expected, mappedResponse, MAPS_MATCH_MESSAGE);
+    }
+
+    @Test
+    void testReturnThirdPartyApiReturnsNotFound() throws Exception {
+        List<Subscription> subscriptions = List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1),
+                                                   subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1));
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post(API_URL)
+            .content(om.writeValueAsString(subscriptions))
+            .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult response = mockMvc.perform(request).andExpect(status().isNotFound()).andReturn();
+
+        assertTrue(response.getResponse().getContentAsString()
+                       .contains("Invalid channel for API subscriptions: EMAIL"));
     }
 }
