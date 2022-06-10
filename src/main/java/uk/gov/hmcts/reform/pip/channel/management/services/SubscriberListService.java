@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Channel;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
 
@@ -113,13 +114,11 @@ public class SubscriberListService {
     private Map<String, List<Subscription>> userIdToApiValueSwitcher(Map<String, List<Subscription>> subscriptions) {
         Map<String, List<Subscription>> switchedMap = new ConcurrentHashMap<>();
         subscriptions.forEach((recipient, subscriptionList)  -> {
-            switch (subscriptionList.get(0).getChannel()) {
-                case API_COURTEL:
-                    switchedMap.put(thirdPartyApi.getCourtel(), subscriptionList);
-                    break;
-                default:
-                    throw new ChannelNotFoundException("Invalid channel for API subscriptions: "
-                                                           + subscriptionList.get(0).getChannel());
+            if (subscriptionList.get(0).getChannel() == Channel.API_COURTEL) {
+                switchedMap.put(thirdPartyApi.getCourtel(), subscriptionList);
+            } else {
+                throw new ChannelNotFoundException("Invalid channel for API subscriptions: "
+                                                       + subscriptionList.get(0).getChannel());
             }
         });
         return switchedMap;

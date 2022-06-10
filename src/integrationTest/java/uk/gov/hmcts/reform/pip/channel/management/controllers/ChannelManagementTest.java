@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -139,7 +138,8 @@ class ChannelManagementTest {
         Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
         expected.put("testCourtelApi", subscriptions);
 
-        Map<String, List<Subscription>> mappedResponse = om.readValue(response.getResponse().getContentAsString(),
+        ConcurrentHashMap<String, List<Subscription>> mappedResponse = om.readValue(response.getResponse()
+                                                                                        .getContentAsString(),
                                                                       new TypeReference<>() {});
 
         assertEquals(expected, mappedResponse, MAPS_MATCH_MESSAGE);
@@ -157,6 +157,6 @@ class ChannelManagementTest {
         MvcResult response = mockMvc.perform(request).andExpect(status().isNotFound()).andReturn();
 
         assertTrue(response.getResponse().getContentAsString()
-                       .contains("Invalid channel for API subscriptions: EMAIL"));
+                       .contains("Invalid channel for API subscriptions: EMAIL"), "Messages should match");
     }
 }

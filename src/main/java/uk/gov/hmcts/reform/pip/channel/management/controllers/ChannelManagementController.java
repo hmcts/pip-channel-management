@@ -57,7 +57,7 @@ public class ChannelManagementController {
     @ApiOperation("Returns Map of api destination against list of subscriptions")
     @PostMapping("/api")
     public ResponseEntity<Map<String, List<Subscription>>> returnThirdPartyApi(
-        @RequestBody List<Subscription> subscriptions ) {
+        @RequestBody List<Subscription> subscriptions) {
         return ResponseEntity.ok(subscriberListService.buildApiSubscriptionsMap(subscriptions));
     }
 }
