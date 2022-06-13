@@ -19,7 +19,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.BuildSubscriberListSe
 import java.util.List;
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeGenericLog;
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
 
 @Slf4j
 @RestController
@@ -43,7 +43,7 @@ public class ChannelManagementController {
     @PostMapping("/emails")
     public ResponseEntity<Map<String, List<Subscription>>> buildSubscriberList(
         @RequestBody List<Subscription> listOfSubscriptions) {
-        log.info(writeGenericLog(String.format("Received a list of subscribers of length %s",
+        log.info(writeLog(String.format("Received a list of subscribers of length %s",
                                                listOfSubscriptions.size())));
 
         Map<String, List<Subscription>> returnMap =

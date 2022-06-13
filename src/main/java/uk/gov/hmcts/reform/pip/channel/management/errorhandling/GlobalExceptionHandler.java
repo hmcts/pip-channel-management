@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Chann
 
 import java.time.LocalDateTime;
 
-import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeGenericLog;
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
 
 /**
  * Global exception handler, that captures exceptions thrown by the controllers, and encapsulates
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(
         ChannelNotFoundException ex) {
 
-        log.warn(writeGenericLog("404, no channels found for any subscribers"));
+        log.warn(writeLog("404, no channels found for any subscribers"));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
