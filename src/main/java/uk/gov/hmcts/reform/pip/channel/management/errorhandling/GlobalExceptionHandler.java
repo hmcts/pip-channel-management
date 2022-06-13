@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.pip.channel.management.errorhandling;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,11 +9,14 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Chann
 
 import java.time.LocalDateTime;
 
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeGenericLog;
+
 /**
  * Global exception handler, that captures exceptions thrown by the controllers, and encapsulates
  * the logic to handle them and return a standardised response to the user.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
@@ -24,6 +28,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ChannelNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(
         ChannelNotFoundException ex) {
+
+        log.warn(writeGenericLog("404, no channels found for any subscribers"));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
