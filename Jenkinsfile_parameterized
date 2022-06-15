@@ -6,7 +6,25 @@ def type = "java"
 def product = "pip"
 def component = "channel-management"
 
+def apiSecrets = [ 'pip-ss-kv-${env}' : [
+    secret('app-pip-channel-management-scope', 'APP_URI'),
+    secret('app-pip-channel-management-id', 'CLIENT_ID'),
+    secret('app-pip-channel-management-pwd', 'CLIENT_SECRET'),
+    secret('app-pip-account-management-scope', 'ACCOUNT_MANAGEMENT_AZ_API'),
+    secret('app-tenant-id', 'TENANT_ID')
+  ]
+]
+
+static Map<String, Object> secret(String secretName, String envVariable) {
+  [$class     : 'AzureKeyVaultSecret',
+   secretType : 'Secret',
+   name       : secretName,
+   envVariable: envVariable
+  ]
+}
+
 withPipeline(type, product, component) {
 
+    loadVaultSecrets(apiSecrets)
     enableSlackNotifications('#pip-build-notices')
 }
