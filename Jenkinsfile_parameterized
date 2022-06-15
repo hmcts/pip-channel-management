@@ -11,7 +11,7 @@ def apiSecrets = [ 'pip-ss-kv-${env}' : [
     secret('app-pip-channel-management-id', 'CLIENT_ID'),
     secret('app-pip-channel-management-pwd', 'CLIENT_SECRET'),
     secret('app-pip-account-management-scope', 'ACCOUNT_MANAGEMENT_AZ_API'),
-    secret('app-tenant-id', 'TENANT_ID')
+    secret('app-tenant', 'TENANT_ID')
   ]
 ]
 
