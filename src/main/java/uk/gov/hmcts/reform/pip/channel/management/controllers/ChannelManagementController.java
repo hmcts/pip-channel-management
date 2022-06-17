@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.services.AccountManagementService;
 import uk.gov.hmcts.reform.pip.channel.management.services.BuildSubscriberListService;
@@ -25,6 +26,7 @@ import java.util.Map;
     + "ensure they are handled correctly whether they are email-based or API-based subscribers (determined by their "
     + "Channel attribute")
 @RequestMapping("/channel")
+@IsAdmin
 public class ChannelManagementController {
 
     @Autowired
