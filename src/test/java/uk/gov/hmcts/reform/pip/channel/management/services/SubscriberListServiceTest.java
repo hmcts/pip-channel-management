@@ -7,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Channel;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
+import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +24,18 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BuildSubscriberListServiceTest {
+class SubscriberListServiceTest {
+
+    private static final String COURTEL_VALUE = "testCourtelValue";
 
     @Mock
     private AccountManagementService accountManagementService;
 
+    @Mock
+    private ThirdPartyApi thirdPartyApi;
+
     @InjectMocks
-    BuildSubscriberListService buildSubscriberListService;
+    SubscriberListService subscriberListService;
 
 
     private static final Subscription SUB1 = new Subscription();
@@ -38,7 +45,6 @@ class BuildSubscriberListServiceTest {
     private static final String USER2 = "testUser2";
     private static final String TEST_EMAIL_1 = "test@user.com";
     private static final String TEST_EMAIL_2 = "dave@email.com";
-
 
     @Test
     void buildEmailSubscriptionMap() {
@@ -53,7 +59,7 @@ class BuildSubscriberListServiceTest {
         expectedMap.put(TEST_EMAIL_2, List.of(SUB2));
         doReturn(userEmailsMap).when(accountManagementService).getEmails(any());
         List<Subscription> initialList = List.of(SUB1, SUB2);
-        assertEquals(buildSubscriberListService.buildEmailSubscriptionMap(initialList), expectedMap,
+        assertEquals(subscriberListService.buildEmailSubscriptionMap(initialList), expectedMap,
                      "the final map produced is not equivalent to the expected output");
     }
 
@@ -62,7 +68,7 @@ class BuildSubscriberListServiceTest {
         List<Subscription> initialList = List.of(SUB1, SUB2);
         when(accountManagementService.getEmails(any())).thenReturn(new ConcurrentHashMap<>());
         ChannelNotFoundException ex = assertThrows(ChannelNotFoundException.class, () ->
-            buildSubscriberListService.buildEmailSubscriptionMap(initialList),
+            subscriberListService.buildEmailSubscriptionMap(initialList),
                                                    "Expected exception to be thrown");
         assertEquals("No email channel found for any of the users provided", ex.getMessage(),
                      "Messages should match");
@@ -80,7 +86,7 @@ class BuildSubscriberListServiceTest {
         expectedResponse.put(USER2, List.of(SUB2));
 
         Map<String, List<Subscription>> response =
-            buildSubscriberListService.deduplicateSubscriptions(subscriptionList);
+            subscriberListService.deduplicateSubscriptions(subscriptionList);
         assertEquals(response, expectedResponse, "should return a map of users to subscription lists");
     }
 
@@ -98,7 +104,7 @@ class BuildSubscriberListServiceTest {
         expectedResponse.put(USER2, List.of(SUB3));
 
         Map<String, List<Subscription>> response =
-            buildSubscriberListService.deduplicateSubscriptions(subscriptionList);
+            subscriberListService.deduplicateSubscriptions(subscriptionList);
         assertEquals(response, expectedResponse, "should return a deduplicated map of users to subscription "
             + "lists");
     }
@@ -114,7 +120,7 @@ class BuildSubscriberListServiceTest {
         subsMap.put(USER2, List.of(SUB3));
 
         Map<String, List<Subscription>> response =
-            buildSubscriberListService.userIdToUserEmailSwitcher(subsMap, emailMap);
+            subscriberListService.userIdToUserEmailSwitcher(subsMap, emailMap);
 
         Map<String, List<Subscription>> expectedResponse = new ConcurrentHashMap<>();
         expectedResponse.put(TEST_EMAIL_1, List.of(SUB1, SUB2));
@@ -134,7 +140,7 @@ class BuildSubscriberListServiceTest {
         subsMap.put(USER2, List.of(SUB3));
 
         Map<String, List<Subscription>> response =
-            buildSubscriberListService.userIdToUserEmailSwitcher(subsMap, emailMap);
+            subscriberListService.userIdToUserEmailSwitcher(subsMap, emailMap);
 
         Map<String, List<Subscription>> expectedResponse = new ConcurrentHashMap<>();
         expectedResponse.put(TEST_EMAIL_1, List.of(SUB1, SUB2));
@@ -142,5 +148,35 @@ class BuildSubscriberListServiceTest {
         assertEquals(expectedResponse, response, "Maps do not equal.");
     }
 
+    @Test
+    void testBuildApiSubscriptionsMap() {
+        when(thirdPartyApi.getCourtel()).thenReturn(COURTEL_VALUE);
+        SUB1.setUserId(USER1);
+        SUB1.setChannel(Channel.API_COURTEL);
+        SUB2.setUserId(USER1);
+        SUB2.setChannel(Channel.API_COURTEL);
+
+        Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
+        expected.put(COURTEL_VALUE, List.of(SUB1, SUB2));
+
+        assertEquals(expected, subscriberListService.buildApiSubscriptionsMap(List.of(SUB1, SUB2)),
+                     "Maps should match");
+    }
+
+    @Test
+    void testBuildApiSubscriptionsMapInvalidApiChannel() {
+        SUB1.setUserId(USER1);
+        SUB1.setChannel(Channel.API_COURTEL);
+        SUB2.setUserId(USER2);
+        SUB2.setChannel(Channel.EMAIL);
+
+        ChannelNotFoundException ex = assertThrows(ChannelNotFoundException.class, () ->
+            subscriberListService.buildApiSubscriptionsMap(List.of(SUB1, SUB2)),
+                                                   "Should throw ChannelNotFoundException"
+            );
+
+        assertEquals("Invalid channel for API subscriptions: EMAIL", ex.getMessage(),
+                     "Messages should match");
+    }
 
 }

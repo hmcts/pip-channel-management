@@ -6,5 +6,6 @@ public enum SearchType {
      */
     LOCATION_ID,
     CASE_ID,
-    CASE_URN
+    CASE_URN,
+    LIST_TYPE
 }
