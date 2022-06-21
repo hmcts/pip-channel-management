@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
-import uk.gov.hmcts.reform.pip.channel.management.services.BuildSubscriberListService;
+import uk.gov.hmcts.reform.pip.channel.management.services.SubscriberListService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ChannelManagementControllerTest {
 
-    @Mock
-    private BuildSubscriberListService buildSubscriberListService;
+    private final List<Subscription> subscriptionList = new ArrayList<>();
+    private final  Map<String, List<Subscription>> returnedMap = new ConcurrentHashMap<>();
 
+    @Mock
+    private SubscriberListService subscriberListService;
 
     @InjectMocks
     ChannelManagementController channelManagementController;
@@ -32,18 +35,36 @@ class ChannelManagementControllerTest {
     private static final String TEST_EMAIL_1 = "test@user.com";
     private static final String TEST_EMAIL_2 = "dave@email.com";
 
+    @BeforeEach
+    void setup() {
+        returnedMap.put(TEST_EMAIL_1, subscriptionList);
+        returnedMap.put(TEST_EMAIL_2, subscriptionList);
+    }
+
     @Test
     void multiItemListOfEmails() {
-        List<Subscription> subscriptionList = new ArrayList<>();
-        Map<String, List<Subscription>> finalMap = new ConcurrentHashMap<>();
-        finalMap.put(TEST_EMAIL_1, subscriptionList);
-        finalMap.put(TEST_EMAIL_2, subscriptionList);
-        when(buildSubscriberListService.buildEmailSubscriptionMap(subscriptionList)).thenReturn(finalMap);
+        when(subscriberListService.buildEmailSubscriptionMap(subscriptionList)).thenReturn(returnedMap);
         ResponseEntity<Map<String, List<Subscription>>> response =
             channelManagementController.buildSubscriberList(subscriptionList);
-        assertEquals(response.getBody(), finalMap, "Map does not match with output");
+        assertEquals(response.getBody(), returnedMap, "Map does not match with output");
         assertEquals(response.getStatusCode(), HttpStatus.OK, STATUS_CODE_MATCH);
         assertEquals(response.getBody().get(TEST_EMAIL_1), subscriptionList, "Subs list does not match");
+    }
+
+    @Test
+    void testReturnThirdPartyApiReturnsOk() {
+        when(subscriberListService.buildApiSubscriptionsMap(subscriptionList)).thenReturn(returnedMap);
+        ResponseEntity<Map<String, List<Subscription>>> response =
+            channelManagementController.returnThirdPartyApi(subscriptionList);
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_CODE_MATCH);
+    }
+
+    @Test
+    void testReturnThirdPartyApiReturns() {
+        when(subscriberListService.buildApiSubscriptionsMap(subscriptionList)).thenReturn(returnedMap);
+        ResponseEntity<Map<String, List<Subscription>>> response =
+            channelManagementController.returnThirdPartyApi(subscriptionList);
+        assertEquals(returnedMap, response.getBody(), "Returned map should match");
     }
 
 }

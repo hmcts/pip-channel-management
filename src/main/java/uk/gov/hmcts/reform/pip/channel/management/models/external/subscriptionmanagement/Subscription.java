@@ -11,7 +11,7 @@ public class Subscription {
     private LocalDateTime createdDate;
     private String caseNumber;
     private String urn;
-    private String courtName;
+    private String locationName;
     private String searchValue;
     private SearchType searchType;
 }
