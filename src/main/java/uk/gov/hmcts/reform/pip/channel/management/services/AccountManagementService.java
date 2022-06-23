@@ -28,6 +28,7 @@ public class AccountManagementService {
     private String url;
 
     public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
+        log.info("IN THE ROOT: " + System.getenv("TENANT_ID"));
         try {
             return  webClient.post().uri(String.format(
                     "%s/account/emails/", url)).body(BodyInserters.fromValue(listOfUserIds))
