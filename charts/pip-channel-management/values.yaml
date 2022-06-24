@@ -22,3 +22,4 @@ java:
         - name: app-insights-java-instrumentation-key
           alias: INSTRUMENTATION_KEY
   environment:
+    SPRING_PROFILES_ACTIVE: dev
