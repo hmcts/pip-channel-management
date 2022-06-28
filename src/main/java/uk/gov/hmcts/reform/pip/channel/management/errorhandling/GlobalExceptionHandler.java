@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(
         ChannelNotFoundException ex) {
 
-        log.warn(writeLog("404, no channels found for any subscribers"));
+        log.error(writeLog("404, no channels found for any subscribers"));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
