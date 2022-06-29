@@ -29,7 +29,7 @@ spring:
             scopes:
               - ${ACCOUNT_MANAGEMENT_AZ_API}/.default
   config:
-    import: "optional:configtree:/mnt/secrets/"
+    import: "optional:configtree:/mnt/secrets/pip-ss-kv/"
   application:
     name: Spring Boot Template
 #  datasource:
