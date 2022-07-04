@@ -9,6 +9,8 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Chann
 
 import java.time.LocalDateTime;
 
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
+
 /**
  * Global exception handler, that captures exceptions thrown by the controllers, and encapsulates
  * the logic to handle them and return a standardised response to the user.
@@ -26,6 +28,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ChannelNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(ChannelNotFoundException ex) {
         log.error("Channel not found exception thrown: {}", ex.getMessage());
+
+        log.error(writeLog("404, no channels found for any subscribers"));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
