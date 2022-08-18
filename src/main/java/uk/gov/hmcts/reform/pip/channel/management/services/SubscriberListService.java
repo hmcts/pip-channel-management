@@ -101,7 +101,6 @@ public class SubscriberListService {
             }
             userIdMap.remove(userId);
         });
-        log.info(userIdMap.toString());
         return userIdMap;
     }
 
