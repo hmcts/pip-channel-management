@@ -186,6 +186,11 @@ dependencies {
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.63'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.63'
 
+  // Force upgrade snakeyaml version for CVE-2022-25857
+  implementation( group: 'org.yaml', name: 'snakeyaml').version {
+    strictly("1.31")
+  }
+
   testImplementation(platform('org.junit:junit-bom:5.8.1'))
   testImplementation group: 'io.github.hakky54', name: 'logcaptor', version: '2.7.8'
   testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.9.3'
