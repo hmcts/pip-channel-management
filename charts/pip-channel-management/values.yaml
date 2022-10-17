@@ -19,6 +19,8 @@ java:
           alias: CLIENT_SECRET
         - name: app-pip-account-management-scope
           alias: ACCOUNT_MANAGEMENT_AZ_API
+        - name: app-pip-data-management-scope
+          alias: DATA_MANAGEMENT_AZ_API
         - name: app-insights-java-instrumentation-key
           alias: INSTRUMENTATION_KEY
         - name: auto-pip-<ENV>-courtel-api

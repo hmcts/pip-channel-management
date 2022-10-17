@@ -160,15 +160,32 @@ repositories {
   maven { url 'https://jitpack.io' }
 }
 
-ext {
-  reformLoggingVersion = "5.1.9"
-}
+def versions = [
+  junit           : '5.9.1',
+  junitPlatform   : '1.9.1',
+  reformLogging   : '5.1.9',
+  springBoot      : springBoot.class.package.implementationVersion,
+  springfoxSwagger: '3.0.0'
+]
+
+ext.libraries = [
+  junit5: [
+    "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
+    "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+    "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
+    "org.apiguardian:apiguardian-api:1.1.2",
+    "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
+    "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+  ]
+]
 
 dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
   implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.1.0'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -177,28 +194,31 @@ dependencies {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
   }
 
-  implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+  implementation group: 'io.springfox', name: 'springfox-boot-starter', version: versions.springfoxSwagger
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.63'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.63'
+  implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
+  implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
 
-  // Force upgrade snakeyaml version for CVE-2022-25857
+  // Force upgrade snakeyaml version for CVE-2022-38752
   implementation( group: 'org.yaml', name: 'snakeyaml').version {
-    strictly("1.31")
+    strictly("1.33")
   }
 
-  testImplementation(platform('org.junit:junit-bom:5.8.1'))
-  testImplementation group: 'io.github.hakky54', name: 'logcaptor', version: '2.7.8'
-  testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.9.3'
+  testImplementation group: 'org.springframework.security', name: 'spring-security-test'
+  testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation group: 'org.springframework.security', name: 'spring-security-test'
+  testImplementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
+  testImplementation group: 'io.github.hakky54', name: 'logcaptor', version: '2.7.8'
+  testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.9.3'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
