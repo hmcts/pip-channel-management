@@ -38,6 +38,9 @@ spring:
 azure:
   application-insights:
     instrumentation-key: ${INSTRUMENTATION_KEY:00000000-0000-0000-0000-000000000000}
+  blob:
+    connection-string: ${CONNECTION_STRING}
+    container-name: publications
 service-to-service:
   account-management: ${ACCOUNT_MANAGEMENT_URL:https://pip-account-management.staging.platform.hmcts.net}
   subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-subscription-management.staging.platform.hmcts.net}

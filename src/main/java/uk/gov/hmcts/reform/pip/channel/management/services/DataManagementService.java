@@ -13,6 +13,8 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 
 import java.util.UUID;
 
+import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId;
+
 @Slf4j
 @Service
 @SuppressWarnings({"PMD.PreserveStackTrace", "PMD.ImmutableField"})
@@ -32,6 +34,7 @@ public class DataManagementService {
         try {
             return webClient.get().uri(String.format("%s/publication/%s", url, artefactId))
                 .header(ADMIN_HEADER, TRUE)
+                .attributes(clientRegistrationId("dataManagementApi"))
                 .retrieve()
                 .bodyToMono(Artefact.class).block();
         } catch (WebClientResponseException ex) {
@@ -42,6 +45,7 @@ public class DataManagementService {
     public Location getLocation(String locationId) {
         try {
             return webClient.get().uri(String.format("%s/locations/%s", url, locationId))
+                .attributes(clientRegistrationId("dataManagementApi"))
                 .retrieve()
                 .bodyToMono(Location.class).block();
         } catch (WebClientResponseException ex) {
@@ -53,6 +57,7 @@ public class DataManagementService {
         try {
             return webClient.get().uri(String.format("%s/publication/%s/payload", url, artefactId))
                 .header(ADMIN_HEADER, TRUE)
+                .attributes(clientRegistrationId("dataManagementApi"))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve().bodyToMono(String.class).block();
         } catch (WebClientResponseException ex) {
