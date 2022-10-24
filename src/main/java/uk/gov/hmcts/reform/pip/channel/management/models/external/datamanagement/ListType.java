@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Artef
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CivilDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.DailyCauseListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.PrimaryHealthListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.Converter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.PrimaryHealthListConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPressListConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPublicListConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SscsDailyListConverter;
@@ -41,7 +43,7 @@ public enum ListType {
                                       new DailyCauseListSummaryConverter()),
     COP_DAILY_CAUSE_LIST(new CopDailyCauseListConverter(), new CopDailyCauseListSummaryConverter()),
     SSCS_DAILY_LIST(new SscsDailyListConverter(), new SscsDailyListSummaryConverter()),
-    PRIMARY_HEALTH_LIST,
+    PRIMARY_HEALTH_LIST(new PrimaryHealthListConverter(), new PrimaryHealthListSummaryConverter()),
     CARE_STANDARDS_LIST,
     ET_DAILY_LIST,
     ET_FORTNIGHTLY_PRESS_LIST;

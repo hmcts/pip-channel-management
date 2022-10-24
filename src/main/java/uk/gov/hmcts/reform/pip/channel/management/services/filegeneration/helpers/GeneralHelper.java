@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-/**
- * Class for static utility methods assisting with json->html->pdf issues.
- */
+
 @Slf4j
 public final class GeneralHelper {
 

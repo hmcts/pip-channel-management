@@ -241,7 +241,7 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static void handlePartiesSscs(JsonNode node, Hearing hearing) {
+    private static void handlePartiesScss(JsonNode node, Hearing hearing) {
         Map<String, String> parties = new ConcurrentHashMap<>();
         for (JsonNode party : node) {
             switch (party.get("partyRole").asText()) {
@@ -269,7 +269,7 @@ public final class DataManipulation {
 
     private static Hearing hearingBuilder(JsonNode hearingNode) {
         Hearing currentHearing = new Hearing();
-        handlePartiesSscs(hearingNode.get("party"), currentHearing);
+        handlePartiesScss(hearingNode.get("party"), currentHearing);
         currentHearing.setRespondent(dealWithInformants(hearingNode));
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
@@ -327,7 +327,7 @@ public final class DataManipulation {
      * @param session The session containing the judiciary.
      * @return A string of the formatted judiciary.
      */
-    private static String sscsFormatJudiciary(JsonNode session) {
+    private static String scssFormatJudiciary(JsonNode session) {
         StringBuilder formattedJudiciaryBuilder = new StringBuilder();
         session.get(JUDICIARY).forEach(judiciary -> {
             if (formattedJudiciaryBuilder.length() > 0) {
@@ -340,7 +340,7 @@ public final class DataManipulation {
         return formattedJudiciaryBuilder.toString();
     }
 
-    private static CourtRoom sscsCourtRoomBuilder(JsonNode node) throws JsonProcessingException {
+    private static CourtRoom scssCourtRoomBuilder(JsonNode node) throws JsonProcessingException {
         CourtRoom thisCourtRoom = new CourtRoom();
         thisCourtRoom.setName(GeneralHelper.safeGet("courtRoomName", node));
         List<Sitting> sittingList = new ArrayList<>();
@@ -352,7 +352,7 @@ public final class DataManipulation {
                 session.get("sessionChannel").toString(),
                 typeReference
             );
-            String judiciary = sscsFormatJudiciary(session);
+            String judiciary = scssFormatJudiciary(session);
             String sessionChannelString = String.join(", ", sessionChannel);
             for (JsonNode sitting : session.get("sittings")) {
                 sittingList.add(sscsSittingBuilder(sessionChannelString, sitting, judiciary));
@@ -370,7 +370,7 @@ public final class DataManipulation {
         thisCourtHouse.setEmail(GeneralHelper.safeGet("courtHouseContact.venueEmail", thisCourtHouseNode));
         List<CourtRoom> courtRoomList = new ArrayList<>();
         for (JsonNode courtRoom : thisCourtHouseNode.get("courtRoom")) {
-            courtRoomList.add(sscsCourtRoomBuilder(courtRoom));
+            courtRoomList.add(scssCourtRoomBuilder(courtRoom));
         }
         thisCourtHouse.setListOfCourtRooms(courtRoomList);
         return thisCourtHouse;

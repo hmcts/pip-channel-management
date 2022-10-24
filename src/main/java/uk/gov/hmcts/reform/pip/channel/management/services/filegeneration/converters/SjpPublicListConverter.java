@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.ExcelAbstractList;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SjpManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.SjpManipulation;
 
 import java.io.IOException;
 import java.util.ArrayList;

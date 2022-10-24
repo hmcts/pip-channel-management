@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers;
+package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,4 +62,3 @@ class SjpManipulationTest {
         assertThat(SjpManipulation.constructSjpCase(hearingNode)).isEmpty();
     }
 }
-
