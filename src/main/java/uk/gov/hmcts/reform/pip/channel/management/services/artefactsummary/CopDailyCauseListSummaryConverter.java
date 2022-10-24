@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 
 @Service
-public class CopDailyCauseList {
+public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
 
     /**
      * COP Daily Cause List summary producer.
@@ -18,7 +18,8 @@ public class CopDailyCauseList {
      * @return - The returned summary for the list.
      * @throws JsonProcessingException - Thrown if there has been an error while processing the JSON payload.
      */
-    public String artefactSummaryCopDailyCauseList(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
 
         DataManipulation.manipulateCopListData(node, Language.ENGLISH);

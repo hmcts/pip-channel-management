@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
-class SscsDailyListConverterTest {
+class SscsDailyListConverterSummaryConverterTest {
 
     @Autowired
     SscsDailyListConverter sscsDailyListConverter;

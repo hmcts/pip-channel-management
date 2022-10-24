@@ -23,13 +23,13 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SjpPublicListConverterTest {
+class SjpPublicListConverterSummaryConverterTest {
     private final SjpPublicListConverter converter = new SjpPublicListConverter();
     private final Map<String, String> metaData = Map.of("contentDate", "1 July 2022",
                                                         "language", "ENGLISH");
     private final Map<String, Object> language = handleLanguage();
 
-    SjpPublicListConverterTest() throws IOException {
+    SjpPublicListConverterSummaryConverterTest() throws IOException {
         // deliberately empty constructor to handle IOException at class level.
     }
 

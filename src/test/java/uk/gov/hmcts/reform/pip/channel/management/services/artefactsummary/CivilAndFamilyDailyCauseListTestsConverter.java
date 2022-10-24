@@ -2,9 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -14,23 +13,22 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @ActiveProfiles("test")
-class FamilyDailyCauseListTests {
-    @Autowired
-    DailyCauseList familyDailyCauseList;
+@SuppressWarnings({"PMD.LawOfDemeter"})
+class CivilAndFamilyDailyCauseListTestsConverter {
 
     @Test
     void testFamilyCauseListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
             "src/test/resources/mocks/",
-            "familyDailyCauseList.json"
+            "civilAndFamilyDailyCauseList.json"
                      )), writer,
                      Charset.defaultCharset()
         );
 
-        String emailOutput = familyDailyCauseList.artefactSummaryDailyCause(writer.toString());
+        String emailOutput = ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.getArtefactSummaryConverter()
+            .convert(writer.toString());
 
         assertThat(emailOutput)
             .as("incorrect party name found")

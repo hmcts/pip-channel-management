@@ -12,13 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class CivilDailyCauseList {
+public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
 
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
+
 
     /**
      * Civil cause list parent method - iterates on courtHouse/courtList - if these need to be shown in further
@@ -28,7 +29,8 @@ public class CivilDailyCauseList {
      * @return - string for output.
      * @throws JsonProcessingException - jackson req.
      */
-    public String artefactSummaryCivilDailyCause(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder("");
         JsonNode node = new ObjectMapper().readTree(payload);
         Iterator<JsonNode> courtHouseNode = node.get(COURT_LISTS).elements();

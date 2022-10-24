@@ -2,9 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -14,26 +13,25 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @ActiveProfiles("test")
-class CopDailyCauseListTest {
-
-    @Autowired
-    CopDailyCauseList copDailyCauseList;
+@SuppressWarnings({"PMD.LawOfDemeter"})
+class FamilyDailyCauseListSummaryConverterTests {
 
     @Test
-    void testCopDailyCauseListTemplate() throws IOException {
+    void testFamilyCauseListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
-            "src/test/resources/mocks/copDailyCauseList.json"
-                     )), writer, Charset.defaultCharset()
+            "src/test/resources/mocks/",
+            "familyDailyCauseList.json"
+                     )), writer,
+                     Charset.defaultCharset()
         );
 
-        String emailOutput = copDailyCauseList.artefactSummaryCopDailyCauseList(writer.toString());
+        String emailOutput = ListType.FAMILY_DAILY_CAUSE_LIST.getArtefactSummaryConverter().convert(writer.toString());
 
         assertThat(emailOutput)
-            .as("incorrect case suppression name found")
-            .contains("ThisIsACaseSupressionName");
+            .as("incorrect party name found")
+            .contains("This is a case name [2 of 3]");
 
         assertThat(emailOutput)
             .as("incorrect case ID found")
@@ -41,19 +39,18 @@ class CopDailyCauseListTest {
 
         assertThat(emailOutput)
             .as("incorrect hearing found")
-            .contains("Criminal");
+            .contains("Directions");
 
         assertThat(emailOutput)
             .as("incorrect location found")
-            .contains("Teams, In-Person");
+            .contains("Teams, Attended");
 
         assertThat(emailOutput)
             .as("incorrect duration found")
-            .contains("1 hour [1 of 2]");
+            .contains("1 hour 25 mins");
 
         assertThat(emailOutput)
             .as("incorrect judge found")
-            .contains("Mrs Firstname Surname");
+            .contains("This is the court room name");
     }
-
 }

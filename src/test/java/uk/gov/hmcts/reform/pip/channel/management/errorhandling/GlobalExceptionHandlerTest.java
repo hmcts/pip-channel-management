@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +21,7 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void testHandleChannelNotFoundMethod() {
-        ChannelNotFoundException channelNotFoundException = new ChannelNotFoundException("This is a test message");
+        ChannelNotFoundException channelNotFoundException = new ChannelNotFoundException(TEST_MESSAGE);
 
         ResponseEntity<ExceptionResponse> responseEntity =
             globalExceptionHandler.handleChannelNotFound(channelNotFoundException);
@@ -40,5 +42,30 @@ class GlobalExceptionHandlerTest {
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals("Request to Test service failed due to: " +  TEST_MESSAGE,
                      responseEntity.getBody().getMessage(), MESSAGES_MATCH);
+    }
+
+    @Test
+    void testHandleNotFoundException() {
+        NotFoundException exception = new NotFoundException(TEST_MESSAGE);
+
+        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleNotFound(exception);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), "Status code should be not found");
+        assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
+        assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
+                     MESSAGES_MATCH);
+    }
+
+    @Test
+    void testHandleProcessingException() {
+        ProcessingException exception = new ProcessingException(TEST_MESSAGE);
+
+        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleProcessingException(exception);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode(),
+                     "Status code should be not found");
+        assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
+        assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
+                     MESSAGES_MATCH);
     }
 }

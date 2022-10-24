@@ -9,7 +9,8 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 
 @Service
-public class DailyCauseList {
+public class DailyCauseListSummaryConverter implements ArtefactSummaryConverter {
+
     /**
      * Civil cause list parent method - iterates on courtHouse/courtList - if these need to be shown in further
      * iterations, do it here.
@@ -18,7 +19,8 @@ public class DailyCauseList {
      * @return - string for output.
      * @throws JsonProcessingException - jackson req.
      */
-    public String artefactSummaryDailyCause(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
 
         DataManipulation.manipulatedDailyListData(node, Language.ENGLISH);

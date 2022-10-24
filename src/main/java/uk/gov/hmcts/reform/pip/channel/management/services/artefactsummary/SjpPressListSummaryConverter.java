@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 @Service
-public class SjpPressList {
+public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
@@ -22,7 +22,8 @@ public class SjpPressList {
      * @return String with final summary data.
      * @throws JsonProcessingException - jackson req.
      */
-    public String artefactSummarySjpPress(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
         OBJECT_MAPPER.readTree(payload).get("courtLists").forEach(courtList -> {

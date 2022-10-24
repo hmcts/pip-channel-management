@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import java.util.Optional;
 
 @Service
-public class SjpPublicList {
+public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String HEARING = "hearing";
@@ -25,7 +25,8 @@ public class SjpPublicList {
      * @return string of data.
      * @throws JsonProcessingException - jackson prereq.
      */
-    public String artefactSummarySjpPublic(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
         OBJECT_MAPPER.readTree(payload).get(COURT_LISTS).forEach(courtList -> {

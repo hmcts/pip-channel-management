@@ -16,8 +16,7 @@ import java.util.List;
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation.courtHouseBuilder;
 
 @Service
-public class SscsDailyList {
-
+public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
 
     /**
      * parent method - first iterates through json file to build courthouse object list (with nested courtroom,
@@ -28,7 +27,8 @@ public class SscsDailyList {
      * @return String with final summary data.
      * @throws JsonProcessingException - jackson req.
      */
-    public String artefactSummarySscsDailyList(String payload) throws JsonProcessingException {
+    @Override
+    public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder(67);
         List<CourtHouse> courtHouseList = jsonParsePayload(payload);
         for (CourtHouse courtHouse : courtHouseList) {
