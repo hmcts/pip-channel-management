@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SuppressWarnings({"PMD.LawOfDemeter"})
-class FamilyDailyCauseListSummaryConverterTests {
+class FamilyDailyCauseListSummaryConverterTest {
 
     @Test
     void testFamilyCauseListTemplate() throws IOException {
