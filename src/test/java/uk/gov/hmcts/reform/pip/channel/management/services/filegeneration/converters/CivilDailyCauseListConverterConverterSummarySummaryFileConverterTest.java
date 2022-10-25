@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
-class CivilDailyCauseListConverterConverterSummarySummaryConverterTest {
+class CivilDailyCauseListConverterConverterSummarySummaryFileConverterTest {
     private static final String OXFORD_COURT = "Oxford Combined Court Centre";
     private static final String MANUAL_UPLOAD = "MANUAL_UPLOAD";
 
@@ -33,7 +33,7 @@ class CivilDailyCauseListConverterConverterSummarySummaryConverterTest {
     );
     private static final int NUMBER_OF_TABLES = 3;
 
-    CivilDailyCauseListConverter converter = new CivilDailyCauseListConverter();
+    CivilDailyCauseListFileConverter converter = new CivilDailyCauseListFileConverter();
 
     @Test
     void testSuccessfulConversion() throws IOException {

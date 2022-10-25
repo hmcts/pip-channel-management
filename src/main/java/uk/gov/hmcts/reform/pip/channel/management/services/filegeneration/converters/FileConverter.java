@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.util.Map;
 
-public interface Converter {
+public interface FileConverter {
 
     /**
      * Interface method that captures the conversion of an artefact to a Html File.

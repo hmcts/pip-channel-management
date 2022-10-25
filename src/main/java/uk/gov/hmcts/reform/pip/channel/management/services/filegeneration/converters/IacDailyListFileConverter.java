@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Converter class for the IAC daily list to generate the PDF.
+ * FileConverter class for the IAC daily list to generate the PDF.
  */
-public class IacDailyListConverter implements Converter {
+public class IacDailyListFileConverter implements FileConverter {
 
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata,

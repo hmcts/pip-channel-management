@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Converter class for SJP Press Lists - builds a nice pdf from input json and an html template (found in
+ * FileConverter class for SJP Press Lists - builds a nice pdf from input json and an html template (found in
  * resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final output string is
  * passed in to PDF Creation Service.
  */
 @Service
-public class SjpPressListConverter extends ExcelAbstractList implements Converter {
+public class SjpPressListFileConverter extends ExcelAbstractList implements FileConverter {
 
     public static final String INDIVIDUAL_DETAILS = "individualDetails";
 

@@ -25,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CopCauseListConverterTest {
+class CopCauseListFileConverterTest {
 
     @Autowired
-    CopDailyCauseListConverter copDailyCauseListConverter;
+    CopDailyCauseListFileConverter copDailyCauseListConverter;
 
     public static final String PROVENANCE = "provenance";
     public static final String HEADER_TEXT = "incorrect header text";

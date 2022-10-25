@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import java.util.Map;
 
 @Service
-public class PrimaryHealthListConverter implements Converter {
+public class PrimaryHealthListFileConverter implements FileConverter {
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
         Context context = new Context();

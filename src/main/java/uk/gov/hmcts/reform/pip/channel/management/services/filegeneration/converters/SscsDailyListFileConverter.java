@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class SscsDailyListConverter implements Converter {
+public class SscsDailyListFileConverter implements FileConverter {
 
     @Override
     public String convert(JsonNode highestLevelNode, Map<String, String> metadata, Map<String, Object> language)

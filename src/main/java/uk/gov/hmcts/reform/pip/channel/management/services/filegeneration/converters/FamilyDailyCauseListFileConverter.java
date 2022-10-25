@@ -10,7 +10,7 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Service
-public class FamilyDailyCauseListConverter implements Converter {
+public class FamilyDailyCauseListFileConverter implements FileConverter {
 
     @Override
     public String convert(JsonNode artefact, Map<String, String> artefactValues, Map<String, Object> language) {

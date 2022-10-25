@@ -33,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
-class SjpPressListConverterSummaryConverterTest {
+class SjpPressListConverterSummaryFileConverterTest {
 
     @Autowired
-    SjpPressListConverter sjpPressListConverter;
+    SjpPressListFileConverter sjpPressListConverter;
 
     private JsonNode getInput(String resourcePath) throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream(resourcePath)) {

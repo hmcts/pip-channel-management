@@ -60,7 +60,7 @@ public class PublicationManagementService {
             topLevelNode = new ObjectMapper().readTree(rawJson);
 
             // Generate the Excel and store it
-            byte[] outputExcel = artefact.getListType().getConverter().convertToExcel(topLevelNode);
+            byte[] outputExcel = artefact.getListType().getFileConverter().convertToExcel(topLevelNode);
             if (outputExcel.length > 0 && outputExcel.length < 2_000_000) {
                 azureBlobService.uploadFile(artefactId + ".xlsx", outputExcel);
             }
@@ -139,7 +139,7 @@ public class PublicationManagementService {
             "language", languageEntry.toString()
         );
 
-        String html = artefact.getListType().getConverter().convert(topLevelNode, metadataMap, language);
+        String html = artefact.getListType().getFileConverter().convert(topLevelNode, metadataMap, language);
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             PdfRendererBuilder builder = new PdfRendererBuilder();

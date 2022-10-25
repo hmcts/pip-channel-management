@@ -11,7 +11,7 @@ import java.io.InputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-class PrimaryHealthListSummaryConverterTest {
+class PrimaryHealthListSummaryFileConverterTest {
     @Test
     void testPrimaryHealthListTemplate() throws IOException {
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()

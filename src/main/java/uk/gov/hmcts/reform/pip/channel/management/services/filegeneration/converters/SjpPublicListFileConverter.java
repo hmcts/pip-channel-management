@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SjpPublicListConverter extends ExcelAbstractList implements Converter {
+public class SjpPublicListFileConverter extends ExcelAbstractList implements FileConverter {
     /**
      * Convert SJP public cases into HMTL file for PDF generation.
      *

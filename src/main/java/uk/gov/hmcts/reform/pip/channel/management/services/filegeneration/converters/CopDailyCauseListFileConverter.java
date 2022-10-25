@@ -12,7 +12,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import java.util.Map;
 
 @Service
-public class CopDailyCauseListConverter implements Converter {
+public class CopDailyCauseListFileConverter implements FileConverter {
 
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {

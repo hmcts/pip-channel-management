@@ -12,16 +12,16 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Prima
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilAndFamilyDailyCauseListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.Converter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.IacDailyListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.PrimaryHealthListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPressListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPublicListConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SscsDailyListConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilAndFamilyDailyCauseListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.IacDailyListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.PrimaryHealthListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPressListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPublicListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SscsDailyListFileConverter;
 
 /**
  * Enum that represents the different list types.
@@ -30,26 +30,26 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 @AllArgsConstructor
 @NoArgsConstructor
 public enum ListType {
-    SJP_PUBLIC_LIST(new SjpPublicListConverter(), new SjpPublicListSummaryConverter()),
-    SJP_PRESS_LIST(new SjpPressListConverter(), new SjpPressListSummaryConverter()),
+    SJP_PUBLIC_LIST(new SjpPublicListFileConverter(), new SjpPublicListSummaryConverter()),
+    SJP_PRESS_LIST(new SjpPressListFileConverter(), new SjpPressListSummaryConverter()),
     SJP_PRESS_REGISTER,
     CROWN_DAILY_LIST,
     CROWN_FIRM_LIST,
     CROWN_WARNED_LIST,
     MAGISTRATES_PUBLIC_LIST,
     MAGISTRATES_STANDARD_LIST,
-    IAC_DAILY_LIST(new IacDailyListConverter(), new IacDailyListSummaryConverter()),
-    CIVIL_DAILY_CAUSE_LIST(new CivilDailyCauseListConverter(), new CivilDailyCauseListSummaryConverter()),
-    FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListConverter(), new DailyCauseListSummaryConverter()),
-    CIVIL_AND_FAMILY_DAILY_CAUSE_LIST(new CivilAndFamilyDailyCauseListConverter(),
+    IAC_DAILY_LIST(new IacDailyListFileConverter(), new IacDailyListSummaryConverter()),
+    CIVIL_DAILY_CAUSE_LIST(new CivilDailyCauseListFileConverter(), new CivilDailyCauseListSummaryConverter()),
+    FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListFileConverter(), new DailyCauseListSummaryConverter()),
+    CIVIL_AND_FAMILY_DAILY_CAUSE_LIST(new CivilAndFamilyDailyCauseListFileConverter(),
                                       new DailyCauseListSummaryConverter()),
-    COP_DAILY_CAUSE_LIST(new CopDailyCauseListConverter(), new CopDailyCauseListSummaryConverter()),
-    SSCS_DAILY_LIST(new SscsDailyListConverter(), new SscsDailyListSummaryConverter()),
-    PRIMARY_HEALTH_LIST(new PrimaryHealthListConverter(), new PrimaryHealthListSummaryConverter()),
+    COP_DAILY_CAUSE_LIST(new CopDailyCauseListFileConverter(), new CopDailyCauseListSummaryConverter()),
+    SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
+    PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new PrimaryHealthListSummaryConverter()),
     CARE_STANDARDS_LIST,
     ET_DAILY_LIST,
     ET_FORTNIGHTLY_PRESS_LIST;
 
-    private Converter converter;
+    private FileConverter fileConverter;
     private ArtefactSummaryConverter artefactSummaryConverter;
 }

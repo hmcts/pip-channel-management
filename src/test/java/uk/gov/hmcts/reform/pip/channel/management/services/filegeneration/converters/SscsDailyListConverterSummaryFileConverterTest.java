@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
-class SscsDailyListConverterSummaryConverterTest {
+class SscsDailyListConverterSummaryFileConverterTest {
 
     @Autowired
-    SscsDailyListConverter sscsDailyListConverter;
+    SscsDailyListFileConverter sscsDailyListConverter;
 
     public static final String PROVENANCE = "provenance";
     public static final String CONTENT_DATE = "contentDate";

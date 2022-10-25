@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.Objects;
 
 @ActiveProfiles("test")
-class IacDailyListConverterTest {
+class IacDailyListFileConverterTest {
 
-    private static final IacDailyListConverter CONVERTER = new IacDailyListConverter();
+    private static final IacDailyListFileConverter CONVERTER = new IacDailyListFileConverter();
 
     private static Document doc;
 
@@ -170,7 +170,7 @@ class IacDailyListConverterTest {
     }
 
     private static JsonNode getInput(String resourcePath) throws IOException {
-        try (InputStream inputStream = IacDailyListConverterTest.class.getResourceAsStream(resourcePath)) {
+        try (InputStream inputStream = IacDailyListFileConverterTest.class.getResourceAsStream(resourcePath)) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             return new ObjectMapper().readTree(inputRaw);
         }

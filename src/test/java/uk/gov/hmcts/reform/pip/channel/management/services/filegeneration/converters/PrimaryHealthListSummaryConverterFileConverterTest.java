@@ -16,8 +16,8 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Objects;
 
-class PrimaryHealthListSummaryConverterConverterTest {
-    private final PrimaryHealthListConverter converter = new PrimaryHealthListConverter();
+class PrimaryHealthListSummaryConverterFileConverterTest {
+    private final PrimaryHealthListFileConverter converter = new PrimaryHealthListFileConverter();
 
     @Test
     @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
