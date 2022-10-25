@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobConfigurationTest;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
+import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
@@ -114,11 +115,11 @@ class PublicationManagementServiceTest {
         when(dataManagementService.getArtefact(any())).thenReturn(artefact);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        Map<String, byte[]> response = publicationManagementService
+        Map<FileType, byte[]> response = publicationManagementService
             .getStoredPublications(UUID.randomUUID());
 
-        assertEquals(TEST_BYTE, response.get("PDF"), BYTES_NO_MATCH);
-        assertEquals(TEST_BYTE, response.get("EXCEL"), BYTES_NO_MATCH);
+        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
+        assertEquals(TEST_BYTE, response.get(FileType.EXCEL), BYTES_NO_MATCH);
     }
 
     @Test
@@ -127,10 +128,10 @@ class PublicationManagementServiceTest {
         when(dataManagementService.getArtefact(any())).thenReturn(artefact);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        Map<String, byte[]> response = publicationManagementService
+        Map<FileType, byte[]> response = publicationManagementService
             .getStoredPublications(UUID.randomUUID());
 
-        assertEquals(TEST_BYTE, response.get("PDF"), BYTES_NO_MATCH);
-        assertTrue(response.get("EXCEL").length == 0, BYTES_NO_MATCH);
+        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
+        assertTrue(response.get(FileType.EXCEL).length == 0, BYTES_NO_MATCH);
     }
 }

@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 
 import java.util.Map;
@@ -46,12 +47,12 @@ class PublicationManagementControllerTest {
 
     @Test
     void testGetFiles() {
-        Map<String, byte[]> testMap = new ConcurrentHashMap<>();
-        testMap.put("PDF", new byte[100]);
-        testMap.put("EXCEL", new byte[0]);
+        Map<FileType, byte[]> testMap = new ConcurrentHashMap<>();
+        testMap.put(FileType.PDF, new byte[100]);
+        testMap.put(FileType.EXCEL, new byte[0]);
         when(publicationManagementService.getStoredPublications(any())).thenReturn(testMap);
 
-        ResponseEntity<Map<String, byte[]>> response = publicationManagementController
+        ResponseEntity<Map<FileType, byte[]>> response = publicationManagementController
             .getFiles(UUID.randomUUID());
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Status did not match");

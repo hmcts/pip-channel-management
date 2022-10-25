@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
+import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
@@ -102,16 +103,16 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to get the files for.
      * @return A map of the filetype to file byte array
      */
-    public Map<String, byte[]> getStoredPublications(UUID artefactId) {
+    public Map<FileType, byte[]> getStoredPublications(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-        Map<String, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-        publicationFilesMap.put("PDF", azureBlobService.getBlobFile(artefactId + ".pdf"));
+        Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
+        publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
         if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
             || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
-            publicationFilesMap.put("EXCEL", azureBlobService.getBlobFile(artefactId + ".xlsx"));
+            publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
         } else {
-            publicationFilesMap.put("EXCEL", new byte[0]);
+            publicationFilesMap.put(FileType.EXCEL, new byte[0]);
         }
         return publicationFilesMap;
     }

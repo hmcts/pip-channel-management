@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
+import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 
 import java.util.Map;
@@ -60,13 +61,13 @@ public class PublicationManagementController {
     }
 
     @ApiResponses({
-        @ApiResponse(code = 200, message = "Map<String, byte[]> returned for each file for an artefact"),
+        @ApiResponse(code = 200, message = "Map<FileType, byte[]> returned for each file for an artefact"),
         @ApiResponse(code = 404, message = NOT_FOUND_DESCRIPTION),
         @ApiResponse(code = 403, message = UNAUTHORIZED_DESCRIPTION)
     })
     @ApiOperation("Takes in an artefact ID and returns a map of stored files")
     @GetMapping("/{artefactId}")
-    public ResponseEntity<Map<String, byte[]>> getFiles(@PathVariable UUID artefactId) {
+    public ResponseEntity<Map<FileType, byte[]>> getFiles(@PathVariable UUID artefactId) {
         return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId));
     }
 }
