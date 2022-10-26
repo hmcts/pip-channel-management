@@ -59,6 +59,11 @@ public class PublicationManagementService {
         try {
             topLevelNode = new ObjectMapper().readTree(rawJson);
 
+            if (artefact.getListType().getFileConverter() == null) {
+                log.info("Failed to find converter for list type");
+                return;
+            }
+
             // Generate the Excel and store it
             byte[] outputExcel = artefact.getListType().getFileConverter().convertToExcel(topLevelNode);
             if (outputExcel.length > 0 && outputExcel.length < 2_000_000) {
@@ -86,10 +91,15 @@ public class PublicationManagementService {
      * @return A string of the generated summary
      */
     public String generateArtefactSummary(UUID artefactId) {
-        String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         String summary = "";
+        if (artefact.getListType().getArtefactSummaryConverter() == null) {
+            log.info("Failed to find converter for list type");
+            return summary;
+        }
+        
         try {
+            String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
             summary = artefact.getListType().getArtefactSummaryConverter().convert(rawJson);
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(String.format("Failed to generate summary for artefact id %s", artefactId));
