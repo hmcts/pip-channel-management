@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
-class SjpPressListConverterSummaryFileConverterTest {
+class SjpPressListFileConverterTest {
 
     @Autowired
     SjpPressListFileConverter sjpPressListConverter;

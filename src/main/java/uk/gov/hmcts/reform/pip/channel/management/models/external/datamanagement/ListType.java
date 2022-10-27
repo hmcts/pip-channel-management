@@ -8,10 +8,11 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Civil
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.DailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.PrimaryHealthListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.TribunalNationalListsSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CareStandardsListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilAndFamilyDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListFileConverter;
@@ -45,8 +46,8 @@ public enum ListType {
                                       new DailyCauseListSummaryConverter()),
     COP_DAILY_CAUSE_LIST(new CopDailyCauseListFileConverter(), new CopDailyCauseListSummaryConverter()),
     SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
-    PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new PrimaryHealthListSummaryConverter()),
-    CARE_STANDARDS_LIST,
+    PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new TribunalNationalListsSummaryConverter()),
+    CARE_STANDARDS_LIST(new CareStandardsListFileConverter(), new TribunalNationalListsSummaryConverter()),
     ET_DAILY_LIST,
     ET_FORTNIGHTLY_PRESS_LIST;
 

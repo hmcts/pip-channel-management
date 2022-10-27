@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.PrimaryHealthList;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.TribunalNationalList;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.PrimaryHealthListManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.TribunalNationalListsManipulation;
 
 import java.util.List;
 
 @Service
-public class PrimaryHealthListSummaryConverter implements ArtefactSummaryConverter {
+public class TribunalNationalListsSummaryConverter implements ArtefactSummaryConverter {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
@@ -21,10 +21,10 @@ public class PrimaryHealthListSummaryConverter implements ArtefactSummaryConvert
         JsonNode jsonPayload = OBJECT_MAPPER.readTree(payload);
 
         LocationHelper.formatCourtAddress(jsonPayload, ", ", true);
-        List<PrimaryHealthList> primaryHealthList = PrimaryHealthListManipulation
-            .processRawListData(jsonPayload, Language.ENGLISH);
+        List<TribunalNationalList> tribunalNationalList =
+            TribunalNationalListsManipulation.processRawListData(jsonPayload, Language.ENGLISH);
 
-        primaryHealthList.forEach(data -> {
+        tribunalNationalList.forEach(data -> {
             output
                 .append("•Hearing Date: ")
                 .append(data.getHearingDate())

@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SuppressWarnings({"PMD.LawOfDemeter"})
-class IacDailyListSummaryFileConverterTest {
+class IacDailyListSummaryConverterTest {
 
     @Test
     void testIacDailyListTemplate() throws IOException {

@@ -16,7 +16,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Objects;
 
-class PrimaryHealthListSummaryConverterFileConverterTest {
+class PrimaryHealthListFileConverterTest {
     private final PrimaryHealthListFileConverter converter = new PrimaryHealthListFileConverter();
 
     @Test
