@@ -157,12 +157,12 @@ public class PublicationManagementService {
             builder.useFastMode()
                 .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_A);
 
-            File file = new File("/opt/app/gdsFont.ttf");
+            File file = new File("/opt/app/gdsFont.otf");
             if (file.exists()) {
                 builder.useFont(file, "GDS Transport");
             } else {
                 builder.useFont(new File(Thread.currentThread().getContextClassLoader()
-                                             .getResource("gdsFont.ttf").getFile()), "GDS Transport");
+                                             .getResource("gdsFont.otf").getFile()), "GDS Transport");
             }
 
             if (accessibility) {
