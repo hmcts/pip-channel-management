@@ -87,7 +87,7 @@ class DataManipulationTest {
                        .get(SITTINGS).get(0)
                        .get("time").asText())
             .as("Unable to get hearing time")
-            .isEqualTo("10:30");
+            .isEqualTo("10:30am");
     }
 
     @Test
@@ -307,7 +307,7 @@ class DataManipulationTest {
     private JsonNode loadInPartyFile() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(
-                         Paths.get("src/test/resources/mocks/partyManipulationJson.json")), writer,
+                         Paths.get("src/test/resources/mocks/partyManipulation.json")), writer,
                      Charset.defaultCharset()
         );
 

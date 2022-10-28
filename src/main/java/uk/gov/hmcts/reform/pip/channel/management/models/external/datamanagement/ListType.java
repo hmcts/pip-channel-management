@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Civil
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.DailyCauseListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CrownDailyListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.EtDailyListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.IacDailyListFileConverter;
@@ -50,7 +52,7 @@ public enum ListType {
     SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
     PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new TribunalNationalListsSummaryConverter()),
     CARE_STANDARDS_LIST(new CareStandardsListFileConverter(), new TribunalNationalListsSummaryConverter()),
-    ET_DAILY_LIST,
+    ET_DAILY_LIST(new EtDailyListFileConverter(), new EtDailyListSummaryConverter()),
     ET_FORTNIGHTLY_PRESS_LIST;
 
     private FileConverter fileConverter;

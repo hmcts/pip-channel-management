@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -66,6 +67,7 @@ class PublicationManagementServiceTest {
 
         location.setLocationId(1);
         location.setName("Test");
+        location.setRegion(Collections.singletonList("Test"));
     }
 
     @Test

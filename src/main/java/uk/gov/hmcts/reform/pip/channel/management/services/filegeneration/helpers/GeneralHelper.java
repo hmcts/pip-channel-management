@@ -12,6 +12,9 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 
+/**
+ * Class for static utility methods assisting with json->html->pdf issues.
+ */
 @Slf4j
 public final class GeneralHelper {
 
@@ -36,7 +39,12 @@ public final class GeneralHelper {
 
     public static void appendToStringBuilder(StringBuilder builder, String text, JsonNode node,
                                              String nodeName) {
-        builder.append('\n')
+        appendToStringBuilderWithPrefix(builder, text, node, nodeName, "\n");
+    }
+
+    public static void appendToStringBuilderWithPrefix(StringBuilder builder, String text, JsonNode node,
+                                                       String nodeName, String prefix) {
+        builder.append(prefix)
             .append(text)
             .append(GeneralHelper.findAndReturnNodeText(node, nodeName));
     }
@@ -86,3 +94,4 @@ public final class GeneralHelper {
         }
     }
 }
+

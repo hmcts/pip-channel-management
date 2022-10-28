@@ -97,7 +97,7 @@ public class PublicationManagementService {
             log.info("Failed to find converter for list type");
             return summary;
         }
-        
+
         try {
             String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
             summary = artefact.getListType().getArtefactSummaryConverter().convert(rawJson);
@@ -146,6 +146,7 @@ public class PublicationManagementService {
             "contentDate", DateHelper.formatLocalDateTimeToBst(artefact.getContentDate()),
             "provenance", artefact.getProvenance(),
             "locationName", locationName,
+            "region", String.join(", ", location.getRegion()),
             "language", languageEntry.toString()
         );
 
