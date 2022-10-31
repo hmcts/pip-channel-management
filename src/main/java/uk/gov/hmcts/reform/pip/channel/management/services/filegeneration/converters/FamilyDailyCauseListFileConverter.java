@@ -16,6 +16,7 @@ public class FamilyDailyCauseListFileConverter implements FileConverter {
     public String convert(JsonNode artefact, Map<String, String> artefactValues, Map<String, Object> language) {
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
         return templateEngine.process("familyCauseList.html",
-                                      preprocessArtefactForThymeLeafConverter(artefact, artefactValues, language));
+                                      preprocessArtefactForThymeLeafConverter(artefact, artefactValues, language,
+                                                                              false));
     }
 }

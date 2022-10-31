@@ -48,12 +48,12 @@ class CrownDailyListHelperTest {
         assertEquals(inputJson.get(COURT_LISTS).size(), 5,
                      "Unable to find correct court List array when unallocated cases are there");
         assertTrue(inputJson.get(COURT_LISTS).get(4).get("unallocatedCases").asBoolean(),
-                     "Unable to find unallocated case section");
+                   "Unable to find unallocated case section");
         assertFalse(inputJson.get(COURT_LISTS).get(0).get("unallocatedCases").asBoolean(),
-                     "Unable to find allocated case section");
+                    "Unable to find allocated case section");
         assertTrue(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(1)
-                         .get("exclude").asBoolean(),
-                     "Unable to find unallocated courtroom");
+                       .get("exclude").asBoolean(),
+                   "Unable to find unallocated courtroom");
         assertEquals(inputJson.get(COURT_LISTS).get(4).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get("courtRoomName").asText(), "to be allocated",
                      "Unable to find unallocated courtroom");
@@ -61,7 +61,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethod() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH);
+        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
         CrownDailyListHelper.manipulatedCrownDailyListData(inputJson);
         CrownDailyListHelper.findUnallocatedCasesInCrownDailyListData(inputJson);
         CrownDailyListHelper.formattedCourtRoomName(inputJson);
@@ -124,3 +124,4 @@ class CrownDailyListHelperTest {
                      "Unable to find linked cases css for a particular case");
     }
 }
+

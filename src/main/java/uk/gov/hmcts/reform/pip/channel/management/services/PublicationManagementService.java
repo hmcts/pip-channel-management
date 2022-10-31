@@ -147,6 +147,7 @@ public class PublicationManagementService {
             "provenance", artefact.getProvenance(),
             "locationName", locationName,
             "region", String.join(", ", location.getRegion()),
+            "regionName", String.join(", ", location.getRegion()),
             "language", languageEntry.toString()
         );
 
