@@ -197,8 +197,8 @@ dependencies {
   implementation group: 'io.springfox', name: 'springfox-boot-starter', version: versions.springfoxSwagger
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLoggingVersion
   implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.10.0'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.63'
   implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.63'
