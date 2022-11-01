@@ -161,11 +161,11 @@ repositories {
 }
 
 def versions = [
-  junit           : '5.9.1',
-  junitPlatform   : '1.9.1',
-  reformLogging   : '5.1.9',
-  springBoot      : springBoot.class.package.implementationVersion,
-  springfoxSwagger: '3.0.0'
+  junit                  : '5.9.1',
+  junitPlatform          : '1.9.1',
+  reformLoggingVersion   : '5.1.9',
+  springBoot             : springBoot.class.package.implementationVersion,
+  springfoxSwagger       : '3.0.0'
 ]
 
 ext.libraries = [
