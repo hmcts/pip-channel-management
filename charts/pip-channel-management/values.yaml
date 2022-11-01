@@ -25,4 +25,6 @@ java:
           alias: INSTRUMENTATION_KEY
         - name: auto-pip-<ENV>-courtel-api
           alias: COURTEL_API
+        - name: shared-storageaccount-connection-string
+          alias: CONNECTION_STRING
   environment:
