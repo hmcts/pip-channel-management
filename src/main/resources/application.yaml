@@ -48,3 +48,7 @@ service-to-service:
 
 third-party-api:
   courtel: ${COURTEL_API:testCourtelApi}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/

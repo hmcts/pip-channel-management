@@ -4,7 +4,7 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.5.14'
+  id 'org.springframework.boot' version '2.7.4'
   id 'org.owasp.dependencycheck' version '7.3.0'
   id 'com.github.ben-manes.versions' version '0.43.0'
   id 'org.sonarqube' version '3.5.0.2730'
@@ -187,14 +187,14 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.1.0'
+  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.4.0'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-  implementation group: 'com.github.hmcts', name: 'pip-data-models', version: '1.1.1', {
+  implementation group: 'com.github.hmcts', name: 'pip-data-models', version: '1.2.1', {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
   }
 
-  implementation group: 'io.springfox', name: 'springfox-boot-starter', version: versions.springfoxSwagger
+  implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLoggingVersion
@@ -226,8 +226,7 @@ dependencies {
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
   testImplementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
-  testImplementation group: 'io.github.hakky54', name: 'logcaptor', version: '2.7.8'
-  testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.9.3'
+  testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
