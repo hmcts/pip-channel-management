@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
 
 import java.time.LocalDateTime;
 
@@ -38,4 +41,36 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
+    @ExceptionHandler(ServiceToServiceException.class)
+    public ResponseEntity<ExceptionResponse> handleServiceToService(ServiceToServiceException ex) {
+        log.error(String.format("ServiceToServiceException was thrown with the init cause: %s", ex.getCause()));
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex) {
+        log.error(String.format("NotFoundException was thrown with the init cause: %s", ex.getCause()));
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ExceptionResponse> handleProcessingException(ProcessingException ex) {
+        log.error(String.format("ProcessingException was thrown with the init cause: %s", ex.getCause()));
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
 }

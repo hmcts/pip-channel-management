@@ -21,11 +21,15 @@ import java.util.Optional;
 @Component
 public class AccountManagementService {
 
-    @Autowired
-    private WebClient webClient;
-
     @Value("${service-to-service.account-management}")
     private String url;
+
+    private final WebClient webClient;
+
+    @Autowired
+    public AccountManagementService(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
         try {

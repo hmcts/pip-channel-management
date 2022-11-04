@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
+import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobConfigurationTest;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientConfigurationTest;
 
 import java.io.IOException;
@@ -27,9 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-@SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
-@ActiveProfiles({"test", "non-async"})
+@SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class, AzureBlobConfigurationTest.class})
+@ActiveProfiles(profiles = "test")
 class AccountManagementServiceTest {
 
     private static MockWebServer mockAccountManagementGetEmailsEndpoint;

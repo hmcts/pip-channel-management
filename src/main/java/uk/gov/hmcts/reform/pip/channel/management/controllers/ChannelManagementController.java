@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
-import uk.gov.hmcts.reform.pip.channel.management.services.AccountManagementService;
 import uk.gov.hmcts.reform.pip.channel.management.services.SubscriberListService;
 
 import java.util.List;
@@ -31,11 +30,12 @@ import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
 @IsAdmin
 public class ChannelManagementController {
 
-    @Autowired
-    AccountManagementService accountManagementService;
+    private final SubscriberListService subscriberListService;
 
     @Autowired
-    SubscriberListService subscriberListService;
+    public ChannelManagementController(SubscriberListService subscriberListService) {
+        this.subscriberListService = subscriberListService;
+    }
 
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Subscriber request has been accepted"),

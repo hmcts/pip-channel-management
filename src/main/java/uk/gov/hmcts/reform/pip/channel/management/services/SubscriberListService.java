@@ -25,11 +25,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class SubscriberListService {
 
-    @Autowired
-    AccountManagementService accountManagementService;
+    private final AccountManagementService accountManagementService;
+    private final ThirdPartyApi thirdPartyApi;
 
     @Autowired
-    private ThirdPartyApi thirdPartyApi;
+    public SubscriberListService(AccountManagementService accountManagementService, ThirdPartyApi thirdPartyApi) {
+        this.accountManagementService = accountManagementService;
+        this.thirdPartyApi = thirdPartyApi;
+    }
 
     /**
      * Parent method which handles the flow through the service, initially capturing duplicate users, then sending a
