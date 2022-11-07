@@ -22,7 +22,7 @@ import java.util.Objects;
 class CrownWarnedListFileConverterTest {
     private static final String CONTENT_DATE = "23 October 2022";
     private static final String ENGLISH = "ENGLISH";
-    private static final Map<String, String> metaData = Map.of("contentDate", CONTENT_DATE,
+    private static final Map<String, String> METADATA = Map.of("contentDate", CONTENT_DATE,
                                                                "language", ENGLISH);
 
     private final CrownWarnedListFileConverter converter = new CrownWarnedListFileConverter();
@@ -40,7 +40,7 @@ class CrownWarnedListFileConverterTest {
 
     @Test
     void testHeadersForSuccessfulConversion() {
-        String result = converter.convert(inputJson, metaData, language);
+        String result = converter.convert(inputJson, METADATA, language);
         Document doc = Jsoup.parse(result);
         SoftAssertions softly = new SoftAssertions();
 
@@ -83,7 +83,7 @@ class CrownWarnedListFileConverterTest {
 
     @Test
     void testTableContentsForSuccessfulConversion() {
-        String result = converter.convert(inputJson, metaData, language);
+        String result = converter.convert(inputJson, METADATA, language);
         Document doc = Jsoup.parse(result);
         SoftAssertions softly = new SoftAssertions();
 
