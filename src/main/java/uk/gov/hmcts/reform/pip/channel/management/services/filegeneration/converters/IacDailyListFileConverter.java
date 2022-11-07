@@ -6,9 +6,9 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
 import java.io.IOException;
@@ -79,33 +79,11 @@ public class IacDailyListFileConverter implements FileConverter {
 
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.findAndManipulatePartyInformation(hearing, language, false);
-                            hearing.get("case").forEach(this::formatLinkedCases);
+                            hearing.get("case").forEach(CaseHelper::formatLinkedCases);
                         });
                     });
                 });
             });
-
         });
     }
-
-    /**
-     * This method formats the linked cases.
-     * @param caseInfo The case info that contains the linked cases.
-     */
-    private void formatLinkedCases(JsonNode caseInfo) {
-        StringBuilder formattedLinked = new StringBuilder();
-
-        if (caseInfo.has("caseLinked")) {
-            caseInfo.get("caseLinked").forEach(linkedCase -> {
-
-                if (formattedLinked.length() != 0) {
-                    formattedLinked.append(", ");
-                }
-                formattedLinked.append(GeneralHelper.findAndReturnNodeText(linkedCase, "caseId"));
-            });
-        }
-
-        ((ObjectNode) caseInfo).put("formattedLinkedCases", formattedLinked.toString());
-    }
-
 }
