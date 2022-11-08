@@ -125,8 +125,8 @@ class CrownWarnedListManipulationTest {
             .containsExactly("12345678",
                              "Kelly, Smith",
                              "27/07/2022",
-                             "FirstGroup LLP",
-                             "CPS",
+                             "Defendant rep 1",
+                             "Prosecutor",
                              "123456, 123457",
                              "Note 1");
     }
