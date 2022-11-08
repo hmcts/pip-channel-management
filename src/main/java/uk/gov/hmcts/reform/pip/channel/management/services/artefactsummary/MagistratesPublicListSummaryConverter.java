@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.helpers.CrimeListSummaryHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.MagistratesPublicListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrimeListHelper;
 
 @Service
 public class MagistratesPublicListSummaryConverter implements ArtefactSummaryConverter {
@@ -25,7 +25,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
         JsonNode node = new ObjectMapper().readTree(payload);
 
         DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, false);
-        MagistratesPublicListHelper.manipulatedMagistratesPublicListData(node);
+        CrimeListHelper.manipulatedCrimeListData(node, ListType.MAGISTRATES_PUBLIC_LIST);
 
         return CrimeListSummaryHelper.processCrimeList(node, ListType.MAGISTRATES_PUBLIC_LIST);
     }
