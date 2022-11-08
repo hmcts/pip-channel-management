@@ -104,7 +104,7 @@ public final class CrownWarnedListManipulation {
         String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
         String surname = GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname");
 
-        return surname + GeneralHelper.stringDelimiter(surname, ", ")
+        return surname + (!surname.isEmpty() && !forenames.isEmpty() ? ", " : "")
             + forenames;
     }
 
