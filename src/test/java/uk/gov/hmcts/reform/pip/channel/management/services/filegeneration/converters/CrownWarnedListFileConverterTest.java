@@ -53,7 +53,7 @@ class CrownWarnedListFileConverterTest {
         softly.assertThat(doc.getElementById("list-name"))
             .as("Incorrect list name")
             .extracting(Element::text)
-            .isEqualTo("Manchester Crown Court: Warned List");
+            .isEqualTo("Manchester Court: Warned List");
 
         softly.assertThat(doc.getElementById("publication-date"))
             .as("Incorrect publication date")
@@ -63,12 +63,12 @@ class CrownWarnedListFileConverterTest {
         softly.assertThat(doc.getElementById("list-version"))
             .as("Incorrect version")
             .extracting(Element::text)
-            .isEqualTo("Final: Version 1.0");
+            .isEqualTo("Draft: Version 1.0");
 
         softly.assertThat(doc.getElementById("venue-address"))
             .as("Incorrect venue address")
             .extracting(Element::text)
-            .isEqualTo("Crown Square Barcroft Street Manchester M3 3EB");
+            .isEqualTo("Princess Square Manchester M1 1AA");
 
         softly.assertThat(doc.getElementsByClass("heading-note"))
             .as("Incorrect content date")
@@ -118,8 +118,8 @@ class CrownWarnedListFileConverterTest {
             .startsWith("12345678",
                         "Kelly, Smith",
                         "27/07/2022",
-                        "FirstGroup LLP",
-                        "CPS",
+                        "Defendant rep 1",
+                        "Prosecutor",
                         "Linked Cases: 123456, 123457",
                         "Listing Notes: Note 1"
             );

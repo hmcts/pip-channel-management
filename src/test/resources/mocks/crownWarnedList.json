@@ -4,14 +4,13 @@
     "publicationDate":"2022-09-13T11:30:52.123Z"
   },
   "venue": {
-    "venueName": "Manchester Crown Court",
+    "venueName": "Manchester Court",
     "venueAddress": {
       "line": [
-        "Crown Square",
-        "Barcroft Street"
+        "Princess Square"
       ],
       "town": "Manchester",
-      "postCode": "M3 3EB"
+      "postCode": "M1 1AA"
     }
   },
   "@schemaLocation": "",
@@ -59,13 +58,13 @@
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
                             "organisationDetails": {
-                              "organisationName": "FirstGroup LLP"
+                              "organisationName": "Defendant rep 1"
                             }
                           },
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -95,13 +94,13 @@
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
                             "organisationDetails": {
-                              "organisationName": "JLP LLP"
+                              "organisationName": "Defendant rep 2"
                             }
                           },
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -131,13 +130,13 @@
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
                             "organisationDetails": {
-                              "organisationName": "FirstGroup LLP"
+                              "organisationName": "Defendant rep 3"
                             }
                           },
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -168,7 +167,7 @@
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -226,7 +225,7 @@
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -288,7 +287,7 @@
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           }
                         ]
@@ -304,16 +303,6 @@
     },
     {
       "courtHouse": {
-        "courtHouseName": "Court B",
-        "courtHouseAddress": {
-          "line": [
-            "Address Line 1",
-            "Address Line 2"
-          ],
-          "town": "Town B",
-          "county": "County B",
-          "postCode": "BB1 BB1"
-        },
         "courtRoom": [
           {
             "courtRoomName": "1",
@@ -352,13 +341,13 @@
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
                             "organisationDetails": {
-                              "organisationName": "Anderson LLP"
+                              "organisationName": "Defendant rep 4"
                             }
                           },
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "organisationDetails": {
-                              "organisationName": "CPS"
+                              "organisationName": "Prosecutor"
                             }
                           },
                           {

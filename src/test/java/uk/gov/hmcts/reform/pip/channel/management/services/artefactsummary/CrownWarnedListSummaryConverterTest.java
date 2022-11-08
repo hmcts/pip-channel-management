@@ -39,11 +39,11 @@ class CrownWarnedListSummaryConverterTest {
 
             softly.assertThat(output)
                 .as("Defendant representative does not match")
-                .contains("Represented By: FirstGroup LLP");
+                .contains("Represented By: Defendant rep 1");
 
             softly.assertThat(output)
                 .as("prosecuting authority does not match")
-                .contains("Prosecuting Authority: CPS");
+                .contains("Prosecuting Authority: Prosecutor");
 
             softly.assertThat(output)
                 .as("Linked cases does not match")
