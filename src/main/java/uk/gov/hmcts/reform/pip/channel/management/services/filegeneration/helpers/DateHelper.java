@@ -179,4 +179,12 @@ public final class DateHelper {
 
         ((ObjectNode) sitting).put("time", time);
     }
+
+    public static void formatCaseTime(JsonNode sitting, String dateTimeNode, String destinationNode,
+                                      String format) {
+        if (!GeneralHelper.findAndReturnNodeText(sitting, dateTimeNode).isEmpty()) {
+            ((ObjectNode)sitting).put(destinationNode, timeStampToBstTimeWithFormat(
+                GeneralHelper.findAndReturnNodeText(sitting, dateTimeNode), format));
+        }
+    }
 }

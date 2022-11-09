@@ -41,7 +41,8 @@ public final class CrownDailyListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get("sittings").forEach(sitting -> {
-                        formatCaseTime(sitting);
+                        DateHelper.formatCaseTime(sitting, "sittingStart",
+                            "time", "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 findAndManipulatePartyInformation(hearing);
@@ -157,14 +158,6 @@ public final class CrownDailyListHelper {
                     ((ObjectNode)cases).put("linkedCasesBorder", "no-border-bottom");
                 }
             });
-        }
-    }
-
-    private static void formatCaseTime(JsonNode sitting) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, "sittingStart").isEmpty()) {
-            ((ObjectNode)sitting).put("time",
-                                      DateHelper.timeStampToBstTimeWithFormat(GeneralHelper
-                    .findAndReturnNodeText(sitting, "sittingStart"), "h:mma"));
         }
     }
 

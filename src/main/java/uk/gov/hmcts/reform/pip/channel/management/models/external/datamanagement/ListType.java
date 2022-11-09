@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Daily
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
@@ -25,6 +26,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.IacDailyListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.MagistratesStandardListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.PrimaryHealthListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPublicListFileConverter;
@@ -44,7 +46,8 @@ public enum ListType {
     CROWN_FIRM_LIST,
     CROWN_WARNED_LIST,
     MAGISTRATES_PUBLIC_LIST,
-    MAGISTRATES_STANDARD_LIST,
+    MAGISTRATES_STANDARD_LIST(new MagistratesStandardListFileConverter(),
+                              new MagistratesStandardListSummaryConverter()),
     IAC_DAILY_LIST(new IacDailyListFileConverter(), new IacDailyListSummaryConverter()),
     CIVIL_DAILY_CAUSE_LIST(new CivilDailyCauseListFileConverter(), new CivilDailyCauseListSummaryConverter()),
     FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListFileConverter(), new DailyCauseListSummaryConverter()),
