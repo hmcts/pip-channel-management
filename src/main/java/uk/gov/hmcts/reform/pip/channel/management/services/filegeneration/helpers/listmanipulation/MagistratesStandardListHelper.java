@@ -156,7 +156,7 @@ public final class MagistratesStandardListHelper {
         AtomicReference<String> formattedAddress = new AtomicReference<>("");
         defendantAddress.get("line").forEach(addressLine -> {
             formattedAddress.updateAndGet(v -> v
-                + (addressLine.asText().length() > 0 ? ", "
+                + (formattedAddress.get().length() > 0 && addressLine.asText().length() > 0 ? ", "
                 + addressLine.asText() : addressLine.asText()));
         });
         String town = GeneralHelper.findAndReturnNodeText(defendantAddress, "town");
@@ -167,7 +167,7 @@ public final class MagistratesStandardListHelper {
         formattedAddress.updateAndGet(v -> v + (county.length() > 0 ? ", " + county : county));
         formattedAddress.updateAndGet(v -> v + (postCode.length() > 0 ? ", " + postCode : postCode));
 
-        return formattedAddress.get();
+        return formattedAddress.get().trim();
     }
 
     private static String createIndividualDetails(JsonNode party) {
