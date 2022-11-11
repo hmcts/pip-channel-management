@@ -11,11 +11,10 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrimeListHelper;
 
 @Service
-public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter {
+public class MagistratesPublicListSummaryConverter implements ArtefactSummaryConverter {
 
     /**
-     * Crown daily list parent method - iterates on courtHouse/courtList - if these need to be shown in further
-     * iterations, do it here.
+     * Magistrates public lists - iterates on courtHouse/courtList.
      *
      * @param payload - json body.
      * @return - string for output.
@@ -26,9 +25,8 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
         JsonNode node = new ObjectMapper().readTree(payload);
 
         DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, false);
-        CrimeListHelper.manipulatedCrimeListData(node, ListType.CROWN_DAILY_LIST);
-        CrimeListHelper.findUnallocatedCasesInCrownDailyListData(node);
+        CrimeListHelper.manipulatedCrimeListData(node, ListType.MAGISTRATES_PUBLIC_LIST);
 
-        return CrimeListSummaryHelper.processCrimeList(node, ListType.CROWN_DAILY_LIST);
+        return CrimeListSummaryHelper.processCrimeList(node, ListType.MAGISTRATES_PUBLIC_LIST);
     }
 }

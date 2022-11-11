@@ -11,12 +11,12 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrimeListHelper.preprocessArtefactForCrimeListsThymeLeafConverter;
 
 @Service
-public class CrownDailyListFileConverter implements FileConverter {
+public class MagistratesPublicListFileConverter implements FileConverter {
     @Override
     public String convert(JsonNode artefact, Map<String, String> artefactValues, Map<String, Object> language) {
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
-        return templateEngine.process("crownDailyList.html",
+        return templateEngine.process("magistratesPublicList.html",
                                       preprocessArtefactForCrimeListsThymeLeafConverter(
-                                          artefact, artefactValues, language, ListType.CROWN_DAILY_LIST));
+                                          artefact, artefactValues, language, ListType.MAGISTRATES_PUBLIC_LIST));
     }
 }
