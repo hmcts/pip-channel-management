@@ -204,7 +204,6 @@
                             ]
                           },
                           {
-
                             "caseNumber": "86643534"
                           }
                         ],
@@ -247,7 +246,7 @@
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
                             "organisationDetails": {
-                              "organisationName": "Leaman & Co LLP"
+                              "organisationName": "Defendant rep 5"
                             }
                           }
                         ]
