@@ -55,6 +55,32 @@
         "individualSurname": "SurnameB",
         "title": "Mr"
       }
+    },
+    {
+      "partyRole": "DEFENDANT",
+      "individualDetails": {
+        "individualForenames": "ForenamesA",
+        "individualSurname": "SurnameA"
+      }
+    },
+    {
+      "partyRole": "DEFENDANT",
+      "individualDetails": {
+        "individualForenames": "ForenamesB",
+        "individualSurname": "SurnameB"
+      }
+    },
+    {
+      "partyRole": "DEFENDANT_REPRESENTATIVE",
+      "organisationDetails": {
+        "organisationName": "Defendant rep name"
+      }
+    },
+    {
+      "partyRole": "PROSECUTING_AUTHORITY",
+      "organisationDetails": {
+        "organisationName": "Prosecuting authority name"
+      }
     }
   ]
 }

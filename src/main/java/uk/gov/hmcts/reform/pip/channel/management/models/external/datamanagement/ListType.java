@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Artef
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CivilDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownWarnedListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.DailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryConverter;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CopDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CrownDailyListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CrownWarnedListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.EtDailyListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.EtFortnightlyPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FamilyDailyCauseListFileConverter;
@@ -44,7 +46,7 @@ public enum ListType {
     SJP_PRESS_REGISTER,
     CROWN_DAILY_LIST(new CrownDailyListFileConverter(), new CrownDailyListSummaryConverter()),
     CROWN_FIRM_LIST,
-    CROWN_WARNED_LIST,
+    CROWN_WARNED_LIST(new CrownWarnedListFileConverter(), new CrownWarnedListSummaryConverter()),
     MAGISTRATES_PUBLIC_LIST(new MagistratesPublicListFileConverter(), new MagistratesPublicListSummaryConverter()),
     MAGISTRATES_STANDARD_LIST,
     IAC_DAILY_LIST(new IacDailyListFileConverter(), new IacDailyListSummaryConverter()),

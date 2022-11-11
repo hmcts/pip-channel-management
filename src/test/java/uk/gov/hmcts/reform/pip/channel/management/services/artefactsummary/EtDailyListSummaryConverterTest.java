@@ -8,9 +8,8 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ActiveProfiles("test")
+@SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
 class EtDailyListSummaryConverterTest {
     @Test
     void testEtDailyListTemplate() throws IOException {
@@ -33,7 +32,7 @@ class EtDailyListSummaryConverterTest {
                 .as("Incorrect duration")
                 .contains("Duration: 2 hours");
 
-            assertThat(output)
+            softly.assertThat(output)
                 .as("Incorrect case number")
                 .contains("Case Number: 12341234");
 
