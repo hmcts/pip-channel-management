@@ -38,16 +38,24 @@ class LocationHelperTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
     void testFormatVenueAddress() {
         List<String> venueAddress = LocationHelper.formatVenueAddress(inputJson);
 
-        assertThat(venueAddress.get(0))
+        assertThat(venueAddress)
             .as(VENUE_ADDRESS_ERROR)
-            .isEqualTo("Address Line 1");
+            .hasSize(2)
+            .containsExactly("Address Line 1", "AA1 AA1");
+    }
 
-        assertThat(venueAddress.get(venueAddress.size() - 1))
+    @Test
+    void testFormatFullVenueAddress() {
+        List<String> venueAddress = LocationHelper.formatFullVenueAddress(inputJson);
+
+        assertThat(venueAddress)
             .as(VENUE_ADDRESS_ERROR)
-            .isEqualTo("AA1 AA1");
+            .hasSize(4)
+            .containsExactly("Address Line 1", "Venue Town", "Venue County", "AA1 AA1");
     }
 
     @Test

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class LocationHelper {
+    private static final String VENUE = "venue";
+    private static final String VENUE_ADDRESS = "venueAddress";
     private static final String LINE = "line";
     private static final String TOWN = "town";
     private static final String COUNTY = "county";
@@ -20,14 +22,28 @@ public final class LocationHelper {
 
     public static List<String> formatVenueAddress(JsonNode artefact) {
         List<String> address = new ArrayList<>();
-        JsonNode arrayNode = artefact.get("venue").get("venueAddress").get(LINE);
-        for (JsonNode jsonNode : arrayNode) {
-            if (!jsonNode.asText().isEmpty()) {
-                address.add(jsonNode.asText());
-            }
+        address.addAll(addAddressLines(artefact));
+
+        if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), POSTCODE).isEmpty()) {
+            address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(POSTCODE).asText());
         }
-        if (!GeneralHelper.findAndReturnNodeText(artefact.get("venue").get("venueAddress"), POSTCODE).isEmpty()) {
-            address.add(artefact.get("venue").get("venueAddress").get(POSTCODE).asText());
+        return address;
+    }
+
+    public static List<String> formatFullVenueAddress(JsonNode artefact) {
+        List<String> address = new ArrayList<>();
+        address.addAll(addAddressLines(artefact));
+
+        if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), TOWN).isEmpty()) {
+            address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(TOWN).asText());
+        }
+
+        if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), COUNTY).isEmpty()) {
+            address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(COUNTY).asText());
+        }
+
+        if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), POSTCODE).isEmpty()) {
+            address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(POSTCODE).asText());
         }
         return address;
     }
@@ -67,6 +83,17 @@ public final class LocationHelper {
                 .append(node.get(nodeName).asText())
                 .append(delimiter);
         }
+    }
+
+    private static List<String> addAddressLines(JsonNode artefact) {
+        List<String> addressLines = new ArrayList<>();
+        JsonNode arrayNode = artefact.get(VENUE).get(VENUE_ADDRESS).get(LINE);
+        for (JsonNode jsonNode : arrayNode) {
+            if (!jsonNode.asText().isEmpty()) {
+                addressLines.add(jsonNode.asText());
+            }
+        }
+        return addressLines;
     }
 
     public static void formatRegionName(JsonNode artefact) {
