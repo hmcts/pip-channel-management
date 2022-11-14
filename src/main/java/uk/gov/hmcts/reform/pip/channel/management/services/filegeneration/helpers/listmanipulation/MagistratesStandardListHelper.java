@@ -11,11 +11,14 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
+@SuppressWarnings({"PMD.TooManyMethods"})
 public final class MagistratesStandardListHelper {
     public static final String COURT_LIST = "courtLists";
     public static final String CASE = "case";
@@ -23,6 +26,9 @@ public final class MagistratesStandardListHelper {
     public static final String INDIVIDUAL_DETAILS = "individualDetails";
     public static final String AGE = "age";
     public static final String IN_CUSTODY = "inCustody";
+    public static final String DEFENDANT_HEADING = "defendantHeading";
+    public static final String PLEA = "plea";
+    public static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
 
     private MagistratesStandardListHelper() {
     }
@@ -41,26 +47,92 @@ public final class MagistratesStandardListHelper {
         artefact.get(COURT_LIST).forEach(courtList -> {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
+                    ArrayNode allDefendants = mapper.createArrayNode();
                     session.get("sittings").forEach(sitting -> {
                         manipulatedSitting(courtRoom, session, sitting);
-                        ArrayNode allHearings = mapper.createArrayNode();
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 hearing.get("party").forEach(party -> {
-                                    JsonNode cloneHearing = hearing.deepCopy();
-                                    formatPartyInformation(cloneHearing, party, language);
-                                    cloneHearing.get(CASE).forEach(thisCase -> {
-                                        manipulatedCase(thisCase);
-                                    });
-                                    allHearings.add(cloneHearing);
+                                    JsonNode cloneHearing =
+                                        manipulateHearingParty(sitting, hearing, party, language);
+                                    allDefendants.add(cloneHearing);
                                 });
                             }
                         });
-                        ((ObjectNode) sitting).put("hearing", allHearings);
                     });
+                    ((ObjectNode) session).put("defendants",
+                                               combineDefendantSittings(allDefendants));
                 });
             });
         });
+    }
+
+    private static ArrayNode combineDefendantSittings(ArrayNode allDefendants) {
+        ObjectMapper mapper = new ObjectMapper();
+        AtomicReference<ObjectNode> defendantNode = new AtomicReference<>();
+        List<String> uniqueDefendantNames = new ArrayList<>();
+        ArrayNode defendantsPerSessions = mapper.createArrayNode();
+        AtomicReference<ArrayNode> defendantInfo = new AtomicReference<>();
+        allDefendants.forEach(df -> {
+            if (!uniqueDefendantNames.contains(df.get(DEFENDANT_HEADING).asText())) {
+                uniqueDefendantNames.add(df.get(DEFENDANT_HEADING).asText());
+            }
+        });
+
+        uniqueDefendantNames.forEach(uniqueName -> {
+            defendantNode.set(mapper.createObjectNode());
+            defendantInfo.set(mapper.createArrayNode());
+            int sittingSequence = 1;
+            for (JsonNode defendant : allDefendants) {
+                if (uniqueName.equals(defendant.get(DEFENDANT_HEADING).asText())) {
+                    ((ObjectNode) defendant).put("sittingSequence", sittingSequence);
+                    sittingSequence++;
+                    defendantInfo.get().add(defendant);
+                }
+            }
+            defendantNode.get().put(DEFENDANT_HEADING, uniqueName);
+            defendantNode.get().put("defendantInfo", defendantInfo.get());
+            defendantsPerSessions.add(defendantNode.get());
+        });
+
+        return defendantsPerSessions;
+    }
+
+    private static JsonNode manipulateHearingParty(JsonNode sitting, JsonNode hearing, JsonNode party,
+                                                    Map<String, Object> language) {
+        JsonNode cloneHearing = hearing.deepCopy();
+        formatPartyInformation(cloneHearing, party, language);
+        cloneHearing.get(CASE).forEach(thisCase -> {
+            manipulatedCase(sitting, cloneHearing, thisCase);
+        });
+        ((ObjectNode) cloneHearing).put("time",
+                                        GeneralHelper.findAndReturnNodeText(sitting, "time"));
+        ((ObjectNode) cloneHearing).put("formattedDuration",
+                                        GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
+        findOffences(cloneHearing);
+
+        return cloneHearing;
+    }
+
+    private static void findOffences(JsonNode hearing) {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode allOffences = mapper.createArrayNode();
+        hearing.get("offence").forEach(offence -> {
+            ObjectNode offenceNode = mapper.createObjectNode();
+            ((ObjectNode) offenceNode).put("offenceTitle",
+                GeneralHelper.findAndReturnNodeText(offence, "offenceTitle"));
+            ((ObjectNode) offenceNode).put(PLEA,
+                GeneralHelper.findAndReturnNodeText(hearing, PLEA));
+            ((ObjectNode) offenceNode).put("dateOfPlea", "Need to confirm");
+            ((ObjectNode) offenceNode).put("formattedConvictionDate",
+                GeneralHelper.findAndReturnNodeText(hearing, "formattedConvictionDate"));
+            ((ObjectNode) offenceNode).put("formattedAdjournedDate",
+                GeneralHelper.findAndReturnNodeText(hearing, "formattedAdjournedDate"));
+            ((ObjectNode) offenceNode).put("offenceWording",
+                GeneralHelper.findAndReturnNodeText(offence, "offenceWording"));
+            allOffences.add(offenceNode);
+        });
+        ((ObjectNode) hearing).put("allOffences", allOffences);
     }
 
     private static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting) {
@@ -78,58 +150,85 @@ public final class MagistratesStandardListHelper {
                                   "time", "h:mma");
     }
 
-    private static void manipulatedCase(JsonNode thisCase) {
-        ((ObjectNode) thisCase).put("formattedConvictionDate",
-                            DateHelper.timeStampToBstTimeWithFormat(
-                            GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
-                            "dd/MM/yyyy"));
-        ((ObjectNode) thisCase).put("formattedAdjournedDate",
-                            DateHelper.timeStampToBstTimeWithFormat(
-                            GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
-                            "dd/MM/yyyy"));
-
-        if (!thisCase.has("caseSequenceIndicator")) {
-            ((ObjectNode) thisCase).put("caseSequenceIndicator", "");
+    private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {
+        ((ObjectNode) hearing).put("formattedConvictionDate",
+            DateHelper.timeStampToBstTimeWithFormat(
+            GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
+            "dd/MM/yyyy"));
+        ((ObjectNode) hearing).put("formattedAdjournedDate",
+            DateHelper.timeStampToBstTimeWithFormat(
+            GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
+            "dd/MM/yyyy"));
+        ((ObjectNode) hearing).put("prosecutionAuthorityCode",
+            GeneralHelper.findAndReturnNodeText(thisCase.get("informant"),
+            "prosecutionAuthorityCode"));
+        ((ObjectNode) hearing).put("hearingNumber",
+            GeneralHelper.findAndReturnNodeText(thisCase,
+            "hearingNumber"));
+        ((ObjectNode) hearing).put("caseHearingChannel",
+            GeneralHelper.findAndReturnNodeText(sitting,
+            "caseHearingChannel"));
+        ((ObjectNode) hearing).put("caseNumber",
+            GeneralHelper.findAndReturnNodeText(thisCase,
+            "caseNumber"));
+        ((ObjectNode) hearing).put("asn", "Need to confirm");
+        ((ObjectNode) hearing).put("panel",
+            GeneralHelper.findAndReturnNodeText(thisCase,
+            "panel"));
+        ((ObjectNode) hearing).put(CASE_SEQUENCE_INDICATOR, "");
+        if (thisCase.has(CASE_SEQUENCE_INDICATOR)) {
+            ((ObjectNode) hearing).put(CASE_SEQUENCE_INDICATOR,
+                thisCase.get(CASE_SEQUENCE_INDICATOR));
         }
     }
 
     private static void formatPartyInformation(JsonNode hearing, JsonNode party, Map<String, Object> language) {
-        String defendant = "";
-
         if ("DEFENDANT".equals(PartyRoleMapper.convertPartyRole(party.get("partyRole").asText()))) {
-            defendant = createIndividualDetails(party);
-        }
+            String defendant = createIndividualDetails(party);
+            ((ObjectNode) hearing).put(DEFENDANT_HEADING, defendant);
+            ((ObjectNode) hearing).put("defendantDateOfBirth", "");
+            ((ObjectNode) hearing).put("defendantAddress", "");
+            ((ObjectNode) hearing).put(AGE, "");
+            ((ObjectNode) hearing).put("gender", "");
+            ((ObjectNode) hearing).put(PLEA, "");
+            ((ObjectNode) hearing).put(IN_CUSTODY, "");
 
-        ((ObjectNode) hearing).put("defendantHeading", defendant);
-        ((ObjectNode) hearing).put("defendantDateOfBirth", "");
-        ((ObjectNode) hearing).put("defendantAddress", "");
-        ((ObjectNode) hearing).put(AGE, "");
-        ((ObjectNode) hearing).put("gender", "");
-        ((ObjectNode) hearing).put("plea", "");
-        ((ObjectNode) hearing).put(IN_CUSTODY, "");
+            if (party.has(INDIVIDUAL_DETAILS)) {
+                JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
 
-        if (party.has(INDIVIDUAL_DETAILS)) {
-            JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+                formatDobAndAge(hearing, individualDetails, language);
 
-            formatDobAndAge(hearing, individualDetails, language);
+                ((ObjectNode) hearing).put(DEFENDANT_HEADING,
+                    formatDefendantHeading(defendant, individualDetails));
 
-            if (individualDetails.has("address")) {
-                ((ObjectNode) hearing).put("defendantAddress",
-                    formatDefendantAddress(individualDetails.get("address")));
-            }
+                ((ObjectNode) hearing).put(
+                    "defendantAddress",
+                    formatDefendantAddress(individualDetails)
+                );
 
-            ((ObjectNode) hearing).put("gender", "("
-                + GeneralHelper.findAndReturnNodeText(individualDetails,
-                    "gender") + ")");
-            ((ObjectNode) hearing).put("plea",
-                GeneralHelper.findAndReturnNodeText(individualDetails,
-                    "plea"));
-
-            if (individualDetails.has(IN_CUSTODY)
-                && individualDetails.get(IN_CUSTODY).asBoolean()) {
-                ((ObjectNode) hearing).put(IN_CUSTODY, "*");
+                ((ObjectNode) hearing).put(
+                    PLEA, GeneralHelper.findAndReturnNodeText(individualDetails, PLEA));
             }
         }
+    }
+
+    private static String formatDefendantHeading(String name, JsonNode individualDetails) {
+        StringBuilder defendantName = new StringBuilder();
+        defendantName.append(name);
+        String gender = GeneralHelper.findAndReturnNodeText(individualDetails,"gender");
+        String inCustody = "";
+
+        if (!gender.isBlank()) {
+            gender = " (" + gender + ")";
+        }
+
+        if (individualDetails.has(IN_CUSTODY)
+            && individualDetails.get(IN_CUSTODY).asBoolean()) {
+            inCustody = "*";
+        }
+
+        defendantName.append(gender).append(inCustody);
+        return defendantName.toString();
     }
 
     private static void formatDobAndAge(JsonNode hearing, JsonNode individualDetails,
@@ -152,22 +251,27 @@ public final class MagistratesStandardListHelper {
 
     }
 
-    private static String formatDefendantAddress(JsonNode defendantAddress) {
-        AtomicReference<String> formattedAddress = new AtomicReference<>("");
-        defendantAddress.get("line").forEach(addressLine -> {
-            formattedAddress.updateAndGet(v -> v
-                + (formattedAddress.get().length() > 0 && addressLine.asText().length() > 0 ? ", "
-                + addressLine.asText() : addressLine.asText()));
-        });
-        String town = GeneralHelper.findAndReturnNodeText(defendantAddress, "town");
-        String county = GeneralHelper.findAndReturnNodeText(defendantAddress, "county");
-        String postCode = GeneralHelper.findAndReturnNodeText(defendantAddress, "postCode");
+    private static String formatDefendantAddress(JsonNode individualDetails) {
+        if (individualDetails.has("address")) {
+            JsonNode defendantAddress = individualDetails.get("address");
+            StringBuilder address = new StringBuilder();
+            for (JsonNode addressLine : defendantAddress.get("line")) {
+                if (!addressLine.asText().isBlank()) {
+                    String line = addressLine.asText() + ", ";
+                    address.append(line);
+                }
+            }
+            String town = GeneralHelper.findAndReturnNodeText(defendantAddress, "town");
+            String county = GeneralHelper.findAndReturnNodeText(defendantAddress, "county");
+            String postCode = GeneralHelper.findAndReturnNodeText(defendantAddress, "postCode");
 
-        formattedAddress.updateAndGet(v -> v + (town.length() > 0 ? ", " + town : town));
-        formattedAddress.updateAndGet(v -> v + (county.length() > 0 ? ", " + county : county));
-        formattedAddress.updateAndGet(v -> v + (postCode.length() > 0 ? ", " + postCode : postCode));
+            address.append(town)
+                .append(county.length() > 0 ? ", " + county : county)
+                .append(postCode.length() > 0 ? ", " + postCode : postCode);
 
-        return formattedAddress.get().trim();
+            return address.toString();
+        }
+        return "";
     }
 
     private static String createIndividualDetails(JsonNode party) {

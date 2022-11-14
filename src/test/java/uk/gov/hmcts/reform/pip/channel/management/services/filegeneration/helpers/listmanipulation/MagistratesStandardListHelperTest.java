@@ -25,9 +25,9 @@ class MagistratesStandardListHelperTest {
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SESSION = "session";
-    private static final String SITTINGS = "sittings";
-    private static final String HEARING = "hearing";
-    private static final String CASE = "case";
+    private static final String DEFENDANTS = "defendants";
+    private static final String DEFENDANT_INFO = "defendantInfo";
+
     public static final String PROVENANCE = "provenance";
 
     Map<String, Object> language =
@@ -57,92 +57,129 @@ class MagistratesStandardListHelperTest {
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
+                         .get(DEFENDANTS).get(0)
                          .get("defendantHeading").asText(),
-                     "Surname1, John Smith1",
-                     "Unable to defendant name");
+                     "Surname1, John Smith1 (male)",
+                     "Unable to defendant heading");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get("time").asText(),
-                     "2:30pm",
-                     "Unable to find sitting time");
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("sittingSequence").asText(),
+                     "1",
+                     "Unable to find sitting sequence");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("formattedDuration").asText(),
                      "2 hours 30 mins",
                      "Unable to find formatted duration");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
-                         .get(CASE).get(0)
-                         .get("caseSequenceIndicator").asText(),
-                     "[2 of 3]",
-                     "Unable to find formatted duration");
-
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("defendantDateOfBirthAndAge").asText(),
                      "01/01/1983 Age: 39",
-                     "Unable to defendant date of birth and age");
+                     "Unable to find date of birth and age");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("defendantAddress").asText(),
                      "Address Line 1, Address Line 2, Month A, County A, AA1 AA1",
-                     "Unable to defendant address");
+                     "Unable to find address");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
-                         .get("gender").asText(),
-                     "(male)",
-                     "Unable to defendant gender");
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("prosecutionAuthorityCode").asText(),
+                     "Test1234",
+                     "Unable to find prosecution authority code");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("hearingNumber").asText(),
+                     "12",
+                     "Unable to find hearing number");
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("caseHearingChannel").asText(),
+                     "VIDEO HEARING",
+                     "Unable to hearing channel");
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("caseNumber").asText(),
+                     "45684548",
+                     "Unable to case number");
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("hearingType").asText(),
+                     "mda",
+                     "Unable to in hearing type");
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("panel").asText(),
+                     "ADULT",
+                     "Unable to find panel");
+
+    }
+
+    @Test
+    void testOffenceMagistratesStandardListMethod() {
+        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
+        MagistratesStandardListHelper.manipulatedMagistratesStandardList(inputJson, language);
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
+                         .get("offence").get(0)
+                         .get("offenceTitle").asText(),
+                     "1. drink driving",
+                     "Unable to find offence title");
+
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("plea").asText(),
                      "NOT_GUILTY",
-                     "Unable to defendant gender");
+                     "Unable to find plea");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
-                         .get("inCustody").asText(),
-                     "",
-                     "Unable to in custody gender");
-
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
-                         .get(CASE).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("formattedConvictionDate").asText(),
                      "14/09/2016",
                      "Unable to find formatted conviction date");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get(HEARING).get(0)
-                         .get(CASE).get(0)
+                         .get(DEFENDANTS).get(0)
+                         .get(DEFENDANT_INFO).get(0)
                          .get("formattedAdjournedDate").asText(),
                      "14/09/2016",
                      "Unable to find formatted adjourned date");
-
     }
 }

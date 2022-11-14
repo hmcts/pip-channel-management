@@ -36,48 +36,50 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
         node.get("courtLists").forEach(courtList -> {
             courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
-                                output.append('\n');
-                                formatDefendantHeading(output, hearing);
-                                output.append('\n');
-                                formatSittingTime(output, sitting, hearingCase);
+                    session.get("defendants").forEach(defendant -> {
+                        output.append('\n');
+                        checkAndAddToEmail(output, defendant, "defendantHeading",
+                                           "Defendant Name - ");
+                        defendant.get("defendantInfo").forEach(defendantInfo -> {
+                            output.append('\n');
+                            formatSittingTime(output, defendantInfo);
+                            checkAndAddToEmail(output, defendantInfo, "defendantDateOfBirthAndAge",
+                                               "DOB and Age - ");
+                            checkAndAddToEmail(output, defendantInfo, "defendantAddress",
+                                               "Defendant Address - ");
+                            checkAndAddToEmail(output, defendantInfo, "prosecutionAuthorityCode",
+                                               "Prosecuting Authority - ");
+                            checkAndAddToEmail(output, defendantInfo, "hearingNumber",
+                                               "Hearing Number - ");
+                            checkAndAddToEmail(output, defendantInfo, "caseHearingChannel",
+                                               "Attendance Method - ");
+                            checkAndAddToEmail(output, defendantInfo, "caseNumber",
+                                               "Case Ref - ");
+                            output.append('\n');
+                            formatAsn(output);
+                            checkAndAddToEmail(output, defendantInfo, "hearingType",
+                                               "Hearing of Type - ");
+                            checkAndAddToEmail(output, defendantInfo, "panel",
+                                               "Panel - ");
+                            output.append('\n');
 
-                                checkAndAddToEmail(output, hearing, "defendantDateOfBirthAndAge",
-                                                   "DOB and Age - ");
-                                checkAndAddToEmail(output, hearing, "defendantAddress",
-                                                   "Defendant Address - ");
-                                checkAndAddToEmail(output, hearingCase.get("informant"), "prosecutionAuthorityCode",
-                                                   "Prosecuting Authority - ");
-                                checkAndAddToEmail(output, hearingCase, "hearingNumber",
-                                                   "Hearing Number - ");
-                                checkAndAddToEmail(output, sitting, "caseHearingChannel",
-                                                   "Attendance Method - ");
-                                checkAndAddToEmail(output, hearingCase, "caseNumber",
-                                                   "Case Ref - ");
-                                output.append('\n');
-                                formatAsn(output);
-                                checkAndAddToEmail(output, hearing, "hearingType",
-                                                   "Hearing of Type - ");
-                                checkAndAddToEmail(output, hearingCase, "panel",
-                                                   "Panel - ");
-                                output.append('\n');
-
-                                hearing.get("offence").forEach(offence -> {
-                                    checkAndAddToEmail(output, offence, "offenceTitle","");
-                                    checkAndAddToEmail(output, hearing, "plea","Plea - ");
+                            if (defendantInfo.has("offence")) {
+                                defendantInfo.get("offence").forEach(offence -> {
+                                    checkAndAddToEmail(output, offence, "offenceTitle", "");
+                                    checkAndAddToEmail(output, defendantInfo, "plea", "Plea - ");
                                     output.append('\n');
                                     formatDateOfPlea(output);
-                                    checkAndAddToEmail(output, hearingCase, "formattedConvictionDate",
-                                                       "Convicted on - ");
+                                    checkAndAddToEmail(output, defendantInfo, "formattedConvictionDate",
+                                                       "Convicted on - "
+                                    );
                                     output.append('\n');
-                                    formatAdjournedFrom(output, hearingCase);
+                                    formatAdjournedFrom(output, defendantInfo);
                                     checkAndAddToEmail(output, offence, "offenceWording",
-                                                       "");
+                                                       ""
+                                    );
                                     output.append('\n');
                                 });
-                            });
+                            }
                         });
                     });
                 });
@@ -87,18 +89,12 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
         return output.toString();
     }
 
-    private void formatDefendantHeading(StringBuilder output, JsonNode hearing) {
-        String defendantInfo = hearing.get("defendantHeading").asText()
-            + " " + hearing.get("gender").asText()
-            + " " + hearing.get("inCustody").asText();
-        output.append("Defendant Name - ").append(defendantInfo).append('\n');
-    }
-
-    private void formatSittingTime(StringBuilder output, JsonNode sitting, JsonNode hearingCase) {
-        String sittingTime = sitting.get("time").asText() + " " + "for "
-            + sitting.get("formattedDuration").asText()
+    private void formatSittingTime(StringBuilder output, JsonNode hearingCase) {
+        String sittingTime = hearingCase.get("time").asText() + " " + "for "
+            + hearingCase.get("formattedDuration").asText()
             + " " + hearingCase.get("caseSequenceIndicator").asText();
-        output.append("Sitting at - ").append(sittingTime);
+        String sequence = hearingCase.get("sittingSequence").asText() + ". ";
+        output.append(sequence).append("Sitting at - ").append(sittingTime);
     }
 
     private void formatAsn(StringBuilder output) {
