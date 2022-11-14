@@ -56,8 +56,7 @@ public final class CrimeListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get("sittings").forEach(sitting -> {
-                        DateHelper.formatCaseTime(sitting, "sittingStart",
-                            "time", "h:mma");
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 findAndManipulatePartyInformation(hearing);

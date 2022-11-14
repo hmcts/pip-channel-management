@@ -249,16 +249,4 @@ class DateHelperTest {
             .as(ERR_MSG)
             .isEqualTo("3:30pm");
     }
-
-    @Test
-    void testFormatCaseTime() {
-        ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put(SITTING_START, "2022-12-10T15:30:52.123Z");
-
-        DateHelper.formatCaseTime(sittingNode, SITTING_START,
-                                  "formattedSittingStart",TIME_FORMAT);
-        assertThat(sittingNode.get("formattedSittingStart").asText())
-            .as(ERR_MSG)
-            .isEqualTo("3:30pm");
-    }
 }
