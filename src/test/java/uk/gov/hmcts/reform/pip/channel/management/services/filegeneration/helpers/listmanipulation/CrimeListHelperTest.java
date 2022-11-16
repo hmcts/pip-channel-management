@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CrimeListHelperTest {
     private static JsonNode inputJsonCrownDailyList;
     private static JsonNode inputJsonMagistratesPublicList;
+    private static JsonNode partyRoleJson;
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
@@ -35,6 +39,7 @@ class CrimeListHelperTest {
     private static final String TIME = "time";
     private static final String LISTING_NOTES = "listingNotes";
     private static final String TIME_ERROR = "Unable to find correct case time";
+    private static final String PARTY_NAME_MESSAGE = "Party name do not match";
 
     @BeforeAll
     public static void setup()  throws IOException {
@@ -48,16 +53,22 @@ class CrimeListHelperTest {
                      magistratesPublicWriter, Charset.defaultCharset()
         );
 
-        inputJsonCrownDailyList = new ObjectMapper().readTree(crownDailyWriter.toString());
-        inputJsonMagistratesPublicList = new ObjectMapper().readTree(magistratesPublicWriter.toString());
+        StringWriter partyRoleWriter = new StringWriter();
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/partyManipulation.json")),
+                     partyRoleWriter, Charset.defaultCharset()
+        );
+
+        inputJsonCrownDailyList = OBJECT_MAPPER.readTree(crownDailyWriter.toString());
+        inputJsonMagistratesPublicList = OBJECT_MAPPER.readTree(magistratesPublicWriter.toString());
+        partyRoleJson = OBJECT_MAPPER.readTree(partyRoleWriter.toString());
     }
 
     @Test
     void testFindUnallocatedCasesInCrownDailyListDataMethod() {
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).size(), 4,
+        assertEquals(4, inputJsonCrownDailyList.get(COURT_LISTS).size(),
                      "Unable to find correct court List array");
         CrimeListHelper.findUnallocatedCasesInCrownDailyListData(inputJsonCrownDailyList);
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).size(), 5,
+        assertEquals(5, inputJsonCrownDailyList.get(COURT_LISTS).size(),
                      "Unable to find correct court List array when unallocated cases are there");
         assertTrue(inputJsonCrownDailyList.get(COURT_LISTS).get(4).get("unallocatedCases").asBoolean(),
                    "Unable to find unallocated case section");
@@ -66,8 +77,8 @@ class CrimeListHelperTest {
         assertTrue(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(1)
                        .get("exclude").asBoolean(),
                    "Unable to find unallocated courtroom");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(4).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get("courtRoomName").asText(), "to be allocated",
+        assertEquals("to be allocated", inputJsonCrownDailyList.get(COURT_LISTS).get(4).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get("courtRoomName").asText(),
                      "Unable to find unallocated courtroom");
     }
 
@@ -78,17 +89,17 @@ class CrimeListHelperTest {
         CrimeListHelper.findUnallocatedCasesInCrownDailyListData(inputJsonCrownDailyList);
         CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList);
 
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
-                     "1: Firstname1 Surname1, Firstname2 Surname2",
+        assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonCrownDailyList.get(COURT_LISTS)
+                         .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name");
 
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(1)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(), "to be allocated",
+        assertEquals("to be allocated", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(1).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find unallocated formatted courtroom name");
 
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(1).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(), "CourtRoom 1",
+        assertEquals("CourtRoom 1", inputJsonCrownDailyList.get(COURT_LISTS).get(1).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name without judge");
     }
 
@@ -96,43 +107,42 @@ class CrimeListHelperTest {
     void testManipulatedCrownDailyListDataMethod() {
         CrimeListHelper.manipulatedCrimeListData(inputJsonCrownDailyList, ListType.CROWN_DAILY_LIST);
 
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(), "10:40am",
+        assertEquals("10:40am", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
+                         .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(), "1:00pm",
+        assertEquals("1:00pm", inputJsonCrownDailyList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM)
+                         .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("defendant").asText(), "Defendant_SN, Defendant_FN",
+        assertEquals("Defendant_SN, Defendant_FN", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get("defendant").asText(),
                      "Unable to find information for defendant");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecuting_authority").asText(), "Pro_Auth_SN, Pro_Auth_FN",
+        assertEquals("Pro_Auth", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
+                         .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("linkedCases").asText(), "caseid111, caseid222",
+        assertEquals("caseid111, caseid222", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get(CASE).get(0).get("linkedCases").asText(),
                      "Unable to find linked cases for a particular case");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(1).get("linkedCases").asText(), "",
+        assertEquals("", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(1)
+                         .get("linkedCases").asText(),
                      "able to find linked cases for a particular case");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(LISTING_NOTES).asText(), "Listing details text",
+        assertEquals("Listing details text", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get(LISTING_NOTES).asText(),
                      "Unable to find listing notes for a particular hearing");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1)
-                         .get(LISTING_NOTES).asText(), "",
+        assertEquals("", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(LISTING_NOTES).asText(),
                      "Able to find listing notes for a particular hearing");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("caseCellBorder").asText(), "no-border-bottom",
+        assertEquals("no-border-bottom", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get(CASE).get(0).get("caseCellBorder").asText(),
                      "Unable to find linked cases css for a particular case");
-        assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("linkedCasesBorder").asText(), "no-border-bottom",
+        assertEquals("no-border-bottom", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get(CASE).get(0).get("linkedCasesBorder").asText(),
                      "Unable to find linked cases css for a particular case");
     }
 
@@ -140,27 +150,27 @@ class CrimeListHelperTest {
     void testManipulatedMagistratesPublicListDataMethod() {
         CrimeListHelper.manipulatedCrimeListData(inputJsonMagistratesPublicList, ListType.MAGISTRATES_PUBLIC_LIST);
 
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(), "10:40am",
+        assertEquals("10:40am", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(), "1:00pm",
+        assertEquals("1:00pm", inputJsonMagistratesPublicList.get(COURT_LISTS).get(2).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("defendant").asText(), "Defendant_SN, Defendant_FN",
+        assertEquals("Defendant_SN, Defendant_FN", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
+                         .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
+                         .get(0).get("defendant").asText(),
                      "Unable to find information for defendant");
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecuting_authority").asText(), "Pro_Auth_SN, Pro_Auth_FN",
+        assertEquals("Pro_Auth", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
+                         .get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(LISTING_NOTES).asText(), "Listing details text",
+        assertEquals("Listing details text", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
+                         .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
+                         .get(0).get(LISTING_NOTES).asText(),
                      "Unable to find listing notes for a particular hearing");
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1)
-                         .get(LISTING_NOTES).asText(), "",
+        assertEquals("", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
+                         .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(LISTING_NOTES)
+                         .asText(),
                      "Able to find listing notes for a particular hearing");
 
     }
@@ -171,18 +181,42 @@ class CrimeListHelperTest {
         CrimeListHelper.manipulatedCrimeListData(inputJsonMagistratesPublicList, ListType.MAGISTRATES_PUBLIC_LIST);
         CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
 
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
-                     "1: Firstname1 Surname1, Firstname2 Surname2",
+        assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonMagistratesPublicList
+                         .get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name");
 
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(1)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(), "to be allocated",
+        assertEquals("to be allocated", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(1).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find unallocated formatted courtroom name");
 
-        assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(1).get(COURT_HOUSE).get(COURT_ROOM).get(0)
-                         .get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(), "CourtRoom 1",
+        assertEquals("CourtRoom 1", inputJsonMagistratesPublicList.get(COURT_LISTS).get(1).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name without judge");
+    }
+
+    @Test
+    void testHandleDefendantParty() {
+        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        assertThat(partyRoleJson.get("defendant").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("SurnameA, ForenamesA, SurnameB, ForenamesB");
+    }
+
+    @Test
+    void testHandleDefendantRepresentativeParty() {
+        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        assertThat(partyRoleJson.get("defendantRepresentative").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("Defendant rep name");
+    }
+
+    @Test
+    void testHandleProsecutingAuthorityParty() {
+        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        assertThat(partyRoleJson.get("prosecutingAuthority").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("Prosecuting authority name");
     }
 }
 
