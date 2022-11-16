@@ -38,6 +38,7 @@ public final class MagistratesStandardListHelper {
         Context context;
         context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
         manipulatedMagistratesStandardList(artefact, language);
+        context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
         context.setVariable("version", artefact.get("document").get("version").asText());
         return context;
     }
