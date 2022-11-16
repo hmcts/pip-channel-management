@@ -13,10 +13,12 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +53,9 @@ public final class EtFortnightlyPressListHelper {
         artefact.get("courtLists").forEach(courtList -> {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode sittingArray = mapper.createArrayNode();
-            Set<String> uniqueSittingDate = findUniqueSittingDate(
+            Map<Date, String> sittingDateTimes = findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
+            List<String> uniqueSittingDate = findUniqueDateAndSort(sittingDateTimes);
             String[] uniqueSittingDates = uniqueSittingDate.toArray(new String[0]);
             for (int i = 0; i < uniqueSittingDates.length; i++) {
                 int finalI = i;
@@ -74,7 +77,7 @@ public final class EtFortnightlyPressListHelper {
         });
     }
 
-    private static void checkSittingDateAlreadyExists(JsonNode sitting, String[] uniqueSittingDate,
+    public static void checkSittingDateAlreadyExists(JsonNode sitting, String[] uniqueSittingDate,
                                                       ArrayNode hearingNodeArray, Integer sittingDateIndex) {
         String sittingDate = GeneralHelper.findAndReturnNodeText(sitting, SITTING_DATE);
         if (!sittingDate.isEmpty()
@@ -83,7 +86,7 @@ public final class EtFortnightlyPressListHelper {
         }
     }
 
-    private static Set<String> findUniqueSittingDate(JsonNode courtRooms) {
+    public static Map<Date, String> findAllSittingDates(JsonNode courtRooms) {
         Map<Date, String> sittingDateTimes = new ConcurrentHashMap<>();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
 
@@ -100,11 +103,17 @@ public final class EtFortnightlyPressListHelper {
             });
         });
 
+        return sittingDateTimes;
+    }
+
+    public static List<String> findUniqueDateAndSort(Map<Date, String> sittingDateTimes) {
         Map<Date,String> sortedSittingDateTimes = sortByDateTime(sittingDateTimes);
 
-        Set<String> uniqueDates = new HashSet<>();
+        List<String> uniqueDates = new ArrayList<>();
         for (String value : sortedSittingDateTimes.values()) {
-            uniqueDates.add(value);
+            if (!uniqueDates.contains(value)) {
+                uniqueDates.add(value);
+            }
         }
         return uniqueDates;
     }
@@ -202,9 +211,9 @@ public final class EtFortnightlyPressListHelper {
         return respondentRepresentative;
     }
 
-    private static void formatCaseTime(JsonNode sitting, JsonNode hearing) {
+    public static void formatCaseTime(JsonNode sitting, JsonNode node) {
         if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
-            ((ObjectNode)hearing).put("time",
+            ((ObjectNode)node).put("time",
                 DateHelper.timeStampToBstTimeWithFormat(GeneralHelper
                 .findAndReturnNodeText(sitting, SITTING_START), "h:mma"));
         }

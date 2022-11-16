@@ -26,6 +26,7 @@ public final class CrimeListHelper {
 
     public static final String PROSECUTING_AUTHORITY = "prosecuting_authority";
     public static final String DEFENDANT = "defendant";
+    public static final String DEFENDANT_REPRESENTATIVE = "defendant_representative";
     public static final String COURT_LIST = "courtLists";
     public static final String CASE = "case";
     public static final String COURT_ROOM = "courtRoom";
@@ -58,13 +59,7 @@ public final class CrimeListHelper {
                     session.get("sittings").forEach(sitting -> {
                         formatCaseTime(sitting);
                         sitting.get("hearing").forEach(hearing -> {
-                            if (hearing.has("party")) {
                                 findAndManipulatePartyInformation(hearing);
-                            } else {
-                                ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY, "");
-                                ((ObjectNode) hearing).put(DEFENDANT, "");
-                            }
-
                             if (ListType.CROWN_DAILY_LIST.equals(listType)) {
                                 formatCaseInformationCrownDaily(hearing);
                                 formatCaseHtmlTableCrownDailyList(hearing);
@@ -155,13 +150,17 @@ public final class CrimeListHelper {
 
 
 
-    private static void formatCaseInformationCrownDaily(JsonNode hearing) {
+    public static void formatCaseInformationCrownDaily(JsonNode hearing) {
         AtomicReference<StringBuilder> linkedCases = new AtomicReference<>(new StringBuilder());
         StringBuilder listingNotes = new StringBuilder();
 
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(cases -> {
                 linkedCases.set(new StringBuilder());
+                if (!cases.has("caseNumber")) {
+                    ((ObjectNode) cases).put("caseNumber", "");
+                }
+
                 if (cases.has("caseLinked")) {
                     cases.get("caseLinked").forEach(caseLinked -> {
                         linkedCases.get()
@@ -200,7 +199,7 @@ public final class CrimeListHelper {
         }
     }
 
-    private static void formatCaseHtmlTableCrownDailyList(JsonNode hearing) {
+    public static void formatCaseHtmlTableCrownDailyList(JsonNode hearing) {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(cases -> {
                 ((ObjectNode)cases).put("caseCellBorder", "");
@@ -226,31 +225,40 @@ public final class CrimeListHelper {
         }
     }
 
-    private static void findAndManipulatePartyInformation(JsonNode hearing) {
+    public static void findAndManipulatePartyInformation(JsonNode hearing) {
         StringBuilder prosecutingAuthority = new StringBuilder();
         StringBuilder defendant = new StringBuilder();
+        StringBuilder defendantRepresentative = new StringBuilder();
 
-        hearing.get("party").forEach(party -> {
-            if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isBlank()) {
-                switch (PartyRoleMapper.convertPartyRole(party.get("partyRole").asText())) {
-                    case "PROSECUTING_AUTHORITY": {
-                        formatPartyInformation(party, prosecutingAuthority);
-                        break;
+        if (hearing.has("party")) {
+            hearing.get("party").forEach(party -> {
+                if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isBlank()) {
+                    switch (PartyRoleMapper.convertPartyRole(party.get("partyRole").asText())) {
+                        case "PROSECUTING_AUTHORITY": {
+                            formatPartyInformation(party, prosecutingAuthority);
+                            break;
+                        }
+                        case "DEFENDANT": {
+                            formatPartyInformation(party, defendant);
+                            break;
+                        }
+                        case "DEFENDANT_REPRESENTATIVE": {
+                            formatPartyInformation(party, defendantRepresentative);
+                            break;
+                        }
+                        default:
+                            break;
                     }
-                    case "DEFENDANT": {
-                        formatPartyInformation(party, defendant);
-                        break;
-                    }
-                    default:
-                        break;
                 }
-            }
-        });
+            });
+        }
 
         ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(prosecutingAuthority.toString()));
+            GeneralHelper.trimAnyCharacterFromStringEnd(prosecutingAuthority.toString()));
         ((ObjectNode) hearing).put(DEFENDANT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(defendant.toString()));
+            GeneralHelper.trimAnyCharacterFromStringEnd(defendant.toString()));
+        ((ObjectNode) hearing).put(DEFENDANT_REPRESENTATIVE,
+            GeneralHelper.trimAnyCharacterFromStringEnd(defendantRepresentative.toString()));
     }
 
     private static void formatPartyInformation(JsonNode party, StringBuilder builder) {
