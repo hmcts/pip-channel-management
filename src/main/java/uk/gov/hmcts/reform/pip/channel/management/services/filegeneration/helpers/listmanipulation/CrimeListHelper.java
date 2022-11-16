@@ -59,7 +59,7 @@ public final class CrimeListHelper {
                     session.get("sittings").forEach(sitting -> {
                         formatCaseTime(sitting);
                         sitting.get("hearing").forEach(hearing -> {
-                                findAndManipulatePartyInformation(hearing);
+                            findAndManipulatePartyInformation(hearing);
                             if (ListType.CROWN_DAILY_LIST.equals(listType)) {
                                 formatCaseInformationCrownDaily(hearing);
                                 formatCaseHtmlTableCrownDailyList(hearing);

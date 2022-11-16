@@ -16,18 +16,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Slf4j
+@SuppressWarnings("PMD.TooManyMethods")
 public final class EtFortnightlyPressListHelper {
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";

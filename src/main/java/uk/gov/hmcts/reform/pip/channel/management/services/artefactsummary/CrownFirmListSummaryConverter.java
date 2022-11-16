@@ -8,24 +8,18 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrownFirmListHelper;
 
-import java.util.Map;
-
 @Service
 public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter {
 
     @Override
     public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
-        Map<String, Object> language =
-            Map.of("rep", "Rep: ",
-                   "noRep", "Rep: ",
-                   "legalAdvisor", "Legal Advisor: ");
         DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, true);
-        CrownFirmListHelper.crownFirmListFormatted(node, language);
+        CrownFirmListHelper.crownFirmListFormatted(node);
         return this.processCrownFirmList(node);
     }
 
     private String processCrownFirmList(JsonNode node) {
-        return "";
+        return node.get("test").asText();
     }
 }

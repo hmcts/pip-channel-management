@@ -14,9 +14,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
@@ -30,6 +28,7 @@ public final class CrownFirmListHelper {
     private static final String LINKED_CASES = "linkedCases";
     private static final String LISTING_NOTES = "listingNotes";
     private static final String FORMATTED_COURT_ROOM_NAME = "formattedSessionCourtRoom";
+    public static final String DEFENDANT_REPRESENTATIVE = "defendant_representative";
 
     private CrownFirmListHelper() {
     }
@@ -38,9 +37,8 @@ public final class CrownFirmListHelper {
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
         Context context;
         context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
-        crownFirmListFormatted(artefact, language);
+        crownFirmListFormatted(artefact);
         splitByCourtAndDate(artefact);
-        context.setVariable("regionName", metadata.get("regionName"));
         return context;
     }
 
@@ -54,6 +52,7 @@ public final class CrownFirmListHelper {
         List<String> uniqueSittingDates = EtFortnightlyPressListHelper.findUniqueDateAndSort(allSittingDateTimes);
         return uniqueSittingDates.toArray(new String[0]);
     }
+
     public static void splitByCourtAndDate(JsonNode artefact) {
         String[] uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
         ObjectMapper mapper = new ObjectMapper();
@@ -77,7 +76,8 @@ public final class CrownFirmListHelper {
                     ObjectNode courtRoomNode = mapper.createObjectNode();
                     ArrayNode hearingArray = mapper.createArrayNode();
                     courtRoom.get("session").forEach(session -> {
-                        session.get(SITTINGS).forEach(sitting -> EtFortnightlyPressListHelper.checkSittingDateAlreadyExists(
+                        session.get(SITTINGS).forEach(sitting ->
+                            EtFortnightlyPressListHelper.checkSittingDateAlreadyExists(
                             sitting, uniqueSittingDates, hearingArray, finalI));
 
                         checkToBeAllocatedRoom(courtRoomNode, session, unAllocatedCourtRoom, hearingArray,
@@ -107,24 +107,24 @@ public final class CrownFirmListHelper {
         }
     }
 
-    private static void checkToBeAllocatedRoom(ObjectNode courtRoomNode, JsonNode session, ObjectNode unAllocatedCourtRoom,
-                                               ArrayNode hearingArray, ArrayNode unAllocatedCourtRoomHearings) {
+    private static void checkToBeAllocatedRoom(ObjectNode courtRoomNode, JsonNode session,
+        ObjectNode unAllocatedCourtRoom, ArrayNode hearingArray, ArrayNode unAllocatedCourtRoomHearings) {
         if (GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM_NAME)
             .contains("to be allocated") && hearingArray.size() > 0) {
             (unAllocatedCourtRoom).put(
                 FORMATTED_COURT_ROOM_NAME,
-                GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM_NAME)
+                GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
             );
             unAllocatedCourtRoomHearings.addAll(hearingArray);
         } else {
             (courtRoomNode).put(
                 FORMATTED_COURT_ROOM_NAME,
-                GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM_NAME)
+                GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
             );
         }
     }
 
-    public static void crownFirmListFormatted(JsonNode artefact, Map<String, Object> language) {
+    public static void crownFirmListFormatted(JsonNode artefact) {
         artefact.get("courtLists").forEach(courtList -> {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
@@ -171,21 +171,24 @@ public final class CrownFirmListHelper {
         ((ObjectNode)hearing).put("caseReference",
             GeneralHelper.findAndReturnNodeText(caseNode,"caseNumber"));
         ((ObjectNode)hearing).put(DEFENDANT,
-            GeneralHelper.findAndReturnNodeText(hearing,DEFENDANT));
+            GeneralHelper.findAndReturnNodeText(hearing, DEFENDANT));
         ((ObjectNode)hearing).put("hearingType",
             GeneralHelper.findAndReturnNodeText(hearing,"hearingType"));
         ((ObjectNode)hearing).put("formattedDuration",
             GeneralHelper.findAndReturnNodeText(sitting,"formattedDuration"));
         ((ObjectNode)hearing).put("caseSequenceIndicator",
             GeneralHelper.findAndReturnNodeText(caseNode,"caseSequenceIndicator"));
-        ((ObjectNode)hearing).put("DEFENDANT_REPRESENTATIVE",
-            GeneralHelper.findAndReturnNodeText(hearing,"DEFENDANT_REPRESENTATIVE"));
+        ((ObjectNode)hearing).put(DEFENDANT_REPRESENTATIVE,
+            GeneralHelper.findAndReturnNodeText(hearing,DEFENDANT_REPRESENTATIVE));
         ((ObjectNode)hearing).put(PROSECUTING_AUTHORITY,
-            GeneralHelper.findAndReturnNodeText(hearing,PROSECUTING_AUTHORITY));
+            GeneralHelper.findAndReturnNodeText(hearing, PROSECUTING_AUTHORITY));
         ((ObjectNode)hearing).put(LINKED_CASES,
-            GeneralHelper.findAndReturnNodeText(caseNode,LINKED_CASES));
+            GeneralHelper.findAndReturnNodeText(caseNode, LINKED_CASES));
         ((ObjectNode)hearing).put(LISTING_NOTES,
-            GeneralHelper.findAndReturnNodeText(hearing,LISTING_NOTES));
-
+            GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES));
+        ((ObjectNode)hearing).put("caseCellBorder",
+            GeneralHelper.findAndReturnNodeText(caseNode, "caseCellBorder"));
+        ((ObjectNode)hearing).put("linkedCasesBorder",
+            GeneralHelper.findAndReturnNodeText(caseNode, "linkedCasesBorder"));
     }
 }

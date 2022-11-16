@@ -42,6 +42,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuppressWarnings("PMD")
 public enum ListType {
     SJP_PUBLIC_LIST(new SjpPublicListFileConverter(), new SjpPublicListSummaryConverter()),
     SJP_PRESS_LIST(new SjpPressListFileConverter(), new SjpPressListSummaryConverter()),

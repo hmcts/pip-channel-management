@@ -34,7 +34,7 @@
       color: black;
     }
 
-    .govuk-heading-l {
+    .govuk-heading-l, .govuk-heading-m {
       color: #0b0c0c;
       font-family: "GDS Transport";
       font-weight: 700;
@@ -44,6 +44,10 @@
       display: block;
       margin-top: 0;
       margin-bottom: 20px;
+    }
+
+    .govuk-heading-m {
+      font-size: 1.25rem;
     }
 
     .govuk-body {
@@ -204,71 +208,62 @@
 </div>
 <div aria-label="Court Lists" class="landscape">
   <div class="site-header" aria-label="Court Details"
-       th:each="courtList : ${artefact.get('courtLists')}">
-    <div th:if="${courtList.get('unallocatedCases').asText() == 'false'}">
+       th:each="courtLists : ${artefact.get('courtListsByDate')}">
+    <div th:each="courtList : ${courtLists}">
       <h1 class="govuk-heading-l site-address" tabindex="0"
-          th:text="${courtList.get('courtHouse').get('courtHouseName').asText()}"/>
-    </div>
-    <div th:if="${courtList.get('unallocatedCases').asText() == 'true'}">
-      <h2 class="govuk-heading-m site-address" tabindex="0"
-          th:text="${i18n.unallocatedCourtText}"/>
-      <h2 class="govuk-heading-m site-address" tabindex="0"
-          th:text="${i18n.toBeAllocatedText}"/>
-    </div>
-    <div class="govuk-accordion" id="accordion-default"
-         th:each="courtRoom : ${courtList.get('courtHouse').get('courtRoom')}">
-      <div th:if="${courtRoom.has('exclude') != true}">
-        <div th:each="session : ${courtRoom.get('session')}">
-          <div class="govuk-accordion__section-header">
-            <h2 th:text="${i18n.sittingAtCourt + ' ' + session.get('formattedSessionCourtRoom').asText()}"/>
-          </div>
-          <div class="govuk-accordion__section-content">
-            <div class="parent-box overflow-table">
-              <table class="govuk-table">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th:block th:each="header:${i18n.headerValuesNoWrap}">
-                    <th th:text="${header}" scope="col" class="govuk-table__header no-wrap"/>
-                  </th:block>
-                  <th:block th:each="header:${i18n.headerValuesWrap}">
-                    <th th:text="${header}" scope="col" class="govuk-table__header"/>
-                  </th:block>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                <th:block th:each="sitting : ${session.get('sittings')}">
-                  <th:block th:each="hearing : ${sitting.get('hearing')}">
-                    <th:block th:each="case : ${hearing.get('case')}">
-                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${sitting.get('time').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('caseNumber').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
-                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
-                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${sitting.get('formattedDuration').asText() + ' ' + case.get('caseSequenceIndicator').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecuting_authority').asText()}"/>
-                      </tr>
-                      <span th:if="${case.get('linkedCases').asText() != ''}">
-                          <tr class="govuk-table__row">
-                            <td class="govuk-table__cell no-wrap" th:classappend="${case.get('linkedCasesBorder').asText()}" colspan="6">
-                              <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
-                              <span th:text="${case.get('linkedCases').asText()}" />
-                            </td>
-                          </tr>
-                        </span>
-                      <span th:if="${hearing.get('listingNotes').asText() != ''}">
-                          <tr class="govuk-table__row">
-                            <td class="govuk-table__cell no-wrap" colspan="6">
-                              <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
-                              <span th:text="${hearing.get('listingNotes').asText()}" />
-                            </td>
-                          </tr>
-                        </span>
-                    </th:block>
-                  </th:block>
+          th:text="${i18n.sittingAtCourt + ' ' + courtList.get('courtName').asText()}"/>
+      <h1 class="govuk-heading-l site-address" tabindex="0"
+          th:text="${courtList.get('courtSittingDate').asText()}"/>
+      <div class="govuk-accordion" id="accordion-default"
+           th:each="courtRoom : ${courtList.get('courtRooms')}">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-heading-m" th:text="${courtRoom.get('formattedSessionCourtRoom').asText()}"/>
+        </div>
+        <div class="govuk-accordion__section-content">
+          <div class="parent-box overflow-table">
+            <table class="govuk-table">
+              <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th:block th:each="header:${i18n.headerValuesNoWrap}">
+                  <th th:text="${header}" scope="col" class="govuk-table__header no-wrap"/>
                 </th:block>
-                </tbody>
-              </table>
-            </div>
+                <th:block th:each="header:${i18n.headerValuesWrap}">
+                  <th th:text="${header}" scope="col" class="govuk-table__header"/>
+                </th:block>
+              </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+              <th:block th:each="hearings : ${courtRoom.get('hearings')}">
+                <th:block th:each="hearing : ${hearings}">
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('sittingAt').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('caseReference').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
+                      <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
+                      <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('formattedDuration').asText() + ' ' + hearing.get('caseSequenceIndicator').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant_representative').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecuting_authority').asText()}"/>
+                    </tr>
+                    <span th:if="${hearing.get('linkedCases').asText() != ''}">
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('linkedCasesBorder').asText()}" colspan="6">
+                          <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
+                          <span th:text="${hearing.get('linkedCases').asText()}" />
+                        </td>
+                      </tr>
+                    </span>
+                    <span th:if="${hearing.get('listingNotes').asText() != ''}">
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell no-wrap" colspan="7">
+                          <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
+                          <span th:text="${hearing.get('listingNotes').asText()}" />
+                        </td>
+                      </tr>
+                    </span>
+                </th:block>
+              </th:block>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
