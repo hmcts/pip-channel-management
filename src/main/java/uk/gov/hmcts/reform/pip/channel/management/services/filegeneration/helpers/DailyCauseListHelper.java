@@ -32,7 +32,9 @@ public final class DailyCauseListHelper {
         context.setVariable("artefact", artefact);
         context.setVariable("phone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
         context.setVariable("email", artefact.get("venue").get("venueContact").get("venueEmail").asText());
-        context.setVariable("version", artefact.get("document").get("version").asText());
+        if (artefact.get("document").has("version")) {
+            context.setVariable("version", artefact.get("document").get("version").asText());
+        }
 
         DataManipulation.manipulatedDailyListData(artefact, Language.valueOf(metadata.get("language")), initialised);
         return context;
