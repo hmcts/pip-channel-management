@@ -65,13 +65,14 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
 
                             if (defendantInfo.has("offence")) {
                                 defendantInfo.get("offence").forEach(offence -> {
-                                    checkAndAddToEmail(output, offence, "offenceTitle", "");
+                                    output.append("\n\t");
+                                    output.append(GeneralHelper.findAndReturnNodeText(
+                                        offence, "offenceTitle"));
                                     checkAndAddToEmail(output, defendantInfo, "plea", "Plea - ");
                                     output.append('\n');
                                     formatDateOfPlea(output);
-                                    checkAndAddToEmail(output, defendantInfo, "formattedConvictionDate",
-                                                       "Convicted on - "
-                                    );
+                                    checkAndAddToEmail(output, defendantInfo,
+                                        "formattedConvictionDate","Convicted on - ");
                                     output.append('\n');
                                     formatAdjournedFrom(output, defendantInfo);
                                     checkAndAddToEmail(output, offence, "offenceWording",
@@ -93,7 +94,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
         String sittingTime = hearingCase.get("time").asText() + " " + "for "
             + hearingCase.get("formattedDuration").asText()
             + " " + hearingCase.get("caseSequenceIndicator").asText();
-        String sequence = hearingCase.get("sittingSequence").asText() + ". ";
+        String sequence = "\n\t" + hearingCase.get("sittingSequence").asText() + ". ";
         output.append(sequence).append("Sitting at - ").append(sittingTime);
     }
 
