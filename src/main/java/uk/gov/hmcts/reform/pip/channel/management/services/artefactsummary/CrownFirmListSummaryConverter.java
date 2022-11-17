@@ -28,24 +28,22 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
                 courtList.get("courtRooms").forEach(courtRoom -> {
                     courtRoom.get("hearings").forEach(hearings -> {
                         hearings.forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
-                                output.append('\n');
-                                GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
-                                    hearingCase, "sittingAt");
-                                GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
-                                    hearingCase, "caseReference");
-                                GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
-                                    hearingCase, "defendant");
-                                GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
-                                    hearingCase, "hearingType");
-                                output.append('\n');
-                                checkCaseSequenceNo(output, hearingCase);
-                                GeneralHelper.appendToStringBuilder(output, "Representative - ",
-                                    hearingCase, "defendant_representative");
-                                GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
-                                    hearingCase, "prosecuting_authority");
-                                checkLinkedCasesAndListingNotes(output, hearingCase);
-                            });
+                            output.append('\n');
+                            GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
+                                                                hearing, "sittingAt");
+                            GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
+                                                                hearing, "caseReference");
+                            GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
+                                                                hearing, "defendant");
+                            GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
+                                                                hearing, "hearingType");
+                            output.append('\n');
+                            checkCaseSequenceNo(output, hearing);
+                            GeneralHelper.appendToStringBuilder(output, "Representative - ",
+                                                                hearing, "defendant_representative");
+                            GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
+                                                                hearing, "prosecuting_authority");
+                            checkLinkedCasesAndListingNotes(output, hearing);
                         });
                     });
                 });

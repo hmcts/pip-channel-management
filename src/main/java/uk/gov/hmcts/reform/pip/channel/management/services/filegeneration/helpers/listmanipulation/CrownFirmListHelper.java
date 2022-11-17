@@ -42,22 +42,23 @@ public final class CrownFirmListHelper {
         return context;
     }
 
-    private static String[] findUniqueSittingDatesPerCounts(JsonNode artefact) {
+    private static List<String> findUniqueSittingDatesPerCounts(JsonNode artefact) {
         Map<Date, String> allSittingDateTimes = new ConcurrentHashMap<>();
         artefact.get("courtLists").forEach(courtList -> {
             Map<Date, String> sittingDateTimes = EtFortnightlyPressListHelper.findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
             allSittingDateTimes.putAll(sittingDateTimes);
         });
-        List<String> uniqueSittingDates = EtFortnightlyPressListHelper.findUniqueDateAndSort(allSittingDateTimes);
-        return uniqueSittingDates.toArray(new String[0]);
+        return EtFortnightlyPressListHelper.findUniqueDateAndSort(allSittingDateTimes);
     }
 
     public static void splitByCourtAndDate(JsonNode artefact) {
-        String[] uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
+        List<String> uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
+        String[] uniqueDates =  uniqueSittingDates.toArray(new String[0]);
+        setListToDates(artefact, uniqueSittingDates);
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode courtListByDateArray = mapper.createArrayNode();
-        for (int i = 0; i < uniqueSittingDates.length; i++) {
+        for (int i = 0; i < uniqueSittingDates.size(); i++) {
             int finalI = i;
             ArrayNode courtListArray = mapper.createArrayNode();
             artefact.get("courtLists").forEach(courtList -> {
@@ -70,7 +71,7 @@ public final class CrownFirmListHelper {
                 courtListNode.put("courtName",
                     GeneralHelper.findAndReturnNodeText(courtList.get(LocationHelper.COURT_HOUSE),
                                                         "courtHouseName"));
-                courtListNode.put("courtSittingDate", uniqueSittingDates[finalI]);
+                courtListNode.put("courtSittingDate", uniqueSittingDates.get(finalI));
 
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                     ObjectNode courtRoomNode = mapper.createObjectNode();
@@ -78,7 +79,7 @@ public final class CrownFirmListHelper {
                     courtRoom.get("session").forEach(session -> {
                         session.get(SITTINGS).forEach(sitting ->
                             EtFortnightlyPressListHelper.checkSittingDateAlreadyExists(
-                            sitting, uniqueSittingDates, hearingArray, finalI));
+                            sitting, uniqueDates, hearingArray, finalI));
 
                         checkToBeAllocatedRoom(courtRoomNode, session, unAllocatedCourtRoom, hearingArray,
                                                unAllocatedCourtRoomHearings);
@@ -115,12 +116,14 @@ public final class CrownFirmListHelper {
                 FORMATTED_COURT_ROOM_NAME,
                 GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
             );
+            (unAllocatedCourtRoom).put("unallocatedSection", "true");
             unAllocatedCourtRoomHearings.addAll(hearingArray);
         } else {
             (courtRoomNode).put(
                 FORMATTED_COURT_ROOM_NAME,
                 GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
             );
+            (courtRoomNode).put("unallocatedSection", "false");
         }
     }
 
@@ -162,7 +165,6 @@ public final class CrownFirmListHelper {
         ((ObjectNode) session).put("formattedCourtRoom", judiciary);
     }
 
-
     private static void moveTableColumnValuesToHearing(JsonNode sitting,
                                                        JsonNode hearing,
                                                        JsonNode caseNode) {
@@ -190,5 +192,14 @@ public final class CrownFirmListHelper {
             GeneralHelper.findAndReturnNodeText(caseNode, "caseCellBorder"));
         ((ObjectNode)hearing).put("linkedCasesBorder",
             GeneralHelper.findAndReturnNodeText(caseNode, "linkedCasesBorder"));
+    }
+
+    private static void setListToDates(JsonNode artefact, List<String> uniqueSittingDates) {
+        String startDate = uniqueSittingDates.get(0)
+            .substring(uniqueSittingDates.get(0).indexOf(' ') + 1);
+        String endDate = uniqueSittingDates.get(uniqueSittingDates.size() - 1)
+            .substring(uniqueSittingDates.get(uniqueSittingDates.size() - 1).indexOf(' ') + 1);
+        ((ObjectNode)artefact).put("listStartDate", startDate);
+        ((ObjectNode)artefact).put("listEndDate", endDate);
     }
 }
