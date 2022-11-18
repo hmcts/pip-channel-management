@@ -235,15 +235,15 @@ public final class CrimeListHelper {
                 if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isBlank()) {
                     switch (PartyRoleMapper.convertPartyRole(party.get("partyRole").asText())) {
                         case "PROSECUTING_AUTHORITY": {
-                            formatPartyInformation(party, prosecutingAuthority);
+                            formatPartyInformation(party, prosecutingAuthority, true);
                             break;
                         }
                         case "DEFENDANT": {
-                            formatPartyInformation(party, defendant);
+                            formatPartyInformation(party, defendant, true);
                             break;
                         }
                         case "DEFENDANT_REPRESENTATIVE": {
-                            formatPartyInformation(party, defendantRepresentative);
+                            formatPartyInformation(party, defendantRepresentative, false);
                             break;
                         }
                         default:
@@ -261,28 +261,52 @@ public final class CrimeListHelper {
             GeneralHelper.trimAnyCharacterFromStringEnd(defendantRepresentative.toString()));
     }
 
-    private static void formatPartyInformation(JsonNode party, StringBuilder builder) {
-        String partyDetails = createIndividualDetails(party);
+    private static void formatPartyInformation(JsonNode party, StringBuilder builder, boolean surnameFirst) {
+        String partyDetails = createIndividualDetails(party, surnameFirst);
         partyDetails = partyDetails
             + GeneralHelper.stringDelimiter(partyDetails, ", ");
         builder.insert(0, partyDetails);
     }
 
-    private static String createIndividualDetails(JsonNode party) {
+    private static String createIndividualDetails(JsonNode party, boolean surnameFirst) {
         if (party.has("individualDetails")) {
             JsonNode individualDetails = party.get("individualDetails");
+            String title = GeneralHelper.findAndReturnNodeText(individualDetails, "title");
             String forNames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
             String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, "individualMiddleName");
-            String separator = " ";
-            if (!forNames.isEmpty() || !middleName.isEmpty()) {
-                separator = ", ";
+            String surName = GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname");
+
+            if (surnameFirst) {
+                return formatNameWitSurnameFirst(title, forNames, middleName, surName);
             }
-            return (GeneralHelper.findAndReturnNodeText(individualDetails, "title") + " "
-                + GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname")
-                + separator
-                + forNames + " "
-                + middleName).trim();
+            return formatNameWitForNameFirst(title, forNames, middleName, surName);
         }
         return "";
+    }
+
+    private static String formatNameWitSurnameFirst(String title, String forName, String middleName, String surname) {
+        String separator = " ";
+        if (!forName.isEmpty() || !middleName.isEmpty()) {
+            separator = ", ";
+        }
+
+        return (title + " "
+            + surname
+            + separator
+            + forName + " "
+            + middleName).trim();
+    }
+
+    private static String formatNameWitForNameFirst(String title, String forName, String middleName, String surname) {
+        String separator = " ";
+        if (!surname.isEmpty() || !middleName.isEmpty()) {
+            separator = " ";
+        }
+
+        return (title + " "
+            + forName
+            + separator
+            + (middleName.length() > 0 ? " " : "")
+            + surname).trim();
     }
 }
