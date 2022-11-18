@@ -23,10 +23,10 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
 
     private String processCrownFirmList(JsonNode node) {
         StringBuilder output = new StringBuilder();
-        node.get("courtListsByDate").forEach(courtLists -> {
-            courtLists.forEach(courtList -> {
-                courtList.get("courtRooms").forEach(courtRoom -> {
-                    courtRoom.get("hearings").forEach(hearings -> {
+        node.get("courtListsByDate").forEach(courtLists ->
+            courtLists.forEach(courtList ->
+                courtList.get("courtRooms").forEach(courtRoom ->
+                    courtRoom.get("hearings").forEach(hearings ->
                         hearings.forEach(hearing -> {
                             output.append('\n');
                             GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
@@ -44,11 +44,11 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
                             GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
                                                                 hearing, "prosecuting_authority");
                             checkLinkedCasesAndListingNotes(output, hearing);
-                        });
-                    });
-                });
-            });
-        });
+                        })
+                     )
+                )
+            )
+        );
         return output.toString();
     }
 

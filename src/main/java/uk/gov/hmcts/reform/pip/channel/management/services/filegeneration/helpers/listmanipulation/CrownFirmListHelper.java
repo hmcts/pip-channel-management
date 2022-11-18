@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
@@ -29,6 +28,8 @@ public final class CrownFirmListHelper {
     private static final String LISTING_NOTES = "listingNotes";
     private static final String FORMATTED_COURT_ROOM_NAME = "formattedSessionCourtRoom";
     public static final String DEFENDANT_REPRESENTATIVE = "defendant_representative";
+    public static final String COURT_LIST = "courtLists";
+    public static final String FORMATTED_COURT_ROOM = "formattedCourtRoom";
 
     private CrownFirmListHelper() {
     }
@@ -44,7 +45,7 @@ public final class CrownFirmListHelper {
 
     private static List<String> findUniqueSittingDatesPerCounts(JsonNode artefact) {
         Map<Date, String> allSittingDateTimes = new ConcurrentHashMap<>();
-        artefact.get("courtLists").forEach(courtList -> {
+        artefact.get(COURT_LIST).forEach(courtList -> {
             Map<Date, String> sittingDateTimes = EtFortnightlyPressListHelper.findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
             allSittingDateTimes.putAll(sittingDateTimes);
@@ -61,7 +62,7 @@ public final class CrownFirmListHelper {
         for (int i = 0; i < uniqueSittingDates.size(); i++) {
             int finalI = i;
             ArrayNode courtListArray = mapper.createArrayNode();
-            artefact.get("courtLists").forEach(courtList -> {
+            artefact.get(COURT_LIST).forEach(courtList -> {
 
                 ObjectNode courtListNode = mapper.createObjectNode();
                 ArrayNode courtRoomsArray = mapper.createArrayNode();
@@ -114,21 +115,21 @@ public final class CrownFirmListHelper {
             .contains("to be allocated") && hearingArray.size() > 0) {
             (unAllocatedCourtRoom).put(
                 FORMATTED_COURT_ROOM_NAME,
-                GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
+                GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM)
             );
             (unAllocatedCourtRoom).put("unallocatedSection", "true");
             unAllocatedCourtRoomHearings.addAll(hearingArray);
         } else {
             (courtRoomNode).put(
                 FORMATTED_COURT_ROOM_NAME,
-                GeneralHelper.findAndReturnNodeText(session, "formattedCourtRoom")
+                GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM)
             );
             (courtRoomNode).put("unallocatedSection", "false");
         }
     }
 
     public static void crownFirmListFormatted(JsonNode artefact) {
-        artefact.get("courtLists").forEach(courtList -> {
+        artefact.get(COURT_LIST).forEach(courtList -> {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get(SITTINGS).forEach(sitting -> {
@@ -136,7 +137,8 @@ public final class CrownFirmListHelper {
                             sitting.get(SITTING_START).asText(),
                             "dd MMMM yyyy", Language.ENGLISH);
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
-                        manipulatedSitting(courtRoom, session, sitting);
+                        MagistratesStandardListHelper.manipulatedSitting(courtRoom, session, sitting,
+                                                                         FORMATTED_COURT_ROOM);
                         sitting.get("hearing").forEach(hearing -> {
                             EtFortnightlyPressListHelper.formatCaseTime(sitting, hearing);
                             CrimeListHelper.findAndManipulatePartyInformation(hearing);
@@ -150,19 +152,6 @@ public final class CrownFirmListHelper {
                 });
             });
         });
-    }
-
-    private static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting) {
-        String judiciary = DataManipulation.findAndManipulateJudiciary(sitting, false);
-        String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
-
-        if (judiciary.isBlank()) {
-            judiciary = DataManipulation.findAndManipulateJudiciary(session, false);
-
-        }
-
-        judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
-        ((ObjectNode) session).put("formattedCourtRoom", judiciary);
     }
 
     private static void moveTableColumnValuesToHearing(JsonNode sitting,

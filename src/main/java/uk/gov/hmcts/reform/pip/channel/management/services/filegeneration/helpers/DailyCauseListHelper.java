@@ -7,6 +7,9 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import java.util.Map;
 
 public final class DailyCauseListHelper {
+    public static final String DOCUMENT = "document";
+    public static final String VERSION = "version";
+
     private DailyCauseListHelper() {
     }
 
@@ -16,7 +19,7 @@ public final class DailyCauseListHelper {
         LocationHelper.formatCourtAddress(artefact, "|");
         context.setVariable("metadata", metadata);
         context.setVariable("i18n", language);
-        String publicationDate = artefact.get("document").get("publicationDate").asText();
+        String publicationDate = artefact.get(DOCUMENT).get("publicationDate").asText();
         context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate,
                                                                                Language.valueOf(metadata.get(
                                                                                    "language")),
@@ -30,8 +33,8 @@ public final class DailyCauseListHelper {
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
         context.setVariable("artefact", artefact);
-        if (artefact.get("document").has("version")) {
-            context.setVariable("version", artefact.get("document").get("version").asText());
+        if (artefact.get(DOCUMENT).has(VERSION)) {
+            context.setVariable(VERSION, artefact.get(DOCUMENT).get(VERSION).asText());
         }
 
         if (artefact.get("venue").has("venueContact")) {

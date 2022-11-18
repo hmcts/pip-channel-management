@@ -50,7 +50,8 @@ public final class MagistratesStandardListHelper {
                 courtRoom.get("session").forEach(session -> {
                     ArrayNode allDefendants = mapper.createArrayNode();
                     session.get("sittings").forEach(sitting -> {
-                        manipulatedSitting(courtRoom, session, sitting);
+                        manipulatedSitting(courtRoom, session, sitting, "formattedSessionCourtRoom");
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 hearing.get("party").forEach(party -> {
@@ -136,7 +137,8 @@ public final class MagistratesStandardListHelper {
         ((ObjectNode) hearing).put("allOffences", allOffences);
     }
 
-    private static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting) {
+    public static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting,
+                                           String destinationNodeName) {
         String judiciary = DataManipulation.findAndManipulateJudiciary(sitting, false);
         String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
 
@@ -146,8 +148,7 @@ public final class MagistratesStandardListHelper {
         }
 
         judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
-        ((ObjectNode) session).put("formattedSessionCourtRoom", judiciary);
-        DateHelper.formatStartTime(sitting, "h:mma");
+        ((ObjectNode) session).put(destinationNodeName, judiciary);
     }
 
     private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {
