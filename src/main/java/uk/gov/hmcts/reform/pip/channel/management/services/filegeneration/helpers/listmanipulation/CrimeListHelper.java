@@ -56,7 +56,7 @@ public final class CrimeListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get("sittings").forEach(sitting -> {
-                        formatCaseTime(sitting);
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 findAndManipulatePartyInformation(hearing);
@@ -214,15 +214,6 @@ public final class CrimeListHelper {
                     ((ObjectNode)cases).put("linkedCasesBorder", "no-border-bottom");
                 }
             });
-        }
-    }
-
-    private static void formatCaseTime(JsonNode sitting) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, "sittingStart").isEmpty()) {
-            ((ObjectNode)sitting).put("time",
-                                      DateHelper.timeStampToBstTimeWithFormat(
-                                          GeneralHelper.findAndReturnNodeText(sitting, "sittingStart"),
-                                          "h:mma"));
         }
     }
 
