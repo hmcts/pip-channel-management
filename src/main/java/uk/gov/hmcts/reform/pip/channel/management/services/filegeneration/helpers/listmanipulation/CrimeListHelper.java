@@ -222,15 +222,6 @@ public final class CrimeListHelper {
         }
     }
 
-    private static void formatCaseTime(JsonNode sitting) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, "sittingStart").isEmpty()) {
-            ((ObjectNode)sitting).put("time",
-                                      DateHelper.timeStampToBstTime(
-                                          GeneralHelper.findAndReturnNodeText(sitting, "sittingStart"),
-                                          "h:mma"));
-        }
-    }
-
     public static void findAndManipulatePartyInformation(JsonNode hearing) {
         List<String> defendants = new ArrayList<>();
         List<String> defendantRepresentatives = new ArrayList<>();
