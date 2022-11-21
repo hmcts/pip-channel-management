@@ -108,7 +108,7 @@ class CrimeListHelperTest {
                      "Unable to find information for defendant");
         assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecuting_authority").asText(), "Pro_Auth_SN, Pro_Auth_FN",
+                         .get("prosecuting_authority").asText(), "Pro_Auth",
                      "Unable to find information for prosecution authority");
         assertEquals(inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
@@ -152,7 +152,7 @@ class CrimeListHelperTest {
                      "Unable to find information for defendant");
         assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecuting_authority").asText(), "Pro_Auth_SN, Pro_Auth_FN",
+                         .get("prosecuting_authority").asText(), "Pro_Auth",
                      "Unable to find information for prosecution authority");
         assertEquals(inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)

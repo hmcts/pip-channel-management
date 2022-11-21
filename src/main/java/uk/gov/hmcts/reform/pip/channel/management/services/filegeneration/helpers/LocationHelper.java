@@ -2,11 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public final class LocationHelper {
     private static final String VENUE = "venue";
     private static final String VENUE_ADDRESS = "venueAddress";

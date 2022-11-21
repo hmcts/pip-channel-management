@@ -62,8 +62,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "HMCTS"
+                            "organisationDetails": {
+                              "organisationName": "HMCTS"
                             }
                           },
                           {
@@ -75,9 +75,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Boyce",
-                              "individualForenames": "Daniel"
+                            "organisationDetails": {
+                              "organisationName": "Boyce Daniel"
                             }
                           }
                         ]
@@ -138,8 +137,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -172,8 +171,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -185,9 +184,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Breakfast",
-                              "individualForenames": "Daniel"
+                            "organisationDetails": {
+                              "organisationName": "Breakfast Daniel"
                             }
                           }
                         ]
@@ -250,8 +248,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "The Queen"
+                            "organisationDetails": {
+                              "organisationName": "The Queen"
                             }
                           },
                           {
@@ -263,9 +261,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Villain",
-                              "individualForenames": "Daniel"
+                            "organisationDetails": {
+                              "organisationName": "Daniel Villain"
                             }
                           }
                         ]
@@ -330,8 +327,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -364,8 +361,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -377,9 +374,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Switchblade",
-                              "individualForenames": "Daniel"
+                            "organisationDetails": {
+                              "organisationName": "Switchblade Daniel"
                             }
                           }
                         ]
@@ -422,8 +418,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "DVSA"
+                            "organisationDetails": {
+                              "organisationName": "DVSA"
                             }
                           },
                           {
@@ -456,8 +452,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "HMCTS"
+                            "organisationDetails": {
+                              "organisationName": "HMCTS"
                             }
                           },
                           {
@@ -469,9 +465,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor",
-                              "individualForenames": "Joshua"
+                            "organisationDetails": {
+                              "organisationName": "Blackmoor Joshua"
                             }
                           }
                         ]
@@ -533,8 +528,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -567,8 +562,8 @@
                         "party": [
                           {
                             "partyRole": "PROSECUTING_AUTHORITY",
-                            "individualDetails": {
-                              "individualSurname": "Queen"
+                            "organisationDetails": {
+                              "organisationName": "Queen"
                             }
                           },
                           {
@@ -580,9 +575,8 @@
                           },
                           {
                             "partyRole": "DEFENDANT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualSurname": "Switchblade",
-                              "individualForenames": "Daniel"
+                            "organisationDetails": {
+                              "organisationName": "Switchblade Daniel"
                             }
                           }
                         ]

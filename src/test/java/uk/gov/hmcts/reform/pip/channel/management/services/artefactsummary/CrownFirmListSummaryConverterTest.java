@@ -54,7 +54,7 @@ class CrownFirmListSummaryConverterTest {
 
         assertThat(emailOutput)
             .as("incorrect representative found")
-            .contains("Daniel Breakfast");
+            .contains("Breakfast Daniel");
 
         assertThat(emailOutput)
             .as("incorrect prosecuting authority found")

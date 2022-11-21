@@ -96,7 +96,7 @@ class CrownFirmListHelperTest {
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("defendant_representative").asText(),
-                     "Daniel Boyce",
+                     "Boyce Daniel",
                      "Unable to find defendant representative");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)

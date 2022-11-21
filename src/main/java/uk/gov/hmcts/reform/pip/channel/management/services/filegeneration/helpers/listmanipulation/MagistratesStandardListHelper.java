@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleMapper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SittingHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,8 @@ public final class MagistratesStandardListHelper {
                 courtRoom.get("session").forEach(session -> {
                     ArrayNode allDefendants = mapper.createArrayNode();
                     session.get("sittings").forEach(sitting -> {
-                        manipulatedSitting(courtRoom, session, sitting, "formattedSessionCourtRoom");
+                        SittingHelper.manipulatedSitting(courtRoom, session, sitting,
+                                        "formattedSessionCourtRoom");
                         DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
@@ -135,20 +136,6 @@ public final class MagistratesStandardListHelper {
             allOffences.add(offenceNode);
         });
         ((ObjectNode) hearing).put("allOffences", allOffences);
-    }
-
-    public static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting,
-                                           String destinationNodeName) {
-        String judiciary = DataManipulation.findAndManipulateJudiciary(sitting, false);
-        String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
-
-        if (judiciary.isBlank()) {
-            judiciary = DataManipulation.findAndManipulateJudiciary(session, false);
-
-        }
-
-        judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
-        ((ObjectNode) session).put(destinationNodeName, judiciary);
     }
 
     private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {

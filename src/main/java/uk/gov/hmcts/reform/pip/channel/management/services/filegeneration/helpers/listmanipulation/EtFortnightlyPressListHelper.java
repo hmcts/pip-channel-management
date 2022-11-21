@@ -10,18 +10,11 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SittingHelper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
@@ -52,9 +45,9 @@ public final class EtFortnightlyPressListHelper {
         artefact.get("courtLists").forEach(courtList -> {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode sittingArray = mapper.createArrayNode();
-            Map<Date, String> sittingDateTimes = findAllSittingDates(
+            Map<Date, String> sittingDateTimes = SittingHelper.findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
-            List<String> uniqueSittingDate = findUniqueDateAndSort(sittingDateTimes);
+            List<String> uniqueSittingDate = GeneralHelper.findUniqueDateAndSort(sittingDateTimes);
             String[] uniqueSittingDates = uniqueSittingDate.toArray(new String[0]);
             for (int i = 0; i < uniqueSittingDates.length; i++) {
                 int finalI = i;
@@ -64,7 +57,7 @@ public final class EtFortnightlyPressListHelper {
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                     courtRoom.get("session").forEach(session -> {
                         session.get(SITTINGS).forEach(sitting -> {
-                            checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
+                            SittingHelper.checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
                                                           hearingNodeArray, finalI);
                         });
                     });
@@ -74,55 +67,6 @@ public final class EtFortnightlyPressListHelper {
             }
             ((ObjectNode)courtList).putArray(SITTINGS).addAll(sittingArray);
         });
-    }
-
-    public static void checkSittingDateAlreadyExists(JsonNode sitting, String[] uniqueSittingDate,
-                                                      ArrayNode hearingNodeArray, Integer sittingDateIndex) {
-        String sittingDate = GeneralHelper.findAndReturnNodeText(sitting, SITTING_DATE);
-        if (!sittingDate.isEmpty()
-            && sittingDate.equals(uniqueSittingDate[sittingDateIndex])) {
-            hearingNodeArray.add(sitting.get("hearing"));
-        }
-    }
-
-    public static Map<Date, String> findAllSittingDates(JsonNode courtRooms) {
-        Map<Date, String> sittingDateTimes = new ConcurrentHashMap<>();
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
-
-        courtRooms.forEach(courtRoom -> {
-            courtRoom.get("session").forEach(session -> {
-                session.get(SITTINGS).forEach(sitting -> {
-                    try {
-                        sittingDateTimes.put(sf.parse(sitting.get(SITTING_START).asText()),
-                                             GeneralHelper.findAndReturnNodeText(sitting, SITTING_DATE));
-                    } catch (ParseException e) {
-                        log.error(e.getMessage());
-                    }
-                });
-            });
-        });
-
-        return sittingDateTimes;
-    }
-
-    public static List<String> findUniqueDateAndSort(Map<Date, String> sittingDateTimes) {
-        Map<Date,String> sortedSittingDateTimes = sortByDateTime(sittingDateTimes);
-
-        List<String> uniqueDates = new ArrayList<>();
-        for (String value : sortedSittingDateTimes.values()) {
-            if (!uniqueDates.contains(value)) {
-                uniqueDates.add(value);
-            }
-        }
-        return uniqueDates;
-    }
-
-    @SuppressWarnings({"PMD.LawOfDemeter"})
-    private static Map<Date,String> sortByDateTime(Map<Date, String> dateTimeValueString) {
-        return dateTimeValueString.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
-            .collect(Collectors.toMap(
-                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     public static void etFortnightlyListFormatted(JsonNode artefact, Map<String, Object> language) {

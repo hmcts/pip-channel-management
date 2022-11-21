@@ -54,7 +54,7 @@ class CrownDailyListSummaryConverterTest {
 
         assertThat(emailOutput)
             .as("incorrect prosecuting authority found")
-            .contains("Pro_Auth_SN, Pro_Auth_FN");
+            .contains("Pro_Auth");
 
         assertThat(emailOutput)
             .as("incorrect linked cases found")

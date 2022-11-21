@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SittingHelper;
 
 import java.util.Date;
 import java.util.List;
@@ -46,11 +47,11 @@ public final class CrownFirmListHelper {
     private static List<String> findUniqueSittingDatesPerCounts(JsonNode artefact) {
         Map<Date, String> allSittingDateTimes = new ConcurrentHashMap<>();
         artefact.get(COURT_LIST).forEach(courtList -> {
-            Map<Date, String> sittingDateTimes = EtFortnightlyPressListHelper.findAllSittingDates(
+            Map<Date, String> sittingDateTimes = SittingHelper.findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
             allSittingDateTimes.putAll(sittingDateTimes);
         });
-        return EtFortnightlyPressListHelper.findUniqueDateAndSort(allSittingDateTimes);
+        return GeneralHelper.findUniqueDateAndSort(allSittingDateTimes);
     }
 
     public static void splitByCourtAndDate(JsonNode artefact) {
@@ -79,7 +80,7 @@ public final class CrownFirmListHelper {
                     ArrayNode hearingArray = mapper.createArrayNode();
                     courtRoom.get("session").forEach(session -> {
                         session.get(SITTINGS).forEach(sitting ->
-                            EtFortnightlyPressListHelper.checkSittingDateAlreadyExists(
+                            SittingHelper.checkSittingDateAlreadyExists(
                             sitting, uniqueDates, hearingArray, finalI));
 
                         checkToBeAllocatedRoom(courtRoomNode, session, unAllocatedCourtRoom, hearingArray,
@@ -104,7 +105,7 @@ public final class CrownFirmListHelper {
     private static void checkAndAddToArrayNode(ArrayNode arrayToCheck, ObjectNode destinationNode,
                                                String destinationNodeAttribute, ArrayNode arrayToAdd) {
         if (arrayToCheck.size() > 0) {
-            (destinationNode).putArray(destinationNodeAttribute).addAll(arrayToCheck);
+            destinationNode.putArray(destinationNodeAttribute).addAll(arrayToCheck);
             arrayToAdd.add(destinationNode);
         }
     }
@@ -113,18 +114,18 @@ public final class CrownFirmListHelper {
         ObjectNode unAllocatedCourtRoom, ArrayNode hearingArray, ArrayNode unAllocatedCourtRoomHearings) {
         if (GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM_NAME)
             .contains("to be allocated") && hearingArray.size() > 0) {
-            (unAllocatedCourtRoom).put(
+            unAllocatedCourtRoom.put(
                 FORMATTED_COURT_ROOM_NAME,
                 GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM)
             );
-            (unAllocatedCourtRoom).put("unallocatedSection", "true");
+            unAllocatedCourtRoom.put("unallocatedSection", "true");
             unAllocatedCourtRoomHearings.addAll(hearingArray);
         } else {
-            (courtRoomNode).put(
+            courtRoomNode.put(
                 FORMATTED_COURT_ROOM_NAME,
                 GeneralHelper.findAndReturnNodeText(session, FORMATTED_COURT_ROOM)
             );
-            (courtRoomNode).put("unallocatedSection", "false");
+            courtRoomNode.put("unallocatedSection", "false");
         }
     }
 
@@ -137,7 +138,7 @@ public final class CrownFirmListHelper {
                             sitting.get(SITTING_START).asText(),
                             "dd MMMM yyyy", Language.ENGLISH);
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
-                        MagistratesStandardListHelper.manipulatedSitting(courtRoom, session, sitting,
+                        SittingHelper.manipulatedSitting(courtRoom, session, sitting,
                                                                          FORMATTED_COURT_ROOM);
                         sitting.get("hearing").forEach(hearing -> {
                             EtFortnightlyPressListHelper.formatCaseTime(sitting, hearing);
