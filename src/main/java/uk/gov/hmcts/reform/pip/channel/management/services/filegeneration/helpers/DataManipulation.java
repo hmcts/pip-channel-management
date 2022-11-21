@@ -146,12 +146,16 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static String findAndManipulateJudiciary(JsonNode session) {
+    private static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
+        return findAndManipulateJudiciary(judiciaryNode, true);
+    }
+
+    public static String findAndManipulateJudiciary(JsonNode judiciaryNode, boolean addBeforeToJudgeName) {
         AtomicReference<StringBuilder> formattedJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
 
-        if (session.has(JUDICIARY)) {
-            session.get(JUDICIARY).forEach(judiciary -> {
+        if (judiciaryNode.has(JUDICIARY)) {
+            judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
                     formattedJudiciary.set(new StringBuilder());
                     formattedJudiciary.get().append(GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs"));
@@ -166,7 +170,8 @@ public final class DataManipulation {
                 }
             });
 
-            if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()) {
+            if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()
+                    && addBeforeToJudgeName) {
                 formattedJudiciary.get().insert(0, "Before: ");
             }
         }

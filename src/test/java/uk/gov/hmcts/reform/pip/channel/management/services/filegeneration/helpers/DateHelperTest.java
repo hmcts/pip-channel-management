@@ -18,6 +18,8 @@ class DateHelperTest {
     private static final String ERR_MSG = "Helper method doesn't seem to be working correctly";
     private static final String TEST_DATETIME_1 = "2022-08-19T09:30:00Z";
     private static final String TEST_DATETIME_2 = "2022-07-26T16:04:43.416924Z";
+    private static final String SITTING_START = "sittingStart";
+    private static final String TIME_FORMAT = "h:mma";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
@@ -168,14 +170,14 @@ class DateHelperTest {
 
     @Test
     void testTimeStampToBstTimeWithFormatForAmMethod() {
-        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, "h:mma"))
+        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, TIME_FORMAT))
             .as(ERR_MSG)
             .isEqualTo("10:30am");
     }
 
     @Test
     void testTimeStampToBstTimeWithFormatForPmMethod() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", "h:mma"))
+        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", TIME_FORMAT))
             .as(ERR_MSG)
             .isEqualTo("2:30pm");
     }
@@ -198,7 +200,7 @@ class DateHelperTest {
     @Test
     void testCalculateDurationInDays() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T10:00:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T10:00:52.123Z");
         sittingNode.put("sittingEnd", "2022-12-12T12:30:52.123Z");
 
         DateHelper.calculateDuration(sittingNode, Language.ENGLISH, true);
@@ -210,7 +212,7 @@ class DateHelperTest {
     @Test
     void testCalculateDurationInHoursAndMinutes() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T10:00:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T10:00:52.123Z");
         sittingNode.put("sittingEnd", "2022-12-10T12:30:52.123Z");
 
         DateHelper.calculateDuration(sittingNode, Language.ENGLISH, true);
@@ -222,9 +224,9 @@ class DateHelperTest {
     @Test
     void testFormatStartTime() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T15:30:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T15:30:52.123Z");
 
-        DateHelper.formatStartTime(sittingNode, "h:mma");
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT);
         assertThat(sittingNode.get("time").asText())
             .as(ERR_MSG)
             .isEqualTo("3:30pm");
