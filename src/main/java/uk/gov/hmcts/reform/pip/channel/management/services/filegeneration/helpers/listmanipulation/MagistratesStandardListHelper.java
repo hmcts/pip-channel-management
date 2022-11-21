@@ -152,11 +152,11 @@ public final class MagistratesStandardListHelper {
 
     private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {
         ((ObjectNode) hearing).put("formattedConvictionDate",
-            DateHelper.timeStampToBstTimeWithFormat(
+            DateHelper.timeStampToBstTime(
             GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
             "dd/MM/yyyy"));
         ((ObjectNode) hearing).put("formattedAdjournedDate",
-            DateHelper.timeStampToBstTimeWithFormat(
+            DateHelper.timeStampToBstTime(
             GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
             "dd/MM/yyyy"));
         ((ObjectNode) hearing).put("prosecutionAuthorityCode",
