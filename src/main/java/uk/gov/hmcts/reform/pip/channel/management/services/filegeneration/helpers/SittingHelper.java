@@ -63,4 +63,13 @@ public final class SittingHelper {
         judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
         ((ObjectNode) session).put(destinationNodeName, judiciary);
     }
+
+    public static void formatCaseTime(JsonNode sitting, JsonNode node) {
+        if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
+            ((ObjectNode)node).put("time",
+                DateHelper.timeStampToBstTime(GeneralHelper
+                    .findAndReturnNodeText(sitting, SITTING_START), "h:mma")
+                    .replace(":00", ""));
+        }
+    }
 }

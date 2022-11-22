@@ -34,7 +34,7 @@ class CrownFirmListSummaryConverterTest {
 
         assertThat(emailOutput)
             .as("incorrect sitting at found")
-            .contains("9:00am");
+            .contains("9am");
 
         assertThat(emailOutput)
             .as("incorrect case reference found")

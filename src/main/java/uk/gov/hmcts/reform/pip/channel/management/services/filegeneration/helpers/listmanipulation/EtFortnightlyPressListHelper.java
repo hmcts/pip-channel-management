@@ -79,7 +79,7 @@ public final class EtFortnightlyPressListHelper {
                             "EEEE dd MMMM yyyy");
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
                         sitting.get("hearing").forEach(hearing -> {
-                            formatCaseTime(sitting, hearing);
+                            SittingHelper.formatCaseTime(sitting, hearing);
                             moveTableColumnValuesToHearing(courtRoom, sitting, hearing, language);
                             if (hearing.has("case")) {
                                 hearing.get("case").forEach(cases -> {
@@ -152,13 +152,5 @@ public final class EtFortnightlyPressListHelper {
         }
 
         return respondentRepresentative;
-    }
-
-    public static void formatCaseTime(JsonNode sitting, JsonNode node) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
-            ((ObjectNode)node).put("time",
-                DateHelper.timeStampToBstTime(GeneralHelper
-                .findAndReturnNodeText(sitting, SITTING_START), "h:mma"));
-        }
     }
 }

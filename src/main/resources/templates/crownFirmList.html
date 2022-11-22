@@ -217,9 +217,6 @@
       <div class="govuk-accordion" id="accordion-default"
            th:each="courtRoom : ${courtList.get('courtRooms')}">
         <div class="govuk-accordion__section-header">
-          <div th:if="${courtRoom.get('unallocatedSection').asText() == 'true'}">
-            <h2 class="govuk-heading-m" th:text="${i18n.unallocatedCases}"/>
-          </div>
           <h2 class="govuk-heading-m" th:text="${courtRoom.get('formattedSessionCourtRoom').asText()}"/>
         </div>
         <div class="govuk-accordion__section-content">

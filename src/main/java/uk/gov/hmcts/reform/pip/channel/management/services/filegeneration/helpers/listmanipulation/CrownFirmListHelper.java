@@ -142,7 +142,7 @@ public final class CrownFirmListHelper {
                         SittingHelper.manipulatedSitting(courtRoom, session, sitting,
                                                                          FORMATTED_COURT_ROOM);
                         sitting.get("hearing").forEach(hearing -> {
-                            EtFortnightlyPressListHelper.formatCaseTime(sitting, hearing);
+                            SittingHelper.formatCaseTime(sitting, hearing);
                             PartyRoleHelper.handleParties(hearing);
                             CrimeListHelper.formatCaseInformationCrownDaily(hearing);
                             CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
@@ -160,7 +160,7 @@ public final class CrownFirmListHelper {
                                                        JsonNode hearing,
                                                        JsonNode caseNode) {
         ((ObjectNode)hearing).put("sittingAt",
-            GeneralHelper.findAndReturnNodeText(sitting,"time"));
+            GeneralHelper.findAndReturnNodeText(hearing,"time"));
         ((ObjectNode)hearing).put("caseReference",
             GeneralHelper.findAndReturnNodeText(caseNode,"caseNumber"));
         ((ObjectNode)hearing).put(DEFENDANT,
