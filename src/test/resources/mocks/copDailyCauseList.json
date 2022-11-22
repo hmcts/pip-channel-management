@@ -51,7 +51,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "1 of 2"
+                            "caseSequenceIndicator": "[1 of 2]"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -83,7 +83,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "1 of 2"
+                            "caseSequenceIndicator": "[1 of 2]"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -136,7 +136,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "1 of 2"
+                            "caseSequenceIndicator": "[1 of 2]"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -174,7 +174,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "1 of 2"
+                            "caseSequenceIndicator": "[1 of 2]"
                           }
                         ],
                         "hearingType": "Criminal"

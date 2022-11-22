@@ -71,7 +71,7 @@ public final class CrimeListSummaryHelper {
         output.append(formattedDuration);
 
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
-                                            hearing,"prosecuting_authority");
+                                            hearing,"prosecutingAuthority");
 
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, "linkedCases").isEmpty()) {
             GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, "linkedCases");
@@ -88,7 +88,7 @@ public final class CrimeListSummaryHelper {
                                                      JsonNode hearingCase) {
 
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ", hearing,
-                                            "prosecuting_authority");
+                                            "prosecutingAuthority");
         output.append('\n');
 
         String caseSequenceNo = " " + GeneralHelper

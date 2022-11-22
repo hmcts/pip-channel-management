@@ -96,6 +96,83 @@
                     ]
                   }
                 ]
+              },
+              {
+                "sessionChannel": [
+                  "Teams"
+                ],
+                "judiciary": [
+                  {
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name2",
+                    "isPresiding": true
+                  },
+                  {
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name2",
+                    "isPresiding": false
+                  }
+                ],
+                "sittings": [
+                  {
+                    "sittingStart": "2020-10-20T20:00:00.001Z",
+                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234"
+                              }
+                            ],
+                            "language": "French"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "CLAIMANT_PETITIONER",
+                            "individualDetails": {
+                              "individualSurname": "Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT",
+                            "individualDetails": {
+                              "individualSurname": "Authority Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT_REPRESENTATIVE",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": [
+                      "Teams",
+                      "Attended"
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -204,6 +281,69 @@
                               "individualMiddleName": "Individual Middlename",
                               "individualSurname": "Individual Surname",
                               "title": "Mr"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT_REPRESENTATIVE",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": [
+                      "Teams",
+                      "Attended"
+                    ]
+                  }
+                ]
+              },
+              {
+                "sessionChannel": [
+                  "Teams"
+                ],
+                "judiciary": [
+                  {
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
+                    "isPresiding": true
+                  },
+                  {
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
+                    "isPresiding": false
+                  }
+                ],
+                "sittings": [
+                  {
+                    "sittingStart": "2020-10-20T20:20:00.001Z",
+                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseType": "case type",
+                            "caseLinked": []
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "CLAIMANT_PETITIONER",
+                            "individualDetails": {
+                              "individualSurname": "Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT",
+                            "individualDetails": {
+                              "individualSurname": "Authority Surname"
                             }
                           },
                           {

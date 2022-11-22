@@ -32,7 +32,7 @@ class IacDailyListSummaryConverterTest {
 
         assertThat(artefactSummary.split(System.lineSeparator()))
             .as("Incorrect output lines")
-                .hasSize(21);
+                .hasSize(35);
 
         assertThat(artefactSummary)
             .as("incorrect start time found")
@@ -54,5 +54,4 @@ class IacDailyListSummaryConverterTest {
             .as("incorrect prosecuting authority found")
             .contains("Authority Surname");
     }
-
 }

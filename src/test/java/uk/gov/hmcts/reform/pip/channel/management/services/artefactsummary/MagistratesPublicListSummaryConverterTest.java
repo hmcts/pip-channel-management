@@ -52,10 +52,9 @@ class MagistratesPublicListSummaryConverterTest {
             .as("incorrect duration found")
             .contains("1 hour 5 mins [2 of 3]");
 
-
         assertThat(emailOutput)
             .as("incorrect prosecuting authority found")
-            .contains("Pro_Auth_SN, Pro_Auth_FN");
+            .contains("Pro_Auth");
 
         assertThat(emailOutput)
             .as("incorrect listing notes found")
