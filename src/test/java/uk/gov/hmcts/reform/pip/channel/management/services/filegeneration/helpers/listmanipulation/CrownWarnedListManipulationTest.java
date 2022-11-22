@@ -29,10 +29,8 @@ class CrownWarnedListManipulationTest {
     private static final String HEARING_TYPE_MESSAGE = "Hearing types do not match";
     private static final String ROW_COUNT_MESSAGE = "Row count does not match";
     private static final String ROW_VALUE_MESSAGE = "Row values do not match";
-    private static final String PARTY_NAME_MESSAGE = "Party name do not match";
 
     JsonNode rawListJson;
-    JsonNode partyRoleJson;
 
     @BeforeAll
     void setup() throws IOException {
@@ -40,12 +38,6 @@ class CrownWarnedListManipulationTest {
             "/mocks/crownWarnedList.json")) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             rawListJson = new ObjectMapper().readTree(inputRaw);
-        }
-
-        try (InputStream inputStream = getClass().getResourceAsStream(
-            "/mocks/partyManipulation.json")) {
-            String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
-            partyRoleJson = new ObjectMapper().readTree(inputRaw);
         }
     }
 

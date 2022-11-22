@@ -11,6 +11,8 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,13 +26,14 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class CrimeListHelper {
 
-    public static final String DEFENDANT = "defendant";
-    public static final String COURT_LIST = "courtLists";
-    public static final String CASE = "case";
-    public static final String COURT_ROOM = "courtRoom";
+    private static final String COURT_LIST = "courtLists";
+    private static final String CASE = "case";
+    private static final String COURT_ROOM = "courtRoom";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String LISTING_DETAILS = "listingDetails";
     private static final String LISTING_NOTES = "listingNotes";
+    private static final String LINKED_CASES = "linkedCases";
+    private static final String COURT_ROOM_NAME = "courtRoomName";
 
     private CrimeListHelper() {
     }
@@ -78,7 +81,7 @@ public final class CrimeListHelper {
         artefact.get(COURT_LIST).forEach(courtList -> {
             final int[] roomCount = {0};
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                if (GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName").contains("to be allocated")) {
+                if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME).contains("to be allocated")) {
                     JsonNode cloneCourtRoom = courtRoom.deepCopy();
                     unAllocatedCasesNodeArray.add(cloneCourtRoom);
                     ((ObjectNode)courtRoom).put("exclude", true);
@@ -113,10 +116,10 @@ public final class CrimeListHelper {
         artefact.get(COURT_LIST).forEach(courtList -> {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
-                    if (GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName")
+                    if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
                         .contains("to be allocated")) {
                         ((ObjectNode)session).put("formattedSessionCourtRoom",
-                                                  GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
+                                                  GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME));
                     } else {
                         ((ObjectNode)session).put("formattedSessionCourtRoom",
                              GeneralHelper.findAndReturnNodeText(session, "formattedSessionCourtRoom")
@@ -166,7 +169,7 @@ public final class CrimeListHelper {
                     });
                 }
                 ((ObjectNode) cases).put(
-                    "linkedCases",
+                    LINKED_CASES,
                     GeneralHelper.trimAnyCharacterFromStringEnd(linkedCases.toString())
                 );
 
@@ -201,13 +204,13 @@ public final class CrimeListHelper {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(cases -> {
                 ((ObjectNode)cases).put("caseCellBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, "linkedCases").isEmpty()
+                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
                     ((ObjectNode)cases).put("caseCellBorder", "no-border-bottom");
                 }
 
                 ((ObjectNode)cases).put("linkedCasesBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, "linkedCases").isEmpty()) {
+                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()) {
                     ((ObjectNode)cases).put("linkedCasesBorder", "no-border-bottom");
                 }
             });

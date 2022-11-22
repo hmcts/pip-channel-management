@@ -82,7 +82,7 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .isEqualTo("Bail List");
 
-        softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("p").get(0))
+        softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
             .isEqualTo("Court Room A, Before Judge Test Name, Magistrate Test Name");
@@ -123,12 +123,12 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .isEqualTo("Non Bail List");
 
-        softly.assertThat(doc.getElementsByClass("govuk-accordion").get(1).getElementsByTag("p").get(0))
+        softly.assertThat(doc.getElementsByClass("govuk-accordion").get(1).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
             .isEqualTo("Hearing Room: Court Room B");
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__head").get(1).getElementsByTag("th"))
+        softly.assertThat(doc.getElementsByClass("govuk-table__head").get(2).getElementsByTag("th"))
             .as("Incorrect table headers")
             .hasSize(7)
             .extracting(Element::text)
@@ -140,7 +140,7 @@ class IacDailyListFileConverterTest {
                              "Hearing Channel",
                              "Linked Cases");
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(1)
+        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))
             .as("Incorrect table rows")
             .hasSize(7)
@@ -153,7 +153,7 @@ class IacDailyListFileConverterTest {
                       "Teams, Attended",
                       "");
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(1)
+        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
                               .getElementsByClass("govuk-table__row").get(1).getElementsByTag("td"))
             .as("Incorrect table rows")
             .hasSize(7)
