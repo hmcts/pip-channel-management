@@ -157,7 +157,7 @@ public final class EtFortnightlyPressListHelper {
     public static void formatCaseTime(JsonNode sitting, JsonNode node) {
         if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
             ((ObjectNode)node).put("time",
-                DateHelper.timeStampToBstTimeWithFormat(GeneralHelper
+                DateHelper.timeStampToBstTime(GeneralHelper
                 .findAndReturnNodeText(sitting, SITTING_START), "h:mma"));
         }
     }

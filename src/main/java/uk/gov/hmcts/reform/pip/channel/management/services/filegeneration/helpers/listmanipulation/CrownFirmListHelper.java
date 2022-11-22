@@ -135,9 +135,9 @@ public final class CrownFirmListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get(SITTINGS).forEach(sitting -> {
-                        String sittingDate = DateHelper.formatTimeStampToBstHavingWeekDay(
-                            sitting.get(SITTING_START).asText(),
-                            "dd MMMM yyyy", Language.ENGLISH);
+                        String sittingDate = DateHelper.formatTimeStampToBst(
+                            sitting.get(SITTING_START).asText(), Language.ENGLISH,
+                            false, false, "EEEE dd MMMM yyyy");
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
                         SittingHelper.manipulatedSitting(courtRoom, session, sitting,
                                                                          FORMATTED_COURT_ROOM);

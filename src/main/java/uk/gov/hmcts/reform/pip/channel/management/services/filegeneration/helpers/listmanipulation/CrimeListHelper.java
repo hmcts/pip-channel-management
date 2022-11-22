@@ -11,8 +11,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +23,9 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
  */
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class CrimeListHelper {
+    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
+    public static final String DEFENDANT = "defendant";
+    public static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
 
     private static final String COURT_LIST = "courtLists";
     private static final String CASE = "case";
