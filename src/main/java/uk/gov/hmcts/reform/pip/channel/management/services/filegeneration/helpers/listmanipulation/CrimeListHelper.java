@@ -9,9 +9,8 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,10 +24,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class CrimeListHelper {
 
-    public static final String PROSECUTING_AUTHORITY = "prosecuting_authority";
     public static final String DEFENDANT = "defendant";
-    public static final String DEFENDANT_REPRESENTATIVE = "defendant_representative";
-    private static final String DELIMITER = ", ";
     public static final String COURT_LIST = "courtLists";
     public static final String CASE = "case";
     public static final String COURT_ROOM = "courtRoom";
@@ -61,7 +57,7 @@ public final class CrimeListHelper {
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
-                            findAndManipulatePartyInformation(hearing);
+                            PartyRoleHelper.handleParties(hearing);
                             if (ListType.CROWN_DAILY_LIST.equals(listType)) {
                                 formatCaseInformationCrownDaily(hearing);
                                 formatCaseHtmlTableCrownDailyList(hearing);
@@ -216,84 +212,5 @@ public final class CrimeListHelper {
                 }
             });
         }
-    }
-
-    public static void findAndManipulatePartyInformation(JsonNode hearing) {
-        List<String> defendants = new ArrayList<>();
-        List<String> defendantRepresentatives = new ArrayList<>();
-        List<String> prosecutingAuthorities = new ArrayList<>();
-
-        if (hearing.has("party")) {
-            hearing.get("party").forEach(party -> {
-                if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isEmpty()) {
-                    switch (party.get("partyRole").asText()) {
-                        case "DEFENDANT":
-                            defendants.add(createIndividualDetails(party, true));
-                            break;
-                        case "DEFENDANT_REPRESENTATIVE":
-                            defendantRepresentatives.add(createOrganisationDetails(party));
-                            break;
-                        case "PROSECUTING_AUTHORITY":
-                            prosecutingAuthorities.add(createOrganisationDetails(party));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            });
-        }
-
-        ((ObjectNode) hearing).put(DEFENDANT, String.join(DELIMITER, defendants));
-        ((ObjectNode) hearing).put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
-        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
-    }
-
-    private static String createIndividualDetails(JsonNode party, boolean surnameFirst) {
-        if (party.has("individualDetails")) {
-            JsonNode individualDetails = party.get("individualDetails");
-            String forNames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
-            String surName = GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname");
-
-            if (surnameFirst) {
-                return formatNameWithSurnameFirst(forNames, surName);
-            }
-
-            String title = GeneralHelper.findAndReturnNodeText(individualDetails, "title");
-            String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, "individualMiddleName");
-            return formatNameWithForNameFirst(title, forNames, middleName, surName);
-        }
-        return "";
-    }
-
-    private static String formatNameWithSurnameFirst(String forName, String surname) {
-        String separator = " ";
-        if (!forName.isEmpty()) {
-            separator = ", ";
-        }
-
-        return (surname
-            + separator
-            + forName).trim();
-    }
-
-    private static String formatNameWithForNameFirst(String title, String forName, String middleName, String surname) {
-        String separator = " ";
-        if (!surname.isEmpty() || !middleName.isEmpty()) {
-            separator = " ";
-        }
-
-        return (title + " "
-            + forName
-            + separator
-            + (middleName.length() > 0 ? " " : "")
-            + surname).trim();
-    }
-
-    private static String createOrganisationDetails(JsonNode party) {
-        if (party.has("organisationDetails")) {
-            JsonNode organisationDetails = party.get("organisationDetails");
-            return GeneralHelper.findAndReturnNodeText(organisationDetails, "organisationName");
-        }
-        return "";
     }
 }

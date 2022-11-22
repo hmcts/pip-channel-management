@@ -95,14 +95,14 @@ class CrownFirmListHelperTest {
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("defendant_representative").asText(),
+                         .get("defendantRepresentative").asText(),
                      "Boyce Daniel",
                      "Unable to find defendant representative");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecuting_authority").asText(),
+                         .get("prosecutingAuthority").asText(),
                      "HMCTS",
                      "Unable to find prosecuting authority");
 

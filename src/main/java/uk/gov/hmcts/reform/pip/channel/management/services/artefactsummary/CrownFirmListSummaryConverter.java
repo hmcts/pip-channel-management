@@ -40,9 +40,9 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
                             output.append('\n');
                             checkCaseSequenceNo(output, hearing);
                             GeneralHelper.appendToStringBuilder(output, "Representative - ",
-                                                                hearing, "defendant_representative");
+                                                                hearing, "defendantRepresentative");
                             GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
-                                                                hearing, "prosecuting_authority");
+                                                                hearing, "prosecutingAuthority");
                             checkLinkedCasesAndListingNotes(output, hearing);
                         })
                      )

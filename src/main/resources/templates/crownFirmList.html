@@ -244,8 +244,8 @@
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
                       <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
                       <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('formattedDuration').asText() + ' ' + hearing.get('caseSequenceIndicator').asText()}"/>
-                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant_representative').asText()}"/>
-                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecuting_authority').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendantRepresentative').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
                     </tr>
                     <span th:if="${hearing.get('linkedCases').asText() != ''}">
                       <tr class="govuk-table__row">

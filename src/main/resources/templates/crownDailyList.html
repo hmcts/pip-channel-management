@@ -245,7 +245,7 @@
                           <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${sitting.get('formattedDuration').asText() + ' ' + case.get('caseSequenceIndicator').asText()}"/>
-                          <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecuting_authority').asText()}"/>
+                          <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
                         </tr>
                         <span th:if="${case.get('linkedCases').asText() != ''}">
                           <tr class="govuk-table__row">

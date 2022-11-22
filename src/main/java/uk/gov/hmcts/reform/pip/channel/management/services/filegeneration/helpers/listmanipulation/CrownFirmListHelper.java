@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SittingHelper;
 
 import java.util.Date;
@@ -24,11 +25,11 @@ public final class CrownFirmListHelper {
     private static final String SITTINGS = "sittings";
     private static final String SITTING_START = "sittingStart";
     public static final String DEFENDANT = "defendant";
-    public static final String PROSECUTING_AUTHORITY = "prosecuting_authority";
+    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     private static final String LINKED_CASES = "linkedCases";
     private static final String LISTING_NOTES = "listingNotes";
     private static final String FORMATTED_COURT_ROOM_NAME = "formattedSessionCourtRoom";
-    public static final String DEFENDANT_REPRESENTATIVE = "defendant_representative";
+    public static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
     public static final String COURT_LIST = "courtLists";
     public static final String FORMATTED_COURT_ROOM = "formattedCourtRoom";
 
@@ -142,7 +143,7 @@ public final class CrownFirmListHelper {
                                                                          FORMATTED_COURT_ROOM);
                         sitting.get("hearing").forEach(hearing -> {
                             EtFortnightlyPressListHelper.formatCaseTime(sitting, hearing);
-                            CrimeListHelper.findAndManipulatePartyInformation(hearing);
+                            PartyRoleHelper.handleParties(hearing);
                             CrimeListHelper.formatCaseInformationCrownDaily(hearing);
                             CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
                             hearing.get("case").forEach(caseNode -> {

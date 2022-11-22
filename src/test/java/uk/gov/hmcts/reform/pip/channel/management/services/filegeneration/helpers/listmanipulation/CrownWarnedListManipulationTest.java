@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWarnedList;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +134,7 @@ class CrownWarnedListManipulationTest {
 
     @Test
     void testHandleDefendantParty() {
-        CrownWarnedListManipulation.handleParties(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("defendant").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("SurnameA, ForenamesA, SurnameB, ForenamesB");
@@ -141,7 +142,7 @@ class CrownWarnedListManipulationTest {
 
     @Test
     void testHandleDefendantRepresentativeParty() {
-        CrownWarnedListManipulation.handleParties(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("defendantRepresentative").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("Defendant rep name");
@@ -149,7 +150,7 @@ class CrownWarnedListManipulationTest {
 
     @Test
     void testHandleProsecutingAuthorityParty() {
-        CrownWarnedListManipulation.handleParties(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("prosecutingAuthority").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("Prosecuting authority name");
