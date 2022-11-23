@@ -83,9 +83,25 @@
     .list-name {
       margin-top: 0.5em;
     }
+
     .govuk-accordion {
       page-break-after: always;
     }
+
+    .govuk-accordion__section-heading {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      font-family: "GDS Transport", arial, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      font-size: 1.125rem;
+      line-height: 1.11111;
+      color: #0b0c0c;
+      display: block;
+    }
+
     .govuk-table {
       table-layout: fixed;
       font-family: "GDS Transport";
@@ -141,13 +157,13 @@
       <div class="govuk-accordion" th:each="courtRoom : ${courtList.get('courtHouse').get('courtRoom')}">
         <th:block th:each="session: ${courtRoom.get('session')}">
           <th:block th:if="${!courtList.get('isBailList').asBoolean()}">
-            <p class="govuk-body" th:text="${i18n.hearingRoom + courtRoom.get('courtRoomName').asText}"/>
+            <h3 class="govuk-accordion__section-heading" th:text="${i18n.hearingRoom + courtRoom.get('courtRoomName').asText}"/>
           </th:block>
           <th:block th:if="${#strings.length(session.get('formattedJudiciary').asText()) > 0 && courtList.get('isBailList').asBoolean()}">
-            <p class="govuk-body" th:text="${courtRoom.get('courtRoomName').asText() + ',' + i18n.beforeJudge + session.get('formattedJudiciary').asText()}"/>
+            <h3 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText() + ',' + i18n.beforeJudge + session.get('formattedJudiciary').asText()}"/>
           </th:block>
           <th:block th:if="${#strings.length(session.get('formattedJudiciary').asText()) == 0 && courtList.get('isBailList').asBoolean()}">
-            <p class="govuk-body" th:text="${courtRoom.get('courtRoomName').asText()}"/>
+            <h3 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText()}"/>
           </th:block>
           <table class="govuk-table">
             <thead class="govuk-table__head">

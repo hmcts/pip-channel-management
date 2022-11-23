@@ -26,7 +26,7 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                 courtRoom.get("session").forEach(session -> {
                     session.get("sittings").forEach(sitting -> {
 
-                        String sittingStart = DateHelper.timeStampToBstTimeWithFormat(
+                        String sittingStart = DateHelper.timeStampToBstTime(
                             sitting.get("sittingStart").asText(), "h:mma");
 
                         DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
