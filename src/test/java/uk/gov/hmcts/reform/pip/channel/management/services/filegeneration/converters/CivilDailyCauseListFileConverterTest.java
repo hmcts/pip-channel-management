@@ -53,7 +53,7 @@ class CivilDailyCauseListFileConverterTest {
 
         assertThat(document.title())
             .as("incorrect document title")
-            .isEqualTo("Civil Daily Cause List");
+            .isEqualTo("Civil Daily Cause List for");
 
         assertFirstPageContent(document.getElementsByClass("first-page").get(0));
         assertCourtHouseInfo(document.getElementsByClass("site-address"));
@@ -80,24 +80,17 @@ class CivilDailyCauseListFileConverterTest {
 
         assertThat(document.title())
             .as("incorrect document title")
-            .isEqualTo("Rhestr Ddyddiol o Achosion Sifil");
+            .isEqualTo("Rhestr Ddyddiol o Achosion Sifil gyfer");
 
     }
 
     private void assertFirstPageContent(Element element) {
-        assertThat(element.getElementsByTag("h1"))
-            .as("Incorrect first page h1 element")
-            .hasSize(1)
-            .extracting(Element::text)
-            .containsExactly("Court and Tribunal Hearings Service");
 
         assertThat(element.getElementsByTag("h2"))
             .as("Incorrect first page h2 elements")
-            .hasSize(2)
+            .hasSize(1)
             .extracting(Element::text)
-            .containsExactly("Civil Daily Cause List:",
-                             "In the " + OXFORD_COURT
-            );
+            .containsExactly("Civil Daily Cause List for " + OXFORD_COURT);
 
         assertThat(element.getElementsByTag("p"))
             .as("Incorrect first page p elements")
@@ -105,7 +98,7 @@ class CivilDailyCauseListFileConverterTest {
             .extracting(Element::text)
             .contains("THE LAW COURTS PR1 2LL",
                       "List for 1 July 2022",
-                      "Last Updated 20 April 2022 at 3:36pm"
+                      "Last updated 20 April 2022 at 3:36pm"
             );
     }
 

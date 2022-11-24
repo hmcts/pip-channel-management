@@ -147,7 +147,7 @@ public final class MagistratesStandardListHelper {
 
         judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
         ((ObjectNode) session).put("formattedSessionCourtRoom", judiciary);
-        DateHelper.formatStartTime(sitting, "h:mma");
+        DateHelper.formatStartTime(sitting, "h:mma", false);
     }
 
     private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {
