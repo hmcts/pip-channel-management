@@ -122,9 +122,9 @@ public final class EtFortnightlyPressListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get(SITTINGS).forEach(sitting -> {
-                        String sittingDate = DateHelper.formatTimeStampToBstHavingWeekDay(
-                            sitting.get(SITTING_START).asText(),
-                            "dd MMMM yyyy", Language.ENGLISH);
+                        String sittingDate = DateHelper.formatTimeStampToBst(
+                            sitting.get(SITTING_START).asText(), Language.ENGLISH, false, false,
+                            "EEEE dd MMMM yyyy");
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
                         sitting.get("hearing").forEach(hearing -> {
                             formatCaseTime(sitting, hearing);
@@ -205,7 +205,7 @@ public final class EtFortnightlyPressListHelper {
     private static void formatCaseTime(JsonNode sitting, JsonNode hearing) {
         if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
             ((ObjectNode)hearing).put("time",
-                DateHelper.timeStampToBstTimeWithFormat(GeneralHelper
+                DateHelper.timeStampToBstTime(GeneralHelper
                 .findAndReturnNodeText(sitting, SITTING_START), "h:mma"));
         }
     }

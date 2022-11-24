@@ -9,8 +9,9 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,15 +24,19 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
  */
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class CrimeListHelper {
-
-    public static final String PROSECUTING_AUTHORITY = "prosecuting_authority";
+    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     public static final String DEFENDANT = "defendant";
-    public static final String COURT_LIST = "courtLists";
-    public static final String CASE = "case";
-    public static final String COURT_ROOM = "courtRoom";
+    public static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
+
+    private static final String DELIMITER = ", ";
+    private static final String COURT_LIST = "courtLists";
+    private static final String CASE = "case";
+    private static final String COURT_ROOM = "courtRoom";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String LISTING_DETAILS = "listingDetails";
     private static final String LISTING_NOTES = "listingNotes";
+    private static final String LINKED_CASES = "linkedCases";
+    private static final String COURT_ROOM_NAME = "courtRoomName";
 
     private CrimeListHelper() {
     }
@@ -56,7 +61,7 @@ public final class CrimeListHelper {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
                     session.get("sittings").forEach(sitting -> {
-                        formatCaseTime(sitting);
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 findAndManipulatePartyInformation(hearing);
@@ -85,7 +90,7 @@ public final class CrimeListHelper {
         artefact.get(COURT_LIST).forEach(courtList -> {
             final int[] roomCount = {0};
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                if (GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName").contains("to be allocated")) {
+                if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME).contains("to be allocated")) {
                     JsonNode cloneCourtRoom = courtRoom.deepCopy();
                     unAllocatedCasesNodeArray.add(cloneCourtRoom);
                     ((ObjectNode)courtRoom).put("exclude", true);
@@ -120,10 +125,10 @@ public final class CrimeListHelper {
         artefact.get(COURT_LIST).forEach(courtList -> {
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 courtRoom.get("session").forEach(session -> {
-                    if (GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName")
+                    if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
                         .contains("to be allocated")) {
                         ((ObjectNode)session).put("formattedSessionCourtRoom",
-                                                  GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
+                                                  GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME));
                     } else {
                         ((ObjectNode)session).put("formattedSessionCourtRoom",
                              GeneralHelper.findAndReturnNodeText(session, "formattedSessionCourtRoom")
@@ -169,7 +174,7 @@ public final class CrimeListHelper {
                     });
                 }
                 ((ObjectNode) cases).put(
-                    "linkedCases",
+                    LINKED_CASES,
                     GeneralHelper.trimAnyCharacterFromStringEnd(linkedCases.toString())
                 );
 
@@ -204,77 +209,58 @@ public final class CrimeListHelper {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(cases -> {
                 ((ObjectNode)cases).put("caseCellBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, "linkedCases").isEmpty()
+                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
                     ((ObjectNode)cases).put("caseCellBorder", "no-border-bottom");
                 }
 
                 ((ObjectNode)cases).put("linkedCasesBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, "linkedCases").isEmpty()) {
+                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()) {
                     ((ObjectNode)cases).put("linkedCasesBorder", "no-border-bottom");
                 }
             });
         }
     }
 
-    private static void formatCaseTime(JsonNode sitting) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, "sittingStart").isEmpty()) {
-            ((ObjectNode)sitting).put("time",
-                                      DateHelper.timeStampToBstTimeWithFormat(
-                                          GeneralHelper.findAndReturnNodeText(sitting, "sittingStart"),
-                                          "h:mma"));
-        }
-    }
-
-    private static void findAndManipulatePartyInformation(JsonNode hearing) {
-        StringBuilder prosecutingAuthority = new StringBuilder();
-        StringBuilder defendant = new StringBuilder();
+    public static void findAndManipulatePartyInformation(JsonNode hearing) {
+        List<String> defendants = new ArrayList<>();
+        List<String> defendantRepresentatives = new ArrayList<>();
+        List<String> prosecutingAuthorities = new ArrayList<>();
 
         hearing.get("party").forEach(party -> {
-            if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isBlank()) {
-                switch (PartyRoleMapper.convertPartyRole(party.get("partyRole").asText())) {
-                    case "PROSECUTING_AUTHORITY": {
-                        formatPartyInformation(party, prosecutingAuthority);
+            if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isEmpty()) {
+                switch (party.get("partyRole").asText()) {
+                    case "DEFENDANT":
+                        defendants.add(createIndividualDetails(party));
                         break;
-                    }
-                    case "DEFENDANT": {
-                        formatPartyInformation(party, defendant);
+                    case "DEFENDANT_REPRESENTATIVE":
+                        defendantRepresentatives.add(createOrganisationDetails(party));
                         break;
-                    }
+                    case "PROSECUTING_AUTHORITY":
+                        prosecutingAuthorities.add(createOrganisationDetails(party));
+                        break;
                     default:
                         break;
                 }
             }
         });
 
-        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(prosecutingAuthority.toString()));
-        ((ObjectNode) hearing).put(DEFENDANT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(defendant.toString()));
-    }
-
-    private static void formatPartyInformation(JsonNode party, StringBuilder builder) {
-        String partyDetails = createIndividualDetails(party);
-        partyDetails = partyDetails
-            + GeneralHelper.stringDelimiter(partyDetails, ", ");
-        builder.insert(0, partyDetails);
+        ((ObjectNode) hearing).put(DEFENDANT, String.join(DELIMITER, defendants));
+        ((ObjectNode) hearing).put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
+        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
     }
 
     private static String createIndividualDetails(JsonNode party) {
-        if (party.has("individualDetails")) {
-            JsonNode individualDetails = party.get("individualDetails");
-            String forNames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
-            String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, "individualMiddleName");
-            String separator = " ";
-            if (!forNames.isEmpty() || !middleName.isEmpty()) {
-                separator = ", ";
-            }
-            return (GeneralHelper.findAndReturnNodeText(individualDetails, "title") + " "
-                + GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname")
-                + separator
-                + forNames + " "
-                + middleName).trim();
-        }
-        return "";
+        JsonNode individualDetails = party.get("individualDetails");
+        String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
+        String surname = GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname");
+
+        return surname + (surname.isEmpty() || forenames.isEmpty() ? "" : ", ")
+            + forenames;
+    }
+
+    private static String createOrganisationDetails(JsonNode party) {
+        JsonNode organisationDetails = party.get("organisationDetails");
+        return GeneralHelper.findAndReturnNodeText(organisationDetails, "organisationName");
     }
 }

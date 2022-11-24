@@ -29,11 +29,6 @@ public final class DataManipulation {
     public static final String APPLICANT = "applicant";
     public static final String RESPONDENT = "respondent";
 
-    public static final String CLAIMANT = "claimant";
-    public static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
-
-    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
-
     private DataManipulation() {
         throw new UnsupportedOperationException();
     }
@@ -42,7 +37,7 @@ public final class DataManipulation {
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR).isEmpty()) {
             ((ObjectNode) hearingCase).put(
                 "caseIndicator",
-                "[" + hearingCase.get(CASE_SEQUENCE_INDICATOR).asText() + "]"
+                hearingCase.get(CASE_SEQUENCE_INDICATOR).asText()
             );
         }
     }
@@ -104,7 +99,7 @@ public final class DataManipulation {
             ((ObjectNode) hearingCase).put(
                 "caseName",
                 GeneralHelper.findAndReturnNodeText(hearingCase, "caseName")
-                    + " [" + hearingCase.get(CASE_SEQUENCE_INDICATOR).asText() + "]"
+                    + " " + hearingCase.get(CASE_SEQUENCE_INDICATOR).asText()
             );
         }
 
@@ -151,12 +146,16 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static String findAndManipulateJudiciary(JsonNode session) {
+    private static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
+        return findAndManipulateJudiciary(judiciaryNode, true);
+    }
+
+    public static String findAndManipulateJudiciary(JsonNode judiciaryNode, boolean addBeforeToJudgeName) {
         AtomicReference<StringBuilder> formattedJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
 
-        if (session.has(JUDICIARY)) {
-            session.get(JUDICIARY).forEach(judiciary -> {
+        if (judiciaryNode.has(JUDICIARY)) {
+            judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
                     formattedJudiciary.set(new StringBuilder());
                     formattedJudiciary.get().append(GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs"));
@@ -171,7 +170,8 @@ public final class DataManipulation {
                 }
             });
 
-            if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()) {
+            if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()
+                    && addBeforeToJudgeName) {
                 formattedJudiciary.get().insert(0, "Before: ");
             }
         }
@@ -236,7 +236,7 @@ public final class DataManipulation {
     private static Sitting sscsSittingBuilder(String sessionChannel, JsonNode node, String judiciary)
         throws JsonProcessingException {
         Sitting sitting = new Sitting();
-        String sittingStart = DateHelper.timeStampToBstTime(GeneralHelper.safeGet("sittingStart", node));
+        String sittingStart = DateHelper.timeStampToBstTime(GeneralHelper.safeGet("sittingStart", node), "HH:mm");
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
         if (node.has(CHANNEL)) {

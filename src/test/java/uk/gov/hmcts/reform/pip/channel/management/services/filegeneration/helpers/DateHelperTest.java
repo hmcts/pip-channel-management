@@ -8,7 +8,6 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,6 +18,8 @@ class DateHelperTest {
     private static final String ERR_MSG = "Helper method doesn't seem to be working correctly";
     private static final String TEST_DATETIME_1 = "2022-08-19T09:30:00Z";
     private static final String TEST_DATETIME_2 = "2022-07-26T16:04:43.416924Z";
+    private static final String SITTING_START = "sittingStart";
+    private static final String TIME_FORMAT = "h:mma";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
@@ -77,16 +78,6 @@ class DateHelperTest {
     }
 
     @Test
-    void testConvertTimeToMinutesMethod() {
-        ZonedDateTime startTime = DateHelper.convertStringToBst(TEST_DATETIME_1);
-        ZonedDateTime endTime = DateHelper.convertStringToBst("2022-08-19T10:55:00Z");
-
-        assertThat(DateHelper.convertTimeToMinutes(startTime, endTime))
-            .as(ERR_MSG)
-            .isEqualTo(85);
-    }
-
-    @Test
     void testFormatDurationInDaysForSingleDay() {
         assertThat(DateHelper.formatDurationInDays(1, Language.ENGLISH))
             .as(ERR_MSG)
@@ -101,10 +92,10 @@ class DateHelperTest {
     }
 
     @Test
-    void testFormatDurationInDaysInNonEnglish() {
+    void testFormatDurationInDaysInWelsh() {
         assertThat(DateHelper.formatDurationInDays(1, Language.WELSH))
             .as(ERR_MSG)
-            .isEqualTo("1 dydd/day");
+            .isEqualTo("1 dydd");
     }
 
     @Test
@@ -115,10 +106,10 @@ class DateHelperTest {
     }
 
     @Test
-    void testFormatDurationMethodInNonEnglish() {
+    void testFormatDurationMethodInWelsh() {
         assertThat(DateHelper.formatDuration(3, 10, Language.WELSH))
             .as(ERR_MSG)
-            .isEqualTo("3 awr/hours 10 munud/minutes");
+            .isEqualTo("3 awr 10 munud");
     }
 
     @Test
@@ -164,51 +155,44 @@ class DateHelperTest {
     }
 
     @Test
-    void testTimeStampToBstTimeMethod() {
-        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1))
+    void testTimeStampToBstTimeMethodForMorningTime() {
+        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, "HH:mm"))
             .as(ERR_MSG)
             .isEqualTo("10:30");
     }
 
     @Test
-    void testTimeStampToBstTimeForAfternoonTimeMethod() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z"))
+    void testTimeStampToBstTimeForAfternoonTime() {
+        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", "HH:mm"))
             .as(ERR_MSG)
             .isEqualTo("14:30");
     }
 
     @Test
     void testTimeStampToBstTimeWithFormatForAmMethod() {
-        assertThat(DateHelper.timeStampToBstTimeWithFormat(TEST_DATETIME_1, "h:mma"))
+        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, TIME_FORMAT))
             .as(ERR_MSG)
             .isEqualTo("10:30am");
     }
 
     @Test
     void testTimeStampToBstTimeWithFormatForPmMethod() {
-        assertThat(DateHelper.timeStampToBstTimeWithFormat("2022-08-19T13:30:00Z", "h:mma"))
+        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", TIME_FORMAT))
             .as(ERR_MSG)
             .isEqualTo("2:30pm");
     }
 
     @Test
-    void testTimestampToBstTimeWithNoFormat() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T10:30:00Z"))
-            .as(ERR_MSG)
-            .isEqualTo("11:30");
-    }
-
-    @Test
     void testTimestampToBstTimeWithFormat() {
-        assertThat(DateHelper.timeStampToBstTimeWithFormat("2022-08-19T10:30:00Z", "hh:mma"))
+        assertThat(DateHelper.timeStampToBstTime("2022-08-19T10:30:00Z", "hh:mma"))
             .as(ERR_MSG)
             .isEqualTo("11:30am");
     }
 
     @Test
     void testFormatTimeStampToBstHavingWeekDay() {
-        assertThat(DateHelper.formatTimeStampToBstHavingWeekDay(
-            TEST_DATETIME_2, "dd MMMM yyyy", Language.ENGLISH))
+        assertThat(DateHelper.formatTimeStampToBst(
+            TEST_DATETIME_2, Language.ENGLISH, false, false, "EEEE dd MMMM yyyy"))
             .as(ERR_MSG)
             .isEqualTo("Tuesday 26 July 2022");
     }
@@ -216,7 +200,7 @@ class DateHelperTest {
     @Test
     void testCalculateDurationInDays() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T10:00:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T10:00:52.123Z");
         sittingNode.put("sittingEnd", "2022-12-12T12:30:52.123Z");
 
         DateHelper.calculateDuration(sittingNode, Language.ENGLISH, true);
@@ -228,7 +212,7 @@ class DateHelperTest {
     @Test
     void testCalculateDurationInHoursAndMinutes() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T10:00:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T10:00:52.123Z");
         sittingNode.put("sittingEnd", "2022-12-10T12:30:52.123Z");
 
         DateHelper.calculateDuration(sittingNode, Language.ENGLISH, true);
@@ -240,9 +224,9 @@ class DateHelperTest {
     @Test
     void testFormatStartTime() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put("sittingStart", "2022-12-10T15:30:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T15:30:52.123Z");
 
-        DateHelper.formatStartTime(sittingNode, "h:mma");
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT);
         assertThat(sittingNode.get("time").asText())
             .as(ERR_MSG)
             .isEqualTo("3:30pm");

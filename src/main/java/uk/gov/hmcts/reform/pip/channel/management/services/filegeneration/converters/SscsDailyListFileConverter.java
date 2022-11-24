@@ -29,9 +29,12 @@ public class SscsDailyListFileConverter implements FileConverter {
         context.setVariable("metadata", metadata);
         context.setVariable("telephone", GeneralHelper.safeGet("venue.venueContact.venueTelephone", highestLevelNode));
         context.setVariable("email", GeneralHelper.safeGet("venue.venueContact.venueEmail", highestLevelNode));
-        context.setVariable("publishedDate", DateHelper.formatTimestampToBst(
-            GeneralHelper.safeGet("document.publicationDate", highestLevelNode),
-            Language.valueOf(metadata.get("language"))));
+
+        String format = (Language.valueOf(metadata.get("language")) == Language.ENGLISH)
+            ? "dd MMMM yyyy 'at' HH:mm"
+            : "dd MMMM yyyy 'yn' HH:mm";
+        context.setVariable("publishedDate", DateHelper.timeStampToBstTime(
+            GeneralHelper.safeGet("document.publicationDate", highestLevelNode), format));
 
         List<CourtHouse> listOfCourtHouses = new ArrayList<>();
         for (JsonNode courtHouse : highestLevelNode.get("courtLists")) {

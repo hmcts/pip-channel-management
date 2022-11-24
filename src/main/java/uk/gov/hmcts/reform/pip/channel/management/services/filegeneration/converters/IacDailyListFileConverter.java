@@ -21,25 +21,22 @@ public class IacDailyListFileConverter implements FileConverter {
 
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata,
-                          Map<String, Object> language) throws IOException {
+                          Map<String, Object> languageResources) throws IOException {
         Context context = new Context();
 
-        calculateListData(artefact, Language.valueOf(metadata.get("language")));
+        Language language = Language.valueOf(metadata.get("language"));
+        calculateListData(artefact, language);
 
-        context.setVariable("i18n", language);
+        context.setVariable("i18n", languageResources);
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("artefact", artefact);
         context.setVariable("contentDate", metadata.get("contentDate"));
 
         context.setVariable("locationName", metadata.get("locationName"));
         String publicationDate = artefact.get("document").get("publicationDate").asText();
-        context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate,
-                                                                               Language.valueOf(metadata.get(
-                                                                                   "language")),
+        context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                false, false));
-        context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate,
-                                                                               Language.valueOf(metadata.get(
-                                                                                   "language")),
+        context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                true, false));
 
         context.setVariable("telephone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
@@ -70,7 +67,7 @@ public class IacDailyListFileConverter implements FileConverter {
                     ((ObjectNode) session).put("formattedJudiciary", formattedJoh);
 
                     session.get("sittings").forEach(sitting -> {
-                        String sittingStart = DateHelper.timeStampToBstTimeWithFormat(
+                        String sittingStart = DateHelper.timeStampToBstTime(
                             sitting.get("sittingStart").asText(), "h:mma");
 
                         ((ObjectNode) sitting).put("formattedStart", sittingStart);

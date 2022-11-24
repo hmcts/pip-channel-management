@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDai
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
@@ -29,6 +30,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.IacDailyListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.MagistratesPublicListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.MagistratesStandardListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.PrimaryHealthListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.SjpPublicListFileConverter;
@@ -40,15 +42,18 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuppressWarnings("PMD")
 public enum ListType {
     SJP_PUBLIC_LIST(new SjpPublicListFileConverter(), new SjpPublicListSummaryConverter()),
     SJP_PRESS_LIST(new SjpPressListFileConverter(), new SjpPressListSummaryConverter()),
     SJP_PRESS_REGISTER,
     CROWN_DAILY_LIST(new CrownDailyListFileConverter(), new CrownDailyListSummaryConverter()),
     CROWN_FIRM_LIST,
+    MAGISTRATES_STANDARD_LIST(new MagistratesStandardListFileConverter(),
+                              new MagistratesStandardListSummaryConverter()),
+    MAGISTRATES_PUBLIC_LIST(new MagistratesPublicListFileConverter(),
+                            new MagistratesPublicListSummaryConverter()),
     CROWN_WARNED_LIST(new CrownWarnedListFileConverter(), new CrownWarnedListSummaryConverter()),
-    MAGISTRATES_PUBLIC_LIST(new MagistratesPublicListFileConverter(), new MagistratesPublicListSummaryConverter()),
-    MAGISTRATES_STANDARD_LIST,
     IAC_DAILY_LIST(new IacDailyListFileConverter(), new IacDailyListSummaryConverter()),
     CIVIL_DAILY_CAUSE_LIST(new CivilDailyCauseListFileConverter(), new CivilDailyCauseListSummaryConverter()),
     FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListFileConverter(), new DailyCauseListSummaryConverter()),
