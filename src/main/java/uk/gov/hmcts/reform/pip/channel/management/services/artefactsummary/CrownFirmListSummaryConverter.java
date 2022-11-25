@@ -66,8 +66,6 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
     }
 
     private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode hearingCase) {
-        output.append('\n');
-
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, "linkedCases").isEmpty()) {
             GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, "linkedCases");
         }
