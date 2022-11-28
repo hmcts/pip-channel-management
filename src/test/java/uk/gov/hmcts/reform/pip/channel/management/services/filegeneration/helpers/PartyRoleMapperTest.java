@@ -25,6 +25,9 @@ class PartyRoleMapperTest {
     private static final String CLAIMANT_REPRESENTATIVE =
         "CLAIMANT_PETITIONER_REPRESENTATIVE";
 
+    private static final String DEFENDANT_REPRESENTATIVE =
+        "DEFENDANT_REPRESENTATIVE";
+
     @Test
     void testConvertPartyRoleApplicantMethod() {
         assertThat(PartyRoleMapper.convertPartyRole(APPLICANT_PETITIONER))
@@ -109,6 +112,14 @@ class PartyRoleMapperTest {
         assertThat(PartyRoleMapper.convertPartyRole(PROSECUTING_AUTHORITY))
             .as(ERR_MSG)
             .isEqualTo(PROSECUTING_AUTHORITY);
+    }
+
+    @Test
+    void testConvertPartyRoleDefendantRepresentativeMethod() {
+        assertThat(PartyRoleMapper
+                       .convertPartyRole(DEFENDANT_REPRESENTATIVE))
+            .as(ERR_MSG)
+            .isEqualTo(DEFENDANT_REPRESENTATIVE);
     }
 
     @Test

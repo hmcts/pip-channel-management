@@ -4,12 +4,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class PartyRoleHelper {
     public static final String APPLICANT = "applicant";
     public static final String RESPONDENT = "respondent";
     public static final String CLAIMANT = "claimant";
     public static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
     public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
+    private static final String DELIMITER = ", ";
+    private static final String DEFENDANT = "defendant";
+    private static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
+    private static final String PARTY_ROLE = "partyRole";
 
     private PartyRoleHelper() {
     }
@@ -22,8 +29,8 @@ public final class PartyRoleHelper {
         StringBuilder prosecutingAuthority = new StringBuilder();
 
         hearing.get("party").forEach(party -> {
-            if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isEmpty()) {
-                switch (PartyRoleMapper.convertPartyRole(party.get("partyRole").asText())) {
+            if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
+                switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
                     case "APPLICANT_PETITIONER": {
                         formatPartyNonRepresentative(party, applicant, initialised);
                         break;
@@ -108,5 +115,49 @@ public final class PartyRoleHelper {
             }
         }
         return "";
+    }
+
+    private static String createIndividualDetails(JsonNode party) {
+        JsonNode individualDetails = party.get("individualDetails");
+        String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
+        String surname = GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname");
+
+        return surname + (surname.isEmpty() || forenames.isEmpty() ? "" : ", ")
+            + forenames;
+    }
+
+    public static void handleParties(JsonNode hearing) {
+        List<String> defendants = new ArrayList<>();
+        List<String> defendantRepresentatives = new ArrayList<>();
+        List<String> prosecutingAuthorities = new ArrayList<>();
+
+        if (hearing.has("party")) {
+            hearing.get("party").forEach(party -> {
+                if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
+                    switch (party.get(PARTY_ROLE).asText()) {
+                        case "DEFENDANT":
+                            defendants.add(createIndividualDetails(party));
+                            break;
+                        case "DEFENDANT_REPRESENTATIVE":
+                            defendantRepresentatives.add(createOrganisationDetails(party));
+                            break;
+                        case "PROSECUTING_AUTHORITY":
+                            prosecutingAuthorities.add(createOrganisationDetails(party));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
+
+        ((ObjectNode) hearing).put(DEFENDANT, String.join(DELIMITER, defendants));
+        ((ObjectNode) hearing).put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
+        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
+    }
+
+    private static String createOrganisationDetails(JsonNode party) {
+        JsonNode organisationDetails = party.get("organisationDetails");
+        return GeneralHelper.findAndReturnNodeText(organisationDetails, "organisationName");
     }
 }

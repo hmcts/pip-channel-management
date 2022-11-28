@@ -12,7 +12,8 @@ public final class PartyRoleMapper {
         "PROSECUTING_AUTHORITY", List.of(""),
         "DEFENDANT", List.of(""),
         "CLAIMANT_PETITIONER", List.of(),
-        "CLAIMANT_PETITIONER_REPRESENTATIVE", List.of()
+        "CLAIMANT_PETITIONER_REPRESENTATIVE", List.of(),
+        "DEFENDANT_REPRESENTATIVE", List.of("")
     );
 
     private PartyRoleMapper() {
