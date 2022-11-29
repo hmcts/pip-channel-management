@@ -66,7 +66,7 @@ public class PublicationManagementService {
 
             // Generate the Excel and store it
             byte[] outputExcel = artefact.getListType().getFileConverter().convertToExcel(topLevelNode);
-            if (outputExcel.length > 0 && outputExcel.length < 2_000_000) {
+            if (outputExcel.length > 0) {
                 azureBlobService.uploadFile(artefactId + ".xlsx", outputExcel);
             }
 
@@ -76,7 +76,7 @@ public class PublicationManagementService {
                 outputPdf = generatePdf(topLevelNode, artefact, location, false);
             }
 
-            if (outputPdf.length > 0 && outputPdf.length < 2_000_000) {
+            if (outputPdf.length > 0) {
                 azureBlobService.uploadFile(artefactId + ".pdf", outputPdf);
             }
         } catch (IOException ex) {
