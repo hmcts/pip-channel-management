@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -197,7 +198,7 @@ class CrimeListHelperTest {
 
     @Test
     void testHandleDefendantParty() {
-        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("defendant").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("SurnameA, ForenamesA, SurnameB, ForenamesB");
@@ -205,7 +206,7 @@ class CrimeListHelperTest {
 
     @Test
     void testHandleDefendantRepresentativeParty() {
-        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("defendantRepresentative").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("Defendant rep name");
@@ -213,7 +214,7 @@ class CrimeListHelperTest {
 
     @Test
     void testHandleProsecutingAuthorityParty() {
-        CrimeListHelper.findAndManipulatePartyInformation(partyRoleJson);
+        PartyRoleHelper.handleParties(partyRoleJson);
         assertThat(partyRoleJson.get("prosecutingAuthority").asText())
             .as(PARTY_NAME_MESSAGE)
             .isEqualTo("Prosecuting authority name");
