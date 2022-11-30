@@ -199,6 +199,7 @@ dependencies {
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLoggingVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLoggingVersion
+  implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.2'
   implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.10.0'
 
   implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
