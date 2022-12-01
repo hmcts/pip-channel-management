@@ -63,7 +63,7 @@ class CopCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("In the court of Protection for location");
+            .as(HEADER_TEXT).isEqualTo("In the court of Protection Regional COP Court");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
@@ -105,7 +105,7 @@ class CopCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Yn y llys Gwarchod gyfer location");
+            .as(HEADER_TEXT).isEqualTo("Yn y llys Gwarchod Regional COP Court");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
