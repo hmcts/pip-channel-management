@@ -63,11 +63,11 @@ class CopCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("In the court of Protection Regional COP Court");
+            .as(HEADER_TEXT).isEqualTo("In the court of Protection for location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
-            .as(HEADER_TEXT).contains("Last Updated 14 February 2022 at 10:30am");
+            .as(HEADER_TEXT).contains("Last updated 14 February 2022 at 10:30am");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
@@ -105,7 +105,7 @@ class CopCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Yn y llys Gwarchod Regional COP Court");
+            .as(HEADER_TEXT).isEqualTo("Yn y llys Gwarchod gyfer location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())

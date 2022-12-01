@@ -224,11 +224,22 @@ class DateHelperTest {
     @Test
     void testFormatStartTime() {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put(SITTING_START, "2022-12-10T15:30:52.123Z");
+        sittingNode.put(SITTING_START, "2022-12-10T15:00:52.123Z");
 
-        DateHelper.formatStartTime(sittingNode, TIME_FORMAT);
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT, false);
         assertThat(sittingNode.get("time").asText())
             .as(ERR_MSG)
-            .isEqualTo("3:30pm");
+            .isEqualTo("3:00pm");
+    }
+
+    @Test
+    void testFormatStartTimeWithZeroMinuteFormat() {
+        ObjectNode sittingNode = MAPPER.createObjectNode();
+        sittingNode.put(SITTING_START, "2022-12-10T15:00:52.123Z");
+
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT, true);
+        assertThat(sittingNode.get("time").asText())
+            .as(ERR_MSG)
+            .isEqualTo("3pm");
     }
 }
