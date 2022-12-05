@@ -62,11 +62,11 @@ class FamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
             .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Family Daily Cause List:");
+            .as(HEADER_TEXT).isEqualTo("Family Daily Cause List for location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Last Updated 21 July 2022");
+            .as(HEADER_TEXT).contains("Last updated 21 July 2022");
     }
 
 
@@ -100,7 +100,7 @@ class FamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Rhestr Ddyddiol o Achosion Teulu:");
+            .as(HEADER_TEXT).isEqualTo("Rhestr Ddyddiol o Achosion Teulu gyfer location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
