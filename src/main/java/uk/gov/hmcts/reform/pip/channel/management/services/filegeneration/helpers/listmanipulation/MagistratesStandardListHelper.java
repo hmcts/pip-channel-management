@@ -138,20 +138,6 @@ public final class MagistratesStandardListHelper {
         ((ObjectNode) hearing).put("allOffences", allOffences);
     }
 
-    private static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting) {
-        String judiciary = DataManipulation.findAndManipulateJudiciary(sitting, false);
-        String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
-
-        if (judiciary.isBlank()) {
-            judiciary = DataManipulation.findAndManipulateJudiciary(session, false);
-
-        }
-
-        judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
-        ((ObjectNode) session).put("formattedSessionCourtRoom", judiciary);
-        DateHelper.formatStartTime(sitting, "h:mma", false);
-    }
-
     private static void manipulatedCase(JsonNode sitting, JsonNode hearing, JsonNode thisCase) {
         ((ObjectNode) hearing).put("formattedConvictionDate",
             DateHelper.timeStampToBstTime(
