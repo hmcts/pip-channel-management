@@ -75,7 +75,9 @@ public final class DataManipulation {
                     formattedJudiciary.append(findAndManipulateJudiciary(session));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
+
                         DateHelper.formatStartTime(sitting, "h:mma", true);
+
                         findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {
