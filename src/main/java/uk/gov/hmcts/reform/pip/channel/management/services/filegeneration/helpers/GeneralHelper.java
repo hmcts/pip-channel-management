@@ -7,8 +7,13 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.text.WordUtils;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -16,6 +21,7 @@ import java.util.stream.Collectors;
  * Class for static utility methods assisting with json->html->pdf issues.
  */
 @Slf4j
+@SuppressWarnings("PMD.TooManyMethods")
 public final class GeneralHelper {
 
     private GeneralHelper() {
@@ -92,6 +98,26 @@ public final class GeneralHelper {
             log.error("Parsing failed for path " + jsonPath + ", specifically " + stringArray[index]);
             return node;
         }
+    }
+
+    public static List<String> findUniqueDateAndSort(Map<Date, String> sittingDateTimes) {
+        Map<Date,String> sortedSittingDateTimes = sortByDateTime(sittingDateTimes);
+
+        List<String> uniqueDates = new ArrayList<>();
+        for (String value : sortedSittingDateTimes.values()) {
+            if (!uniqueDates.contains(value)) {
+                uniqueDates.add(value);
+            }
+        }
+        return uniqueDates;
+    }
+
+    @SuppressWarnings({"PMD.LawOfDemeter"})
+    private static Map<Date,String> sortByDateTime(Map<Date, String> dateTimeValueString) {
+        return dateTimeValueString.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+            .collect(Collectors.toMap(
+                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 }
 

@@ -6,6 +6,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWar
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +20,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrimeListHelper.PROSECUTING_AUTHORITY;
 
 public final class CrownWarnedListManipulation {
+
     private static final String TO_BE_ALLOCATED = "To be allocated";
 
     private static final Comparator<Map.Entry<String, List<CrownWarnedList>>> COMPARATOR = (s1, s2) -> {
@@ -45,7 +47,7 @@ public final class CrownWarnedListManipulation {
                                                                              "dd/MM/yyyy");
                         sitting.get("hearing").forEach(hearing -> {
                             String listNote = GeneralHelper.findAndReturnNodeText(hearing, "listNote");
-                            CrimeListHelper.findAndManipulatePartyInformation(hearing);
+                            PartyRoleHelper.handleParties(hearing);
                             List<CrownWarnedList> rows = new ArrayList<>();
                             hearing.get("case").forEach(hearingCase -> {
                                 CaseHelper.formatLinkedCases(hearingCase);

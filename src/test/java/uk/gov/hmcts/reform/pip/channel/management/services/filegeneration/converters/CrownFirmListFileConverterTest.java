@@ -25,25 +25,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class FamilyCauseListFileConverterTest {
+class CrownFirmListFileConverterTest {
     @Autowired
-    FamilyDailyCauseListFileConverter familyDailyCauseListConverter;
+    CrownFirmListFileConverter crownFirmListConverter;
 
     public static final String HEADER_TEXT = "Incorrect header text";
     public static final String PROVENANCE = "provenance";
 
     @Test
-    void testFamilyCauseListTemplate() throws IOException {
+    void testCrownFirmListTemplate() throws IOException {
         Map<String, Object> language;
         try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("templates/languages/en/familyDailyCauseList.json")) {
+            .getContextClassLoader().getResourceAsStream("templates/languages/en/crownFirmList.json")) {
             language = new ObjectMapper().readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
-            "familyDailyCauseList.json")), writer,
+                                                    "crownFirmList.json")), writer,
                      Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
@@ -53,35 +53,34 @@ class FamilyCauseListFileConverterTest {
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = familyDailyCauseListConverter.convert(inputJson, metadataMap, language);
+        String outputHtml = crownFirmListConverter.convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Family Daily Cause List");
+            .isEqualTo("Crown Firm List");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
-            .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Family Daily Cause List for location");
+                       .get(0).text())
+            .as(HEADER_TEXT).contains("Firm List");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Last updated 21 July 2022");
+            .as(HEADER_TEXT).contains("Draft: Version");
     }
 
-
     @Test
-    void testFamilyCauseListTemplateWelsh() throws IOException {
+    void testCrownFirmListTemplateWelsh() throws IOException {
         Map<String, Object> language;
         try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("templates/languages/cy/familyDailyCauseList.json")) {
+            .getContextClassLoader().getResourceAsStream("templates/languages/cy/crownFirmList.json")) {
             language = new ObjectMapper().readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
-                                                    "familyDailyCauseList.json")), writer,
+                                                    "crownFirmList.json")), writer,
                      Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
@@ -91,19 +90,20 @@ class FamilyCauseListFileConverterTest {
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = familyDailyCauseListConverter.convert(inputJson, metadataMap, language);
+        String outputHtml = crownFirmListConverter.convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Rhestr Ddyddiol o Achosion Teulu");
+            .isEqualTo("Crown Rhestr Derfynol");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Rhestr Ddyddiol o Achosion Teulu gyfer location");
+            .as(HEADER_TEXT).contains("Rhestr Derfynol");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 yn 3:01pm");
+            .as(HEADER_TEXT).contains("Drafft: Fersiwn 3.4");
+
     }
 }

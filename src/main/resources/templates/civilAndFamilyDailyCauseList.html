@@ -155,16 +155,14 @@
   <meta name="subject" content="Accessible PDF template"/>
   <meta name="author" content="HMCTS Court and Tribunal Hearings"/>
   <meta name="description" content="Document description - vital for compliance."/>
-  <title th:text="${i18n.listName}"/>
+  <title th:text="${i18n.title}"/>
 </head>
 <body>
 <div class="header">
   <img
     src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png"
     alt="HMCTS Logo"/>
-  <h1 th:text="${i18n.serviceName}"/>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName + ':'}"/>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.inThe + locationName}"/>
+  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName + locationName}"/>
   <p class="govuk-body">
     <span th:each="address : ${venueAddress}">
       <td th:text="${address}"/>
