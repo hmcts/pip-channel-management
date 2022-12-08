@@ -67,7 +67,7 @@ class CopCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
-            .as(HEADER_TEXT).contains("Last Updated 14 February 2022 at 10:30am");
+            .as(HEADER_TEXT).contains("Last updated 14 February 2022 at 10:30am");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
