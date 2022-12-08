@@ -3,11 +3,15 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -221,14 +225,24 @@ class DateHelperTest {
             .isEqualTo("2 hours 30 mins");
     }
 
-    @Test
-    void testFormatStartTime() {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void testFormatStartTime(String value, boolean zeroMinFormat, String expected) {
         ObjectNode sittingNode = MAPPER.createObjectNode();
-        sittingNode.put(SITTING_START, "2022-12-10T15:30:52.123Z");
+        sittingNode.put(SITTING_START, value);
 
-        DateHelper.formatStartTime(sittingNode, TIME_FORMAT, false);
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT, zeroMinFormat);
         assertThat(sittingNode.get("time").asText())
             .as(ERR_MSG)
-            .isEqualTo("3:30pm");
+            .isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> parameters() {
+        return Stream.of(
+            Arguments.of("2022-12-10T15:30:52.123Z", false, "3:30pm"),
+            Arguments.of("2022-12-10T15:30:52.123Z", true, "3:30pm"),
+            Arguments.of("2022-12-10T15:00:52.123Z", false, "3:00pm"),
+            Arguments.of("2022-12-10T15:00:52.123Z", true, "3pm")
+        );
     }
 }
