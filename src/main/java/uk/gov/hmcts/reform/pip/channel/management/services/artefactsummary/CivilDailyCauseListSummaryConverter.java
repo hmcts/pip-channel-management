@@ -5,9 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -114,12 +113,9 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
                 counter += 1;
             }
             JsonNode currentSitting = sittingIterator.next();
-            DateTimeFormatter inputfmt = DateTimeFormatter.ISO_DATE_TIME;
-            DateTimeFormatter outputfmt = DateTimeFormatter.ofPattern("hh:mm");
-            String startTime =
-                outputfmt.format(LocalDateTime.from(inputfmt.parse(currentSitting.get("sittingStart").asText())));
+            DateHelper.formatStartTime(currentSitting, "h:mma", true);
             outputString.append(processCivilDailyHearings(currentSitting))
-                .append("\nStart Time: ").append(startTime)
+                .append("\nStart Time: ").append(currentSitting.get("time").asText())
                 .append(processCivilDailyChannels(sessionChannel, currentSitting.path("channel")));
         }
         return outputString.toString();

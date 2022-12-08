@@ -63,11 +63,11 @@ class CivilAndFamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Civil and Family Daily Cause List:");
+            .as(HEADER_TEXT).isEqualTo("Civil and Family Daily Cause List for location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Last Updated 21 July 2022");
+            .as(HEADER_TEXT).contains("Last updated 21 July 2022");
     }
 
     @Test
@@ -100,7 +100,7 @@ class CivilAndFamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Rhestr Achosion Dyddiol Sifil a Theuluolt:");
+            .as(HEADER_TEXT).isEqualTo("Rhestr Achosion Dyddiol Sifil a Theuluolt gyfer location");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
