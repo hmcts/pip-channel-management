@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.CaseFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.text.WordUtils;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  * Class for static utility methods assisting with json->html->pdf issues.
  */
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class GeneralHelper {
 
     private GeneralHelper() {
@@ -67,14 +66,9 @@ public final class GeneralHelper {
     }
 
     public static String listTypeToCamelCase(ListType listType) {
-        StringBuilder outputString = new StringBuilder();
-        List<String> splitList = List.of(listType.toString().split("_"));
-        outputString.append(splitList.get(0).toLowerCase(Locale.UK))
-            .append(splitList.stream().skip(1).map(WordUtils::capitalizeFully).collect(Collectors.joining()));
-        return outputString.toString();
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, listType.toString());
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingNPE")
     public static String safeGet(String jsonPath, JsonNode node) {
         return safeGetNode(jsonPath, node).asText();
     }
@@ -112,7 +106,6 @@ public final class GeneralHelper {
         return uniqueDates;
     }
 
-    @SuppressWarnings({"PMD.LawOfDemeter"})
     private static Map<Date,String> sortByDateTime(Map<Date, String> dateTimeValueString) {
         return dateTimeValueString.entrySet().stream()
             .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))

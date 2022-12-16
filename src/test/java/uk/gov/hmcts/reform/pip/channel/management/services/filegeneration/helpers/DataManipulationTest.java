@@ -155,7 +155,7 @@ class DataManipulationTest {
 
         assertThat(newInputJson.get("regionName").asText())
             .as("Unable to get region name")
-            .isEqualTo("");
+            .isEmpty();
     }
 
     @Test
@@ -181,7 +181,7 @@ class DataManipulationTest {
 
         assertThat(newInputJson.get("regionalJoh").asText())
             .as("Unable to get regional Joh")
-            .isEqualTo("");
+            .isEmpty();
     }
 
     @Test
