@@ -53,17 +53,6 @@ sourceSets {
   }
 }
 
-configurations {
-  functionalTestImplementation.extendsFrom testImplementation
-  functionalTestRuntimeOnly.extendsFrom runtimeOnly
-
-  integrationTestImplementation.extendsFrom testImplementation
-  integrationTestRuntimeOnly.extendsFrom runtimeOnly
-
-  smokeTestImplementation.extendsFrom testImplementation
-  smokeTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Werror"
 }
@@ -203,7 +192,6 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-  implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 
   implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.4.1'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -245,6 +233,15 @@ dependencies {
   }
   testImplementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
   testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
+
+  integrationTestImplementation sourceSets.main.runtimeClasspath
+  integrationTestImplementation sourceSets.test.runtimeClasspath
+
+  functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestImplementation sourceSets.test.runtimeClasspath
+
+  smokeTestImplementation sourceSets.main.runtimeClasspath
+  smokeTestImplementation sourceSets.test.runtimeClasspath
 }
 
 mainClassName = 'uk.gov.hmcts.reform.pip.channel.management.Application'
@@ -263,7 +260,7 @@ rootProject.tasks.named("processSmokeTestResources") {
 }
 
 wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 ext['log4j2.version'] = '2.17.1'

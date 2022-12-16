@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
  */
 @Configuration
 @ActiveProfiles("integration")
-public class AzureBlobFunctionalTestConfiguration {
+public class AzureBlobTestConfiguration {
 
     @Mock
     BlobClient blobClientMock;
@@ -21,7 +21,7 @@ public class AzureBlobFunctionalTestConfiguration {
     @Mock
     BlobContainerClient blobContainerClientMock;
 
-    public AzureBlobFunctionalTestConfiguration() {
+    public AzureBlobTestConfiguration() {
         MockitoAnnotations.openMocks(this);
     }
 
