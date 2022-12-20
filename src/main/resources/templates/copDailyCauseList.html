@@ -201,8 +201,14 @@
                       <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>
                       <td class="govuk-table__cell" th:text="${case.get('caseSuppressionName').asText()}"/>
                       <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
-                      <td class="govuk-table__cell"
-                          th:text="${sitting.get('formattedDuration').asText() + ' ' + case.get('caseIndicator').asText()}"/>
+                      <th:block th:if="${case.get('caseIndicator') != null}">
+                        <td class="govuk-table__cell"
+                            th:text="${sitting.get('formattedDuration').asText() + ' ' + case.get('caseIndicator').asText()}"/>
+                      </th:block>
+                      <th:block th:if="${case.get('caseIndicator') == null}">
+                        <td class="govuk-table__cell"
+                            th:text="${sitting.get('formattedDuration').asText()}"/>
+                      </th:block>
                       <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
                     </tr>
                   </th:block>
