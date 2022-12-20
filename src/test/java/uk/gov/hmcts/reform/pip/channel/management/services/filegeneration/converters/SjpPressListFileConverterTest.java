@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.config.WebClientConfigurationTest;
+import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class})
+@SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
 class SjpPressListFileConverterTest {
 
     @Autowired

@@ -126,6 +126,6 @@ class PartyRoleMapperTest {
     void testConvertPartyRoleWhichNotExistsMethod() {
         assertThat(PartyRoleMapper.convertPartyRole("TEST"))
             .as(ERR_MSG)
-            .isEqualTo("");
+            .isEmpty();
     }
 }
