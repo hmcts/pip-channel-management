@@ -65,16 +65,16 @@ class EtFortnightlyPressListHelperTest {
                     "Unable to find sitting date");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
+                         .get(SITTINGS).get(0)
+                         .get("time").asText(),
+                     "9:30am",
+                     "Unable to find time");
+        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("courtRoom").asText(),
                      "Court 1",
                      "Unable to find court room");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("time").asText(),
-                     "9:30am",
-                     "Unable to find time");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
@@ -146,15 +146,16 @@ class EtFortnightlyPressListHelperTest {
                      "Monday 14 February 2022",
                      "Unable to find sitting date");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
+                         .get(SITTINGS).get(0)
+                         .get("time").asText(),
+                     "9:30am",
+                     "Unable to find time");
+        assertEquals(inputJson.get(COURT_LISTS).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
                          .get("courtRoom").asText(),
                      "Court 1",
                      "Unable to find court room");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
-                         .get("time").asText(),
-                     "9:30am",
-                     "Unable to find time");
+
         assertEquals(inputJson.get(COURT_LISTS).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
                          .get("formattedDuration").asText(),
