@@ -14,8 +14,8 @@ public final class EtDailyListManipulation {
 
     private static final String CLAIMANT = "claimant";
     private static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
-    public static final String RESPONDENT = "respondent";
-    public static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
+    private static final String RESPONDENT = "respondent";
+    private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
 
     private EtDailyListManipulation() {
     }
@@ -48,20 +48,15 @@ public final class EtDailyListManipulation {
         hearing.get("party").forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, "partyRole").isEmpty()) {
                 switch (party.get("partyRole").asText()) {
-                    case "CLAIMANT_PETITIONER":
+                    case "CLAIMANT_PETITIONER" ->
                         claimant.set(createIndividualDetails(party));
-                        break;
-                    case "CLAIMANT_PETITIONER_REPRESENTATIVE":
+                    case "CLAIMANT_PETITIONER_REPRESENTATIVE" ->
                         claimantRepresentative.set(createIndividualDetails(party));
-                        break;
-                    case "RESPONDENT":
+                    case "RESPONDENT" ->
                         respondent.set(createIndividualDetails(party));
-                        break;
-                    case "RESPONDENT_REPRESENTATIVE":
+                    case "RESPONDENT_REPRESENTATIVE" ->
                         respondentRepresentative.set(createIndividualDetails(party));
-                        break;
-                    default:
-                        break;
+                    default -> { }
                 }
             }
         });

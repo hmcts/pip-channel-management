@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
+@SuppressWarnings("PMD.TooManyMethods")
 class GeneralHelperTest {
     private static final String ERR_MSG = "Helper method doesn't seem to be working correctly";
     private static final String TEST = "test";
@@ -103,5 +105,12 @@ class GeneralHelperTest {
         assertThat(builder.toString())
             .as(ERR_MSG)
             .isEqualTo("Address Line 1,");
+    }
+
+    @Test
+    void testListTypeToCamelCase() {
+        assertThat(GeneralHelper.listTypeToCamelCase(ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST))
+            .as(ERR_MSG)
+            .isEqualTo("civilAndFamilyDailyCauseList");
     }
 }
