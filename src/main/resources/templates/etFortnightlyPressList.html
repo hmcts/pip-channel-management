@@ -9,7 +9,7 @@
         font-family: 'GDS Transport';
         font-size: 16px;
         color: grey;
-        content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
+        content: "[[${i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
       }
     }
 
@@ -125,9 +125,7 @@
 <body>
 <div>
   <img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png" alt="HMCTS Logo"/>
-  <h1 th:text="${i18n.serviceName}"/>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName1 + regionName}"/>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName2}"/>
+  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName} + ': ' + ${regionName}"/>
   <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1" th:text="${i18n.listFor + contentDate}" />
   <p class="govuk-body" th:text="${i18n.lastUpdated + publicationDate + i18n.at + publicationTime}" />
   <details class="govuk-details" data-module="govuk-details" open="">
@@ -178,7 +176,7 @@
                         <th:block th:each="hearing : ${hearings}">
                           <tr class="govuk-table__row" th:each="case : ${hearing.get('case')}">
                             <td class="govuk-table__cell" th:text="${hearing.get('courtRoom').asText()}" />
-                            <td class="govuk-table__cell no-wrap" th:text="${hearing.get('time').asText()}" />
+                            <td class="govuk-table__cell no-wrap" th:text="${sitting.get('time').asText()}" />
                             <td class="govuk-table__cell" th:text="${hearing.get('formattedDuration').asText() + ' ' + case.get('caseSequenceIndicator').asText()}"/>
                             <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}" />
                             <td class="govuk-table__cell" th:utext="${hearing.get('claimant').asText() + '<br/>' + hearing.get('claimantRepresentative').asText()}"/>
