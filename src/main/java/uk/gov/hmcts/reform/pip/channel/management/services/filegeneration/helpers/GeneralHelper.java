@@ -76,7 +76,11 @@ public final class GeneralHelper {
 
     @SuppressWarnings("PMD.AvoidCatchingNPE")
     public static String safeGet(String jsonPath, JsonNode node) {
-        return safeGetNode(jsonPath, node).asText();
+        JsonNode safeNode = safeGetNode(jsonPath, node);
+        if (safeNode != null) {
+            return safeGetNode(jsonPath, node).asText();
+        }
+        return "";
     }
 
     @SuppressWarnings("PMD.AvoidCatchingNPE")

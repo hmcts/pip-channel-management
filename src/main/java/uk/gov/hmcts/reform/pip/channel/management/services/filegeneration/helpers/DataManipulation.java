@@ -198,10 +198,20 @@ public final class DataManipulation {
                 default:
                     break;
             }
-            hearing.setAppellant(parties.get(APPLICANT) + ",\nLegal Advisor: " + parties.get(
-                "applicantRepresentative"));
-            hearing.setRespondent(parties.get(RESPONDENT) + ",\nLegal Advisor: " + parties.get(
-                "respondentRepresentative"));
+
+            if (parties.get("applicantRepresentative") == null) {
+                hearing.setAppellant(parties.get(APPLICANT));
+            } else {
+                hearing.setAppellant(parties.get(APPLICANT) + ",\nLegal Advisor: " + parties.get(
+                    "applicantRepresentative"));
+            }
+
+            if (parties.get("respondentRepresentative") == null) {
+                hearing.setRespondent(parties.get(RESPONDENT));
+            } else {
+                hearing.setRespondent(parties.get(RESPONDENT) + ",\nLegal Advisor: " + parties.get(
+                    "respondentRepresentative"));
+            }
         }
     }
 
@@ -215,9 +225,11 @@ public final class DataManipulation {
 
     private static String dealWithInformants(JsonNode node) {
         List<String> informants = new ArrayList<>();
-        GeneralHelper.safeGetNode("informant.0.prosecutionAuthorityRef", node).forEach(informant -> {
-            informants.add(informant.asText());
-        });
+        if (node.has("informant")) {
+            GeneralHelper.safeGetNode("informant.0.prosecutionAuthorityRef", node).forEach(informant -> {
+                informants.add(informant.asText());
+            });
+        }
         return String.join(", ", informants);
     }
 
@@ -236,7 +248,7 @@ public final class DataManipulation {
     private static Sitting sscsSittingBuilder(String sessionChannel, JsonNode node, String judiciary)
         throws JsonProcessingException {
         Sitting sitting = new Sitting();
-        String sittingStart = DateHelper.timeStampToBstTime(GeneralHelper.safeGet("sittingStart", node), "HH:mm");
+        DateHelper.formatStartTime(node, "h:mma", true);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
         if (node.has(CHANNEL)) {
@@ -251,7 +263,7 @@ public final class DataManipulation {
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
             Hearing currentHearing = hearingBuilder(currentHearingNode);
-            currentHearing.setHearingTime(sittingStart);
+            currentHearing.setHearingTime(node.get("time").asText());
             listOfHearings.add(currentHearing);
             currentHearing.setJudiciary(sitting.getJudiciary());
         }
