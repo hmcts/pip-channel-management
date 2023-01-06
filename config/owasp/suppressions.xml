@@ -66,7 +66,7 @@
     <cve>CVE-2021-37533</cve>
   </suppress>
   <suppress>
-    <packageUrl regex="true">^pkg:maven/io\.netty/.*@4\.1\.*\.Final$</packageUrl>
+    <packageUrl regex="true">^pkg:maven/io\.netty/.*@4\.1\.84\.Final$</packageUrl>
     <cve>CVE-2022-41915</cve>
     <cve>CVE-2022-41881</cve>
   </suppress>
