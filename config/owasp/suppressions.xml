@@ -65,4 +65,11 @@
     <packageUrl regex="true">^pkg:maven/org.apache.commons/commons-[a-z1-9]+@[^\n]+</packageUrl>
     <cve>CVE-2021-37533</cve>
   </suppress>
+  <suppress base="true">
+    <notes><![CDATA[
+   FP per issue #5166
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.netty/netty-buffer@.*$</packageUrl>
+    <cpe>cpe:/a:netty:netty</cpe>
+  </suppress>
 </suppressions>
