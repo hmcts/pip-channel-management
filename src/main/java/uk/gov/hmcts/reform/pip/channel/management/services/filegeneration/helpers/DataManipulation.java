@@ -183,20 +183,15 @@ public final class DataManipulation {
         Map<String, String> parties = new ConcurrentHashMap<>();
         for (JsonNode party : node) {
             switch (party.get("partyRole").asText()) {
-                case "APPLICANT_PETITIONER":
+                case "APPLICANT_PETITIONER" ->
                     parties.put(APPLICANT, individualDetails(party));
-                    break;
-                case "APPLICANT_PETITIONER_REPRESENTATIVE":
+                case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
                     parties.put("applicantRepresentative", individualDetails(party));
-                    break;
-                case RESPONDENT:
+                case RESPONDENT ->
                     parties.put(RESPONDENT, individualDetails(party));
-                    break;
-                case "RESPONDENT_REPRESENTATIVE":
+                case "RESPONDENT_REPRESENTATIVE" ->
                     parties.put("respondentRepresentative", individualDetails(party));
-                    break;
-                default:
-                    break;
+                default -> { }
             }
             hearing.setAppellant(parties.get(APPLICANT) + ",\nLegal Advisor: " + parties.get(
                 "applicantRepresentative"));

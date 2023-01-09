@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobConfigurationTest;
-import uk.gov.hmcts.reform.pip.channel.management.config.WebClientConfigurationTest;
+import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
+import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,10 +25,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = {Application.class, WebClientConfigurationTest.class, AzureBlobConfigurationTest.class})
+@SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class, AzureBlobTestConfiguration.class})
 @ActiveProfiles(profiles = "test")
 class AccountManagementServiceTest {
 
@@ -98,7 +97,8 @@ class AccountManagementServiceTest {
         List<String> emailList = new ArrayList<>();
         mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().setResponseCode(404));
         try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
-            assertNull(accountManagementService.getEmails(emailList), "should be null when an exception is thrown");
+            assertTrue(accountManagementService.getEmails(emailList).isEmpty(),
+                       "should be empty when an exception is thrown");
             assertTrue(logCaptor.getErrorLogs().get(0).contains("Account management request failed to get emails"),
                        "Messages do not match");
         } catch (Exception ex) {

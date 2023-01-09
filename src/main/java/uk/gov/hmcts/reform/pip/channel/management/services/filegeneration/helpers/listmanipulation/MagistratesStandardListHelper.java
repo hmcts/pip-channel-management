@@ -122,16 +122,15 @@ public final class MagistratesStandardListHelper {
         ArrayNode allOffences = mapper.createArrayNode();
         hearing.get("offence").forEach(offence -> {
             ObjectNode offenceNode = mapper.createObjectNode();
-            ((ObjectNode) offenceNode).put("offenceTitle",
+            offenceNode.put("offenceTitle",
                 GeneralHelper.findAndReturnNodeText(offence, "offenceTitle"));
-            ((ObjectNode) offenceNode).put(PLEA,
-                GeneralHelper.findAndReturnNodeText(hearing, PLEA));
-            ((ObjectNode) offenceNode).put("dateOfPlea", "Need to confirm");
-            ((ObjectNode) offenceNode).put("formattedConvictionDate",
+            offenceNode.put(PLEA, GeneralHelper.findAndReturnNodeText(hearing, PLEA));
+            offenceNode.put("dateOfPlea", "Need to confirm");
+            offenceNode.put("formattedConvictionDate",
                 GeneralHelper.findAndReturnNodeText(hearing, "formattedConvictionDate"));
-            ((ObjectNode) offenceNode).put("formattedAdjournedDate",
+            offenceNode.put("formattedAdjournedDate",
                 GeneralHelper.findAndReturnNodeText(hearing, "formattedAdjournedDate"));
-            ((ObjectNode) offenceNode).put("offenceWording",
+            offenceNode.put("offenceWording",
                 GeneralHelper.findAndReturnNodeText(offence, "offenceWording"));
             allOffences.add(offenceNode);
         });

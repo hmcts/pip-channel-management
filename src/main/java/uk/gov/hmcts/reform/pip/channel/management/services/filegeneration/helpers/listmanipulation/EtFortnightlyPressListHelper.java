@@ -57,6 +57,7 @@ public final class EtFortnightlyPressListHelper {
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                     courtRoom.get("session").forEach(session -> {
                         session.get(SITTINGS).forEach(sitting -> {
+                            (sittingNode).put("time", sitting.get("time").asText());
                             SittingHelper.checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
                                                           hearingNodeArray, finalI);
                         });
@@ -78,8 +79,8 @@ public final class EtFortnightlyPressListHelper {
                             sitting.get(SITTING_START).asText(), Language.ENGLISH, false, false,
                             "EEEE dd MMMM yyyy");
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
+                        DateHelper.formatStartTime(sitting,"h:mma", true);
                         sitting.get("hearing").forEach(hearing -> {
-                            SittingHelper.formatCaseTime(sitting, hearing);
                             moveTableColumnValuesToHearing(courtRoom, sitting, hearing, language);
                             if (hearing.has("case")) {
                                 hearing.get("case").forEach(cases -> {
