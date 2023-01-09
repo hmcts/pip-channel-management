@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
 @SuppressWarnings("PMD.TooManyMethods")
@@ -112,5 +114,23 @@ class GeneralHelperTest {
         assertThat(GeneralHelper.listTypeToCamelCase(ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST))
             .as(ERR_MSG)
             .isEqualTo("civilAndFamilyDailyCauseList");
+    }
+
+    @Test
+    void testSafeGetWithReturningResult() {
+        String result = GeneralHelper.safeGet("publicationDate",
+                                              inputJson.get("document"));
+        assertThat(result)
+            .as(ERR_MSG)
+            .isEqualTo("2022-07-21T14:01:43Z");
+    }
+
+    @Test
+    void testSafeGetWithReturningEmpty() {
+        String result = GeneralHelper.safeGet("Test",
+                                              inputJson.get("document"));
+        assertThat(result)
+            .as(ERR_MSG)
+            .isEqualTo("");
     }
 }
