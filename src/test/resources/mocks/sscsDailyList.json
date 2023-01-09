@@ -132,14 +132,6 @@
                             "caseNumber": "TEST-12345"
                           }
                         ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "DVLA",
-                              "SG"
-                            ]
-                          }
-                        ],
                         "party": [
                           {
                             "partyRole": "APPLICANT_PETITIONER",

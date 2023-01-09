@@ -21,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GeneralHelperTest {
     private static final String ERR_MSG = "Helper method doesn't seem to be working correctly";
     private static final String TEST = "test";
+
+    private static final String DOCUMENT = "document";
     private static JsonNode inputJson;
 
     @BeforeAll
@@ -49,14 +51,14 @@ class GeneralHelperTest {
 
     @Test
     void testFindAndReturnNodeTextMethod() {
-        assertThat(GeneralHelper.findAndReturnNodeText(inputJson.get("document"), "publicationDate"))
+        assertThat(GeneralHelper.findAndReturnNodeText(inputJson.get(DOCUMENT), "publicationDate"))
             .as(ERR_MSG)
             .isEqualTo("2022-07-21T14:01:43Z");
     }
 
     @Test
     void testFindAndReturnNodeTextNotExistsMethod() {
-        assertThat(GeneralHelper.findAndReturnNodeText(inputJson.get("document"), TEST))
+        assertThat(GeneralHelper.findAndReturnNodeText(inputJson.get(DOCUMENT), TEST))
             .as(ERR_MSG)
             .isEmpty();
     }
@@ -112,5 +114,23 @@ class GeneralHelperTest {
         assertThat(GeneralHelper.listTypeToCamelCase(ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST))
             .as(ERR_MSG)
             .isEqualTo("civilAndFamilyDailyCauseList");
+    }
+
+    @Test
+    void testSafeGetWithReturningResult() {
+        String result = GeneralHelper.safeGet("publicationDate",
+                                              inputJson.get(DOCUMENT));
+        assertThat(result)
+            .as(ERR_MSG)
+            .isEqualTo("2022-07-21T14:01:43Z");
+    }
+
+    @Test
+    void testSafeGetWithReturningEmpty() {
+        String result = GeneralHelper.safeGet("Test",
+                                              inputJson.get(DOCUMENT));
+        assertThat(result)
+            .as(ERR_MSG)
+            .isEqualTo("");
     }
 }
