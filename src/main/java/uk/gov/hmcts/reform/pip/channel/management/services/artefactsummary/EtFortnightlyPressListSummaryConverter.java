@@ -39,7 +39,7 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                             GeneralHelper.appendToStringBuilder(output, "Courtroom - ",
                                                                 hearing, "courtRoom");
                             GeneralHelper.appendToStringBuilder(output, "Start Time - ",
-                                                                hearing, "time");
+                                                                sitting, "time");
                             output.append('\n');
                             checkCaseSequenceNo(output, hearing, hearingCase);
                             GeneralHelper.appendToStringBuilder(output, "Case Number - ",

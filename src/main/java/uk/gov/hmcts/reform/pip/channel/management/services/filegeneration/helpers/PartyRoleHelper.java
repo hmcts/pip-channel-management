@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class PartyRoleHelper {
-    public static final String APPLICANT = "applicant";
-    public static final String RESPONDENT = "respondent";
-    public static final String CLAIMANT = "claimant";
-    public static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
-    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
+    private static final String APPLICANT = "applicant";
+    private static final String RESPONDENT = "respondent";
+    private static final String CLAIMANT = "claimant";
+    private static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
+    private static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     private static final String DELIMITER = ", ";
     private static final String DEFENDANT = "defendant";
     private static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
@@ -31,40 +31,28 @@ public final class PartyRoleHelper {
         hearing.get("party").forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                 switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
-                    case "APPLICANT_PETITIONER": {
+                    case "APPLICANT_PETITIONER" ->
                         formatPartyNonRepresentative(party, applicant, initialised);
-                        break;
-                    }
-                    case "APPLICANT_PETITIONER_REPRESENTATIVE": {
+                    case "APPLICANT_PETITIONER_REPRESENTATIVE" -> {
                         final String applicantPetitionerDetails = createIndividualDetails(party, initialised);
                         if (!applicantPetitionerDetails.isEmpty()) {
-                            String advisor = (language == Language.ENGLISH) ? "Legal Advisor: " :
-                                "Cynghorydd Cyfreithiol: ";
-                            applicant.append(advisor);
-                            applicant.append(applicantPetitionerDetails).append(", ");
+                            applicant
+                                .append(language == Language.ENGLISH ? "Legal Advisor: " : "Cynghorydd Cyfreithiol: ")
+                                .append(applicantPetitionerDetails)
+                                .append(", ");
                         }
-                        break;
                     }
-                    case "RESPONDENT": {
+                    case "RESPONDENT" -> {
                         formatPartyNonRepresentative(party, respondent, initialised);
                         formatPartyNonRepresentative(party, prosecutingAuthority, initialised);
-                        break;
                     }
-                    case "RESPONDENT_REPRESENTATIVE": {
+                    case "RESPONDENT_REPRESENTATIVE" ->
                         respondent.append(respondentRepresentative(language, party, initialised));
-                        break;
-                    }
-                    case "CLAIMANT_PETITIONER": {
+                    case "CLAIMANT_PETITIONER" ->
                         formatPartyNonRepresentative(party, claimant, initialised);
-                        break;
-                    }
-                    case "CLAIMANT_PETITIONER_REPRESENTATIVE": {
+                    case "CLAIMANT_PETITIONER_REPRESENTATIVE" ->
                         formatPartyNonRepresentative(party, claimantRepresentative, initialised);
-                        break;
-                    }
-
-                    default:
-                        break;
+                    default -> { }
                 }
             }
         });
@@ -83,10 +71,10 @@ public final class PartyRoleHelper {
         StringBuilder builder = new StringBuilder();
         final String details = createIndividualDetails(respondentDetails, initialised);
         if (!respondentDetails.isEmpty()) {
-            String advisor = (language == Language.ENGLISH) ? "Legal Advisor: " :
-                "Cynghorydd Cyfreithiol: ";
-            builder.append(advisor);
-            builder.append(details).append(", ");
+            builder
+                .append(language == Language.ENGLISH ? "Legal Advisor: " : "Cynghorydd Cyfreithiol: ")
+                .append(details)
+                .append(", ");
         }
         return builder.toString();
     }
@@ -135,17 +123,13 @@ public final class PartyRoleHelper {
             hearing.get("party").forEach(party -> {
                 if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                     switch (party.get(PARTY_ROLE).asText()) {
-                        case "DEFENDANT":
+                        case "DEFENDANT" ->
                             defendants.add(createIndividualDetails(party));
-                            break;
-                        case "DEFENDANT_REPRESENTATIVE":
+                        case "DEFENDANT_REPRESENTATIVE" ->
                             defendantRepresentatives.add(createOrganisationDetails(party));
-                            break;
-                        case "PROSECUTING_AUTHORITY":
+                        case "PROSECUTING_AUTHORITY" ->
                             prosecutingAuthorities.add(createOrganisationDetails(party));
-                            break;
-                        default:
-                            break;
+                        default -> { }
                     }
                 }
             });

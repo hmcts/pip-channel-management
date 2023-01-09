@@ -37,19 +37,12 @@ class EtDailyListFileConverterTest {
         Document doc = Jsoup.parse(result);
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1"))
-            .as("Incorrect h1 element")
-            .hasSize(1)
-            .extracting(Element::text)
-            .contains("Court and Tribunal Hearings Service");
-
         softly.assertThat(doc.getElementsByTag("h2"))
             .as("Incorrect h2 element")
-            .hasSize(4)
+            .hasSize(3)
             .extracting(Element::text)
             .containsExactly(
-                "Employment Tribunals: " + REGION_NAME,
-                "Daily List",
+                "Employment Tribunals Daily List: " + REGION_NAME,
                 "Venue: Leicester Crown Court",
                 "Venue: Nottingham Justice Centre"
             );
@@ -72,7 +65,7 @@ class EtDailyListFileConverterTest {
         softly.assertThat(doc.getElementById("publication-date"))
             .as("Incorrect publication date")
             .extracting(Element::text)
-            .isEqualTo("Last Updated 13 February 2022 at 9:30am");
+            .isEqualTo("Last updated 13 February 2022 at 9:30am");
 
         softly.assertThat(doc.getElementsByTag("th"))
             .as("Incorrect table headers")

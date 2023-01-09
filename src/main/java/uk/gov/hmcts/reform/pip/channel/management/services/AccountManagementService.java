@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class AccountManagementService {
                 "Account management request failed to get emails. Response: {}",
                 ex.getMessage()
             );
-            return null;
+            return Collections.emptyMap();
         }
     }
 }

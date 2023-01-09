@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,7 +65,7 @@ class CrownWarnedListManipulationTest {
             .processRawListData(rawListJson, Language.ENGLISH)
             .values()
             .stream()
-            .collect(Collectors.toList());
+            .toList();
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -102,7 +101,7 @@ class CrownWarnedListManipulationTest {
         List<CrownWarnedList> rows = CrownWarnedListManipulation.processRawListData(rawListJson, Language.ENGLISH)
             .values()
             .stream()
-            .collect(Collectors.toList())
+            .toList()
             .get(0);
 
         assertThat(rows.get(0))

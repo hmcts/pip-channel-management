@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * Class for static utility methods assisting with json->html->pdf issues.
  */
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public final class GeneralHelper {
 
     private GeneralHelper() {
@@ -74,7 +74,6 @@ public final class GeneralHelper {
         return outputString.toString();
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingNPE")
     public static String safeGet(String jsonPath, JsonNode node) {
         JsonNode safeNode = safeGetNode(jsonPath, node);
         if (safeNode != null) {
@@ -116,7 +115,6 @@ public final class GeneralHelper {
         return uniqueDates;
     }
 
-    @SuppressWarnings({"PMD.LawOfDemeter"})
     private static Map<Date,String> sortByDateTime(Map<Date, String> dateTimeValueString) {
         return dateTimeValueString.entrySet().stream()
             .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
