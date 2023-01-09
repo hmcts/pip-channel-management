@@ -63,7 +63,7 @@ class EtFortnightlyPressListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Employment Tribunals");
+            .as(HEADER_TEXT).contains("Employment Tribunals Fortnightly List");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
@@ -101,7 +101,7 @@ class EtFortnightlyPressListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Tribiwnlysoedd Cyflogaeth");
+            .as(HEADER_TEXT).contains("Tribiwnlysoedd Cyflogaeth Rhestr Ddyddiol");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())

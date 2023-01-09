@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * FileConverter class for SJP Press Lists - builds a nice pdf from input json and an html template (found in
@@ -194,7 +193,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
             caseUrns.add(currentCase.get("caseUrn").asText());
         }
         thisCase.setReference1(caseUrns.get(0));
-        thisCase.setReferenceRemainder(caseUrns.stream().skip(1).collect(Collectors.toList()));
+        thisCase.setReferenceRemainder(caseUrns.stream().skip(1).toList());
     }
 
     /**
@@ -218,7 +217,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         thisCase.setAddressRemainder(address.stream()
                                          .skip(1)
                                          .filter(e -> !e.isEmpty())
-                                         .collect(Collectors.toList()));
+                                         .toList());
     }
 
     /**

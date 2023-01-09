@@ -30,7 +30,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      */
     @Override
     public String convert(String payload) throws JsonProcessingException {
-        StringBuilder output = new StringBuilder("");
+        StringBuilder output = new StringBuilder();
         JsonNode node = new ObjectMapper().readTree(payload);
         Iterator<JsonNode> courtHouseNode = node.get(COURT_LISTS).elements();
         while (courtHouseNode.hasNext()) {
