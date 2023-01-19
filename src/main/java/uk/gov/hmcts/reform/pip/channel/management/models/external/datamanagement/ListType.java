@@ -63,6 +63,7 @@ public enum ListType {
                                       new DailyCauseListSummaryConverter()),
     COP_DAILY_CAUSE_LIST(new CopDailyCauseListFileConverter(), new CopDailyCauseListSummaryConverter()),
     SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
+    SSCS_DAILY_LIST_ADDITIONAL_HEARINGS(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
     PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new TribunalNationalListsSummaryConverter()),
     CARE_STANDARDS_LIST(new CareStandardsListFileConverter(), new TribunalNationalListsSummaryConverter()),
     ET_DAILY_LIST(new EtDailyListFileConverter(), new EtDailyListSummaryConverter()),

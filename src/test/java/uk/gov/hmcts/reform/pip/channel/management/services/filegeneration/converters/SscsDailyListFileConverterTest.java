@@ -8,12 +8,13 @@ import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,25 +26,29 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
 class SscsDailyListFileConverterTest {
-
-    @Autowired
-    SscsDailyListFileConverter sscsDailyListConverter;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static final String PROVENANCE = "provenance";
     public static final String CONTENT_DATE = "contentDate";
 
-    @Test
-    void testSscsDailyList() throws IOException {
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
+    void testSscsDailyList(ListType listType) throws IOException {
         Map<String, Object> language;
+        String languageFileName = UPPER_UNDERSCORE.to(LOWER_CAMEL, listType.name());
+
         try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("templates/languages/en/sscsDailyList.json")) {
-            language = new ObjectMapper().readValue(
+            .getContextClassLoader()
+            .getResourceAsStream("templates/languages/en/" + languageFileName + ".json")) {
+            language = OBJECT_MAPPER.readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
@@ -56,8 +61,8 @@ class SscsDailyListFileConverterTest {
                                                  "locationName", "Livingston",
                                                  "language", "ENGLISH"
         );
-        JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = sscsDailyListConverter.convert(inputJson, metadataMap, language);
+        JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
+        String outputHtml = listType.getFileConverter().convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("no HTML found").isNotEmpty();
 
@@ -67,7 +72,20 @@ class SscsDailyListFileConverterTest {
 
         assertThat(document.getElementsByClass("mainHeaderText")
                        .select(".mainHeaderText > h1:nth-child(1)").text())
-            .as("incorrect header text").isEqualTo("Social Security and Child Support");
+            .as("incorrect header text")
+            .isEqualTo("Social Security and Child Support");
+
+        String expectedWarningText = "";
+        if (listType.equals(ListType.SSCS_DAILY_LIST)) {
+            expectedWarningText = "Please note: There may be two hearing lists available for this date, please make "
+                + "sure you look at both lists to see all hearings happening on this date for this location.";
+        } else if (listType.equals(ListType.SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)) {
+            expectedWarningText = "Please note: There are two hearing lists available for this date, please make "
+                + "sure you look at both lists to see all hearings happening on this date for this location.";
+        }
+        assertThat(document.getElementsByClass("govuk-warning-text__text").get(0).text())
+            .as("incorrect warning text")
+            .isEqualTo(expectedWarningText);
 
         assertThat(document.getElementsByTag("h2").get(3).text())
             .as("Header seems to be missing.")
@@ -78,16 +96,18 @@ class SscsDailyListFileConverterTest {
             .hasSize(9)
             .extracting(Element::text)
             .containsSequence("Thank you for reading this document thoroughly.");
-
-
     }
 
-    @Test
-    void testSscsDailyListWelsh() throws IOException {
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
+    void testSscsDailyListWelsh(ListType listType) throws IOException {
         Map<String, Object> language;
+        String languageFileName = UPPER_UNDERSCORE.to(LOWER_CAMEL, listType.name());
+
         try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("templates/languages/cy/sscsDailyList.json")) {
-            language = new ObjectMapper().readValue(
+            .getContextClassLoader()
+            .getResourceAsStream("templates/languages/cy/" + languageFileName + ".json")) {
+            language = OBJECT_MAPPER.readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
@@ -98,10 +118,10 @@ class SscsDailyListFileConverterTest {
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "Livingston",
-                                                 "language", "ENGLISH"
+                                                 "language", "WELSH"
         );
-        JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = sscsDailyListConverter.convert(inputJson, metadataMap, language);
+        JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
+        String outputHtml = listType.getFileConverter().convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("no HTML found").isNotEmpty();
 
@@ -124,14 +144,14 @@ class SscsDailyListFileConverterTest {
             .containsSequence("Ffynhonnell y Data: provenance");
     }
 
-    @Test
-    void testConvertToExcelReturnsDefault() throws IOException {
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
+    void testConvertToExcelReturnsDefault(ListType listType) throws IOException {
         StringWriter writer = new StringWriter();
-        JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
+        JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
 
-        assertEquals(0, sscsDailyListConverter.convertToExcel(inputJson).length,
+        assertEquals(0, listType.getFileConverter().convertToExcel(inputJson).length,
                      "byte array wasn't empty"
         );
     }
-
 }
