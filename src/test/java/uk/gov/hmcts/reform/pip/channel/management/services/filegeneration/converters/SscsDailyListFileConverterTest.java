@@ -66,8 +66,14 @@ class SscsDailyListFileConverterTest {
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("no HTML found").isNotEmpty();
 
+        String expectedTitle = "";
+        if (listType.equals(ListType.SSCS_DAILY_LIST)) {
+            expectedTitle = "SSCS Daily List for Livingston - ";
+        } else if (listType.equals(ListType.SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)) {
+            expectedTitle = "SSCS Daily List - Additional Hearings for Livingston - ";
+        }
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("SSCS Daily List for Livingston - "
+            .isEqualTo(expectedTitle
                            + metadataMap.get(CONTENT_DATE));
 
         assertThat(document.getElementsByClass("mainHeaderText")
