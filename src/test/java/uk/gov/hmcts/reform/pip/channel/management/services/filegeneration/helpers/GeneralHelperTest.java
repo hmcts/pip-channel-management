@@ -64,6 +64,13 @@ class GeneralHelperTest {
     }
 
     @Test
+    void testFindAndReturnNodeTextWheNodeNotExistsMethod() {
+        assertThat(GeneralHelper.findAndReturnNodeText(inputJson.get(TEST), "publicationDate"))
+            .as(ERR_MSG)
+            .isEmpty();
+    }
+
+    @Test
     void testTrimAnyCharacterFromStringEndMethod() {
         assertThat(GeneralHelper.trimAnyCharacterFromStringEnd("test,"))
             .as(ERR_MSG)
