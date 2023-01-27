@@ -33,7 +33,7 @@ public final class GeneralHelper {
     }
 
     public static String findAndReturnNodeText(JsonNode node, String nodeName) {
-        if (node.has(nodeName)) {
+        if (node != null && node.has(nodeName)) {
             return node.get(nodeName).asText();
         }
         return "";
