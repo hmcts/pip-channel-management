@@ -73,17 +73,10 @@ class SscsDailyListFileConverterTest {
             .as("incorrect header text")
             .isEqualTo("Social Security and Child Support");
 
-        String expectedWarningText = "";
-        if (listType.equals(ListType.SSCS_DAILY_LIST)) {
-            expectedWarningText = "Please note: There may be two hearing lists available for this date, please make "
-                + "sure you look at both lists to see all hearings happening on this date for this location.";
-        } else if (listType.equals(ListType.SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)) {
-            expectedWarningText = "Please note: There are two hearing lists available for this date, please make "
-                + "sure you look at both lists to see all hearings happening on this date for this location.";
-        }
         assertThat(document.getElementsByClass("govuk-warning-text__text").get(0).text())
             .as("incorrect warning text")
-            .isEqualTo(expectedWarningText);
+            .isEqualTo("Please note: There may be 2 hearing lists available for this date. Please make sure "
+                           + "you look at both lists to see all hearings happening on this date for this location.");
 
         assertThat(document.getElementsByTag("h2").get(3).text())
             .as("Header seems to be missing.")
