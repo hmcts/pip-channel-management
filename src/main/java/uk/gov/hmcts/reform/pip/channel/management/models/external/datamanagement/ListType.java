@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagemen
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CivilDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
@@ -44,6 +46,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conver
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @SuppressWarnings("PMD")
 public enum ListType {
     SJP_PUBLIC_LIST(new SjpPublicListFileConverter(), new SjpPublicListSummaryConverter()),
@@ -63,11 +66,18 @@ public enum ListType {
                                       new DailyCauseListSummaryConverter()),
     COP_DAILY_CAUSE_LIST(new CopDailyCauseListFileConverter(), new CopDailyCauseListSummaryConverter()),
     SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
+    SSCS_DAILY_LIST_ADDITIONAL_HEARINGS(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter(),
+                                        SSCS_DAILY_LIST),
     PRIMARY_HEALTH_LIST(new PrimaryHealthListFileConverter(), new TribunalNationalListsSummaryConverter()),
     CARE_STANDARDS_LIST(new CareStandardsListFileConverter(), new TribunalNationalListsSummaryConverter()),
     ET_DAILY_LIST(new EtDailyListFileConverter(), new EtDailyListSummaryConverter()),
     ET_FORTNIGHTLY_PRESS_LIST(new EtFortnightlyPressListFileConverter(), new EtFortnightlyPressListSummaryConverter());
 
+    @NonNull
     private FileConverter fileConverter;
+
+    @NonNull
     private ArtefactSummaryConverter artefactSummaryConverter;
+
+    private ListType parentListType;
 }

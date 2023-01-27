@@ -123,14 +123,59 @@
       page-break-after: always;
     }
 
+    .align-warning-icon {
+      margin-top: 3px;
+    }
+
+    .govuk-warning-text {
+      position: relative;
+      padding: 10px 0;
+    }
+
+    .govuk-warning-text__icon {
+      font-weight: 300;
+      box-sizing: border-box;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      min-width: 35px;
+      min-height: 35px;
+      border: 1px solid #0b0c0c;
+      border-radius: 50%;
+      color: #ffffff;
+      background: #0b0c0c;
+      font-size: 30px;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .govuk-warning-text__text {
+      font-weight: 500;
+      color: #0b0c0c;
+      display: block;
+      padding-left: 45px;
+    }
+
+    .govuk-warning-text__assistive {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
   </style>
   <meta charset="UTF-8"/>
   <meta name="subject" content="SSCS Daily list"/>
   <meta name="author" content="HMCTS Court and Tribunal Hearings"/>
   <meta name="description" content="SSCS Daily List PDF File"/>
-  <title th:text="${i18n.title1 + metadata.locationName + ' - ' + metadata.contentDate}"/>
+  <title th:text="${i18n.title + metadata.locationName + ' - ' + metadata.contentDate}"/>
 </head>
-
 
 <body>
 <div class="headerBar">
@@ -160,6 +205,13 @@
   <div class="mainHeaderText">
     <h1 th:text="${i18n.mainHeaderText}"/>
     <h2 th:text="${metadata.locationName + i18n.headerSubText + metadata.contentDate}"/>
+  </div>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon align-warning-icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive" />
+      <span th:text="${i18n.warning}" />
+    </strong>
   </div>
 </div>
 <hr/>
