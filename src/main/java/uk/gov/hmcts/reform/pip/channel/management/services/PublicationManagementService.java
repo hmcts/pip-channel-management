@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.pip.channel.management.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -16,14 +15,12 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -139,7 +136,8 @@ public class PublicationManagementService {
      */
     private byte[] generatePdf(JsonNode topLevelNode, Artefact artefact,
                                Location location, boolean accessibility) throws IOException {
-        Map<String, Object> language = handleLanguages(artefact.getListType(), artefact.getLanguage());
+        Map<String, Object> language = LanguageResourceHelper.getLanguageResources(
+            artefact.getListType(), artefact.getLanguage());
         Language languageEntry = artefact.getLanguage();
         String locationName = (languageEntry == Language.ENGLISH) ? location.getName() : location.getWelshName();
         Map<String, String> metadataMap = Map.of(
@@ -174,30 +172,6 @@ public class PublicationManagementService {
                 .toStream(baos)
                 .run();
             return baos.toByteArray();
-        }
-    }
-
-    /**
-     * Handle the language for a PDF.
-     *
-     * @param listType The list type.
-     * @param language The language.
-     * @return A map.
-     * @throws IOException Thrown if error in getting language.
-     */
-    private Map<String, Object> handleLanguages(ListType listType, Language language) throws IOException {
-        String path;
-        String languageString = GeneralHelper.listTypeToCamelCase(listType);
-        if (language.equals(Language.ENGLISH)) {
-            path = PATH_TO_LANGUAGES + "en/" + languageString + ".json";
-        } else {
-            path = PATH_TO_LANGUAGES + "cy/" + languageString + ".json";
-        }
-        try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream(path)) {
-            return new ObjectMapper().readValue(
-                Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
-                });
         }
     }
 }

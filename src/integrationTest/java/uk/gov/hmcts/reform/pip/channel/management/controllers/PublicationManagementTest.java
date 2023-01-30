@@ -73,8 +73,7 @@ class PublicationManagementTest {
             Arguments.of("cf5d8220-bbbe-4de4-9ca5-e0bee354f49b"), //Civil and Family Daily Cause List
             Arguments.of("0bef43e6-8987-411d-9411-26167730e88c"), //Civil Daily Cause List
             Arguments.of("79e801f1-a746-4640-861b-0f964951a733"), //Court of Protection Daily Cause List
-            //TODO: Pdf generation is failing, we need to fix the bug PUB-1801
-            //Arguments.of("ef94897d-ea6a-41b5-8948-aea4a99d9475"), //Crown Daily List
+            Arguments.of("ef94897d-ea6a-41b5-8948-aea4a99d9475"), //Crown Daily List
             Arguments.of("a6046b89-0ce4-49d7-8036-6144924249a0"), //Crown Firm List
             Arguments.of("7aad9d44-fc2b-43a8-a93b-a46a62589ecf"), //Crown Warned List
             Arguments.of("87f18f00-3543-4a52-a197-b3cf537c4eb0"), //Employment Tribunals Daily List
