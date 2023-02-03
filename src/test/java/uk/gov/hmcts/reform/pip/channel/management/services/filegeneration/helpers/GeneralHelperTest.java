@@ -90,9 +90,9 @@ class GeneralHelperTest {
         builder.append("Test1");
         GeneralHelper.appendToStringBuilder(builder,"Test2 ", inputJson.get("venue"),
                                             "venueName");
-        assertThat(builder.toString())
+        assertThat(builder)
             .as(ERR_MSG)
-            .isEqualTo("Test1\nTest2 This is the venue name");
+            .hasToString("Test1\nTest2 This is the venue name");
     }
 
     @Test
@@ -101,9 +101,9 @@ class GeneralHelperTest {
         builder.append("Test1");
         GeneralHelper.appendToStringBuilderWithPrefix(builder,"Test2: ", inputJson.get("venue"),
                                                       "venueName", "\t\t");
-        assertThat(builder.toString())
+        assertThat(builder)
             .as(ERR_MSG)
-            .isEqualTo("Test1\t\tTest2: This is the venue name");
+            .hasToString("Test1\t\tTest2: This is the venue name");
     }
 
     @Test
@@ -111,9 +111,9 @@ class GeneralHelperTest {
         StringBuilder builder = new StringBuilder();
         JsonNode node = inputJson.get("venue").get("venueAddress");
         GeneralHelper.loopAndFormatString(node, "line", builder, ",");
-        assertThat(builder.toString())
+        assertThat(builder)
             .as(ERR_MSG)
-            .isEqualTo("Address Line 1,");
+            .hasToString("Address Line 1,");
     }
 
     @Test

@@ -153,9 +153,9 @@ class PartyRoleHelperTest {
         StringBuilder builder = new StringBuilder("name1");
 
         PartyRoleHelper.formatPartyNonRepresentative(builder, "name2");
-        assertThat(builder.toString())
+        assertThat(builder)
             .as("Party non representative incorrect")
-            .isEqualTo("name2, name1");
+            .hasToString("name2, name1");
     }
 
     @Test
