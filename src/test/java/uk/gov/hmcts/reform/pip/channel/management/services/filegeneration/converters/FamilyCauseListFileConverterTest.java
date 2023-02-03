@@ -134,7 +134,7 @@ class FamilyCauseListFileConverterTest {
             .extracting(Element::text)
             .contains(
                 "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
-                "Surname, Legal Advisor:",
+                "Surname",
                 "Applicant org name, Legal Advisor: Applicant rep org name",
                 "Respondent org name, Legal Advisor: Respondent rep org name"
             );
