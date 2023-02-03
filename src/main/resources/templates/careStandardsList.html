@@ -6,7 +6,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'GDS Transport';
+        font-family: 'arial';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -22,20 +22,20 @@
     }
 
     body {
-      font-family: 'GDS Transport';
+      font-family: 'arial';
       color: #0b0c0c;
       padding: 2px;
       font-size: 105%;
     }
 
     h1, h4 {
-      font-family: "GDS Transport";
+      font-family: "arial";
       color: black;
     }
 
     .govuk-heading-l {
       color: #0b0c0c;
-      font-family: "GDS Transport";
+      font-family: "arial";
       font-weight: 700;
       font-size: 24px;
       font-size: 1.5rem;
@@ -47,7 +47,7 @@
 
     .govuk-body {
       color: #0b0c0c;
-      font-family: "GDS Transport";
+      font-family: "arial";
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -61,7 +61,7 @@
     }
 
     .govuk-details {
-      font-family: "GDS Transport", arial, sans-serif;
+      font-family: "arial", sans-serif;
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -94,7 +94,7 @@
 
     .govuk-table {
       table-layout: fixed;
-      font-family: "GDS Transport";
+      font-family: "arial";
       font-weight: 400;
       font-size: 16px;
       line-height: 1.25;
@@ -175,8 +175,8 @@
   <section>
     <p th:text="${i18n.dataSource + provenance}"/>
     <hr/>
-    <p th:text="${i18n.legal1}" style="font-family: 'GDS Transport'; font-size: 18px;"/>
-    <p th:text="${i18n.legal2}" style="font-family: 'GDS Transport'; font-size: 18px;"/>
+    <p th:text="${i18n.legal1}" style="font-family: 'arial'; font-size: 18px;"/>
+    <p th:text="${i18n.legal2}" style="font-family: 'arial'; font-size: 18px;"/>
     <hr/>
     <p th:text="${i18n.endText}" style="text-align: center;"/>
   </section>

@@ -156,12 +156,12 @@ public class PublicationManagementService {
             builder.useFastMode()
                 .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_A);
 
-            File file = new File("/opt/app/gdsFont.otf");
+            File file = new File("/opt/app/arial.ttf");
             if (file.exists()) {
-                builder.useFont(file, "GDS Transport");
+                builder.useFont(file, "arial");
             } else {
                 builder.useFont(new File(Thread.currentThread().getContextClassLoader()
-                                             .getResource("gdsFont.otf").getFile()), "GDS Transport");
+                                             .getResource("arial.ttf").getFile()), "arial");
             }
 
             if (accessibility) {
