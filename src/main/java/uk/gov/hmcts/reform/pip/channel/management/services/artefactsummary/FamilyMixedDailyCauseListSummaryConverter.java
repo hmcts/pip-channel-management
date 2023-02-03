@@ -29,32 +29,34 @@ public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummar
 
     public String processDailyCauseList(JsonNode node) {
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
-                                output.append('\n');
-                                GeneralHelper.appendToStringBuilder(output, "Name of Party(ies) - ",
-                                                                    hearingCase, "caseName");
-                                GeneralHelper.appendToStringBuilder(output, "Case ID - ",
-                                                                    hearingCase, "caseNumber");
-                                output.append('\n');
-                                GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
-                                                                    hearing, "hearingType");
-                                GeneralHelper.appendToStringBuilder(output, "Location - ",
-                                                                    sitting, "caseHearingChannel");
-                                GeneralHelper.appendToStringBuilder(output, "Duration - ",
-                                                                    sitting, "formattedDuration");
-                                GeneralHelper.appendToStringBuilder(output, "Judge - ",
-                                                                    session,"formattedSessionCourtRoom");
-                            });
-                        });
-                    });
-                });
-            });
-        });
+        node.get("courtLists")
+            .forEach(courtList -> courtList.get("courtHouse").get("courtRoom")
+                .forEach(courtRoom -> courtRoom.get("session")
+                    .forEach(session -> session.get("sittings")
+                        .forEach(sitting -> sitting.get("hearing")
+                            .forEach(hearing -> hearing.get("case")
+                                .forEach(hearingCase -> {
+                                    output.append('\n');
+                                    GeneralHelper.appendToStringBuilder(output, "Name of Party(ies) - ",
+                                                                        hearingCase, "caseName"
+                                    );
+                                    GeneralHelper.appendToStringBuilder(output, "Case ID - ",
+                                                                        hearingCase, "caseNumber"
+                                    );
+                                    output.append('\n');
+                                    GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
+                                                                        hearing, "hearingType"
+                                    );
+                                    GeneralHelper.appendToStringBuilder(output, "Location - ",
+                                                                        sitting, "caseHearingChannel"
+                                    );
+                                    GeneralHelper.appendToStringBuilder(output, "Duration - ",
+                                                                        sitting, "formattedDuration"
+                                    );
+                                    GeneralHelper.appendToStringBuilder(output, "Judge - ",
+                                                                        session, "formattedSessionCourtRoom"
+                                    );
+                                }))))));
 
         return output.toString();
     }

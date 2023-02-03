@@ -19,9 +19,9 @@ public final class FamilyMixedListHelper {
     }
 
     public static void manipulatedlistData(JsonNode artefact, Language language) {
-        artefact.get("courtLists").forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
+        artefact.get("courtLists")
+            .forEach(courtList -> courtList.get(LocationHelper.COURT_HOUSE).get("courtRoom")
+                .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
                     formattedJudiciary.append(DataManipulation.findAndManipulateJudiciary(session));
                     session.get("sittings").forEach(sitting -> {
@@ -40,9 +40,7 @@ public final class FamilyMixedListHelper {
                         });
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
-                });
-            });
-        });
+                })));
     }
 
     private static void handleParties(JsonNode hearing, Language language) {
