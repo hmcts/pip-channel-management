@@ -5,15 +5,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.FamilyMixedListHelper;
 
 @Service
-public class DailyCauseListSummaryConverter implements ArtefactSummaryConverter {
+public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
 
     /**
-     * Civil cause list parent method - iterates on courtHouse/courtList - if these need to be shown in further
-     * iterations, do it here.
+     * Family and mixed daily cause list method that generates the summary in the email.
      *
      * @param payload - json body.
      * @return - string for output.
@@ -23,7 +22,7 @@ public class DailyCauseListSummaryConverter implements ArtefactSummaryConverter 
     public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
 
-        DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, false);
+        FamilyMixedListHelper.manipulatedlistData(node, Language.ENGLISH);
 
         return this.processDailyCauseList(node);
     }

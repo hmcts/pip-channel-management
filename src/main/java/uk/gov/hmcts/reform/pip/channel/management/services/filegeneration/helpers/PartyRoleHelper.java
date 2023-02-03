@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.poi.util.StringUtil;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 
 import java.util.ArrayList;
@@ -33,21 +34,14 @@ public final class PartyRoleHelper {
                 switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
                     case "APPLICANT_PETITIONER" ->
                         formatPartyNonRepresentative(party, applicant, initialised);
-                    case "APPLICANT_PETITIONER_REPRESENTATIVE" -> {
-                        final String applicantPetitionerDetails = createIndividualDetails(party, initialised);
-                        if (!applicantPetitionerDetails.isEmpty()) {
-                            applicant
-                                .append(language == Language.ENGLISH ? "Legal Advisor: " : "Cynghorydd Cyfreithiol: ")
-                                .append(applicantPetitionerDetails)
-                                .append(", ");
-                        }
-                    }
+                    case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
+                        applicant.append(formatPartyRepresentative(language, party, initialised));
                     case "RESPONDENT" -> {
                         formatPartyNonRepresentative(party, respondent, initialised);
                         formatPartyNonRepresentative(party, prosecutingAuthority, initialised);
                     }
                     case "RESPONDENT_REPRESENTATIVE" ->
-                        respondent.append(respondentRepresentative(language, party, initialised));
+                        respondent.append(formatPartyRepresentative(language, party, initialised));
                     case "CLAIMANT_PETITIONER" ->
                         formatPartyNonRepresentative(party, claimant, initialised);
                     case "CLAIMANT_PETITIONER_REPRESENTATIVE" ->
@@ -66,11 +60,15 @@ public final class PartyRoleHelper {
                                    GeneralHelper.trimAnyCharacterFromStringEnd(prosecutingAuthority.toString()));
     }
 
-    private static String respondentRepresentative(Language language, JsonNode respondentDetails,
+    private static String formatPartyRepresentative(Language language, JsonNode party,
                                                    Boolean initialised) {
+        final String details = createIndividualDetails(party, initialised);
+        return formatPartyRepresentative(language, party, details);
+    }
+
+    public static String formatPartyRepresentative(Language language, JsonNode party, String details) {
         StringBuilder builder = new StringBuilder();
-        final String details = createIndividualDetails(respondentDetails, initialised);
-        if (!respondentDetails.isEmpty()) {
+        if (!party.isEmpty() && StringUtil.isNotBlank(details)) {
             builder
                 .append(language == Language.ENGLISH ? "Legal Advisor: " : "Cynghorydd Cyfreithiol: ")
                 .append(details)
@@ -80,13 +78,16 @@ public final class PartyRoleHelper {
     }
 
     private static void formatPartyNonRepresentative(JsonNode party, StringBuilder builder, Boolean initialised) {
-        String respondentDetails = createIndividualDetails(party, initialised);
-        respondentDetails = respondentDetails
-            + GeneralHelper.stringDelimiter(respondentDetails, ", ");
-        builder.insert(0, respondentDetails);
+        String details = createIndividualDetails(party, initialised);
+        formatPartyNonRepresentative(builder, details);
     }
 
-    private static String createIndividualDetails(JsonNode party, Boolean initialised) {
+    public static void formatPartyNonRepresentative(StringBuilder builder, String details) {
+        String result = details + GeneralHelper.stringDelimiter(details, ", ");
+        builder.insert(0, result);
+    }
+
+    public static String createIndividualDetails(JsonNode party, Boolean initialised) {
         if (party.has("individualDetails")) {
             JsonNode individualDetails = party.get("individualDetails");
             if (initialised) {

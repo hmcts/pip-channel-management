@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,32 +31,29 @@ class CivilAndFamilyCauseListFileConverterTest {
     @Autowired
     CivilAndFamilyDailyCauseListFileConverter civilAndFamilyDailyCauseListConverter;
 
-    public static final String PROVENANCE = "provenance";
-    public static final String HEADER_TEXT = "Incorrect Header Text";
+    private static final String PROVENANCE = "provenance";
+    private static final String HEADER_TEXT = "Incorrect Header Text";
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final Map<String, String> METADATA = Map.of(
+        "contentDate", Instant.now().toString(),
+        PROVENANCE, PROVENANCE,
+        "locationName", "location",
+        "language", "ENGLISH",
+        "listType", "CIVIL_AND_FAMILY_DAILY_CAUSE_LIST"
+    );
 
     @Test
     void testFamilyCauseListTemplate() throws IOException {
         Map<String, Object> language;
         try (InputStream languageFile = Thread.currentThread()
             .getContextClassLoader().getResourceAsStream("templates/languages/en/civilAndFamilyDailyCauseList.json")) {
-            language = new ObjectMapper().readValue(
+            language = OBJECT_MAPPER.readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
-                                                    "civilAndFamilyDailyCauseList.json")), writer,
-                     Charset.defaultCharset()
-        );
-        Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
-                                                 PROVENANCE, PROVENANCE,
-                                                 "locationName", "location",
-                                                 "language", "ENGLISH"
-        );
-
-        JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = civilAndFamilyDailyCauseListConverter.convert(inputJson, metadataMap, language);
+        JsonNode inputJson = getInputJson();
+        String outputHtml = civilAndFamilyDailyCauseListConverter.convert(inputJson, METADATA, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
@@ -75,23 +74,12 @@ class CivilAndFamilyCauseListFileConverterTest {
         Map<String, Object> language;
         try (InputStream languageFile = Thread.currentThread()
             .getContextClassLoader().getResourceAsStream("templates/languages/cy/civilAndFamilyDailyCauseList.json")) {
-            language = new ObjectMapper().readValue(
+            language = OBJECT_MAPPER.readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });
         }
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
-                                                    "civilAndFamilyDailyCauseList.json")), writer,
-                     Charset.defaultCharset()
-        );
-        Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
-                                                 PROVENANCE, PROVENANCE,
-                                                 "locationName", "location",
-                                                 "language", "ENGLISH"
-        );
-
-        JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        String outputHtml = civilAndFamilyDailyCauseListConverter.convert(inputJson, metadataMap, language);
+        JsonNode inputJson = getInputJson();
+        String outputHtml = civilAndFamilyDailyCauseListConverter.convert(inputJson, METADATA, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
@@ -105,5 +93,59 @@ class CivilAndFamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 yn 3:01pm");
+    }
+
+    @Test
+    void testTableContents() throws IOException {
+        Map<String, Object> language;
+        try (InputStream languageFile = Thread.currentThread()
+            .getContextClassLoader().getResourceAsStream("templates/languages/en/civilAndFamilyDailyCauseList.json")) {
+            language = OBJECT_MAPPER.readValue(
+                Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
+                });
+        }
+        JsonNode inputJson = getInputJson();
+        String result = civilAndFamilyDailyCauseListConverter.convert(inputJson, METADATA, language);
+
+        Document doc = Jsoup.parse(result);
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(doc.getElementsByTag("th"))
+            .as("Incorrect table headers")
+            .hasSize(27)
+            .extracting(Element::text)
+            .startsWith("Time",
+                        "Case Ref",
+                        "Case Name",
+                        "Case Type",
+                        "Hearing Type",
+                        "Location",
+                        "Duration",
+                        "Applicant/Petitioner",
+                        "Respondent"
+            );
+
+        softly.assertThat(doc.getElementsByTag("td"))
+            .as("Incorrect table contents")
+            .hasSize(45)
+            .extracting(Element::text)
+            .contains(
+                "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
+                "Surname, Legal Advisor:",
+                "Applicant org name, Legal Advisor: Applicant rep org name",
+                "Respondent org name, Legal Advisor: Respondent rep org name"
+            );
+
+        softly.assertAll();
+    }
+
+    private JsonNode getInputJson() throws IOException {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
+                                                    "civilAndFamilyDailyCauseList.json")), writer,
+                     Charset.defaultCharset()
+        );
+
+        return OBJECT_MAPPER.readTree(writer.toString());
     }
 }
