@@ -144,7 +144,7 @@ class FamilyMixedListHelperTest {
 
         assertThat(hearing.get(RESPONDENT).asText())
             .as("Respondent is incorrect")
-            .isEqualTo("Surname, Legal Advisor: ");
+            .isEqualTo("Surname");
     }
 
     @Test
