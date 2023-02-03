@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleMapper;
 
+@SuppressWarnings("java:S108")
 public final class FamilyMixedListHelper {
     private static final String APPLICANT = "applicant";
     private static final String RESPONDENT = "respondent";
