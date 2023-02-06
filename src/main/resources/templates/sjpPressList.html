@@ -13,23 +13,6 @@
       }
     }
 
-
-    .headerBar {
-      background-color: #0b0c0c;
-      height: 50px;
-    }
-
-    .govUkHeader {
-      left: 0;
-      right: 0;
-      margin: auto;
-      font-size: 30px;
-      color: #f1f1f1;
-      text-align: center;
-      font-weight: 700;
-      display: inline;
-    }
-
     body {
       font-family: 'arial';
       color: #0b0c0c;
@@ -43,28 +26,11 @@
       text-align: center;
     }
 
-    .logoText {
-      font-size: 18px;
-      margin-top: -3px;
-      margin-bottom: 12px;
-      vertical-align: middle;
-      padding: 0;
-      line-height: 0.6;
-      width: 300px;
-    }
-
     .dateContainer {
       font-size: 12px;
       margin-top: 0;
       padding: 0;
       line-height: 0.6;
-    }
-
-    .headerImage {
-      width: 140px;
-      color: #0b0c0c;
-      padding-top: 10px;
-      padding-bottom: 5px;
     }
 
     .logoDatesContainer {
@@ -138,25 +104,8 @@
   <title th:text="${i18n.titleText + contentDate}"/>
 </head>
 <body>
-<div class="headerBar">
-  <div class="govUkHeader">
-    <img style="padding-left:20px; vertical-align: middle;"
-         src="https://www.gov.uk/assets/static/govuk-logotype-crown-66ad9a9b8fca42cf0ba18979eef6afc2e8056d5f158ca9b27ce9afdf852aae87.png"
-         width="36px" height="32px" alt="Gov.UK banner"/>
-    <span style="vertical-align: middle" th:text="${i18n.govUk}"/>
-  </div>
-</div>
 <div class="logoHeaderWrapper">
   <div class="logoDatesContainer">
-    <div class="headerImage">
-      <img style="width:30px; height:auto; padding-bottom: 3px;"
-           src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png"
-           alt="HMCTS Logo"/>
-      <div class="logoText">
-        <p th:text="${i18n.logoText1}" class="logoText"/>
-        <p th:text="${i18n.logoText2}" class="logoText"/>
-      </div>
-    </div>
     <div class="dateContainer">
       <h4 th:text="${i18n.listFor + contentDate}"/>
       <h5 th:text="${i18n.published + publishedDate}"/>
