@@ -11,9 +11,9 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDa
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownFirmListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownWarnedListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.DailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.FamilyMixedDailyCauseListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
@@ -61,9 +61,9 @@ public enum ListType {
     CROWN_WARNED_LIST(new CrownWarnedListFileConverter(), new CrownWarnedListSummaryConverter()),
     IAC_DAILY_LIST(new IacDailyListFileConverter(), new IacDailyListSummaryConverter()),
     CIVIL_DAILY_CAUSE_LIST(new CivilDailyCauseListFileConverter(), new CivilDailyCauseListSummaryConverter()),
-    FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListFileConverter(), new DailyCauseListSummaryConverter()),
+    FAMILY_DAILY_CAUSE_LIST(new FamilyDailyCauseListFileConverter(), new FamilyMixedDailyCauseListSummaryConverter()),
     CIVIL_AND_FAMILY_DAILY_CAUSE_LIST(new CivilAndFamilyDailyCauseListFileConverter(),
-                                      new DailyCauseListSummaryConverter()),
+                                      new FamilyMixedDailyCauseListSummaryConverter()),
     COP_DAILY_CAUSE_LIST(new CopDailyCauseListFileConverter(), new CopDailyCauseListSummaryConverter()),
     SSCS_DAILY_LIST(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter()),
     SSCS_DAILY_LIST_ADDITIONAL_HEARINGS(new SscsDailyListFileConverter(), new SscsDailyListSummaryConverter(),

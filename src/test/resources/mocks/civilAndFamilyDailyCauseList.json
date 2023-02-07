@@ -97,6 +97,45 @@
                             "friendlyRoleName": "Legal Advisor"
                           }
                         ]
+                      },
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseName": "This is a case name 2",
+                            "caseNumber": "12341235",
+                            "caseType": "normal",
+                            "caseJurisdictionET": "Family Law"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "APPLICANT_PETITIONER",
+                            "organisationDetails": {
+                              "organisationName": "Applicant org name"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT",
+                            "organisationDetails": {
+                              "organisationName": "Respondent org name"
+                            }
+                          },
+                          {
+                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                            "friendlyRoleName": "Legal Advisor",
+                            "organisationDetails": {
+                              "organisationName": "Applicant rep org name"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT_REPRESENTATIVE",
+                            "friendlyRoleName": "Legal Advisor",
+                            "organisationDetails": {
+                              "organisationName": "Respondent rep org name"
+                            }
+                          }
+                        ]
                       }
                     ],
                     "channel": [

@@ -3,8 +3,12 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 import com.fasterxml.jackson.databind.JsonNode;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.FamilyMixedListHelper;
 
 import java.util.Map;
+
+import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class DailyCauseListHelper {
     public static final String DOCUMENT = "document";
@@ -44,7 +48,13 @@ public final class DailyCauseListHelper {
             context.setVariable("email", "");
         }
 
-        DataManipulation.manipulatedDailyListData(artefact, language, initialised);
+        String listType = metadata.get("listType");
+        if (FAMILY_DAILY_CAUSE_LIST.name().equals(listType)
+            || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
+            FamilyMixedListHelper.manipulatedlistData(artefact, language);
+        } else {
+            DataManipulation.manipulatedDailyListData(artefact, language, initialised);
+        }
         return context;
     }
 }

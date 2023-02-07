@@ -29,7 +29,8 @@ class CivilDailyCauseListFileConverterTest {
         "contentDate", "1 July 2022",
         "locationName", OXFORD_COURT,
         "provenance", MANUAL_UPLOAD,
-        "language", "ENGLISH"
+        "language", "ENGLISH",
+        "listType", "CIVIL_DAILY_CAUSE_LIST"
     );
     private static final int NUMBER_OF_TABLES = 3;
 

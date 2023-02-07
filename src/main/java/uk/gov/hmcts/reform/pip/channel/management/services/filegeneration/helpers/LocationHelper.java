@@ -126,7 +126,7 @@ public final class LocationHelper {
         }
     }
 
-    static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session,
+    public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session,
                                        StringBuilder formattedJudiciary) {
         if (StringUtils.isBlank(formattedJudiciary.toString())) {
             formattedJudiciary.append(courtRoom.get("courtRoomName").asText());

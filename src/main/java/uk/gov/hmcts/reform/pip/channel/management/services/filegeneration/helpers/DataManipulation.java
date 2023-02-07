@@ -94,7 +94,7 @@ public final class DataManipulation {
         });
     }
 
-    private static void manipulateCaseInformation(JsonNode hearingCase) {
+    public static void manipulateCaseInformation(JsonNode hearingCase) {
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR).isEmpty()) {
             ((ObjectNode) hearingCase).put(
                 "caseName",
@@ -146,7 +146,7 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
+    public static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
         return findAndManipulateJudiciary(judiciaryNode, true);
     }
 
@@ -179,7 +179,7 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static void handlePartiesScss(JsonNode node, Hearing hearing) {
+    private static void handlePartiesSscs(JsonNode node, Hearing hearing) {
         Map<String, String> parties = new ConcurrentHashMap<>();
         for (JsonNode party : node) {
             switch (party.get("partyRole").asText()) {
@@ -212,7 +212,7 @@ public final class DataManipulation {
 
     private static Hearing hearingBuilder(JsonNode hearingNode) {
         Hearing currentHearing = new Hearing();
-        handlePartiesScss(hearingNode.get("party"), currentHearing);
+        handlePartiesSscs(hearingNode.get("party"), currentHearing);
         currentHearing.setRespondent(dealWithInformants(hearingNode));
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
