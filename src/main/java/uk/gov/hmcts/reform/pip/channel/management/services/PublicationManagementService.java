@@ -146,7 +146,8 @@ public class PublicationManagementService {
             "locationName", locationName,
             "region", String.join(", ", location.getRegion()),
             "regionName", String.join(", ", location.getRegion()),
-            "language", languageEntry.toString()
+            "language", languageEntry.toString(),
+            "listType", artefact.getListType().name()
         );
 
         String html = artefact.getListType().getFileConverter().convert(topLevelNode, metadataMap, language);
