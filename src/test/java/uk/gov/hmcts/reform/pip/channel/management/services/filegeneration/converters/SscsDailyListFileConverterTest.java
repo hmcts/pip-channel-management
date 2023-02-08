@@ -87,6 +87,11 @@ class SscsDailyListFileConverterTest {
             .hasSize(9)
             .extracting(Element::text)
             .containsSequence("Thank you for reading this document thoroughly.");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect appellant")
+            .extracting(Element::text)
+            .contains("Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
     }
 
     @ParameterizedTest
@@ -124,6 +129,11 @@ class SscsDailyListFileConverterTest {
             .hasSize(9)
             .extracting(Element::text)
             .containsSequence("Ffynhonnell y Data: provenance");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect appellant")
+            .extracting(Element::text)
+            .contains("Lovekesh, Cynghorydd Cyfreithiol: Mr Sausage Alpha Foxtrot");
     }
 
     @ParameterizedTest

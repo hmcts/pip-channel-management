@@ -25,7 +25,7 @@ class SscsDailyListArtefactSummaryConverterTest {
 
             softly.assertThat(output.split(System.lineSeparator()))
                 .as("Output line count does not match")
-                .hasSize(40);
+                .hasSize(34);
 
             softly.assertThat(output)
                 .as("Court house does not match")
@@ -37,11 +37,7 @@ class SscsDailyListArtefactSummaryConverterTest {
 
             softly.assertThat(output)
                 .as("Appellant does not match")
-                .contains("Appellant: Lovekesh");
-
-            softly.assertThat(output)
-                .as("Legal advisor does not match")
-                .contains("Legal Advisor: Mr Sausage Alpha Foxtrot");
+                .contains("Appellant: Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
 
             softly.assertThat(output)
                 .as("prosecutor does not match")
