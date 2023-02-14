@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
@@ -61,7 +62,7 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         JsonNode node = new ObjectMapper().readTree(payload);
         List<CourtHouse> courtHouseList = new ArrayList<>();
         for (JsonNode courtHouse : node.get("courtLists")) {
-            courtHouseList.add(courtHouseBuilder(courtHouse));
+            courtHouseList.add(courtHouseBuilder(courtHouse, Language.ENGLISH));
         }
         return courtHouseList;
     }
