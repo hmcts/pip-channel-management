@@ -15,9 +15,6 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdail
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings({"PMD.TooManyMethods"})
@@ -179,40 +176,10 @@ public final class DataManipulation {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static void handlePartiesSscs(JsonNode node, Hearing hearing) {
-        Map<String, String> parties = new ConcurrentHashMap<>();
-        for (JsonNode party : node) {
-            switch (party.get("partyRole").asText()) {
-                case "APPLICANT_PETITIONER" ->
-                    parties.put(APPLICANT, individualDetails(party));
-                case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
-                    parties.put("applicantRepresentative", individualDetails(party));
-                case RESPONDENT ->
-                    parties.put(RESPONDENT, individualDetails(party));
-                case "RESPONDENT_REPRESENTATIVE" ->
-                    parties.put("respondentRepresentative", individualDetails(party));
-                default -> { }
-            }
-
-            if (parties.get("applicantRepresentative") == null) {
-                hearing.setAppellant(parties.get(APPLICANT));
-            } else {
-                hearing.setAppellant(parties.get(APPLICANT) + ",\nLegal Advisor: " + parties.get(
-                    "applicantRepresentative"));
-            }
-
-            if (parties.get("respondentRepresentative") == null) {
-                hearing.setRespondent(parties.get(RESPONDENT));
-            } else {
-                hearing.setRespondent(parties.get(RESPONDENT) + ",\nLegal Advisor: " + parties.get(
-                    "respondentRepresentative"));
-            }
-        }
-    }
-
-    private static Hearing hearingBuilder(JsonNode hearingNode) {
+    private static Hearing hearingBuilder(JsonNode hearingNode, Language language) {
         Hearing currentHearing = new Hearing();
-        handlePartiesSscs(hearingNode.get("party"), currentHearing);
+        PartyRoleHelper.findAndManipulatePartyInformation(hearingNode, language, false);
+        currentHearing.setAppellant(hearingNode.get("applicant").asText());
         currentHearing.setRespondent(dealWithInformants(hearingNode));
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
@@ -228,19 +195,8 @@ public final class DataManipulation {
         return String.join(", ", informants);
     }
 
-    private static String individualDetails(JsonNode node) {
-        List<String> listOfRetrievedData = new ArrayList<>();
-        String[] possibleFields = {"title", "individualForenames", "individualMiddleName", "individualSurname"};
-        for (String field : possibleFields) {
-            Optional<String> detail = Optional.ofNullable(node.get("individualDetails").findValue(field))
-                .map(JsonNode::asText)
-                .filter(s -> !s.isEmpty());
-            detail.ifPresent(listOfRetrievedData::add);
-        }
-        return String.join(" ", listOfRetrievedData);
-    }
-
-    private static Sitting sscsSittingBuilder(String sessionChannel, JsonNode node, String judiciary)
+    private static Sitting sscsSittingBuilder(String sessionChannel, JsonNode node, String judiciary,
+                                              Language language)
         throws JsonProcessingException {
         Sitting sitting = new Sitting();
         DateHelper.formatStartTime(node, "h:mma", true);
@@ -257,7 +213,7 @@ public final class DataManipulation {
         Iterator<JsonNode> nodeIterator = node.get("hearing").elements();
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
-            Hearing currentHearing = hearingBuilder(currentHearingNode);
+            Hearing currentHearing = hearingBuilder(currentHearingNode, language);
             currentHearing.setHearingTime(node.get("time").asText());
             listOfHearings.add(currentHearing);
             currentHearing.setJudiciary(sitting.getJudiciary());
@@ -285,7 +241,7 @@ public final class DataManipulation {
         return formattedJudiciaryBuilder.toString();
     }
 
-    private static CourtRoom scssCourtRoomBuilder(JsonNode node) throws JsonProcessingException {
+    private static CourtRoom scssCourtRoomBuilder(JsonNode node, Language language) throws JsonProcessingException {
         CourtRoom thisCourtRoom = new CourtRoom();
         thisCourtRoom.setName(GeneralHelper.safeGet("courtRoomName", node));
         List<Sitting> sittingList = new ArrayList<>();
@@ -300,14 +256,14 @@ public final class DataManipulation {
             String judiciary = scssFormatJudiciary(session);
             String sessionChannelString = String.join(", ", sessionChannel);
             for (JsonNode sitting : session.get("sittings")) {
-                sittingList.add(sscsSittingBuilder(sessionChannelString, sitting, judiciary));
+                sittingList.add(sscsSittingBuilder(sessionChannelString, sitting, judiciary, language));
             }
         }
         thisCourtRoom.setListOfSittings(sittingList);
         return thisCourtRoom;
     }
 
-    public static CourtHouse courtHouseBuilder(JsonNode node) throws JsonProcessingException {
+    public static CourtHouse courtHouseBuilder(JsonNode node, Language language) throws JsonProcessingException {
         JsonNode thisCourtHouseNode = node.get("courtHouse");
         CourtHouse thisCourtHouse = new CourtHouse();
         thisCourtHouse.setName(GeneralHelper.safeGet("courtHouseName", thisCourtHouseNode));
@@ -315,7 +271,7 @@ public final class DataManipulation {
         thisCourtHouse.setEmail(GeneralHelper.safeGet("courtHouseContact.venueEmail", thisCourtHouseNode));
         List<CourtRoom> courtRoomList = new ArrayList<>();
         for (JsonNode courtRoom : thisCourtHouseNode.get("courtRoom")) {
-            courtRoomList.add(scssCourtRoomBuilder(courtRoom));
+            courtRoomList.add(scssCourtRoomBuilder(courtRoom, language));
         }
         thisCourtHouse.setListOfCourtRooms(courtRoomList);
         return thisCourtHouse;

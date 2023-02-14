@@ -22,15 +22,17 @@ import java.util.Map;
 public class SscsDailyListFileConverter implements FileConverter {
 
     @Override
-    public String convert(JsonNode highestLevelNode, Map<String, String> metadata, Map<String, Object> language)
+    public String convert(JsonNode highestLevelNode, Map<String, String> metadata,
+                          Map<String, Object> languageResources)
         throws IOException {
         Context context = new Context();
-        context.setVariable("i18n", language);
+        context.setVariable("i18n", languageResources);
         context.setVariable("metadata", metadata);
         context.setVariable("telephone", GeneralHelper.safeGet("venue.venueContact.venueTelephone", highestLevelNode));
         context.setVariable("email", GeneralHelper.safeGet("venue.venueContact.venueEmail", highestLevelNode));
 
-        String format = (Language.valueOf(metadata.get("language")) == Language.ENGLISH)
+        Language language = Language.valueOf(metadata.get("language"));
+        String format = (language == Language.ENGLISH)
             ? "dd MMMM yyyy 'at' HH:mm"
             : "dd MMMM yyyy 'yn' HH:mm";
         context.setVariable("publishedDate", DateHelper.timeStampToBstTime(
@@ -38,7 +40,7 @@ public class SscsDailyListFileConverter implements FileConverter {
 
         List<CourtHouse> listOfCourtHouses = new ArrayList<>();
         for (JsonNode courtHouse : highestLevelNode.get("courtLists")) {
-            listOfCourtHouses.add(DataManipulation.courtHouseBuilder(courtHouse));
+            listOfCourtHouses.add(DataManipulation.courtHouseBuilder(courtHouse, language));
         }
         context.setVariable("courtList", listOfCourtHouses);
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
