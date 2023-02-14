@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
 
@@ -32,14 +33,17 @@ public class PublicationManagementService {
 
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
+    private final AccountManagementService accountManagementService;
 
     private static final String PATH_TO_LANGUAGES = "templates/languages/";
 
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
-                                        DataManagementService dataManagementService) {
+                                        DataManagementService dataManagementService,
+                                        AccountManagementService accountManagementService) {
         this.azureBlobService = azureBlobService;
         this.dataManagementService = dataManagementService;
+        this.accountManagementService = accountManagementService;
     }
 
     /**
@@ -110,18 +114,23 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to get the files for.
      * @return A map of the filetype to file byte array
      */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId) {
+    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, UUID userId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-        Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-        publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
-        if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
-            || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
-            publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+        if (isAuthorised(artefact, userId)) {
+            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
+            publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
+
+            if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
+                || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
+                publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+            } else {
+                publicationFilesMap.put(FileType.EXCEL, new byte[0]);
+            }
+            return publicationFilesMap;
         } else {
-            publicationFilesMap.put(FileType.EXCEL, new byte[0]);
+            log.error("THROW HERE");
         }
-        return publicationFilesMap;
     }
 
     /**
@@ -173,6 +182,16 @@ public class PublicationManagementService {
                 .toStream(baos)
                 .run();
             return baos.toByteArray();
+        }
+    }
+
+    private boolean isAuthorised(Artefact artefact, UUID userId) {
+        if (artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {
+            return true;
+        } else if (userId == null) {
+            return false;
+        } else {
+            return accountManagementService.getIsAuthorised(userId, artefact.getListType(), artefact.getSensitivity());
         }
     }
 }

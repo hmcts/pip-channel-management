@@ -8,11 +8,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -26,6 +29,9 @@ public class AccountManagementService {
     private String url;
 
     private final WebClient webClient;
+
+    private static final String ACCOUNT_MANAGEMENT_REQUEST_FAILED =
+        "Request to account management failed with error message: %s";
 
     @Autowired
     public AccountManagementService(WebClient webClient) {
@@ -46,6 +52,24 @@ public class AccountManagementService {
                 ex.getMessage()
             );
             return Collections.emptyMap();
+        }
+    }
+
+    /**
+     * Calls Account Management to determine whether a user is allowed to see a set publication.
+     * @param userId The UUID of the user to retrieve.
+     * @param listType The list type of the publication.
+     * @param sensitivity The sensitivity of the publication
+     * @return A flag indicating whether the user is authorised.
+     */
+    public Boolean getIsAuthorised(UUID userId, ListType listType, Sensitivity sensitivity) {
+        try {
+            return webClient.get().uri(String.format(
+                    "%s/account/isAuthorised/%s/%s/%s", url, userId, listType, sensitivity))
+                .retrieve().bodyToMono(Boolean.class).block();
+        } catch (WebClientException ex) {
+            log.error(String.format(ACCOUNT_MANAGEMENT_REQUEST_FAILED, ex.getMessage()));
+            return false;
         }
     }
 }

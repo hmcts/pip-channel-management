@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
@@ -73,7 +74,8 @@ public class PublicationManagementController {
     })
     @Operation(summary = "Takes in an artefact ID and returns a map of stored files")
     @GetMapping("/{artefactId}")
-    public ResponseEntity<Map<FileType, byte[]>> getFiles(@PathVariable UUID artefactId) {
+    public ResponseEntity<Map<FileType, byte[]>> getFiles(@PathVariable UUID artefactId,
+                                                          @RequestHeader("x-user-id") String userId) {
         return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId));
     }
 }
