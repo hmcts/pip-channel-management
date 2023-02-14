@@ -7,7 +7,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'arial';
+        font-family: 'openSans';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -15,7 +15,7 @@
     }
 
     body {
-      font-family: 'arial';
+      font-family: 'openSans';
       padding: 2px;
       font-size: 105%;
     }
@@ -39,7 +39,7 @@
     }
 
     .mainHeaderText {
-      font-family: "arial";
+      font-family: "openSans";
       display: inline-block;
       width: 450px;
       text-align: center;
@@ -52,7 +52,7 @@
     }
 
     h1, h4 {
-      font-family: "arial";
+      font-family: "openSans";
       color: black;
     }
 
@@ -212,8 +212,8 @@
 <section>
   <p class="govuk-body govuk-font-14" th:text="${i18n.dataSource + metadata.provenance}"/>
   <hr/>
-  <p th:text="${i18n.legal1}" style="font-family: 'arial'; font-size: 24px;"/>
-  <p th:text="${i18n.legal2}" style="font-family: 'arial'; font-size: 24px;"/>
+  <p th:text="${i18n.legal1}" style="font-family: 'openSans'; font-size: 24px;"/>
+  <p th:text="${i18n.legal2}" style="font-family: 'openSans'; font-size: 24px;"/>
   <hr/>
   <p th:text="${i18n.thanks}" style="text-align: center;"/>
 </section>

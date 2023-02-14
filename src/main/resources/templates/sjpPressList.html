@@ -6,7 +6,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'arial';
+        font-family: 'openSans';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -14,7 +14,7 @@
     }
 
     body {
-      font-family: 'arial';
+      font-family: 'openSans';
       color: #0b0c0c;
       padding: 2px;
       font-size: 105%;
@@ -45,7 +45,7 @@
     }
 
     .mainHeaderText {
-      font-family: "arial";
+      font-family: "openSans";
       display: inline-block;
       width: 475px;
       text-align: center;
@@ -58,12 +58,12 @@
     }
 
     h4 {
-      font-family: "arial";
+      font-family: "openSans";
       color: black;
     }
 
     h5 {
-      font-family: "arial";
+      font-family: "openSans";
       color: grey;
     }
 
@@ -158,8 +158,8 @@
 </div>
 
 <hr/>
-<p th:text="${i18n.legal1}" style="font-family: 'arial'; font-size: 24px;"/>
-<p th:text="${i18n.legal2}" style="font-family: 'arial'; font-size: 24px;"/>
+<p th:text="${i18n.legal1}" style="font-family: 'openSans'; font-size: 24px;"/>
+<p th:text="${i18n.legal2}" style="font-family: 'openSans'; font-size: 24px;"/>
 <hr/>
 <p th:text="${i18n.endText}" style="text-align: center;"/>
 </body>

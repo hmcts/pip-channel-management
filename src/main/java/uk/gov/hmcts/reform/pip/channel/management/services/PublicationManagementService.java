@@ -157,12 +157,12 @@ public class PublicationManagementService {
             builder.useFastMode()
                 .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_A);
 
-            File file = new File("/opt/app/arial.ttf");
+            File file = new File("/opt/app/openSans.ttf");
             if (file.exists()) {
-                builder.useFont(file, "arial");
+                builder.useFont(file, "openSans");
             } else {
                 builder.useFont(new File(Thread.currentThread().getContextClassLoader()
-                                             .getResource("arial.ttf").getFile()), "arial");
+                                             .getResource("openSans.ttf").getFile()), "openSans");
             }
 
             if (accessibility) {

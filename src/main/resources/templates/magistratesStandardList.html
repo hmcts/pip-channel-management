@@ -6,7 +6,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'arial';
+        font-family: 'openSans';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -23,20 +23,20 @@
     }
 
     body {
-      font-family: 'arial';
+      font-family: 'openSans';
       color: #0b0c0c;
       padding: 2px;
       font-size: 105%;
     }
 
     h1 {
-      font-family: "arial";
+      font-family: "openSans";
       color: black;
     }
 
     .govuk-heading-l, .govuk-heading-m {
       color: #0b0c0c;
-      font-family: "arial";
+      font-family: "openSans";
       font-weight: 700;
       font-size: 24px;
       font-size: 1.5rem;
@@ -52,7 +52,7 @@
 
     .govuk-body {
       color: #0b0c0c;
-      font-family: "arial";
+      font-family: "openSans";
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -79,7 +79,7 @@
     }
 
     .govuk-table {
-      font-family: "arial", sans-serif;
+      font-family: "openSans", sans-serif;
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -185,7 +185,7 @@
     }
 
     .moj-timeline__description {
-      font-family: "arial", sans-serif;
+      font-family: "openSans", sans-serif;
       font-weight: 400;
       font-size: 1.1875rem;
       line-height: 1.31579;
@@ -386,8 +386,8 @@
   <section>
     <p class="govuk-body govuk-font-14" th:text="${i18n.dataSource + metadata.provenance}"/>
     <hr/>
-    <p th:text="${i18n.bottomLegal1}" style="font-family: 'arial'; font-size: 24px;"/>
-    <p th:text="${i18n.bottomLegal2}" style="font-family: 'arial'; font-size: 24px;"/>
+    <p th:text="${i18n.bottomLegal1}" style="font-family: 'openSans'; font-size: 24px;"/>
+    <p th:text="${i18n.bottomLegal2}" style="font-family: 'openSans'; font-size: 24px;"/>
     <hr/>
     <p th:text="${i18n.thanks}" style="text-align: center;"/>
   </section>
