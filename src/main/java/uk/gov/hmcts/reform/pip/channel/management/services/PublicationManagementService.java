@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.AuthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
@@ -114,10 +115,9 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to get the files for.
      * @return A map of the filetype to file byte array
      */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, UUID userId) {
+    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-
-        if (isAuthorised(artefact, userId)) {
+        if (isAuthorised(artefact, userId, system)) {
             Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
             publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
@@ -129,7 +129,8 @@ public class PublicationManagementService {
             }
             return publicationFilesMap;
         } else {
-            log.error("THROW HERE");
+            throw new AuthorisedException(String.format("User with id %s is not authorised to access artefact with id"
+                                                            + " %s", userId, artefactId));
         }
     }
 
@@ -185,13 +186,14 @@ public class PublicationManagementService {
         }
     }
 
-    private boolean isAuthorised(Artefact artefact, UUID userId) {
-        if (artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {
+    private boolean isAuthorised(Artefact artefact, String userId, boolean system) {
+        if (system || artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {
             return true;
         } else if (userId == null) {
             return false;
         } else {
-            return accountManagementService.getIsAuthorised(userId, artefact.getListType(), artefact.getSensitivity());
+            return accountManagementService.getIsAuthorised(UUID.fromString(userId), artefact.getListType(),
+                                                            artefact.getSensitivity());
         }
     }
 }

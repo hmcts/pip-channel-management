@@ -118,7 +118,7 @@ class PublicationManagementServiceTest {
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
         Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(UUID.randomUUID());
+            .getStoredPublications(UUID.randomUUID(), TEST, true);
 
         assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
         assertEquals(TEST_BYTE, response.get(FileType.EXCEL), BYTES_NO_MATCH);
@@ -131,7 +131,7 @@ class PublicationManagementServiceTest {
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
         Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(UUID.randomUUID());
+            .getStoredPublications(UUID.randomUUID(), TEST, true);
 
         assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
         assertTrue(response.get(FileType.EXCEL).length == 0, BYTES_NO_MATCH);

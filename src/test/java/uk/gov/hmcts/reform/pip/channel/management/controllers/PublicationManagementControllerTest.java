@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,10 +51,10 @@ class PublicationManagementControllerTest {
         Map<FileType, byte[]> testMap = new ConcurrentHashMap<>();
         testMap.put(FileType.PDF, new byte[100]);
         testMap.put(FileType.EXCEL, new byte[0]);
-        when(publicationManagementService.getStoredPublications(any())).thenReturn(testMap);
+        when(publicationManagementService.getStoredPublications(any(), eq("test"), eq(true))).thenReturn(testMap);
 
         ResponseEntity<Map<FileType, byte[]>> response = publicationManagementController
-            .getFiles(UUID.randomUUID());
+            .getFiles(UUID.randomUUID(), "test", true);
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Status did not match");
         assertEquals(testMap, response.getBody(), "Body did not match");
