@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
-import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.AuthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
@@ -129,7 +129,7 @@ public class PublicationManagementService {
             }
             return publicationFilesMap;
         } else {
-            throw new AuthorisedException(String.format("User with id %s is not authorised to access artefact with id"
+            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
                                                             + " %s", userId, artefactId));
         }
     }

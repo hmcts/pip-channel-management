@@ -3,11 +3,11 @@ package uk.gov.hmcts.reform.pip.channel.management.errorhandling;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.AuthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -72,10 +72,11 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void testHandleAuthorisedException() {
-        AuthorisedException exception = new AuthorisedException(TEST_MESSAGE);
+    void testHandleUnauthorisedException() {
+        UnauthorisedException exception = new UnauthorisedException(TEST_MESSAGE);
 
-        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleAuthorisedException(exception);
+        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler
+            .handleUnauthorisedException(exception);
 
         assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode(),
                      STATUS_CODE_MATCH);

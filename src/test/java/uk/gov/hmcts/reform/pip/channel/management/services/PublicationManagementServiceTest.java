@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
-import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.AuthorisedException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
@@ -164,7 +164,7 @@ class PublicationManagementServiceTest {
         when(dataManagementService.getArtefact(any())).thenReturn(artefact);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        AuthorisedException ex = assertThrows(AuthorisedException.class, () ->
+        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
             publicationManagementService
                 .getStoredPublications(UUID.randomUUID(), null, false),
                                               "Expected exception to be thrown");
@@ -181,7 +181,7 @@ class PublicationManagementServiceTest {
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
         when(accountManagementService.getIsAuthorised(any(), any(), any())).thenReturn(false);
 
-        AuthorisedException ex = assertThrows(AuthorisedException.class, () ->
+        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
                                                   publicationManagementService
                                                       .getStoredPublications(UUID.randomUUID(),
                                                                              UUID.randomUUID().toString(),
