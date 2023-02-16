@@ -70,7 +70,7 @@ class PublicationManagementTest {
     private static Stream<Arguments> parameters() {
         return Stream.of(
             Arguments.of("16f7a550-dd95-4c77-b427-c03d1e8f4560"), //Care Standards Tribunal Hearing List
-            Arguments.of("cf5d8220-bbbe-4de4-9ca5-e0bee354f49b"), //Civil and Family Daily Cause List
+            Arguments.of("a60c135f-e15c-4c35-9244-a345120dc702"), //Civil and Family Daily Cause List
             Arguments.of("0bef43e6-8987-411d-9411-26167730e88c"), //Civil Daily Cause List
             Arguments.of("79e801f1-a746-4640-861b-0f964951a733"), //Court of Protection Daily Cause List
             Arguments.of("ef94897d-ea6a-41b5-8948-aea4a99d9475"), //Crown Daily List
