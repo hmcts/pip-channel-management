@@ -6,7 +6,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'GDS Transport';
+        font-family: 'openSans';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -14,10 +14,10 @@
     }
 
     body {
-      font-family: 'GDS Transport';
+      font-family: 'openSans';
       color: #0b0c0c;
-      padding: 2px;
-      font-size: 16px;
+      padding: 4px;
+      font-size: 14px;
     }
 
     table {
@@ -37,9 +37,6 @@
 </head>
 <body>
 <div class="header">
-  <img
-    src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png"
-    alt="HMCTS Logo"/>
   <h1 th:text="${i18n.serviceName}"/>
   <h2 th:text="${i18n.listTitle}"/>
   <p th:text="${i18n.listFor + contentDate}"/>
