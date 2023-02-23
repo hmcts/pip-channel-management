@@ -6,7 +6,7 @@
       margin: 30px 20px;
 
       @bottom-center {
-        font-family: 'GDS Transport';
+        font-family: 'openSans';
         font-size: 16px;
         color: grey;
         content: "[[${i18n.serviceName + i18n.pdfAccessibility}]]" counter(page) "[[${i18n.of}]]" counter(pages) ".";
@@ -22,20 +22,20 @@
     }
 
     body {
-      font-family: 'GDS Transport';
+      font-family: 'openSans';
       color: #0b0c0c;
       padding: 2px;
       font-size: 105%;
     }
 
     h1, h4 {
-      font-family: "GDS Transport";
+      font-family: "openSans";
       color: black;
     }
 
     .govuk-heading-l {
       color: #0b0c0c;
-      font-family: "GDS Transport";
+      font-family: "openSans";
       font-weight: 700;
       font-size: 24px;
       font-size: 1.5rem;
@@ -47,7 +47,7 @@
 
     .govuk-body {
       color: #0b0c0c;
-      font-family: "GDS Transport";
+      font-family: "openSans";
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -61,7 +61,7 @@
     }
 
     .govuk-details {
-      font-family: "GDS Transport", arial, sans-serif;
+      font-family: "openSans", sans-serif;
       font-weight: 400;
       font-size: 16px;
       font-size: 1rem;
@@ -94,7 +94,7 @@
 
     .govuk-table {
       table-layout: fixed;
-      font-family: "GDS Transport";
+      font-family: "openSans";
       font-weight: 400;
       font-size: 16px;
       line-height: 1.25;
@@ -132,9 +132,6 @@
 </head>
 <body>
 <div class="header">
-  <img
-    src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px_x2-d759444376a83ad439650d64c8de4158658aa1b5034e5a6080e66ebaa9594b0d.png"
-    alt="HMCTS Logo"/>
   <h1 th:text="${i18n.serviceName}"/>
   <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName}"/>
   <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listType}"/>
@@ -175,8 +172,8 @@
   <section>
     <p th:text="${i18n.dataSource + provenance}"/>
     <hr/>
-    <p th:text="${i18n.legal1}" style="font-family: 'GDS Transport'; font-size: 18px;"/>
-    <p th:text="${i18n.legal2}" style="font-family: 'GDS Transport'; font-size: 18px;"/>
+    <p th:text="${i18n.legal1}" style="font-family: 'openSans'; font-size: 18px;"/>
+    <p th:text="${i18n.legal2}" style="font-family: 'openSans'; font-size: 18px;"/>
     <hr/>
     <p th:text="${i18n.endText}" style="text-align: center;"/>
   </section>
