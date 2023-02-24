@@ -15,14 +15,11 @@
     "Prosecutor",
     "Case Reference(s)"
   ],
-  "govUk": "GOV.UK",
   "offenceHeaders": [
     "Offence Title",
     "Offence Wording",
     "Reporting Restriction"
   ],
   "titleText": "Single Justice Procedure - Press List ",
-  "logoText1": "HM Courts &",
-  "logoText2": "Tribunals Service",
   "subHeader": "Single Justice Procedure cases that are ready for hearing"
 }
