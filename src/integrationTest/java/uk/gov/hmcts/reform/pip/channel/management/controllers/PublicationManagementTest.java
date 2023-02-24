@@ -18,6 +18,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
 
@@ -153,7 +155,11 @@ class PublicationManagementTest {
         when(blobClient.downloadContent()).thenReturn(
             BinaryData.fromString(new String(file.getBytes())));
 
-        MvcResult response = mockMvc.perform(get(ROOT_URL + "/" + listArtefactId))
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .get(ROOT_URL + "/" + listArtefactId)
+            .header("x-system","true");
+
+        MvcResult response = mockMvc.perform(request)
             .andExpect(status().isOk()).andReturn();
 
         assertNotNull(response.getResponse().getContentAsString(),
