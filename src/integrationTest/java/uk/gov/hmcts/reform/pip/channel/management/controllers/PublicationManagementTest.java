@@ -154,10 +154,9 @@ class PublicationManagementTest {
         when(blobClient.downloadContent()).thenReturn(
             BinaryData.fromString(new String(file.getBytes())));
 
-        MockHttpServletRequestBuilder request = get(ROOT_URL + "/" + listArtefactId)
-            .header("x-system","true");
-
-        MvcResult response = mockMvc.perform(request)
+        MvcResult response = mockMvc.perform(
+            get(ROOT_URL + "/" + listArtefactId)
+                .header("x-system","true"))
             .andExpect(status().isOk()).andReturn();
 
         assertNotNull(response.getResponse().getContentAsString(),
