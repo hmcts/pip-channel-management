@@ -61,7 +61,7 @@ class EtFortnightlyPressListHelperTest {
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
                         .get(SITTINGS).get(0).get("sittingDate").asText(),
-                        "Monday 14 February 2022",
+                        "Sunday 13 February 2022",
                     "Unable to find sitting date");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
@@ -92,25 +92,25 @@ class EtFortnightlyPressListHelperTest {
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("claimant").asText(),
-                     "HRH G Anderson",
+                     "",
                      "Unable to find claimant");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("claimantRepresentative").asText(),
-                     "Rep: Mr R Hargreaves",
+                     "Rep: Mr T Test Surname 2",
                      "Unable to find claimant representative");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("respondent").asText(),
-                     "Capt. S Jenkins",
+                     "Capt. T Test Surname",
                      "Unable to find respondent");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("respondentRepresentative").asText(),
-                     "Rep: Dr M Naylor",
+                     "Rep: Dr T Test Surname 2",
                      "Unable to find respondent representative");
         assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0)
@@ -143,7 +143,7 @@ class EtFortnightlyPressListHelperTest {
                      "Unable to find correct court List array");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
                          .get(SITTINGS).get(0).get("sittingDate").asText(),
-                     "Monday 14 February 2022",
+                     "Sunday 13 February 2022",
                      "Unable to find sitting date");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
                          .get(SITTINGS).get(0)
@@ -151,55 +151,55 @@ class EtFortnightlyPressListHelperTest {
                      "9:30am",
                      "Unable to find time");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("courtRoom").asText(),
                      "Court 1",
                      "Unable to find court room");
 
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("formattedDuration").asText(),
                      "2 hours",
                      "Unable to find duration");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get(CASE).get(0)
                          .get("caseNumber").asText(),
                      "12341234",
                      "Unable to find case number");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("claimant").asText(),
-                     "HRH G Anderson",
+                     "",
                      "Unable to find claimant");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("claimantRepresentative").asText(),
-                         "Rep: Mr R Hargreaves",
+                         "Rep: Mr T Test Surname 2",
                          "Unable to find claimant representative");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("respondent").asText(),
-                     "Capt. S Jenkins",
+                     "Capt. T Test Surname",
                      "Unable to find respondent");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("respondentRepresentative").asText(),
-                     "Rep: Dr M Naylor",
+                     "Rep: Dr T Test Surname 2",
                      "Unable to find respondent representative");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("hearingType").asText(),
                      "This is a hearing type",
                      "Unable to find hearing type");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get(CASE).get(0)
                          .get("caseType").asText(),
                      "This is a case type",
                      "Unable to find Jurisdiction");
         assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(1).get(0)
+                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
                          .get("caseHearingChannel").asText(),
                      "This is a sitting channel",
                      "Unable to find Hearing Platform");

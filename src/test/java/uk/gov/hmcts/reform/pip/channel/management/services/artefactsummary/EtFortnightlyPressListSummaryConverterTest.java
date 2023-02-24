@@ -50,11 +50,11 @@ class EtFortnightlyPressListSummaryConverterTest {
 
         assertThat(emailOutput)
             .as("incorrect Claimant found")
-            .contains("HRH G Anderson");
+            .contains("Rep: Mr T Test Surname 2");
 
         assertThat(emailOutput)
             .as("incorrect Respondent found")
-            .contains("Capt. S Jenkins");
+            .contains("Capt. T Test Surname");
 
         assertThat(emailOutput)
             .as("incorrect hearing type found")

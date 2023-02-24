@@ -89,10 +89,12 @@ public final class LocationHelper {
 
     private static List<String> addAddressLines(JsonNode artefact) {
         List<String> addressLines = new ArrayList<>();
-        JsonNode arrayNode = artefact.get(VENUE).get(VENUE_ADDRESS).get(LINE);
-        for (JsonNode jsonNode : arrayNode) {
-            if (!jsonNode.asText().isEmpty()) {
-                addressLines.add(jsonNode.asText());
+        if (artefact.get(VENUE).has(VENUE_ADDRESS)) {
+            JsonNode arrayNode = artefact.get(VENUE).get(VENUE_ADDRESS).get(LINE);
+            for (JsonNode jsonNode : arrayNode) {
+                if (!jsonNode.asText().isEmpty()) {
+                    addressLines.add(jsonNode.asText());
+                }
             }
         }
         return addressLines;

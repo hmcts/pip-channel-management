@@ -38,11 +38,11 @@ class EtDailyListSummaryConverterTest {
 
             softly.assertThat(output)
                 .as("Incorrect claimant")
-                .contains("Claimant: HRH G Anderson, Rep: Mr R Hargreaves");
+                .contains("Claimant: , Rep: Mr T Test Surname 2");
 
             softly.assertThat(output)
                 .as("Incorrect respondent")
-                .contains("Respondent: Capt. S Jenkins, Rep: Dr M Naylor");
+                .contains("Capt. T Test Surname, Rep: Dr T Test Surname 2");
 
             softly.assertThat(output)
                 .as("Incorrect hearing type")
