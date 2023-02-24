@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
 
@@ -37,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
-@WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin" })
+@WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
 
     @Autowired
@@ -49,19 +51,24 @@ class PublicationManagementTest {
     @Autowired
     BlobClient blobClient;
 
+    @Value("${VERIFIED_USER_ID}")
+    private String verifiedUserId;
+
     private static ObjectMapper objectMapper;
 
     private static final String ROOT_URL = "/publication";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
     private static final String ARTEFACT_ID = "591d5021-bf40-4066-b65e-da3221060a54";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
+    private static final String INPUT_PARAMETERS = "parameters";
     private static MockMultipartFile file;
 
     @BeforeAll
     public static void setup() {
         file = new MockMultipartFile("file", "test.pdf",
                                      MediaType.APPLICATION_PDF_VALUE, "test content".getBytes(
-            StandardCharsets.UTF_8));
+            StandardCharsets.UTF_8)
+        );
 
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
@@ -104,9 +111,11 @@ class PublicationManagementTest {
         ExceptionResponse exceptionResponse = objectMapper.readValue(
             mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
 
-        assertEquals(exceptionResponse.getMessage(),
-                     "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-                     "Unable to send NotFound exception");
+        assertEquals(
+            exceptionResponse.getMessage(),
+            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
+            "Unable to send NotFound exception"
+        );
     }
 
     @Test
@@ -117,7 +126,7 @@ class PublicationManagementTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource(INPUT_PARAMETERS)
     void testGenerateFileAccepted(String listArtefactId) throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
 
@@ -134,9 +143,11 @@ class PublicationManagementTest {
         ExceptionResponse exceptionResponse = objectMapper.readValue(
             mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
 
-        assertEquals(exceptionResponse.getMessage(),
-                     "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-                     "Unable to send NotFound exception");
+        assertEquals(
+            exceptionResponse.getMessage(),
+            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
+            "Unable to send NotFound exception"
+        );
     }
 
     @Test
@@ -147,23 +158,58 @@ class PublicationManagementTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource(INPUT_PARAMETERS)
     void testGetFilesOK(String listArtefactId) throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.downloadContent()).thenReturn(
             BinaryData.fromString(new String(file.getBytes())));
 
         MvcResult response = mockMvc.perform(
-            get(ROOT_URL + "/" + listArtefactId)
-                .header("x-system","true"))
+                get(ROOT_URL + "/" + listArtefactId)
+                    .header("x-system", "true"))
             .andExpect(status().isOk()).andReturn();
 
-        assertNotNull(response.getResponse().getContentAsString(),
-                      "Response should contain a Artefact");
-        assertTrue(response.getResponse().getContentAsString().contains("PDF"),
-                   "Response does not contain PDF information");
-        assertTrue(response.getResponse().getContentAsString().contains("EXCEL"),
-                   "Response does not contain excel");
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should contain a Artefact"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("PDF"),
+            "Response does not contain PDF information"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("EXCEL"),
+            "Response does not contain excel"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFilesForUserId(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MockHttpServletRequestBuilder request =
+            get(ROOT_URL + "/" + listArtefactId)
+                .header("x-user-id", verifiedUserId)
+                .header("x-system", "false");
+
+        MvcResult response = mockMvc.perform(request)
+            .andExpect(status().isOk()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should contain a Artefact"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("PDF"),
+            "Response does not contain PDF information"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("EXCEL"),
+            "Response does not contain excel"
+        );
     }
 
     @Test
@@ -175,9 +221,11 @@ class PublicationManagementTest {
         ExceptionResponse exceptionResponse = objectMapper.readValue(
             mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
 
-        assertEquals(exceptionResponse.getMessage(),
-                     "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-                     "Unable to send NotFound exception");
+        assertEquals(
+            exceptionResponse.getMessage(),
+            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
+            "Unable to send NotFound exception"
+        );
     }
 
     @Test
