@@ -19,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
 
@@ -155,8 +154,7 @@ class PublicationManagementTest {
         when(blobClient.downloadContent()).thenReturn(
             BinaryData.fromString(new String(file.getBytes())));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .get(ROOT_URL + "/" + listArtefactId)
+        MockHttpServletRequestBuilder request = get(ROOT_URL + "/" + listArtefactId)
             .header("x-system","true");
 
         MvcResult response = mockMvc.perform(request)
