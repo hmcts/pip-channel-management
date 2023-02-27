@@ -38,4 +38,9 @@
     <cve>CVE-2022-3064</cve>
     <cve>CVE-2021-4235</cve>
   </suppress>
+  <suppress>
+    <notes>Already on latest version</notes>
+    <packageUrl>pkg:maven/net.minidev/json-smart@2.4.8</packageUrl>
+    <cve>CVE-2022-45688</cve>
+  </suppress>
 </suppressions>
