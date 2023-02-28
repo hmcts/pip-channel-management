@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
 
@@ -32,14 +34,17 @@ public class PublicationManagementService {
 
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
+    private final AccountManagementService accountManagementService;
 
     private static final String PATH_TO_LANGUAGES = "templates/languages/";
 
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
-                                        DataManagementService dataManagementService) {
+                                        DataManagementService dataManagementService,
+                                        AccountManagementService accountManagementService) {
         this.azureBlobService = azureBlobService;
         this.dataManagementService = dataManagementService;
+        this.accountManagementService = accountManagementService;
     }
 
     /**
@@ -110,18 +115,23 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to get the files for.
      * @return A map of the filetype to file byte array
      */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId) {
+    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-        Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-        publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
+        if (isAuthorised(artefact, userId, system)) {
+            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
+            publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
-        if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
-            || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
-            publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+            if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
+                || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
+                publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+            } else {
+                publicationFilesMap.put(FileType.EXCEL, new byte[0]);
+            }
+            return publicationFilesMap;
         } else {
-            publicationFilesMap.put(FileType.EXCEL, new byte[0]);
+            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
+                                                            + " %s", userId, artefactId));
         }
-        return publicationFilesMap;
     }
 
     /**
@@ -173,6 +183,17 @@ public class PublicationManagementService {
                 .toStream(baos)
                 .run();
             return baos.toByteArray();
+        }
+    }
+
+    private boolean isAuthorised(Artefact artefact, String userId, boolean system) {
+        if (system || artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {
+            return true;
+        } else if (userId == null) {
+            return false;
+        } else {
+            return accountManagementService.getIsAuthorised(UUID.fromString(userId), artefact.getListType(),
+                                                            artefact.getSensitivity());
         }
     }
 }

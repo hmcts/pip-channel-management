@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Chann
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 
 import java.time.LocalDateTime;
 
@@ -72,5 +73,16 @@ public class GlobalExceptionHandler {
         exceptionResponse.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(UnauthorisedException.class)
+    public ResponseEntity<ExceptionResponse> handleUnauthorisedException(UnauthorisedException ex) {
+        log.error(String.format("UnauthorisedException was thrown with the init cause: %s", ex.getCause()));
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(ex.getMessage());
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
     }
 }
