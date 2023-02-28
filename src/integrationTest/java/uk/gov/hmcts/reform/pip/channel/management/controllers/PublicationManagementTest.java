@@ -91,7 +91,7 @@ class PublicationManagementTest {
             Arguments.of("e37a9f48-513c-42e0-b9ea-e8e5cb157966"), //Magistrates Standard List
             Arguments.of("c4ca592c-2814-4de5-84b7-ecc5d15ce833"), //Primary Health Tribunal Hearing List
             Arguments.of("5874fca9-28dd-4819-a2b7-639f211ef273"), //Single Justice Procedure Press List
-            Arguments.of("391a858e-409a-4120-9eee-b829611186ee"), //Single Justice Procedure Public List
+            Arguments.of("467b493f-c952-4b31-bd51-164c2c0ec660"), //Single Justice Procedure Public List
             Arguments.of("1167228d-d62f-49a2-9361-8627482fb56e") //Social Security and Child Support Tribunal Daily List
         );
     }
