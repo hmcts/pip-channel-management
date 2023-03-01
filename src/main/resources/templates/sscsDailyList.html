@@ -57,8 +57,9 @@
     }
 
     .govuk-details__text {
-      padding-left: 24px;
-      font-size: 22px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      padding-left: 20px;
       border-left: 5px solid #b1b4b6;
     }
 
@@ -167,10 +168,12 @@
 
 <section id="information-section">
   <div class="govuk-details__text">
-    <p th:text="${i18n.infoSectionPara1}"/>
-    <p th:text="${i18n.infoSectionMiddlePara1 + metadata.locationName +
-      i18n.infoSectionMiddlePara2  + email + i18n.infoSectionMiddlePara3 + telephone + i18n.infoSectionMiddlePara4}"/>
-    <p th:text="${i18n.infoSectionPara3}"/>
+    <p th:text="${i18n.importantInformationP1}"/>
+    <p th:text="${i18n.importantInformationP2a + metadata.locationName + i18n.importantInformationP2b  + email
+      + i18n.importantInformationP2c + telephone + i18n.importantInformationP2d}"/>
+    <p th:text="${i18n.importantInformationP3}"/>
+    <p th:text="${i18n.importantInformationP4}"/>
+    <span class="govuk-body" th:text="${i18n.importantInformationP5}" /> <a href="${i18n.openJusticeGuidance}" class="govuk-link" th:text="${i18n.openJusticeGuidance}" />
   </div>
 
   <hr/>

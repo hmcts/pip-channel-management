@@ -95,7 +95,7 @@ class CivilDailyCauseListFileConverterTest {
 
         assertThat(element.getElementsByTag("p"))
             .as("Incorrect first page p elements")
-            .hasSize(7)
+            .hasSize(8)
             .extracting(Element::text)
             .contains("THE LAW COURTS town name PR1 2LL",
                       "List for 1 July 2022",
@@ -162,7 +162,7 @@ class CivilDailyCauseListFileConverterTest {
 
     private void assertDataSource(Document document) {
         Elements elements = document.getElementsByTag("p");
-        assertThat(elements.get(9))
+        assertThat(elements.get(10))
             .as("Incorrect data source")
             .extracting(Element::text)
             .isEqualTo("Data Source: " + MANUAL_UPLOAD);

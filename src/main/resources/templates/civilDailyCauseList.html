@@ -169,9 +169,12 @@
     <p th:text="${i18n.importantInfo}" class="govuk-details__summary-text"/>
   </summary>
   <div class="govuk-details__text">
-    <p th:text="${i18n.legal1}"/>
-    <p th:text="${i18n.legal2 + locationName + i18n.legal3 + email + i18n.legal4 + phone + i18n.legal5}"/>
-    <p th:text="${i18n.legal6}"/>
+    <p th:text="${i18n.importantInformationP1}"/>
+    <p th:text="${i18n.importantInformationP2a + locationName + i18n.importantInformationP2b  + email
+        + i18n.importantInformationP2c + phone + i18n.importantInformationP2d}"/>
+    <p th:text="${i18n.importantInformationP3}"/>
+    <p th:text="${i18n.importantInformationP4}"/>
+    <span class="govuk-body" th:text="${i18n.importantInformationP5}" /> <a href="${i18n.openJusticeGuidance}" class="govuk-link" th:text="${i18n.openJusticeGuidance}" />
   </div>
 </div>
 <div aria-label="Court Lists" class="landscape">

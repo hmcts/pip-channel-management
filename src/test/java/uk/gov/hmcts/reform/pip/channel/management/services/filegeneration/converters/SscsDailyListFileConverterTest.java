@@ -84,7 +84,7 @@ class SscsDailyListFileConverterTest {
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
-            .hasSize(7)
+            .hasSize(8)
             .extracting(Element::text)
             .containsSequence("Thank you for reading this document thoroughly.");
 
@@ -126,7 +126,7 @@ class SscsDailyListFileConverterTest {
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
-            .hasSize(7)
+            .hasSize(8)
             .extracting(Element::text)
             .containsSequence("Ffynhonnell y Data: provenance");
 
