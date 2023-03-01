@@ -49,7 +49,7 @@ public final class LanguageResourceHelper {
         }
         try (InputStream languageFile = Thread.currentThread()
             .getContextClassLoader().getResourceAsStream(path)) {
-            if (languageFile == null ) {
+            if (languageFile == null) {
                 return Collections.emptyMap();
             }
             return OBJECT_MAPPER.readValue(
