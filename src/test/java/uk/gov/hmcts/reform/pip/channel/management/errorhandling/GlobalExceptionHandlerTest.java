@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Chann
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,6 +16,7 @@ class GlobalExceptionHandlerTest {
 
     private static final String MESSAGES_MATCH = "The message should match the message passed in";
     private static final String RESPONSE_BODY_MESSAGE = "Response should contain a body";
+    private static final String STATUS_CODE_MATCH = "Status code should match";
 
     static final String TEST_MESSAGE = "This is a test message";
     private final GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
@@ -26,7 +28,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ExceptionResponse> responseEntity =
             globalExceptionHandler.handleChannelNotFound(channelNotFoundException);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), "Status code should be not found");
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), STATUS_CODE_MATCH);
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
                      MESSAGES_MATCH);
@@ -38,7 +40,7 @@ class GlobalExceptionHandlerTest {
 
         ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleServiceToService(exception);
 
-        assertEquals(HttpStatus.BAD_GATEWAY, responseEntity.getStatusCode(), "Status code should be bad gateway");
+        assertEquals(HttpStatus.BAD_GATEWAY, responseEntity.getStatusCode(), STATUS_CODE_MATCH);
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals("Request to Test service failed due to: " +  TEST_MESSAGE,
                      responseEntity.getBody().getMessage(), MESSAGES_MATCH);
@@ -50,7 +52,7 @@ class GlobalExceptionHandlerTest {
 
         ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleNotFound(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), "Status code should be not found");
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode(), STATUS_CODE_MATCH);
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
                      MESSAGES_MATCH);
@@ -63,7 +65,21 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler.handleProcessingException(exception);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode(),
-                     "Status code should be not found");
+                     STATUS_CODE_MATCH);
+        assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
+        assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
+                     MESSAGES_MATCH);
+    }
+
+    @Test
+    void testHandleUnauthorisedException() {
+        UnauthorisedException exception = new UnauthorisedException(TEST_MESSAGE);
+
+        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler
+            .handleUnauthorisedException(exception);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode(),
+                     STATUS_CODE_MATCH);
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
                      MESSAGES_MATCH);

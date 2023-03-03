@@ -11,27 +11,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class, AzureBlobTestConfiguration.class})
 @ActiveProfiles(profiles = "test")
 class AccountManagementServiceTest {
 
-    private static MockWebServer mockAccountManagementGetEmailsEndpoint;
+    private static MockWebServer mockAccountManagementEndpoint;
     private final ObjectWriter ow = new ObjectMapper().findAndRegisterModules().writer().withDefaultPrettyPrinter();
     private static final String BAD_MAP_ERROR = "Map does not match expected result.";
 
@@ -43,13 +49,13 @@ class AccountManagementServiceTest {
 
     @BeforeEach
     void setup() throws IOException {
-        mockAccountManagementGetEmailsEndpoint = new MockWebServer();
-        mockAccountManagementGetEmailsEndpoint.start(6969);
+        mockAccountManagementEndpoint = new MockWebServer();
+        mockAccountManagementEndpoint.start(6969);
     }
 
     @AfterEach
     void teardown() throws IOException {
-        mockAccountManagementGetEmailsEndpoint.shutdown();
+        mockAccountManagementEndpoint.shutdown();
     }
 
     @Test
@@ -59,7 +65,7 @@ class AccountManagementServiceTest {
         emailList.add("test123");
         testMap.put("test123", Optional.of("test@email.com"));
 
-        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().addHeader(
+        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
             "Content-Type",
             ContentType.APPLICATION_JSON
         ).setBody(ow.writeValueAsString(testMap)));
@@ -76,7 +82,7 @@ class AccountManagementServiceTest {
     @Test
     void testEmptyList() throws IOException {
         Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
-        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().addHeader(
+        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
             "Content-Type",
             ContentType.APPLICATION_JSON
         ).setBody(ow.writeValueAsString(testMap)));
@@ -95,7 +101,7 @@ class AccountManagementServiceTest {
     void testException() throws IOException {
 
         List<String> emailList = new ArrayList<>();
-        mockAccountManagementGetEmailsEndpoint.enqueue(new MockResponse().setResponseCode(404));
+        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(404));
         try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
             assertTrue(accountManagementService.getEmails(emailList).isEmpty(),
                        "should be empty when an exception is thrown");
@@ -104,5 +110,28 @@ class AccountManagementServiceTest {
         } catch (Exception ex) {
             throw new IOException(ex);
         }
+    }
+
+    @Test
+    void testIsAuthorised() {
+        mockAccountManagementEndpoint.enqueue(new MockResponse().setBody("true")
+                                                  .addHeader("Content-Type", "application/json"));
+
+        boolean isAuthorised =
+            accountManagementService.getIsAuthorised(UUID.randomUUID(),
+                                                     ListType.CIVIL_DAILY_CAUSE_LIST, Sensitivity.PUBLIC);
+
+        assertTrue(isAuthorised, "Authorised has not been returned from the server");
+    }
+
+    @Test
+    void testIsAuthorisedError() {
+        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(HttpStatus.BAD_REQUEST.value()));
+
+        boolean isAuthorised =
+            accountManagementService.getIsAuthorised(UUID.randomUUID(),
+                                                     ListType.CIVIL_DAILY_CAUSE_LIST, Sensitivity.PUBLIC);
+
+        assertFalse(isAuthorised, "Not authorised has not been returned from the server");
     }
 }
