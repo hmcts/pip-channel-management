@@ -77,14 +77,14 @@ class PublicationManagementTest {
     private static Stream<Arguments> parameters() {
         return Stream.of(
             Arguments.of("16f7a550-dd95-4c77-b427-c03d1e8f4560"), //Care Standards Tribunal Hearing List
-            Arguments.of("cf775702-074e-4f5e-967d-3c866fbd754d"), //Civil and Family Daily Cause List
+            Arguments.of("fada86ba-b003-41cc-8630-1ceb011fcb5f"), //Civil and Family Daily Cause List
             Arguments.of("0bef43e6-8987-411d-9411-26167730e88c"), //Civil Daily Cause List
             Arguments.of("79e801f1-a746-4640-861b-0f964951a733"), //Court of Protection Daily Cause List
-            Arguments.of("e0983ef4-e245-418a-a2f5-cdb61b5b5354"), //Crown Daily List
-            Arguments.of("6ea8aaf8-e167-4d09-a63a-2ab2fc1d7dd2"), //Crown Firm List
+            Arguments.of("dc1963fd-1f66-43b6-bc82-48b19fb1cc69"), //Crown Daily List
+            Arguments.of("475b2cad-b0fd-4aed-a59b-217fa5861b8d"), //Crown Firm List
             Arguments.of("7aad9d44-fc2b-43a8-a93b-a46a62589ecf"), //Crown Warned List
             Arguments.of("87f18f00-3543-4a52-a197-b3cf537c4eb0"), //Employment Tribunals Daily List
-            Arguments.of("ffc36e9a-32f2-4678-80f0-6d73a16b0c60"), //Employment Tribunals Fortnightly Press List
+            Arguments.of("d93c73e7-893d-4d23-bb2a-60509a235e11"), //Employment Tribunals Fortnightly Press List
             Arguments.of("906482b4-f91d-49a2-96e0-b4a9053e532c"), //Family Daily Cause List
             Arguments.of("330bef3e-0d8a-4a59-a534-527dc37f94d8"), //Immigration and Asylum Chamber Daily List
             Arguments.of("bdf23b7e-0063-4d6b-ab74-bf52af734914"), //Magistrates Public List
