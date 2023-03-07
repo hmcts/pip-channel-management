@@ -81,7 +81,7 @@ class PublicationManagementTest {
             Arguments.of("0bef43e6-8987-411d-9411-26167730e88c"), //Civil Daily Cause List
             Arguments.of("79e801f1-a746-4640-861b-0f964951a733"), //Court of Protection Daily Cause List
             Arguments.of("2f849c80-226e-410f-8f57-7481a48aadd7"), //Crown Daily List
-            Arguments.of("475b2cad-b0fd-4aed-a59b-217fa5861b8d"), //Crown Firm List
+            Arguments.of("e5049eb3-c2c0-4b1b-9bed-2289c55fb192"), //Crown Firm List
             Arguments.of("7aad9d44-fc2b-43a8-a93b-a46a62589ecf"), //Crown Warned List
             Arguments.of("87f18f00-3543-4a52-a197-b3cf537c4eb0"), //Employment Tribunals Daily List
             Arguments.of("d79ac1d6-8994-4035-87d4-2a25fc08e819"), //Employment Tribunals Fortnightly Press List
