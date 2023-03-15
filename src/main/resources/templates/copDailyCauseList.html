@@ -161,10 +161,13 @@
       <p th:text="${i18n.importantInfo}" class="govuk-details__summary-text"/>
     </summary>
     <div class="govuk-details__text">
-      <p th:text="${i18n.legal1}"/>
-      <p th:text="${i18n.legal2}"/>
-      <p th:text="${artefact.get('venue').get('venueContact').get('venueEmail').asText() + ' ' +  artefact.get('venue').get('venueContact').get('venueTelephone').asText()}"/>
-      <p th:text="${i18n.legal3}"/>
+      <p th:text="${i18n.importantInformationP1}"/>
+      <p th:text="${i18n.importantInformationP2a + locationName + i18n.importantInformationP2b
+        + artefact.get('venue').get('venueContact').get('venueEmail').asText() + i18n.importantInformationP2c
+        + artefact.get('venue').get('venueContact').get('venueTelephone').asText() + i18n.importantInformationP2d}"/>
+      <p th:text="${i18n.importantInformationP3}"/>
+      <p th:text="${i18n.importantInformationP4}"/>
+      <span class="govuk-body" th:text="${i18n.importantInformationP5}" /> <a href="${i18n.openJusticeGuidance}" class="govuk-link" th:text="${i18n.openJusticeGuidance}" />
     </div>
   </details>
 

@@ -8,31 +8,32 @@ import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Service
 public class CopDailyCauseListFileConverter implements FileConverter {
 
     @Override
-    public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
+    public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources)
+        throws IOException {
         Context context = new Context();
-        String publicationDate = artefact.get("document").get("publicationDate").asText();
+        Language language = Language.valueOf(metadata.get("language"));
+        languageResources.putAll(LanguageResourceHelper.readResourcesFromPath("openJusticeStatement", language));
 
-        context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate,
-                                                                               Language.valueOf(metadata.get(
-                                                                                   "language")),
+        String publicationDate = artefact.get("document").get("publicationDate").asText();
+        context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                false, false));
-        context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate,
-                                                                               Language.valueOf(metadata.get(
-                                                                                   "language")),
+        context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                true, false));
+
         context.setVariable("contentDate", metadata.get("contentDate"));
         context.setVariable("locationName", metadata.get("locationName"));
-        context.setVariable("locationDetails", artefact.get("locationDetails"));
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("artefact", artefact);
-        context.setVariable("i18n", language);
+        context.setVariable("i18n", languageResources);
 
         DataManipulation.manipulateCopListData(artefact, Language.valueOf(metadata.get("language")));
 

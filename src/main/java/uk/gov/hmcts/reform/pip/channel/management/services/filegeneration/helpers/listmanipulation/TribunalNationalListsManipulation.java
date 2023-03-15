@@ -27,7 +27,9 @@ public final class TribunalNationalListsManipulation {
                                                                                true, false));
         context.setVariable("contentDate", metadata.get("contentDate"));
         context.setVariable("provenance", metadata.get("provenance"));
+        context.setVariable("locationName", metadata.get("locationName"));
         context.setVariable("email", artefact.get("venue").get("venueContact").get("venueEmail").asText());
+        context.setVariable("phone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
         context.setVariable("i18n", languageResources);
 
         LocationHelper.formatCourtAddress(artefact, "\n", true);

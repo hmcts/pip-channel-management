@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,25 +27,31 @@ public final class LanguageResourceHelper {
      * @throws IOException thrown if error in getting language.
      */
     public static Map<String, Object> getLanguageResources(ListType listType, Language language) throws IOException {
-        Map<String, Object> languageResources = readResourcesFromPath(listType, language);
+        Map<String, Object> languageResources = readResources(listType, language);
         if (listType.getParentListType() != null) {
-            Map<String, Object> parentLanguageResources = readResourcesFromPath(listType.getParentListType(), language);
+            Map<String, Object> parentLanguageResources = readResources(listType.getParentListType(), language);
             parentLanguageResources.putAll(languageResources);
             return parentLanguageResources;
         }
         return languageResources;
     }
 
-    private static Map<String, Object> readResourcesFromPath(ListType listType, Language language) throws IOException {
+    private static Map<String, Object> readResources(ListType listType, Language language) throws IOException {
+        return readResourcesFromPath(GeneralHelper.listTypeToCamelCase(listType), language);
+    }
+
+    public static Map<String, Object> readResourcesFromPath(String resourceName, Language language) throws IOException {
         String path;
-        String languageString = GeneralHelper.listTypeToCamelCase(listType);
         if (language.equals(Language.ENGLISH)) {
-            path = PATH_TO_LANGUAGES + "en/" + languageString + ".json";
+            path = PATH_TO_LANGUAGES + "en/" + resourceName + ".json";
         } else {
-            path = PATH_TO_LANGUAGES + "cy/" + languageString + ".json";
+            path = PATH_TO_LANGUAGES + "cy/" + resourceName + ".json";
         }
         try (InputStream languageFile = Thread.currentThread()
             .getContextClassLoader().getResourceAsStream(path)) {
+            if (languageFile == null) {
+                return Collections.emptyMap();
+            }
             return OBJECT_MAPPER.readValue(
                 Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
                 });

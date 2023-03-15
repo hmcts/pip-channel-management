@@ -44,4 +44,18 @@ class LanguageResourceHelperTest {
             .extracting(c -> c.get("serviceName"))
             .isEqualTo("Gwasanaeth Gwrandawiadau llys a thribiwnlys");
     }
+
+    @Test
+    void shouldReadResourcesFromPath() throws IOException {
+        assertThat(LanguageResourceHelper.readResourcesFromPath("openJusticeStatement", Language.ENGLISH))
+            .as("Result should not be empty")
+            .isNotEmpty();
+    }
+
+    @Test
+    void shouldReturnEmptyMapWhenReadingNonExistentResourcesFromPath() throws IOException {
+        assertThat(LanguageResourceHelper.readResourcesFromPath("NonExistentResource", Language.ENGLISH))
+            .as("Result should be empty")
+            .isEmpty();
+    }
 }
