@@ -37,8 +37,8 @@ class SscsDailyListFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String LANGUAGE_FILE_PATH = "templates/languages/";
 
-    public static final String PROVENANCE = "provenance";
-    public static final String CONTENT_DATE = "contentDate";
+    private static final String PROVENANCE = "provenance";
+    private static final String CONTENT_DATE = "contentDate";
 
     @ParameterizedTest
     @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})

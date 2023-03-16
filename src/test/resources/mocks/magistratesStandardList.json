@@ -288,6 +288,80 @@
                             "reportingRestriction": true
                           }
                         ]
+                      },
+                      {
+                        "hearingType": "mda",
+                        "case": [
+                          {
+                            "caseNumber": "12345678",
+                            "informant": {
+                              "prosecutionAuthorityRef": "Test",
+                              "prosecutionAuthorityId": "1234",
+                              "prosecutionAuthorityCode": "Test1234",
+                              "prosecutionAuthorityName": "Test"
+                            },
+                            "hearingNumber": "12",
+                            "convictionDate": "2016-09-13T23:30:52.123Z",
+                            "adjournedDate": "2016-09-13T23:30:52.123Z",
+                            "panel": "ADULT"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "DEFENDANT",
+                            "friendlyRoleName": "Accused",
+                            "individualDetails": {
+                              "title": "Mr",
+                              "individualForenames": "John Smith4",
+                              "individualMiddleName": "MiddleName",
+                              "individualSurname": "Surname4",
+                              "age": 39,
+                              "address": {
+                                "town": "Month A",
+                                "line": [
+                                  "Address Line 1",
+                                  "Address Line 2"
+                                ]
+                              },
+                              "inCustody": true,
+                              "plea": "NOT_GUILTY",
+                              "gender": "male"
+                            }
+                          },
+                          {
+                            "partyRole": "DEFENDANT",
+                            "friendlyRoleName": "Accused",
+                            "individualDetails": {
+                              "title": "Mr",
+                              "individualForenames": "John Smith5",
+                              "individualMiddleName": "MiddleName5",
+                              "individualSurname": "Surname5",
+                              "dateOfBirth": "01/01/1983",
+                              "inCustody": false,
+                              "plea": "NOT_GUILTY"
+                            }
+                          },
+                          {
+                            "partyRole": "DEFENDANT",
+                            "friendlyRoleName": "Accused"
+                          }
+                        ],
+                        "offence": [
+                          {
+                            "offenceCode": "dd01-01",
+                            "offenceTitle": "1. drink driving",
+                            "offenceWording": "driving whilst under the influence of alcohol",
+                            "offenceMaxPen": "100yrs",
+                            "reportingRestriction": true
+                          },
+                          {
+                            "offenceCode": "dd01-01",
+                            "offenceTitle": "2. Assault by beating",
+                            "offenceWording": "Assault by beating",
+                            "offenceMaxPen": "100yrs",
+                            "reportingRestriction": true
+                          }
+                        ]
                       }
                     ],
                     "judiciary": [

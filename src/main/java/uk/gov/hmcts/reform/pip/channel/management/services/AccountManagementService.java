@@ -62,7 +62,7 @@ public class AccountManagementService {
      * @param sensitivity The sensitivity of the publication
      * @return A flag indicating whether the user is authorised.
      */
-    public Boolean getIsAuthorised(UUID userId, ListType listType, Sensitivity sensitivity) {
+    public boolean getIsAuthorised(UUID userId, ListType listType, Sensitivity sensitivity) {
         try {
             return webClient.get().uri(String.format(
                     "%s/account/isAuthorised/%s/%s/%s", url, userId, listType, sensitivity))

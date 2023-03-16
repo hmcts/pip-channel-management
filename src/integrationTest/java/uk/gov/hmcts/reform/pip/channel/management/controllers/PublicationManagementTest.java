@@ -54,13 +54,15 @@ class PublicationManagementTest {
     @Value("${VERIFIED_USER_ID}")
     private String verifiedUserId;
 
-    private static ObjectMapper objectMapper;
-
     private static final String ROOT_URL = "/publication";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
     private static final String ARTEFACT_ID = "591d5021-bf40-4066-b65e-da3221060a54";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
     private static final String INPUT_PARAMETERS = "parameters";
+    private static final String ARTEFACT_NOT_FOUND_MESSAGE = "Artefact with id %s not found";
+    private static final String NOT_FOUND_RESPONSE_MESSAGE = "Artefact not found message does not match";
+
+    private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
 
     @BeforeAll
@@ -74,6 +76,7 @@ class PublicationManagementTest {
         objectMapper.findAndRegisterModules();
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
             Arguments.of("16f7a550-dd95-4c77-b427-c03d1e8f4560"), //Care Standards Tribunal Hearing List
@@ -92,12 +95,12 @@ class PublicationManagementTest {
             Arguments.of("c4ca592c-2814-4de5-84b7-ecc5d15ce833"), //Primary Health Tribunal Hearing List
             Arguments.of("5874fca9-28dd-4819-a2b7-639f211ef273"), //Single Justice Procedure Press List
             Arguments.of("467b493f-c952-4b31-bd51-164c2c0ec660"), //Single Justice Procedure Public List
-            Arguments.of("1167228d-d62f-49a2-9361-8627482fb56e") //Social Security and Child Support Tribunal Daily List
+            Arguments.of("1167228d-d62f-49a2-9361-8627482fb56e")  //SSCS Daily List
         );
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource(INPUT_PARAMETERS)
     void testGenerateArtefactSummaryOK(String listArtefactId) throws Exception {
         mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + listArtefactId))
             .andExpect(status().isOk()).andReturn();
@@ -113,8 +116,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 
@@ -145,8 +148,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 
@@ -223,8 +226,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 

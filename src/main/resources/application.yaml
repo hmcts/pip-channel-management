@@ -52,3 +52,6 @@ third-party-api:
 springdoc:
   swagger-ui:
     path: /swagger-ui/
+
+pdf:
+  font: /opt/app/openSans.ttf

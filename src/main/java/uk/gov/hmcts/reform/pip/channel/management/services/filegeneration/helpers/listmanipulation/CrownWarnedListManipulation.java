@@ -38,10 +38,10 @@ public final class CrownWarnedListManipulation {
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     public static Map<String, List<CrownWarnedList>> processRawListData(JsonNode data, Language language) {
         Map<String, List<CrownWarnedList>> result = new LinkedHashMap<>();
-        data.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
+        data.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(sitting -> {
                         String hearingDate = DateHelper.formatTimeStampToBst(sitting.get("sittingStart").asText(),
                                                                              language, false, false,
                                                                              "dd/MM/yyyy");
@@ -64,10 +64,10 @@ public final class CrownWarnedListManipulation {
                             result.computeIfAbsent(hearing.get("hearingType").asText(), x -> new ArrayList<>())
                                 .addAll(rows);
                         });
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
 
         return sort(result);
     }
