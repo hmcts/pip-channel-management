@@ -312,8 +312,7 @@
                             "friendlyRoleName": "Accused",
                             "individualDetails": {
                               "title": "Mr",
-                              "individualForenames": "John Smith4",
-                              "individualMiddleName": "MiddleName",
+                              "individualForenames": "Forename4",
                               "individualSurname": "Surname4",
                               "age": 39,
                               "address": {
@@ -333,7 +332,7 @@
                             "friendlyRoleName": "Accused",
                             "individualDetails": {
                               "title": "Mr",
-                              "individualForenames": "John Smith5",
+                              "individualForenames": "Forename5",
                               "individualMiddleName": "MiddleName5",
                               "individualSurname": "Surname5",
                               "dateOfBirth": "01/01/1983",
@@ -349,15 +348,15 @@
                         "offence": [
                           {
                             "offenceCode": "dd01-01",
-                            "offenceTitle": "1. drink driving",
-                            "offenceWording": "driving whilst under the influence of alcohol",
+                            "offenceTitle": "Offence title 1",
+                            "offenceWording": "Offence wording 1",
                             "offenceMaxPen": "100yrs",
                             "reportingRestriction": true
                           },
                           {
                             "offenceCode": "dd01-01",
-                            "offenceTitle": "2. Assault by beating",
-                            "offenceWording": "Assault by beating",
+                            "offenceTitle": "Offence title 2",
+                            "offenceWording": "Offence wording 2",
                             "offenceMaxPen": "100yrs",
                             "reportingRestriction": true
                           }
@@ -367,16 +366,16 @@
                     "judiciary": [
                       {
                         "johTitle": "DJ",
-                        "johNameSurname": "Test Name",
+                        "johNameSurname": "joh name 1",
                         "role": "JUDGE",
-                        "johKnownAs": "DJ Steve 2",
+                        "johKnownAs": "joh known as 1",
                         "isPresiding": true
                       },
                       {
                         "johTitle": "Magistrate",
-                        "johNameSurname": "Test Name",
+                        "johNameSurname": "joh name 2",
                         "role": "MAGISTRATE",
-                        "johKnownAs": "Justice of the peace",
+                        "johKnownAs": "joh known as 2",
                         "isPresiding": false
                       }
                     ],
