@@ -86,13 +86,13 @@ class MagistratesStandardListHelperTest {
                      "Unable to find hearing number");
 
         assertEquals("VIDEO HEARING", defendantInfo.get("caseHearingChannel").asText(),
-                     "Unable to hearing channel");
+                     "Unable to find case hearing channel");
 
         assertEquals("45684548", defendantInfo.get("caseNumber").asText(),
-                     "Unable to case number");
+                     "Unable to find case number");
 
         assertEquals("mda", defendantInfo.get("hearingType").asText(),
-                     "Unable to in hearing type");
+                     "Unable to find hearing type");
 
         assertEquals("ADULT", defendantInfo.get("panel").asText(),
                      "Unable to find panel");
