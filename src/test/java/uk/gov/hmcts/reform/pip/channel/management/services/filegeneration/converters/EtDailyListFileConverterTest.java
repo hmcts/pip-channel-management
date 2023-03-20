@@ -53,8 +53,8 @@ class EtDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly(
                 "Court 1",
-                "Dynatrace Suite 2",
-                "Jenkins Room 3"
+                "Suite 2",
+                "Room 3"
             );
 
         softly.assertThat(doc.getElementById("content-date"))
