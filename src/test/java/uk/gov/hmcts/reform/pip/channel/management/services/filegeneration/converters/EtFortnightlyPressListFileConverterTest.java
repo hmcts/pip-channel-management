@@ -67,7 +67,7 @@ class EtFortnightlyPressListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("5-7 Hill Street");
+            .as(HEADER_TEXT).contains("5 Test Street");
     }
 
     @Test
@@ -105,7 +105,7 @@ class EtFortnightlyPressListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("5-7 Hill Street");
+            .as(HEADER_TEXT).contains("5 Test Street");
 
     }
 }
