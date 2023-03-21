@@ -87,7 +87,6 @@ The above diagram is somewhat simplified for readability (e.g. it does not inclu
 
 - [Java JDK 17](https://openjdk.org/projects/jdk/17/) - this is used throughout all of our services.
 - REST client of some description (e.g. [Curl](https://github.com/curl/curl), [Insomnia](https://insomnia.rest/), [Postman](https://www.postman.com/)). Swagger-UI can also be used to send requests.
-- Docker - used to run integration tests due to our use of [TestContainers](https://www.testcontainers.org/)
 
 ##### Local development
 
