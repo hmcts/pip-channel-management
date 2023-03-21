@@ -225,7 +225,8 @@ Unit tests can be run on demand using `./gradlew test`.
 Functional tests can be run using `./gradlew functional`
 
 For our functional tests, we are using Square's [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver) library. This allows us to test the full HTTP stack for our service-to-service interactions.
-We also use TestContainers to create throwaway postgres databases for testing to protect our prod and staging databases.
+
+The functional tests also call out to Data Management in staging to retrieve publications.
 
 ## Contributing
 We are happy to accept third-party contributions. See [.github/CONTRIBUTING.md](./.github/CONTRIBUTING.md) for more details.
