@@ -43,12 +43,12 @@ In practice, the service is usually containerized within a hosted kubernetes env
 Broadly speaking, this service has two main components detailed below:
 
 ##### Subscription Channels
-- For email subscriptions, it maps the subscriptions to their related email address
+- For email subscriptions, it maps the subscriptions to their related email address.
 - For third party subscription, it retrieves the API address to send the subscription to.
 
 ##### Alternative publishing formats
 - The generation (and associated CRUD operations) of PDFs and CSVs for JSON publications.
-- The generation of a publication summary for JSON publications, which is used in the subscriptions process
+- The generation of a publication summary for JSON publications, which is used in the subscriptions process.
 
 All interactions with `pip-channel-management` are performed through the API (specified in [API Documentation](#api-documentation)) either as a standalone service or via connections to other microservices.
 
@@ -61,11 +61,9 @@ All interactions with `pip-channel-management` are performed through the API (sp
 - Azure Blob Storage: Handles interactions with the CaTH Azure Blob Storage instance (or local Azurite emulator/Azure Storage Explorer instances)
 - Secure/Insecure Mode: Use of bearer tokens for authentication with the secure instance (if desired)
 - OpenAPI Spec/Swagger-UI: Documents and allows users or developers to access API resources within the browser.
-- Integration tests, which talk to Data Management in staging to retrieve publications
+- Integration tests, which talk to Data Management in staging to retrieve publications.
 
 ## JSON to PDF + Summary Conversion
-
-The PDF / Summary conversion is reasonably complex there is worth calling out specifically.
 
 Each List Type has a related converter and summary generated. This is stored in the List Type enum [here](./src/main/java/uk/gov/hmcts/reform/pip/channel/management/models/external/datamanagement/ListType.java)
 
@@ -75,7 +73,7 @@ The summary generator produces a string that is used in the subscription email t
 
 ## Roles
 
-Any endpoint that should require authentication, needs to be annotated either at controller or endpoint level with @IsAdmin
+Any endpoint that should require authentication, needs to be annotated either at controller or endpoint level with @IsAdmin.
 
 ## Architecture Diagram
 
