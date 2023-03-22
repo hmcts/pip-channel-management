@@ -226,7 +226,7 @@ dependencies {
 
   // Force upgrade snakeyaml version for CVE-2022-38752
   implementation( group: 'org.yaml', name: 'snakeyaml').version {
-    strictly("2.0")
+    strictly("1.33")
   }
 
   // Force upgrade commons version for CVE-2022-42889
