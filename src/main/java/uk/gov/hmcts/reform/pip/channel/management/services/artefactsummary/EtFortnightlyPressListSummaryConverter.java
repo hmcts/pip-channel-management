@@ -30,11 +30,11 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
 
     private String processEtFortnightlyPressList(JsonNode node) {
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("sittings").forEach(sitting -> {
-                sitting.get("hearing").forEach(hearings -> {
-                    hearings.forEach(hearing -> {
-                        hearing.get("case").forEach(hearingCase -> {
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("sittings").forEach(
+                sitting -> sitting.get("hearing").forEach(
+                    hearings -> hearings.forEach(
+                        hearing -> hearing.get("case").forEach(hearingCase -> {
                             output.append('\n');
                             GeneralHelper.appendToStringBuilder(output, "Courtroom - ",
                                                                 hearing, "courtRoom");
@@ -56,11 +56,11 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                                                                 hearingCase,"caseType");
                             GeneralHelper.appendToStringBuilder(output, "Hearing Platform - ",
                                                                 hearing,"caseHearingChannel");
-                        });
-                    });
-                });
-            });
-        });
+                        })
+                    )
+                )
+            )
+        );
         return output.toString();
     }
 

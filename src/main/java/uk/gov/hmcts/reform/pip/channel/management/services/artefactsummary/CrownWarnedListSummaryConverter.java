@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CrownWarnedListManipulation;
 
+import java.util.Collection;
+
 @Service
 public class CrownWarnedListSummaryConverter implements ArtefactSummaryConverter {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -18,9 +20,9 @@ public class CrownWarnedListSummaryConverter implements ArtefactSummaryConverter
         CrownWarnedListManipulation.processRawListData(jsonPayload, Language.ENGLISH)
             .values()
             .stream()
-            .flatMap(table -> table.stream())
-            .forEach(row -> {
-                output
+            .flatMap(Collection::stream)
+            .forEach(
+                row -> output
                     .append("\t•Case Reference: ")
                     .append(row.getCaseReference())
                     .append("\n\t\tDefendant Name(s): ")
@@ -35,8 +37,8 @@ public class CrownWarnedListSummaryConverter implements ArtefactSummaryConverter
                     .append(row.getLinkedCases())
                     .append("\nListing Notes: ")
                     .append(row.getListingNotes())
-                    .append(System.lineSeparator());
-            });
+                    .append(System.lineSeparator())
+            );
 
         return output.toString();
     }

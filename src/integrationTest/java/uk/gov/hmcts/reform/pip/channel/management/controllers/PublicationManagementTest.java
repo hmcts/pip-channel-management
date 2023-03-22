@@ -54,13 +54,15 @@ class PublicationManagementTest {
     @Value("${VERIFIED_USER_ID}")
     private String verifiedUserId;
 
-    private static ObjectMapper objectMapper;
-
     private static final String ROOT_URL = "/publication";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
     private static final String ARTEFACT_ID = "3d498688-bbad-4a53-b253-a16ddf8737a9";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
     private static final String INPUT_PARAMETERS = "parameters";
+    private static final String ARTEFACT_NOT_FOUND_MESSAGE = "Artefact with id %s not found";
+    private static final String NOT_FOUND_RESPONSE_MESSAGE = "Artefact not found message does not match";
+
+    private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
 
     @BeforeAll
@@ -74,6 +76,7 @@ class PublicationManagementTest {
         objectMapper.findAndRegisterModules();
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
             Arguments.of("5697562a-1b96-4386-8bde-355849025c57"), //Care Standards Tribunal Hearing List
@@ -98,7 +101,7 @@ class PublicationManagementTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource(INPUT_PARAMETERS)
     void testGenerateArtefactSummaryOK(String listArtefactId) throws Exception {
         mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + listArtefactId))
             .andExpect(status().isOk()).andReturn();
@@ -114,8 +117,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 
@@ -146,8 +149,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 
@@ -224,8 +227,8 @@ class PublicationManagementTest {
 
         assertEquals(
             exceptionResponse.getMessage(),
-            "Artefact with id " + ARTEFACT_ID_NOT_FOUND + " not found",
-            "Unable to send NotFound exception"
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
         );
     }
 

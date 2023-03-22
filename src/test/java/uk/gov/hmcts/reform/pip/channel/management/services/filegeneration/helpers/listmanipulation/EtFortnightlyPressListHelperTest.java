@@ -28,11 +28,11 @@ class EtFortnightlyPressListHelperTest {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
-    public static final String PROVENANCE = "provenance";
-    Map<String, Object> language =
-            Map.of("rep", "Rep: ",
-                   "noRep", "Rep: ",
-                   "legalAdvisor", "Legal Advisor: ");
+    private static final String PROVENANCE = "provenance";
+
+    Map<String, Object> language = Map.of("rep", "Rep: ",
+                                          "noRep", "Rep: ",
+                                          "legalAdvisor", "Legal Advisor: ");
 
     Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                              PROVENANCE, PROVENANCE,
@@ -56,80 +56,50 @@ class EtFortnightlyPressListHelperTest {
         preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson, language);
 
-        assertEquals(inputJson.get(COURT_LISTS).size(), 2,
+        JsonNode sitting = inputJson.get(COURT_LISTS).get(0)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0).get(SESSION).get(0)
+            .get(SITTINGS).get(0);
+
+        assertEquals(2, inputJson.get(COURT_LISTS).size(),
                      "Unable to find correct court List array");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                        .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                        .get(SITTINGS).get(0).get("sittingDate").asText(),
-                        "Sunday 13 February 2022",
+
+        assertEquals("Sunday 13 February 2022", sitting.get("sittingDate").asText(),
                     "Unable to find sitting date");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0)
-                         .get("time").asText(),
-                     "9:30am",
+
+        assertEquals("9:30am", sitting.get("time").asText(),
                      "Unable to find time");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("courtRoom").asText(),
-                     "Court 1",
+
+        JsonNode hearing = sitting.get(HEARING).get(0);
+
+        assertEquals("Court 1", hearing.get("courtRoom").asText(),
                      "Unable to find court room");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("formattedDuration").asText(),
-                     "2 hours",
+
+        assertEquals("2 hours", hearing.get("formattedDuration").asText(),
                      "Unable to find duration");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0)
-                         .get("caseNumber").asText(),
-                     "12341234",
+
+        assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("claimant").asText(),
-                     "",
+
+        assertEquals("", hearing.get("claimant").asText(),
                      "Unable to find claimant");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("claimantRepresentative").asText(),
-                     "Rep: Mr T Test Surname 2",
+
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
                      "Unable to find claimant representative");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("respondent").asText(),
-                     "Capt. T Test Surname",
+
+        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
                      "Unable to find respondent");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("respondentRepresentative").asText(),
-                     "Rep: Dr T Test Surname 2",
+
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("hearingType").asText(),
-                     "This is a hearing type",
+
+        assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
                      "Unable to find hearing type");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0)
-                         .get("caseType").asText(),
-                     "This is a case type",
+
+        assertEquals("This is a case type", hearing.get(CASE).get(0).get("caseType").asText(),
                      "Unable to find Jurisdiction");
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("caseHearingChannel").asText(),
-                     "This is a sitting channel",
+
+        assertEquals("This is a sitting channel", hearing.get("caseHearingChannel").asText(),
                      "Unable to find Hearing Platform");
     }
 
@@ -139,69 +109,50 @@ class EtFortnightlyPressListHelperTest {
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson,language);
         EtFortnightlyPressListHelper.splitByCourtAndDate(inputJson);
 
-        assertEquals(inputJson.get(COURT_LISTS).size(), 2,
+        JsonNode sitting = inputJson.get(COURT_LISTS).get(0)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0).get(SESSION).get(0)
+            .get(SITTINGS).get(0);
+
+        assertEquals(2, inputJson.get(COURT_LISTS).size(),
                      "Unable to find correct court List array");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get("sittingDate").asText(),
-                     "Sunday 13 February 2022",
+
+        assertEquals("Sunday 13 February 2022", sitting.get("sittingDate").asText(),
                      "Unable to find sitting date");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0)
-                         .get("time").asText(),
-                     "9:30am",
+
+        assertEquals("9:30am", sitting.get("time").asText(),
                      "Unable to find time");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("courtRoom").asText(),
-                     "Court 1",
+
+        JsonNode hearing = sitting.get(HEARING).get(0);
+
+        assertEquals("Court 1", hearing.get("courtRoom").asText(),
                      "Unable to find court room");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("formattedDuration").asText(),
-                     "2 hours",
+        assertEquals("2 hours", hearing.get("formattedDuration").asText(),
                      "Unable to find duration");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get(CASE).get(0)
-                         .get("caseNumber").asText(),
-                     "12341234",
+
+        assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("claimant").asText(),
-                     "",
+
+        assertEquals("", hearing.get("claimant").asText(),
                      "Unable to find claimant");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("claimantRepresentative").asText(),
-                         "Rep: Mr T Test Surname 2",
-                         "Unable to find claimant representative");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("respondent").asText(),
-                     "Capt. T Test Surname",
+
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
+                     "Unable to find claimant representative");
+
+        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
                      "Unable to find respondent");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("respondentRepresentative").asText(),
-                     "Rep: Dr T Test Surname 2",
+
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("hearingType").asText(),
-                     "This is a hearing type",
+
+        assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
                      "Unable to find hearing type");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get(CASE).get(0)
-                         .get("caseType").asText(),
-                     "This is a case type",
+
+        assertEquals("This is a case type", hearing.get(CASE).get(0).get("caseType").asText(),
                      "Unable to find Jurisdiction");
-        assertEquals(inputJson.get(COURT_LISTS).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0).get(0)
-                         .get("caseHearingChannel").asText(),
-                     "This is a sitting channel",
+
+        assertEquals("This is a sitting channel", hearing.get("caseHearingChannel").asText(),
                      "Unable to find Hearing Platform");
     }
 }

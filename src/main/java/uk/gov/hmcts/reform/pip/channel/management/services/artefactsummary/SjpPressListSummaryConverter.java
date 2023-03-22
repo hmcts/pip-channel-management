@@ -26,21 +26,21 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
-        OBJECT_MAPPER.readTree(payload).get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            output
+        OBJECT_MAPPER.readTree(payload).get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(
+                            hearing -> output
                                 .append('•')
                                 .append(processRolesSjpPress(hearing))
                                 .append(processOffencesSjpPress(hearing.get("offence")))
-                                .append('\n');
-                        });
-                    });
-                });
-            });
-        });
+                                .append('\n')
+                        )
+                    )
+                )
+            )
+        );
 
         return output.toString();
     }

@@ -29,8 +29,8 @@ class CrownDailyListFileConverterTest {
     @Autowired
     CrownDailyListFileConverter crownDailyListConverter;
 
-    public static final String HEADER_TEXT = "Incorrect header text";
-    public static final String PROVENANCE = "provenance";
+    private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String PROVENANCE = "provenance";
 
     @Test
     void testCrownDailyListTemplate() throws IOException {

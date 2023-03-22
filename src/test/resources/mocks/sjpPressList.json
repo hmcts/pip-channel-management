@@ -19,8 +19,8 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Boris",
-                              "individualSurname": "Minister",
+                              "individualForenames": "Forename1",
+                              "individualSurname": "Surname1",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
                               "address": {
@@ -60,8 +60,8 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Nigel",
-                              "individualSurname": "Sausage",
+                              "individualForenames": "Forename2",
+                              "individualSurname": "Surname2",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
                               "address": {
@@ -106,8 +106,8 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Joe",
-                              "individualSurname": "Bloggs",
+                              "individualForenames": "Forenames",
+                              "individualSurname": "Surnames",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
                               "address": {
