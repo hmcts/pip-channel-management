@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,24 +40,20 @@ public class PublicationManagementController {
         this.publicationManagementService = publicationManagementService;
     }
 
-    @ApiResponses({
-        @ApiResponse(responseCode = OK_CODE, description = "Artefact summary string returned"),
-        @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION),
-        @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION),
-        @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
-    })
+    @ApiResponse(responseCode = OK_CODE, description = "Artefact summary string returned")
+    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
+    @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
     @Operation(summary = "Takes in an artefact ID and returns an artefact summary")
     @GetMapping("/summary/{artefactId}")
     public ResponseEntity<String> generateArtefactSummary(@PathVariable UUID artefactId) {
         return ResponseEntity.ok(publicationManagementService.generateArtefactSummary(artefactId));
     }
 
-    @ApiResponses({
-        @ApiResponse(responseCode = "202", description = "Request to generate files accepted"),
-        @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION),
-        @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION),
-        @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
-    })
+    @ApiResponse(responseCode = "202", description = "Request to generate files accepted")
+    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
+    @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
     @Operation(summary = "Takes in an artefact ID and generates/stores a publication file")
     @PostMapping("/{artefactId}")
     public ResponseEntity<Void> generateFiles(@PathVariable UUID artefactId) {
@@ -66,13 +61,10 @@ public class PublicationManagementController {
         return ResponseEntity.accepted().build();
     }
 
-    @ApiResponses({
-        @ApiResponse(responseCode = OK_CODE, description =
-            "Map<FileType, byte[]> returned for each file for an artefact"),
-        @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION),
-        @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION),
-        @ApiResponse(responseCode = "401", description = "User not authorised to access requested data.")
-    })
+    @ApiResponse(responseCode = OK_CODE, description = "Map<FileType, byte[]> returned for each file for an artefact")
+    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
+    @ApiResponse(responseCode = "401", description = "User not authorised to access requested data.")
     @Operation(summary = "Takes in an artefact ID and returns a map of stored files")
     @GetMapping("/{artefactId}")
     public ResponseEntity<Map<FileType, byte[]>> getFiles(

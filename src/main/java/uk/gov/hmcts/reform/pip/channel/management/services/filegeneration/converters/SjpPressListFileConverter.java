@@ -30,7 +30,9 @@ import java.util.Map;
 @Service
 public class SjpPressListFileConverter extends ExcelAbstractList implements FileConverter {
 
-    public static final String INDIVIDUAL_DETAILS = "individualDetails";
+    private static final String INDIVIDUAL_DETAILS = "individualDetails";
+    private static final String REPORTING_RESTRICTION = "reportingRestriction";
+    private static final String OFFENCE = "offence";
 
     /**
      * parent method for the process.
@@ -114,8 +116,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
                 int offenceColumnIdx = 4;
 
                 for (Map<String, String> offence : entry.getOffences()) {
-                    setCellValue(dataRow, offenceColumnIdx, offence.get("reportingRestriction"));
-                    setCellValue(dataRow, ++offenceColumnIdx, offence.get("offence"));
+                    setCellValue(dataRow, offenceColumnIdx, offence.get(REPORTING_RESTRICTION));
+                    setCellValue(dataRow, ++offenceColumnIdx, offence.get(OFFENCE));
                     setCellValue(dataRow, ++offenceColumnIdx, offence.get("wording"));
                     ++offenceColumnIdx;
                 }
@@ -136,22 +138,22 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     List<SjpPressList> processRawJson(JsonNode jsonBody) {
         List<SjpPressList> caseList = new ArrayList<>();
 
-        jsonBody.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
+        jsonBody.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(hearing -> {
                             SjpPressList thisCase = new SjpPressList();
                             processRoles(thisCase, hearing);
                             processCaseUrns(thisCase, hearing.get("case"));
-                            processOffences(thisCase, hearing.get("offence"));
+                            processOffences(thisCase, hearing.get(OFFENCE));
                             thisCase.setNumberOfOffences(thisCase.getOffences().size());
                             caseList.add(thisCase);
-                        });
-                    });
-                });
-            });
-        });
+                        })
+                    )
+                )
+            )
+        );
 
         return caseList;
     }
@@ -232,8 +234,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         while (offences.hasNext()) {
             JsonNode thisOffence = offences.next();
             Map<String, String> thisOffenceMap = Map.of(
-                "offence", thisOffence.get("offenceTitle").asText(),
-                "reportingRestriction", processReportingRestrictionsjpPress(thisOffence),
+                OFFENCE, thisOffence.get("offenceTitle").asText(),
+                REPORTING_RESTRICTION, processReportingRestrictionsjpPress(thisOffence),
                 "wording", thisOffence.get("offenceWording").asText()
             );
             listOfOffences.add(thisOffenceMap);
@@ -248,7 +250,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @return a String containing the relevant text based on reporting restriction.
      */
     private String processReportingRestrictionsjpPress(JsonNode node) {
-        return node.get("reportingRestriction").asBoolean() ? "Active" : "None";
+        return node.get(REPORTING_RESTRICTION).asBoolean() ? "Active" : "None";
     }
 
     private String concatenateStrings(String... groupOfStrings) {

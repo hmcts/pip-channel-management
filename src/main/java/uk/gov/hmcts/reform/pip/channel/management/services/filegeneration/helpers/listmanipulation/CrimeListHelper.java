@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.CROWN_DAILY_LIST;
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
 /**
@@ -21,7 +22,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration
  *  Crown Daily List.
  *  Magistrates Public List.
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.TooManyMethods"})
 public final class CrimeListHelper {
     public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     public static final String DEFENDANT = "defendant";
@@ -36,6 +37,9 @@ public final class CrimeListHelper {
     private static final String LINKED_CASES = "linkedCases";
     private static final String COURT_ROOM_NAME = "courtRoomName";
 
+    private static final String SESSION_COURT_ROOM = "formattedSessionCourtRoom";
+    private static final String NO_BORDER_BOTTOM = "no-border-bottom";
+
     private CrimeListHelper() {
     }
 
@@ -44,7 +48,7 @@ public final class CrimeListHelper {
         Context context;
         context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
 
-        if (ListType.CROWN_DAILY_LIST.equals(listType)) {
+        if (CROWN_DAILY_LIST.equals(listType)) {
             findUnallocatedCasesInCrownDailyListData(artefact);
         }
 
@@ -55,14 +59,14 @@ public final class CrimeListHelper {
     }
 
     public static void manipulatedCrimeListData(JsonNode artefact, ListType listType) {
-        artefact.get(COURT_LIST).forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
+        artefact.get(COURT_LIST).forEach(courtList ->
+            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom ->
+                courtRoom.get("session").forEach(session ->
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.formatStartTime(sitting, "h:mma", false);
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.handleParties(hearing);
-                            if (ListType.CROWN_DAILY_LIST.equals(listType)) {
+                            if (CROWN_DAILY_LIST.equals(listType)) {
                                 formatCaseInformationCrownDaily(hearing);
                                 formatCaseHtmlTableCrownDailyList(hearing);
                             } else if (ListType.MAGISTRATES_PUBLIC_LIST.equals(listType)) {
@@ -70,10 +74,10 @@ public final class CrimeListHelper {
                                 formatCaseHtmlTableMagistratesPublic(hearing);
                             }
                         });
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
     }
 
     public static void findUnallocatedCasesInCrownDailyListData(JsonNode artefact) {
@@ -114,21 +118,26 @@ public final class CrimeListHelper {
     }
 
     public static void formattedCourtRoomName(JsonNode artefact) {
-        artefact.get(COURT_LIST).forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
-                        .contains("to be allocated")) {
-                        ((ObjectNode)session).put("formattedSessionCourtRoom",
-                                                  GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME));
-                    } else {
-                        ((ObjectNode)session).put("formattedSessionCourtRoom",
-                             GeneralHelper.findAndReturnNodeText(session, "formattedSessionCourtRoom")
-                                .replace("Before: ", ""));
-                    }
-                });
-            });
-        });
+        artefact.get(COURT_LIST).forEach(
+            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> {
+                        if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
+                            .contains("to be allocated")) {
+                            ((ObjectNode) session).put(
+                                SESSION_COURT_ROOM,
+                                GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
+                            );
+                        } else {
+                            ((ObjectNode) session).put(
+                                SESSION_COURT_ROOM,
+                                GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
+                                    .replace("Before: ", "")
+                            );
+                        }
+                    })
+            )
+        );
     }
 
     private static void formatCaseInformationMagistratesPublic(JsonNode hearing) {
@@ -164,10 +173,10 @@ public final class CrimeListHelper {
                 }
 
                 if (cases.has("caseLinked")) {
-                    cases.get("caseLinked").forEach(caseLinked -> {
-                        linkedCases.get()
-                            .append(GeneralHelper.findAndReturnNodeText(caseLinked, "caseId")).append(", ");
-                    });
+                    cases.get("caseLinked").forEach(
+                        caseLinked -> linkedCases.get()
+                            .append(GeneralHelper.findAndReturnNodeText(caseLinked, "caseId")).append(", ")
+                    );
                 }
                 ((ObjectNode) cases).put(
                     LINKED_CASES,
@@ -195,7 +204,7 @@ public final class CrimeListHelper {
             hearing.get(CASE).forEach(cases -> {
                 ((ObjectNode)cases).put("bottomBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isBlank()) {
-                    ((ObjectNode)cases).put("bottomBorder", "no-border-bottom");
+                    ((ObjectNode)cases).put("bottomBorder", NO_BORDER_BOTTOM);
                 }
             });
         }
@@ -207,12 +216,12 @@ public final class CrimeListHelper {
                 ((ObjectNode)cases).put("caseCellBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
-                    ((ObjectNode)cases).put("caseCellBorder", "no-border-bottom");
+                    ((ObjectNode)cases).put("caseCellBorder", NO_BORDER_BOTTOM);
                 }
 
                 ((ObjectNode)cases).put("linkedCasesBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()) {
-                    ((ObjectNode)cases).put("linkedCasesBorder", "no-border-bottom");
+                    ((ObjectNode)cases).put("linkedCasesBorder", NO_BORDER_BOTTOM);
                 }
             });
         }

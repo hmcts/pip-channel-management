@@ -169,9 +169,10 @@ class SubscriberListServiceTest {
         SUB1.setChannel(Channel.API_COURTEL);
         SUB2.setUserId(USER2);
         SUB2.setChannel(Channel.EMAIL);
+        List<Subscription> subscriptions = List.of(SUB1, SUB2);
 
         ChannelNotFoundException ex = assertThrows(ChannelNotFoundException.class, () ->
-            subscriberListService.buildApiSubscriptionsMap(List.of(SUB1, SUB2)),
+            subscriberListService.buildApiSubscriptionsMap(subscriptions),
                                                    "Should throw ChannelNotFoundException"
             );
 

@@ -35,13 +35,13 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
      */
     private String processCopDailyCauseList(JsonNode node) {
         StringBuilder output = new StringBuilder(100);
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
-                                output
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(
+                            hearing -> hearing.get("case").forEach(
+                                hearingCase -> output
                                     .append("\n\nName of Party(ies) - ")
                                     .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseSuppressionName"))
                                     .append("\nCase ID - ")
@@ -55,13 +55,13 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
                                     .append(' ')
                                     .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseIndicator"))
                                     .append("\nBefore - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"));
-                            });
-                        });
-                    });
-                });
-            });
-        });
+                                    .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"))
+                            )
+                        )
+                    )
+                )
+            )
+        );
 
         return output.toString();
     }

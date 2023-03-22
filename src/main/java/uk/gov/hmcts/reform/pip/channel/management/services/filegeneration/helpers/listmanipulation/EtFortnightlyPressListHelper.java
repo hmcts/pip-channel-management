@@ -54,15 +54,15 @@ public final class EtFortnightlyPressListHelper {
                 ObjectNode sittingNode = mapper.createObjectNode();
                 ArrayNode hearingNodeArray = mapper.createArrayNode();
                 (sittingNode).put(SITTING_DATE, uniqueSittingDates[finalI]);
-                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                    courtRoom.get("session").forEach(session -> {
-                        session.get(SITTINGS).forEach(sitting -> {
+                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                    courtRoom -> courtRoom.get("session").forEach(
+                        session -> session.get(SITTINGS).forEach(sitting -> {
                             (sittingNode).put("time", sitting.get("time").asText());
                             SittingHelper.checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
                                                           hearingNodeArray, finalI);
-                        });
-                    });
-                });
+                        })
+                    )
+                );
                 (sittingNode).putArray("hearing").addAll(hearingNodeArray);
                 sittingArray.add(sittingNode);
             }
@@ -71,10 +71,10 @@ public final class EtFortnightlyPressListHelper {
     }
 
     public static void etFortnightlyListFormatted(JsonNode artefact, Map<String, Object> language) {
-        artefact.get("courtLists").forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get(SITTINGS).forEach(sitting -> {
+        artefact.get("courtLists").forEach(
+            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get(SITTINGS).forEach(sitting -> {
                         String sittingDate = DateHelper.formatTimeStampToBst(
                             sitting.get(SITTING_START).asText(), Language.ENGLISH, false, false,
                             "EEEE dd MMMM yyyy");
@@ -90,10 +90,10 @@ public final class EtFortnightlyPressListHelper {
                                 });
                             }
                         });
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
     }
 
     private static void moveTableColumnValuesToHearing(JsonNode courtRoom, JsonNode sitting,
@@ -132,7 +132,7 @@ public final class EtFortnightlyPressListHelper {
                                          Map<String, Object> language) {
         String legalAdvisor = (String) language.get(LEGAL_ADVISOR);
 
-        if (respondent.indexOf(legalAdvisor) > 0) {
+        if (respondent.contains(legalAdvisor)) {
             return GeneralHelper.trimAnyCharacterFromStringEnd(
                 respondent.substring(0, respondent.indexOf(legalAdvisor)));
         }
@@ -143,7 +143,7 @@ public final class EtFortnightlyPressListHelper {
                                                        Map<String, Object> language) {
         String legalAdvisor = (String) language.get(LEGAL_ADVISOR);
 
-        if (respondentRepresentative.indexOf(legalAdvisor) > 0) {
+        if (respondentRepresentative.contains(legalAdvisor)) {
             return GeneralHelper.trimAnyCharacterFromStringEnd(
                 language.get(REP) + respondentRepresentative.substring(respondentRepresentative
                      .indexOf(legalAdvisor) + legalAdvisor.length()));

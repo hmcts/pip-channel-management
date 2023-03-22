@@ -13,6 +13,8 @@ import java.util.Map;
 
 @Service
 public class EtDailyListFileConverter implements FileConverter {
+    private static final String VENUE_CONTACT = "venueContact";
+
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
         Context context = new Context();
@@ -44,9 +46,9 @@ public class EtDailyListFileConverter implements FileConverter {
 
         String venueEmail = "";
         String venueTelephone = "";
-        if (venue.has("venueContact")) {
-            venueEmail = GeneralHelper.findAndReturnNodeText(venue.get("venueContact"),"venueEmail");
-            venueTelephone = GeneralHelper.findAndReturnNodeText(venue.get("venueContact"),"venueTelephone");
+        if (venue.has(VENUE_CONTACT)) {
+            venueEmail = GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueEmail");
+            venueTelephone = GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueTelephone");
         }
 
         context.setVariable("venueEmail", venueEmail);

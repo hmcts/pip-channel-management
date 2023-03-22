@@ -18,12 +18,12 @@ public class EtDailyListSummaryConverter implements ArtefactSummaryConverter {
         EtDailyListManipulation.processRawListData(jsonPayload, Language.ENGLISH);
 
         StringBuilder output = new StringBuilder(140);
-        jsonPayload.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
+        jsonPayload.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(
+                            hearing -> hearing.get("case").forEach(hearingCase -> {
                                 GeneralHelper.appendToStringBuilderWithPrefix(output, "Start Time: ",
                                                                               sitting, "time", "\t•");
                                 GeneralHelper.appendToStringBuilderWithPrefix(output, "Duration: ",
@@ -51,12 +51,12 @@ public class EtDailyListSummaryConverter implements ArtefactSummaryConverter {
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Platform: ",
                                                                     sitting, "caseHearingChannel");
                                 output.append('\n');
-                            });
-                        });
-                    });
-                });
-            });
-        });
+                            })
+                        )
+                    )
+                )
+            )
+        );
         return output.toString();
     }
 }
