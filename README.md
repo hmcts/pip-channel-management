@@ -54,10 +54,10 @@ All interactions with `pip-channel-management` are performed through the API (sp
 
 ## Features and Functionality
 
-- Generation of PDFs from JSON, for each list type. These are used in the subscriptions process, and also via the Frontend
+- Generation of PDFs from JSON for each list type. These are used in the subscriptions process and also via the Frontend
 - Generation of the Artefact Summary, which is the text that contains details about a JSON publication. This is used in the subscription email.
-- Maps a list of subscriptions to their appropriate email. It also de-duplicates the list, which in turn means only one email is sent per user.
-- Maps a third party subscription to it's appropriate API endpoint.
+- Mapping of a list of subscriptions to their appropriate email. It also de-duplicates the list, which in turn means only one email is sent per user.
+- Mapping a third party subscription to its appropriate API endpoint.
 - Azure Blob Storage: Handles interactions with the CaTH Azure Blob Storage instance (or local Azurite emulator/Azure Storage Explorer instances)
 - Secure/Insecure Mode: Use of bearer tokens for authentication with the secure instance (if desired)
 - OpenAPI Spec/Swagger-UI: Documents and allows users or developers to access API resources within the browser.
@@ -154,9 +154,9 @@ Secrets required for getting tests to run correctly can be found in the below ta
 
 #### Application.yaml files
 The service can also be adapted using the yaml files found in the following locations:
-- `src/main/resources/application.yaml` for changes to the behaviour of the service itself.
-- `src/main/resources/application-dev.yaml` for changes to the behaviour of the service when running locally.
-- `src/test/resources/application-test.yaml` for changes to other test types (e.g. unit tests).
+- [src/main/resources/application.yaml](./src/main/resources/application.yaml) for changes to the behaviour of the service itself.
+- [src/main/resources/application-dev.yaml](./src/main/resources/application-dev.yaml) for changes to the behaviour of the service when running locally.
+- [src/test/resources/application-test.yaml](./src/test/resources/application-test.yaml) for changes to other test types (e.g. unit tests).
 
 ## API Documentation
 Our full API specification can be found within our Swagger-UI page.
