@@ -21,10 +21,17 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class DataManipulation {
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    public static final String CHANNEL = "channel";
-    public static final String JUDICIARY = "judiciary";
-    public static final String APPLICANT = "applicant";
-    public static final String RESPONDENT = "respondent";
+    private static final String TIME_FORMAT = "h:mma";
+
+    private static final String CHANNEL = "channel";
+    private static final String JUDICIARY = "judiciary";
+    private static final String APPLICANT = "applicant";
+    private static final String RESPONDENT = "respondent";
+    private static final String COURT_ROOM = "courtRoom";
+    private static final String SESSION = "session";
+    private static final String SITTINGS = "sittings";
+    private static final String HEARING = "hearing";
+    private static final String SESSION_CHANNEL = "sessionChannel";
 
     private DataManipulation() {
         throw new UnsupportedOperationException();
@@ -43,39 +50,39 @@ public final class DataManipulation {
         LocationHelper.formatRegionName(artefact);
         LocationHelper.formatRegionalJoh(artefact);
 
-        artefact.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
+        artefact.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     ((ObjectNode) session).put(
                         "formattedSessionJoh",
                         DataManipulation.findAndManipulateJudiciaryForCop(session)
                     );
-                    session.get("sittings").forEach(sitting -> {
+                    session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, "h:mma", true);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
                         DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
 
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(DataManipulation::manipulateCaseInformationForCop);
-                        });
+                        sitting.get(HEARING).forEach(
+                            hearing -> hearing.get("case").forEach(DataManipulation::manipulateCaseInformationForCop)
+                        );
                     });
-                });
-            });
-        });
+                })
+            )
+        );
     }
 
-    public static void manipulatedDailyListData(JsonNode artefact, Language language, Boolean initialised) {
-        artefact.get("courtLists").forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
+    public static void manipulatedDailyListData(JsonNode artefact, Language language, boolean initialised) {
+        artefact.get("courtLists").forEach(
+            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
                     formattedJudiciary.append(findAndManipulateJudiciary(session));
-                    session.get("sittings").forEach(sitting -> {
+                    session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, "h:mma", true);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
                         findAndConcatenateHearingPlatform(sitting, session);
 
-                        sitting.get("hearing").forEach(hearing -> {
+                        sitting.get(HEARING).forEach(hearing -> {
                             if (hearing.has("party")) {
                                 PartyRoleHelper.findAndManipulatePartyInformation(hearing, language, initialised);
                             } else {
@@ -86,9 +93,9 @@ public final class DataManipulation {
                         });
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
-                });
-            });
-        });
+                })
+            )
+        );
     }
 
     public static void manipulateCaseInformation(JsonNode hearingCase) {
@@ -112,8 +119,8 @@ public final class DataManipulation {
             GeneralHelper.loopAndFormatString(sitting, CHANNEL,
                                               formattedHearingPlatform, ", "
             );
-        } else if (session.has("sessionChannel")) {
-            GeneralHelper.loopAndFormatString(session, "sessionChannel",
+        } else if (session.has(SESSION_CHANNEL)) {
+            GeneralHelper.loopAndFormatString(session, SESSION_CHANNEL,
                                               formattedHearingPlatform, ", "
             );
         }
@@ -157,7 +164,7 @@ public final class DataManipulation {
                     formattedJudiciary.set(new StringBuilder());
                     formattedJudiciary.get().append(GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs"));
                     foundPresiding.set(true);
-                } else if (!foundPresiding.get()) {
+                } else if (Boolean.FALSE.equals(foundPresiding.get())) {
                     String johKnownAs = GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs");
                     if (StringUtils.isNotBlank(johKnownAs)) {
                         formattedJudiciary.get()
@@ -179,7 +186,7 @@ public final class DataManipulation {
     private static Hearing hearingBuilder(JsonNode hearingNode, Language language) {
         Hearing currentHearing = new Hearing();
         PartyRoleHelper.findAndManipulatePartyInformation(hearingNode, language, false);
-        currentHearing.setAppellant(hearingNode.get("applicant").asText());
+        currentHearing.setAppellant(hearingNode.get(APPLICANT).asText());
         currentHearing.setRespondent(dealWithInformants(hearingNode));
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
@@ -188,9 +195,9 @@ public final class DataManipulation {
     private static String dealWithInformants(JsonNode node) {
         List<String> informants = new ArrayList<>();
         if (node.has("informant")) {
-            GeneralHelper.safeGetNode("informant.0.prosecutionAuthorityRef", node).forEach(informant -> {
-                informants.add(informant.asText());
-            });
+            GeneralHelper.safeGetNode("informant.0.prosecutionAuthorityRef", node).forEach(
+                informant -> informants.add(informant.asText())
+            );
         }
         return String.join(", ", informants);
     }
@@ -199,7 +206,7 @@ public final class DataManipulation {
                                               Language language)
         throws JsonProcessingException {
         Sitting sitting = new Sitting();
-        DateHelper.formatStartTime(node, "h:mma", true);
+        DateHelper.formatStartTime(node, TIME_FORMAT, true);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
         if (node.has(CHANNEL)) {
@@ -210,7 +217,7 @@ public final class DataManipulation {
         } else {
             sitting.setChannel(sessionChannel);
         }
-        Iterator<JsonNode> nodeIterator = node.get("hearing").elements();
+        Iterator<JsonNode> nodeIterator = node.get(HEARING).elements();
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
             Hearing currentHearing = hearingBuilder(currentHearingNode, language);
@@ -236,7 +243,8 @@ public final class DataManipulation {
             }
             formattedJudiciaryBuilder
                 .append(GeneralHelper.safeGet("johTitle", judiciary))
-                .append(' ').append(GeneralHelper.safeGet("johNameSurname", judiciary));
+                .append(' ')
+                .append(GeneralHelper.safeGet("johNameSurname", judiciary));
         });
         return formattedJudiciaryBuilder.toString();
     }
@@ -248,14 +256,14 @@ public final class DataManipulation {
         List<String> sessionChannel;
         TypeReference<List<String>> typeReference = new TypeReference<>() {
         };
-        for (final JsonNode session : node.get("session")) {
+        for (final JsonNode session : node.get(SESSION)) {
             sessionChannel = MAPPER.readValue(
-                session.get("sessionChannel").toString(),
+                session.get(SESSION_CHANNEL).toString(),
                 typeReference
             );
             String judiciary = scssFormatJudiciary(session);
             String sessionChannelString = String.join(", ", sessionChannel);
-            for (JsonNode sitting : session.get("sittings")) {
+            for (JsonNode sitting : session.get(SITTINGS)) {
                 sittingList.add(sscsSittingBuilder(sessionChannelString, sitting, judiciary, language));
             }
         }
@@ -270,7 +278,7 @@ public final class DataManipulation {
         thisCourtHouse.setPhone(GeneralHelper.safeGet("courtHouseContact.venueTelephone", thisCourtHouseNode));
         thisCourtHouse.setEmail(GeneralHelper.safeGet("courtHouseContact.venueEmail", thisCourtHouseNode));
         List<CourtRoom> courtRoomList = new ArrayList<>();
-        for (JsonNode courtRoom : thisCourtHouseNode.get("courtRoom")) {
+        for (JsonNode courtRoom : thisCourtHouseNode.get(COURT_ROOM)) {
             courtRoomList.add(scssCourtRoomBuilder(courtRoom, language));
         }
         thisCourtHouse.setListOfCourtRooms(courtRoomList);

@@ -21,11 +21,10 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
         JsonNode node = new ObjectMapper().readTree(payload);
 
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(sitting -> {
                         String sittingStart = DateHelper.timeStampToBstTime(
                             sitting.get("sittingStart").asText(), "h:mma");
 
@@ -48,10 +47,10 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                                 output.append('\n');
                             });
                         });
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
 
         return output.toString();
     }

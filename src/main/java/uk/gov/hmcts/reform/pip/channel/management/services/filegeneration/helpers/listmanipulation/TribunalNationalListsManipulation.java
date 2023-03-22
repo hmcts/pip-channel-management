@@ -41,9 +41,9 @@ public final class TribunalNationalListsManipulation {
     public static List<TribunalNationalList> processRawListData(JsonNode data, Language language) {
         List<TribunalNationalList> cases = new ArrayList<>();
 
-        data.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
+        data.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(session -> {
                     String hearingDate = DateHelper.formatTimeStampToBst(session.get("sessionStartTime").asText(),
                                                                          language, false, false,
                                                                          "dd MMMM");
@@ -62,9 +62,9 @@ public final class TribunalNationalListsManipulation {
                             });
                         });
                     });
-                });
-            });
-        });
+                })
+            )
+        );
         return cases;
     }
 

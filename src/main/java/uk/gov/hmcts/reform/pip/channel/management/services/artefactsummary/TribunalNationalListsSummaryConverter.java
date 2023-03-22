@@ -24,8 +24,8 @@ public class TribunalNationalListsSummaryConverter implements ArtefactSummaryCon
         List<TribunalNationalList> tribunalNationalList =
             TribunalNationalListsManipulation.processRawListData(jsonPayload, Language.ENGLISH);
 
-        tribunalNationalList.forEach(data -> {
-            output
+        tribunalNationalList.forEach(
+            data -> output
                 .append("•Hearing Date: ")
                 .append(data.getHearingDate())
                 .append("\n\tCase Name: ")
@@ -36,8 +36,8 @@ public class TribunalNationalListsSummaryConverter implements ArtefactSummaryCon
                 .append(data.getHearingType())
                 .append("\nVenue: ")
                 .append(data.getVenue())
-                .append('\n');
-        });
+                .append('\n')
+        );
         return output.toString();
     }
 }

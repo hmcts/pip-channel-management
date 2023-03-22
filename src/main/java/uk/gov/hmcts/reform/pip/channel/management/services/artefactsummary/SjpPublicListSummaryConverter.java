@@ -29,11 +29,11 @@ public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
     public String convert(String payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
-        OBJECT_MAPPER.readTree(payload).get(COURT_LISTS).forEach(courtList -> {
-            courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                courtRoom.get(SESSION).forEach(session -> {
-                    session.get(SITTINGS).forEach(sitting -> {
-                        sitting.get(HEARING).forEach(hearing -> {
+        OBJECT_MAPPER.readTree(payload).get(COURT_LISTS).forEach(courtList ->
+            courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get(SESSION).forEach(
+                    session -> session.get(SITTINGS).forEach(
+                        sitting -> sitting.get(HEARING).forEach(hearing -> {
                             Optional<uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList>
                                 sjpCaseOptional = SjpManipulation.constructSjpCase(hearing);
                             if (sjpCaseOptional.isPresent()) {
@@ -50,11 +50,11 @@ public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
                                     .append(sjpCase.getOffence())
                                     .append('\n');
                             }
-                        });
-                    });
-                });
-            });
-        });
+                        })
+                    )
+                )
+            )
+        );
         return output.toString();
     }
 }

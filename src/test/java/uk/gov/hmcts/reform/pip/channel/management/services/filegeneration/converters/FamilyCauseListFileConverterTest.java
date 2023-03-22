@@ -31,8 +31,8 @@ class FamilyCauseListFileConverterTest {
     @Autowired
     FamilyDailyCauseListFileConverter familyDailyCauseListConverter;
 
-    public static final String HEADER_TEXT = "Incorrect header text";
-    public static final String PROVENANCE = "provenance";
+    private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String PROVENANCE = "provenance";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Map<String, String> METADATA = Map.of(

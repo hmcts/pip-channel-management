@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +36,8 @@ public class ChannelManagementController {
         this.subscriberListService = subscriberListService;
     }
 
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Subscriber request has been accepted"),
-        @ApiResponse(responseCode = "404", description = "No subscribers exist for this list")
-    })
+    @ApiResponse(responseCode = "200", description = "Subscriber request has been accepted")
+    @ApiResponse(responseCode = "404", description = "No subscribers exist for this list")
     @Operation(description = "Takes in list of subscriptions to build subscriber list.")
     @PostMapping("/emails")
     public ResponseEntity<Map<String, List<Subscription>>> buildSubscriberList(
@@ -55,10 +52,8 @@ public class ChannelManagementController {
 
     }
 
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "{Map of api destination to subscriptions}"),
-        @ApiResponse(responseCode = "404", description = "Invalid channel for API subscriptions: {channel}")
-    })
+    @ApiResponse(responseCode = "200", description = "{Map of api destination to subscriptions}")
+    @ApiResponse(responseCode = "404", description = "Invalid channel for API subscriptions: {channel}")
     @Operation(description = "Returns Map of api destination against list of subscriptions")
     @PostMapping("/api")
     public ResponseEntity<Map<String, List<Subscription>>> returnThirdPartyApi(

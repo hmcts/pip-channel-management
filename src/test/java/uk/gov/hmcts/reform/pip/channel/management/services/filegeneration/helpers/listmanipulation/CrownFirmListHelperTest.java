@@ -27,7 +27,7 @@ class CrownFirmListHelperTest {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
-    public static final String PROVENANCE = "provenance";
+    private static final String PROVENANCE = "provenance";
     Map<String, Object> language =
         Map.of("rep", "Rep: ",
                "noRep", "Rep: ",
@@ -55,76 +55,55 @@ class CrownFirmListHelperTest {
         preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
         CrownFirmListHelper.crownFirmListFormatted(inputJson);
 
-        assertEquals(inputJson.get(COURT_LISTS).size(), 2,
+        assertEquals(2, inputJson.get(COURT_LISTS).size(),
                      "Unable to find correct court List array");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get("sittingDate").asText(),
-                     "Wednesday 12 April 2023",
+        JsonNode sitting = inputJson
+            .get(COURT_LISTS).get(0)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0)
+            .get(SESSION).get(0)
+            .get(SITTINGS).get(0);
+
+        JsonNode hearing = sitting
+            .get(HEARING).get(0);
+
+        assertEquals("Wednesday 12 April 2023", sitting.get("sittingDate").asText(),
                      "Unable to find sitting date");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("time").asText(),
-                     "9:35am",
+        assertEquals("9:35am", hearing.get("time").asText(),
                      "Unable to find time");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("formattedDuration").asText(),
-                     "1 hour 25 mins",
+        assertEquals("1 hour 25 mins", hearing.get("formattedDuration").asText(),
                      "Unable to find duration");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("caseReference").asText(),
-                     "I4Y416QE",
+        assertEquals("I4Y416QE", hearing.get("caseReference").asText(),
                      "Unable to find case number");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("defendant").asText(),
-                     "Butcher, Pat",
+        assertEquals("Butcher, Pat", hearing.get("defendant").asText(),
                      "Unable to find defendant");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("defendantRepresentative").asText(),
-                     "Boyce Daniel",
+        assertEquals("Boyce Daniel", hearing.get("defendantRepresentative").asText(),
                      "Unable to find defendant representative");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecutingAuthority").asText(),
-                     "HMCTS",
+        assertEquals("HMCTS", hearing.get("prosecutingAuthority").asText(),
                      "Unable to find prosecuting authority");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("hearingType").asText(),
-                     "Directions",
+        assertEquals("Directions", hearing.get("hearingType").asText(),
                      "Unable to find hearing type");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("linkedCases").asText(),
-                     "YRYCTRR3",
+        assertEquals("YRYCTRR3", hearing.get("linkedCases").asText(),
                      "Unable to find linked cases");
 
-        assertEquals(inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(1).get(SESSION).get(0)
-                         .get(SITTINGS).get(0).get(HEARING).get(0)
+        assertEquals("Listing details text",
+                     inputJson
+                         .get(COURT_LISTS).get(0)
+                         .get(COURT_HOUSE)
+                         .get(COURT_ROOM).get(1)
+                         .get(SESSION).get(0)
+                         .get(SITTINGS).get(0)
+                         .get(HEARING).get(0)
                          .get("listingNotes").asText(),
-                     "Listing details text",
                      "Unable to find listing notes");
     }
 
@@ -134,22 +113,20 @@ class CrownFirmListHelperTest {
         CrownFirmListHelper.crownFirmListFormatted(inputJson);
         CrownFirmListHelper.splitByCourtAndDate(inputJson);
 
-        assertEquals(inputJson.get(COURT_LISTS).size(), 2,
-                     "Unable to find correct court List array"
-        );
+        assertEquals(2, inputJson.get(COURT_LISTS).size(),
+                     "Unable to find correct court List array");
 
-        assertEquals(
-            inputJson.get("courtListsByDate").get(0).get(0)
-                .get("courtSittingDate").asText(),
-            "Wednesday 12 April 2023",
-            "Unable to find court sitting date"
-        );
+        assertEquals("Wednesday 12 April 2023",
+                     inputJson
+                         .get("courtListsByDate").get(0).get(0)
+                         .get("courtSittingDate").asText(),
+                     "Unable to find court sitting date");
 
-        assertEquals(
-            inputJson.get("courtListsByDate").get(0).get(0)
-                .get("courtRooms").get(0).get("formattedSessionCourtRoom").asText(),
-            "Courtroom 2: Thomas Athorne, Reginald Cork",
-            "Unable to find court room name"
-        );
+        assertEquals("Courtroom 2: Thomas Athorne, Reginald Cork",
+                     inputJson
+                         .get("courtListsByDate").get(0).get(0)
+                         .get("courtRooms").get(0)
+                         .get("formattedSessionCourtRoom").asText(),
+                     "Unable to find court room name");
     }
 }

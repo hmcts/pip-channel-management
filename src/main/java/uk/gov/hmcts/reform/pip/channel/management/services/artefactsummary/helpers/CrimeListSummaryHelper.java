@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 public final class CrimeListSummaryHelper {
 
     private static final String LISTING_NOTES = "listingNotes";
+    private static final String LINKED_CASES = "linkedCases";
 
     private CrimeListSummaryHelper() {
 
@@ -25,12 +26,12 @@ public final class CrimeListSummaryHelper {
      */
     public static String processCrimeList(JsonNode node, ListType listType) {
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
-                            hearing.get("case").forEach(hearingCase -> {
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(
+                            hearing -> hearing.get("case").forEach(hearingCase -> {
                                 output.append('\n');
                                 GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
                                                                     sitting, "time");
@@ -41,18 +42,17 @@ public final class CrimeListSummaryHelper {
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                     hearing, "hearingType");
 
-
                                 if (ListType.CROWN_DAILY_LIST.equals(listType)) {
                                     processCrownDailyList(output, sitting, hearing, hearingCase);
                                 } else if (ListType.MAGISTRATES_PUBLIC_LIST.equals(listType)) {
                                     processMagistratesPublicList(output, sitting, hearing, hearingCase);
                                 }
-                            });
-                        });
-                    });
-                });
-            });
-        });
+                            })
+                        )
+                    )
+                )
+            )
+        );
         return output.toString();
     }
 
@@ -60,7 +60,7 @@ public final class CrimeListSummaryHelper {
                                               JsonNode hearingCase) {
         output.append('\n');
         String caseSequenceNo = "";
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "linkedCases")
+        if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES)
             .isEmpty()) {
             caseSequenceNo = " " + GeneralHelper.findAndReturnNodeText(hearingCase,
                                                                        "caseSequenceIndicator");
@@ -73,8 +73,8 @@ public final class CrimeListSummaryHelper {
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
                                             hearing,"prosecutingAuthority");
 
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "linkedCases").isEmpty()) {
-            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, "linkedCases");
+        if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, LINKED_CASES);
         }
 
         if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {

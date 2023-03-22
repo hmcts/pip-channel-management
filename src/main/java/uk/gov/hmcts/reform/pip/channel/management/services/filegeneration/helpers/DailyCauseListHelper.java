@@ -11,22 +11,24 @@ import static uk.gov.hmcts.reform.pip.channel.management.models.external.dataman
 import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class DailyCauseListHelper {
-    public static final String DOCUMENT = "document";
-    public static final String VERSION = "version";
+    private static final String DOCUMENT = "document";
+    private static final String VERSION = "version";
+    private static final String VENUE = "venue";
+    private static final String VENUE_CONTACT = "venueContact";
 
     private DailyCauseListHelper() {
     }
 
     public static Context preprocessArtefactForThymeLeafConverter(JsonNode artefact, Map<String, String> metadata,
                                                                   Map<String, Object> languageResources,
-                                                                  Boolean initialised) {
+                                                                  boolean initialised) {
         Context context = new Context();
         LocationHelper.formatCourtAddress(artefact, "|");
         context.setVariable("metadata", metadata);
         context.setVariable("i18n", languageResources);
 
         Language language = Language.valueOf(metadata.get("language"));
-        String publicationDate = artefact.get("document").get("publicationDate").asText();
+        String publicationDate = artefact.get(DOCUMENT).get("publicationDate").asText();
         context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                false, false));
         context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
@@ -40,9 +42,9 @@ public final class DailyCauseListHelper {
             context.setVariable(VERSION, artefact.get(DOCUMENT).get(VERSION).asText());
         }
 
-        if (artefact.get("venue").has("venueContact")) {
-            context.setVariable("phone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
-            context.setVariable("email", artefact.get("venue").get("venueContact").get("venueEmail").asText());
+        if (artefact.get(VENUE).has(VENUE_CONTACT)) {
+            context.setVariable("phone", artefact.get(VENUE).get(VENUE_CONTACT).get("venueTelephone").asText());
+            context.setVariable("email", artefact.get(VENUE).get(VENUE_CONTACT).get("venueEmail").asText());
         } else {
             context.setVariable("phone", "");
             context.setVariable("email", "");

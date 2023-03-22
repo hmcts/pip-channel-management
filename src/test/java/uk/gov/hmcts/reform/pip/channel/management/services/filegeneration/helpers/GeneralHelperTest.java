@@ -125,19 +125,22 @@ class GeneralHelperTest {
 
     @Test
     void testSafeGetWithReturningResult() {
-        String result = GeneralHelper.safeGet("publicationDate",
-                                              inputJson.get(DOCUMENT));
-        assertThat(result)
+        assertThat(GeneralHelper.safeGet("publicationDate", inputJson.get(DOCUMENT)))
             .as(ERR_MSG)
             .isEqualTo("2022-07-21T14:01:43Z");
     }
 
     @Test
     void testSafeGetWithReturningEmpty() {
-        String result = GeneralHelper.safeGet("Test",
-                                              inputJson.get(DOCUMENT));
-        assertThat(result)
+        assertThat(GeneralHelper.safeGet("Test", inputJson.get(DOCUMENT)))
             .as(ERR_MSG)
-            .isEqualTo("");
+            .isEmpty();
+    }
+
+    @Test
+    void testSafeGetWithReturningEmptyForBullPointerException() {
+        assertThat(GeneralHelper.safeGet("Test.0", inputJson.get(DOCUMENT)))
+            .as(ERR_MSG)
+            .isEmpty();
     }
 }

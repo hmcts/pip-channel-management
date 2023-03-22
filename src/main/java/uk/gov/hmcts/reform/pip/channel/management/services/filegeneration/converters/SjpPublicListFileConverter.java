@@ -81,20 +81,20 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
     private List<SjpPublicList> processRawListData(JsonNode data) {
         List<SjpPublicList> sjpCases = new ArrayList<>();
 
-        data.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
-                        sitting.get("hearing").forEach(hearing -> {
+        data.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(hearing -> {
                             Optional<SjpPublicList> sjpCase = SjpManipulation.constructSjpCase(hearing);
                             if (sjpCase.isPresent()) {
                                 sjpCases.add(sjpCase.get());
                             }
-                        });
-                    });
-                });
-            });
-        });
+                        })
+                    )
+                )
+            )
+        );
         return sjpCases;
     }
 }

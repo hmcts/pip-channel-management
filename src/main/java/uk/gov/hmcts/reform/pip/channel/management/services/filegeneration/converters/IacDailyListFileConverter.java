@@ -60,9 +60,8 @@ public class IacDailyListFileConverter implements FileConverter {
                                                  .asText())
             );
 
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-
+            courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(session -> {
                     String formattedJoh = DataManipulation.findAndManipulateJudiciaryForCop(session);
                     ((ObjectNode) session).put("formattedJudiciary", formattedJoh);
 
@@ -79,8 +78,8 @@ public class IacDailyListFileConverter implements FileConverter {
                             hearing.get("case").forEach(CaseHelper::formatLinkedCases);
                         });
                     });
-                });
-            });
+                })
+            );
         });
     }
 }
