@@ -16,7 +16,7 @@ import java.util.Locale;
 public final class DateHelper {
 
     private static final int ONE = 1;
-    public static final String EUROPE_LONDON = "Europe/London";
+    private static final String EUROPE_LONDON = "Europe/London";
     private static final int MINUTES_PER_HOUR = 60;
     private static final int HOURS_PER_DAY = 24;
 
@@ -24,13 +24,13 @@ public final class DateHelper {
         throw new UnsupportedOperationException();
     }
 
-    public static String formatTimeStampToBst(String timestamp, Language language, Boolean isTimeOnly,
-                                              Boolean isBothDateAndTime) {
+    public static String formatTimeStampToBst(String timestamp, Language language, boolean isTimeOnly,
+                                              boolean isBothDateAndTime) {
         return formatTimeStampToBst(timestamp, language, isTimeOnly, isBothDateAndTime, "dd MMMM yyyy");
     }
 
-    public static String formatTimeStampToBst(String timestamp, Language language, Boolean isTimeOnly,
-                                              Boolean isBothDateAndTime, String dateFormat) {
+    public static String formatTimeStampToBst(String timestamp, Language language, boolean isTimeOnly,
+                                              boolean isBothDateAndTime, String dateFormat) {
         ZonedDateTime zonedDateTime = convertStringToBst(timestamp);
         String pattern = DateHelper.getDateTimeFormat(zonedDateTime, isTimeOnly, isBothDateAndTime, language,
                                                       dateFormat);
@@ -38,8 +38,8 @@ public final class DateHelper {
         return dtf.format(zonedDateTime);
     }
 
-    private static String getDateTimeFormat(ZonedDateTime zonedDateTime, Boolean isTimeOnly,
-                                            Boolean isBothDateAndTime, Language language,
+    private static String getDateTimeFormat(ZonedDateTime zonedDateTime, boolean isTimeOnly,
+                                            boolean isBothDateAndTime, Language language,
                                             String dateFormat) {
         if (isTimeOnly) {
             return (zonedDateTime.getMinute() == 0) ? "ha" : "h:mma";

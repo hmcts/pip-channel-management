@@ -23,20 +23,18 @@ public final class EtDailyListManipulation {
     public static void processRawListData(JsonNode data, Language language) {
         LocationHelper.formatCourtAddress(data, System.lineSeparator());
 
-        data.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("sittings").forEach(sitting -> {
+        data.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting,"h:mma", true);
                         DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
-                        sitting.get("hearing").forEach(hearing -> {
-                            handleParties(hearing);
-                        });
-                    });
-                });
-            });
-        });
+                        sitting.get("hearing").forEach(hearing -> handleParties(hearing));
+                    })
+                )
+            )
+        );
     }
 
     static void handleParties(JsonNode hearing) {

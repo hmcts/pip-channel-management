@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
@@ -31,8 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-@SuppressWarnings("PMD.LawOfDemeter")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class, AzureBlobTestConfiguration.class})
 @ActiveProfiles(profiles = "test")
 class AccountManagementServiceTest {
@@ -126,7 +125,7 @@ class AccountManagementServiceTest {
 
     @Test
     void testIsAuthorisedError() {
-        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(HttpStatus.BAD_REQUEST.value()));
+        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(BAD_REQUEST.value()));
 
         boolean isAuthorised =
             accountManagementService.getIsAuthorised(UUID.randomUUID(),

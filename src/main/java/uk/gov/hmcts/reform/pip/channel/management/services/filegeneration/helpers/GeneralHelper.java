@@ -16,12 +16,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.Map.Entry.comparingByKey;
 
 /**
  * Class for static utility methods assisting with json->html->pdf issues.
  */
 @Slf4j
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.TooManyMethods"})
 public final class GeneralHelper {
 
     private GeneralHelper() {
@@ -117,7 +118,7 @@ public final class GeneralHelper {
 
     private static Map<Date,String> sortByDateTime(Map<Date, String> dateTimeValueString) {
         return dateTimeValueString.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
+            .sorted(comparingByKey(Comparator.naturalOrder()))
             .collect(Collectors.toMap(
                 Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }

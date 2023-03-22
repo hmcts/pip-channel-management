@@ -33,10 +33,10 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
 
     private String processMagistratesStandardList(JsonNode node) {
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(courtList -> {
-            courtList.get("courtHouse").get("courtRoom").forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get("defendants").forEach(defendant -> {
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("defendants").forEach(defendant -> {
                         output.append('\n');
                         checkAndAddToEmail(output, defendant, "defendantHeading",
                                            "Defendant Name - ");
@@ -82,10 +82,10 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                                 });
                             }
                         });
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
 
         return output.toString();
     }

@@ -30,8 +30,8 @@ class CopCauseListFileConverterTest {
     @Autowired
     CopDailyCauseListFileConverter copDailyCauseListConverter;
 
-    public static final String PROVENANCE = "provenance";
-    public static final String HEADER_TEXT = "incorrect header text";
+    private static final String PROVENANCE = "provenance";
+    private static final String HEADER_TEXT = "incorrect header text";
 
     @Test
     void testCopCauseListTemplate() throws IOException {

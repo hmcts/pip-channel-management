@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
@@ -13,7 +14,6 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.Unaut
 import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
 import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
@@ -26,17 +26,21 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.SJP_PRESS_LIST;
+import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.SJP_PUBLIC_LIST;
+
 @Slf4j
 @Service
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.PreserveStackTrace", "PMD.UnusedAssignment",
-    "PMD.AvoidLiteralsInIfCondition"})
+@SuppressWarnings({"PMD.PreserveStackTrace"})
 public class PublicationManagementService {
+    private static final int MAX_FILE_SIZE = 2_000_000;
 
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
     private final AccountManagementService accountManagementService;
 
-    private static final String PATH_TO_LANGUAGES = "templates/languages/";
+    @Value("${pdf.font}")
+    private String pdfFont;
 
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
@@ -74,7 +78,7 @@ public class PublicationManagementService {
 
             // Generate the PDF and store it
             byte[] outputPdf = generatePdf(topLevelNode, artefact, location, true);
-            if (outputPdf.length > 2_000_000) {
+            if (outputPdf.length > MAX_FILE_SIZE) {
                 outputPdf = generatePdf(topLevelNode, artefact, location, false);
             }
 
@@ -121,8 +125,8 @@ public class PublicationManagementService {
             Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
             publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
-            if (ListType.SJP_PUBLIC_LIST.equals(artefact.getListType())
-                || ListType.SJP_PRESS_LIST.equals(artefact.getListType())) {
+            if (SJP_PUBLIC_LIST.equals(artefact.getListType())
+                || SJP_PRESS_LIST.equals(artefact.getListType())) {
                 publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
             } else {
                 publicationFilesMap.put(FileType.EXCEL, new byte[0]);
@@ -167,7 +171,7 @@ public class PublicationManagementService {
             builder.useFastMode()
                 .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_A);
 
-            File file = new File("/opt/app/openSans.ttf");
+            File file = new File(pdfFont);
             if (file.exists()) {
                 builder.useFont(file, "openSans");
             } else {

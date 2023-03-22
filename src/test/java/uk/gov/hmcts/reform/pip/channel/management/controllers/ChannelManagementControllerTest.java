@@ -47,7 +47,7 @@ class ChannelManagementControllerTest {
         ResponseEntity<Map<String, List<Subscription>>> response =
             channelManagementController.buildSubscriberList(subscriptionList);
         assertEquals(response.getBody(), returnedMap, "Map does not match with output");
-        assertEquals(response.getStatusCode(), HttpStatus.OK, STATUS_CODE_MATCH);
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_CODE_MATCH);
         assertEquals(response.getBody().get(TEST_EMAIL_1), subscriptionList, "Subs list does not match");
     }
 

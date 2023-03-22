@@ -24,14 +24,14 @@ public final class CrownFirmListHelper {
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
     private static final String SITTING_START = "sittingStart";
-    public static final String DEFENDANT = "defendant";
-    public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
+    private static final String DEFENDANT = "defendant";
+    private static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     private static final String LINKED_CASES = "linkedCases";
     private static final String LISTING_NOTES = "listingNotes";
     private static final String FORMATTED_COURT_ROOM_NAME = "formattedSessionCourtRoom";
-    public static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
-    public static final String COURT_LIST = "courtLists";
-    public static final String FORMATTED_COURT_ROOM = "formattedCourtRoom";
+    private static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
+    private static final String COURT_LIST = "courtLists";
+    private static final String FORMATTED_COURT_ROOM = "formattedCourtRoom";
 
     private CrownFirmListHelper() {
     }
@@ -131,29 +131,31 @@ public final class CrownFirmListHelper {
     }
 
     public static void crownFirmListFormatted(JsonNode artefact) {
-        artefact.get(COURT_LIST).forEach(courtList -> {
-            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                courtRoom.get("session").forEach(session -> {
-                    session.get(SITTINGS).forEach(sitting -> {
-                        String sittingDate = DateHelper.formatTimeStampToBst(
-                            sitting.get(SITTING_START).asText(), Language.ENGLISH,
-                            false, false, "EEEE dd MMMM yyyy");
-                        ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
-                        SittingHelper.manipulatedSitting(courtRoom, session, sitting,
-                                                                         FORMATTED_COURT_ROOM);
-                        sitting.get("hearing").forEach(hearing -> {
-                            SittingHelper.formatCaseTime(sitting, hearing);
-                            PartyRoleHelper.handleParties(hearing);
-                            CrimeListHelper.formatCaseInformationCrownDaily(hearing);
-                            CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
-                            hearing.get("case").forEach(caseNode -> {
-                                moveTableColumnValuesToHearing(sitting, hearing, caseNode);
+        artefact.get(COURT_LIST).forEach(
+            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get(SITTINGS).forEach(
+                        sitting -> {
+                            String sittingDate = DateHelper.formatTimeStampToBst(
+                                sitting.get(SITTING_START).asText(), Language.ENGLISH,
+                                false, false, "EEEE dd MMMM yyyy");
+                            ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
+                            SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
+
+                            sitting.get("hearing").forEach(hearing -> {
+                                SittingHelper.formatCaseTime(sitting, hearing);
+                                PartyRoleHelper.handleParties(hearing);
+                                CrimeListHelper.formatCaseInformationCrownDaily(hearing);
+                                CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
+                                hearing.get("case").forEach(
+                                    caseNode -> moveTableColumnValuesToHearing(sitting, hearing, caseNode)
+                                );
                             });
-                        });
-                    });
-                });
-            });
-        });
+                        }
+                    )
+                )
+            )
+        );
     }
 
     private static void moveTableColumnValuesToHearing(JsonNode sitting,

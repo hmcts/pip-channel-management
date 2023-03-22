@@ -29,8 +29,8 @@ class CrownFirmListFileConverterTest {
     @Autowired
     CrownFirmListFileConverter crownFirmListConverter;
 
-    public static final String HEADER_TEXT = "Incorrect header text";
-    public static final String PROVENANCE = "provenance";
+    private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String PROVENANCE = "provenance";
 
     @Test
     void testCrownFirmListTemplate() throws IOException {
