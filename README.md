@@ -47,15 +47,15 @@ Broadly speaking, this service has two main components detailed below:
 - For third party subscription, it retrieves the API address to send the subscription to.
 
 ##### Alternative publishing formats
-- The generation (and associated CRUD operations) of PDFs and CSVs for JSON publications.
-- The generation of a publication summary for JSON publications, which is used in the subscriptions process.
+- The generation (and associated CRUD operations) of PDFs and Excel spreadsheets for JSON publications.
+- The generation of a publication summary for JSON publications, which is used in the subscription process.
 
 All interactions with `pip-channel-management` are performed through the API (specified in [API Documentation](#api-documentation)) either as a standalone service or via connections to other microservices.
 
 ## Features and Functionality
 
 - Generation of PDFs from JSON for each list type. These are used in the subscriptions process and also via the Frontend
-- Generation of the Artefact Summary, which is the text that contains details about a JSON publication. This is used in the subscription email.
+- Generation of publication summary, which contains details about a JSON publication. This is used in the subscription email.
 - Mapping of a list of subscriptions to their appropriate email. It also de-duplicates the list, which in turn means only one email is sent per user.
 - Mapping a third party subscription to its appropriate API endpoint.
 - Azure Blob Storage: Handles interactions with the CaTH Azure Blob Storage instance (or local Azurite emulator/Azure Storage Explorer instances)
@@ -67,7 +67,7 @@ All interactions with `pip-channel-management` are performed through the API (sp
 
 Each List Type has a related converter and summary generated. This is stored in the List Type enum [here](./src/main/java/uk/gov/hmcts/reform/pip/channel/management/models/external/datamanagement/ListType.java)
 
-The converter does a very similar job to the frontend style guides. It maps the JSON data to an associated accessible PDF, and also CSVs for certain list types.
+The converter does a very similar job to the frontend style guides. It maps the JSON data to an associated accessible PDF, and also Excel spreadsheets for certain list types.
 
 The summary generator produces a string that is used in the subscription email that contains key fields extracted from the blob. These fields vary depending on the list type.
 
@@ -160,7 +160,7 @@ The service can also be adapted using the yaml files found in the following loca
 
 ## API Documentation
 Our full API specification can be found within our Swagger-UI page.
-It can be accessed locally by starting the service and going to [http://localhost:8090/swagger-ui/swagger-ui/index.html](http://localhost:8181/swagger-ui/swagger-ui/index.html)
+It can be accessed locally by starting the service and going to [http://localhost:8181/swagger-ui/swagger-ui/index.html](http://localhost:8181/swagger-ui/swagger-ui/index.html)
 Alternatively, if you're on our VPN, you can access the swagger endpoint at our staging URL (ask a teammate to give you this).
 
 ## Examples
