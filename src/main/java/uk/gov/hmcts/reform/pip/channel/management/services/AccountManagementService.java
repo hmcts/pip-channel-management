@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
+import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.util.Collections;
 import java.util.List;

@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;

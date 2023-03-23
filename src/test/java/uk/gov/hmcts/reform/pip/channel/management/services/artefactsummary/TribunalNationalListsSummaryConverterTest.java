@@ -3,7 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +16,8 @@ class TribunalNationalListsSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/primaryHealthList.json")) {
-            output = ListType.PRIMARY_HEALTH_LIST
-                .getArtefactSummaryConverter().convert(new String(mockFile.readAllBytes()));
+            output = new ListConversionFactory().getArtefactSummaryConverter(ListType.PRIMARY_HEALTH_LIST)
+                .convert(new String(mockFile.readAllBytes()));
         }
 
         SoftAssertions softly = new SoftAssertions();
@@ -52,8 +53,8 @@ class TribunalNationalListsSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/careStandardsList.json")) {
-            output = ListType.CARE_STANDARDS_LIST
-                .getArtefactSummaryConverter().convert(new String(mockFile.readAllBytes()));
+            output = new ListConversionFactory().getArtefactSummaryConverter(ListType.CARE_STANDARDS_LIST)
+                .convert(new String(mockFile.readAllBytes()));
         }
 
         SoftAssertions softly = new SoftAssertions();

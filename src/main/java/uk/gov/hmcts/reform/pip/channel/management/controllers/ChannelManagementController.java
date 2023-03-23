@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.services.SubscriberListService;
+import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
+import uk.gov.hmcts.reform.pip.model.subscription.Subscription;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +49,6 @@ public class ChannelManagementController {
             subscriberListService.buildEmailSubscriptionMap(listOfSubscriptions);
 
         return ResponseEntity.ok(returnMap);
-
     }
 
     @ApiResponse(responseCode = "200", description = "{Map of api destination to subscriptions}")

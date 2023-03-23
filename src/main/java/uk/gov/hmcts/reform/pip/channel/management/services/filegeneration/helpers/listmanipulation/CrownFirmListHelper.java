@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.SittingHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Date;
 import java.util.List;

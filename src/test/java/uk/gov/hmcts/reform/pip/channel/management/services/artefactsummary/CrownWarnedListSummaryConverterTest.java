@@ -3,7 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +16,7 @@ class CrownWarnedListSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/crownWarnedList.json")) {
-            output = ListType.CROWN_WARNED_LIST
-                .getArtefactSummaryConverter()
+            output = new ListConversionFactory().getArtefactSummaryConverter(ListType.CROWN_WARNED_LIST)
                 .convert(new String(mockFile.readAllBytes()));
         }
 

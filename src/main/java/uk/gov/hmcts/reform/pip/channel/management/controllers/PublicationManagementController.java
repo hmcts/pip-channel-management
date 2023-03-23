@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.pip.channel.management.authentication.roles.IsAdmin;
-import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
+import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
+import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
 import java.util.Map;
 import java.util.UUID;

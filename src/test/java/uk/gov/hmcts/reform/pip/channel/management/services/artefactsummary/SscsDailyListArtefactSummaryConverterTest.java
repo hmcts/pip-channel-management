@@ -4,7 +4,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,7 @@ class SscsDailyListArtefactSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/sscsDailyList.json")) {
-            output = listType.getArtefactSummaryConverter()
+            output = new ListConversionFactory().getArtefactSummaryConverter(listType)
                 .convert(new String(mockFile.readAllBytes()));
         }
 

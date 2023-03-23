@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.conve
 import com.fasterxml.jackson.databind.JsonNode;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.util.Map;

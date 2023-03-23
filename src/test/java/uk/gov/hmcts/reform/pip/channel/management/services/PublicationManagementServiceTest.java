@@ -17,12 +17,12 @@ import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
-import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
+import uk.gov.hmcts.reform.pip.model.location.Location;
+import uk.gov.hmcts.reform.pip.model.publication.Artefact;
+import uk.gov.hmcts.reform.pip.model.publication.FileType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
+import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.io.IOException;
 import java.io.InputStream;
