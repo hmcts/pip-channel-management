@@ -56,7 +56,7 @@ class PublicationManagementTest {
 
     private static final String ROOT_URL = "/publication";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
-    private static final String ARTEFACT_ID = "591d5021-bf40-4066-b65e-da3221060a54";
+    private static final String ARTEFACT_ID = "3d498688-bbad-4a53-b253-a16ddf8737a9";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
     private static final String INPUT_PARAMETERS = "parameters";
     private static final String ARTEFACT_NOT_FOUND_MESSAGE = "Artefact with id %s not found";
@@ -79,23 +79,24 @@ class PublicationManagementTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
-            Arguments.of("16f7a550-dd95-4c77-b427-c03d1e8f4560"), //Care Standards Tribunal Hearing List
-            Arguments.of("d6310231-06eb-429b-b36d-9a8f3df6cef1"), //Civil and Family Daily Cause List
-            Arguments.of("0bef43e6-8987-411d-9411-26167730e88c"), //Civil Daily Cause List
-            Arguments.of("79e801f1-a746-4640-861b-0f964951a733"), //Court of Protection Daily Cause List
-            Arguments.of("2f849c80-226e-410f-8f57-7481a48aadd7"), //Crown Daily List
-            Arguments.of("e5049eb3-c2c0-4b1b-9bed-2289c55fb192"), //Crown Firm List
-            Arguments.of("7aad9d44-fc2b-43a8-a93b-a46a62589ecf"), //Crown Warned List
-            Arguments.of("87f18f00-3543-4a52-a197-b3cf537c4eb0"), //Employment Tribunals Daily List
-            Arguments.of("d79ac1d6-8994-4035-87d4-2a25fc08e819"), //Employment Tribunals Fortnightly Press List
-            Arguments.of("906482b4-f91d-49a2-96e0-b4a9053e532c"), //Family Daily Cause List
-            Arguments.of("330bef3e-0d8a-4a59-a534-527dc37f94d8"), //Immigration and Asylum Chamber Daily List
-            Arguments.of("bdf23b7e-0063-4d6b-ab74-bf52af734914"), //Magistrates Public List
-            Arguments.of("e37a9f48-513c-42e0-b9ea-e8e5cb157966"), //Magistrates Standard List
-            Arguments.of("c4ca592c-2814-4de5-84b7-ecc5d15ce833"), //Primary Health Tribunal Hearing List
-            Arguments.of("5874fca9-28dd-4819-a2b7-639f211ef273"), //Single Justice Procedure Press List
-            Arguments.of("467b493f-c952-4b31-bd51-164c2c0ec660"), //Single Justice Procedure Public List
-            Arguments.of("1167228d-d62f-49a2-9361-8627482fb56e")  //SSCS Daily List
+            Arguments.of("5697562a-1b96-4386-8bde-355849025c57"), //Care Standards Tribunal Hearing List
+            Arguments.of("aa7376b7-7a67-4446-b51e-f5718a54ec72"), //Civil and Family Daily Cause List
+            Arguments.of("a1464fc0-9dc7-4721-a59b-2d870d6f5c35"), //Civil Daily Cause List
+            Arguments.of("03dafc5e-6264-4ade-ba94-6aebd0ac23ba"), //Court of Protection Daily Cause List
+            Arguments.of("3f8ac854-7d82-42cd-8e33-c31ee5442d36"), //Crown Daily List
+            Arguments.of("cd93565d-a3ab-4da2-a0aa-37433227e7de"), //Crown Firm List
+            Arguments.of("85871ab3-8e53-422a-a3e6-e164c66e1683"), //Crown Warned List
+            Arguments.of("10b40fa9-47b1-4a12-85e0-d8be67d8eaf5"), //Employment Tribunals Daily List
+            Arguments.of("b9d5a447-29db-4025-8326-4413ec240e1a"), //Employment Tribunals Fortnightly Press List
+            Arguments.of("63c3d528-5e33-4067-ae54-eac2eee9f645"), //Family Daily Cause List
+            Arguments.of("aa5e97d3-b82a-436a-9621-8b0fb2a987ca"), //Immigration and Asylum Chamber Daily List
+            Arguments.of("93d9600c-af8b-44fa-ac5c-c8419933d185"), //Magistrates Public List
+            Arguments.of("af7c6ba8-c391-458f-9246-40f419a98a12"), //Magistrates Standard List
+            Arguments.of("e646650b-c7dc-4551-9163-f0f792b83e54"), //Primary Health Tribunal Hearing List
+            Arguments.of("5dea6753-7a1d-4b91-b3c7-06721e3332cd"), //Single Justice Procedure Press List
+            Arguments.of("3d498688-bbad-4a53-b253-a16ddf8737a9"), //Single Justice Procedure Public List
+            Arguments.of("a954f6f1-fc82-403b-9a01-4bb11578f08a"), //SSCS Daily List,
+            Arguments.of("c21bf262-d0b5-475e-b0e3-12aa34495469")  //SSCS Daily List - Additional Hearings
         );
     }
 
