@@ -99,24 +99,24 @@ class PublicationManagementTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
-            Arguments.of("5697562a-1b96-4386-8bde-355849025c57"), //Care Standards Tribunal Hearing List
-            Arguments.of("aa7376b7-7a67-4446-b51e-f5718a54ec72"), //Civil and Family Daily Cause List
-            Arguments.of("a1464fc0-9dc7-4721-a59b-2d870d6f5c35"), //Civil Daily Cause List
-            Arguments.of("03dafc5e-6264-4ade-ba94-6aebd0ac23ba"), //Court of Protection Daily Cause List
-            Arguments.of("3f8ac854-7d82-42cd-8e33-c31ee5442d36"), //Crown Daily List
-            Arguments.of("cd93565d-a3ab-4da2-a0aa-37433227e7de"), //Crown Firm List
-            Arguments.of("85871ab3-8e53-422a-a3e6-e164c66e1683"), //Crown Warned List
-            Arguments.of("10b40fa9-47b1-4a12-85e0-d8be67d8eaf5"), //Employment Tribunals Daily List
-            Arguments.of("b9d5a447-29db-4025-8326-4413ec240e1a"), //Employment Tribunals Fortnightly Press List
-            Arguments.of("63c3d528-5e33-4067-ae54-eac2eee9f645"), //Family Daily Cause List
-            Arguments.of("aa5e97d3-b82a-436a-9621-8b0fb2a987ca"), //Immigration and Asylum Chamber Daily List
-            Arguments.of("93d9600c-af8b-44fa-ac5c-c8419933d185"), //Magistrates Public List
-            Arguments.of("af7c6ba8-c391-458f-9246-40f419a98a12"), //Magistrates Standard List
-            Arguments.of("e646650b-c7dc-4551-9163-f0f792b83e54"), //Primary Health Tribunal Hearing List
-            Arguments.of("5dea6753-7a1d-4b91-b3c7-06721e3332cd"), //Single Justice Procedure Press List
-            Arguments.of("3d498688-bbad-4a53-b253-a16ddf8737a9"), //Single Justice Procedure Public List
-            Arguments.of("a954f6f1-fc82-403b-9a01-4bb11578f08a"), //SSCS Daily List,
-            Arguments.of("c21bf262-d0b5-475e-b0e3-12aa34495469")  //SSCS Daily List - Additional Hearings
+            Arguments.of(ARTEFACT_ID_CARE_STANDARDS_LIST), //Care Standards Tribunal Hearing List
+            Arguments.of(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST), //Civil and Family Daily Cause List
+            Arguments.of(ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST), //Civil Daily Cause List
+            Arguments.of(ARTEFACT_ID_COP_DAILY_CAUSE_LIST), //Court of Protection Daily Cause List
+            Arguments.of(ARTEFACT_ID_CROWN_DAILY_LIST), //Crown Daily List
+            Arguments.of(ARTEFACT_ID_CROWN_FIRM_LIST), //Crown Firm List
+            Arguments.of(ARTEFACT_ID_CROWN_WARNED_LIST), //Crown Warned List
+            Arguments.of(ARTEFACT_ID_ET_DAILY_LIST), //Employment Tribunals Daily List
+            Arguments.of(ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST), //Employment Tribunals Fortnightly Press List
+            Arguments.of(ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST), //Family Daily Cause List
+            Arguments.of(ARTEFACT_ID_IAC_DAILY_LIST), //Immigration and Asylum Chamber Daily List
+            Arguments.of(ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST), //Magistrates Public List
+            Arguments.of(ARTEFACT_ID_MAGISTRATES_STANDARD_LIST), //Magistrates Standard List
+            Arguments.of(ARTEFACT_ID_PRIMARY_HEALTH_LIST), //Primary Health Tribunal Hearing List
+            Arguments.of(ARTEFACT_ID_SJP_PRESS_LIST), //Single Justice Procedure Press List
+            Arguments.of(ARTEFACT_ID_SJP_PUBLIC_LIST), //Single Justice Procedure Public List
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List,
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)  //SSCS Daily List - Additional Hearings
         );
     }
 
