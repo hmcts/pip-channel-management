@@ -3,7 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +16,7 @@ class SjpPressListSummaryConverterTest {
         String[] outputLines;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/sjpPressList.json")) {
-            String result = ListType.SJP_PRESS_LIST
-                .getArtefactSummaryConverter()
+            String result = new ListConversionFactory().getArtefactSummaryConverter(ListType.SJP_PRESS_LIST)
                 .convert(new String(mockFile.readAllBytes()));
             outputLines = result.split(System.lineSeparator());
         }

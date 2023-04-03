@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 /**
  * Helper class for crime lists.

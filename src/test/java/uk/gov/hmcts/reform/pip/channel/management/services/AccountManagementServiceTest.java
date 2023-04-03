@@ -16,8 +16,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
+import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

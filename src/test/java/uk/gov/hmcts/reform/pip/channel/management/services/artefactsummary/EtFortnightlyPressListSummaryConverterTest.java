@@ -3,8 +3,10 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -12,11 +14,13 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.ET_FORTNIGHTLY_PRESS_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.ET_FORTNIGHTLY_PRESS_LIST;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class EtFortnightlyPressListSummaryConverterTest {
+    @Autowired
+    ListConversionFactory listConversionFactory;
 
     @Test
     void testEtFortnightlyPressListTemplate() throws IOException {
@@ -28,7 +32,7 @@ class EtFortnightlyPressListSummaryConverterTest {
                      Charset.defaultCharset()
         );
 
-        String emailOutput = ET_FORTNIGHTLY_PRESS_LIST.getArtefactSummaryConverter()
+        String emailOutput = listConversionFactory.getArtefactSummaryConverter(ET_FORTNIGHTLY_PRESS_LIST)
             .convert(writer.toString());
 
         SoftAssertions softly = new SoftAssertions();

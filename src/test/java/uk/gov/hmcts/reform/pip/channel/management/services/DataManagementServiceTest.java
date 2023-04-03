@@ -14,8 +14,8 @@ import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
+import uk.gov.hmcts.reform.pip.model.location.Location;
+import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 
 import java.io.IOException;
 import java.util.UUID;

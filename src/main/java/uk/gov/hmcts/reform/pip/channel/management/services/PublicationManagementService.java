@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
-import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Sensitivity;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
+import uk.gov.hmcts.reform.pip.model.location.Location;
+import uk.gov.hmcts.reform.pip.model.publication.Artefact;
+import uk.gov.hmcts.reform.pip.model.publication.FileType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,8 +28,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.SJP_PRESS_LIST;
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.SJP_PUBLIC_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
 
 @Slf4j
 @Service
@@ -38,6 +40,7 @@ public class PublicationManagementService {
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
     private final AccountManagementService accountManagementService;
+    private final ListConversionFactory listConversionFactory;
 
     @Value("${pdf.font}")
     private String pdfFont;
@@ -45,10 +48,12 @@ public class PublicationManagementService {
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
                                         DataManagementService dataManagementService,
-                                        AccountManagementService accountManagementService) {
+                                        AccountManagementService accountManagementService,
+                                        ListConversionFactory listConversionFactory) {
         this.azureBlobService = azureBlobService;
         this.dataManagementService = dataManagementService;
         this.accountManagementService = accountManagementService;
+        this.listConversionFactory = listConversionFactory;
     }
 
     /**
@@ -64,14 +69,15 @@ public class PublicationManagementService {
 
         try {
             topLevelNode = new ObjectMapper().readTree(rawJson);
+            FileConverter fileConverter = listConversionFactory.getFileConverter(artefact.getListType());
 
-            if (artefact.getListType().getFileConverter() == null) {
+            if (fileConverter == null) {
                 log.info("Failed to find converter for list type");
                 return;
             }
 
             // Generate the Excel and store it
-            byte[] outputExcel = artefact.getListType().getFileConverter().convertToExcel(topLevelNode);
+            byte[] outputExcel = fileConverter.convertToExcel(topLevelNode);
             if (outputExcel.length > 0) {
                 azureBlobService.uploadFile(artefactId + ".xlsx", outputExcel);
             }
@@ -99,14 +105,18 @@ public class PublicationManagementService {
     public String generateArtefactSummary(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         String summary = "";
-        if (artefact.getListType().getArtefactSummaryConverter() == null) {
+        ArtefactSummaryConverter artefactSummaryConverter = listConversionFactory.getArtefactSummaryConverter(
+            artefact.getListType()
+        );
+
+        if (artefactSummaryConverter == null) {
             log.info("Failed to find converter for list type");
             return summary;
         }
 
         try {
             String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
-            summary = artefact.getListType().getArtefactSummaryConverter().convert(rawJson);
+            summary = artefactSummaryConverter.convert(rawJson);
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(String.format("Failed to generate summary for artefact id %s", artefactId));
         }
@@ -164,7 +174,8 @@ public class PublicationManagementService {
             "listType", artefact.getListType().name()
         );
 
-        String html = artefact.getListType().getFileConverter().convert(topLevelNode, metadataMap, language);
+        String html = listConversionFactory.getFileConverter(artefact.getListType())
+            .convert(topLevelNode, metadataMap, language);
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             PdfRendererBuilder builder = new PdfRendererBuilder();

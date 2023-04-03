@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Channel;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
+import uk.gov.hmcts.reform.pip.model.subscription.Channel;
+import uk.gov.hmcts.reform.pip.model.subscription.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;

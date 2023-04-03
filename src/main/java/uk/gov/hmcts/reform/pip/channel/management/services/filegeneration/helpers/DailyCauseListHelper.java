@@ -2,13 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.FamilyMixedListHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.FAMILY_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class DailyCauseListHelper {
     private static final String DOCUMENT = "document";

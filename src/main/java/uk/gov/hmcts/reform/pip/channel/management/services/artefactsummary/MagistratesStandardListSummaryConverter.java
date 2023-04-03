@@ -4,15 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.MagistratesStandardListHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
 @Service
-public class MagistratesStandardListSummaryConverter implements ArtefactSummaryConverter  {
+public class MagistratesStandardListSummaryConverter implements ArtefactSummaryConverter {
     /**
      * Magistrates Standard List parent method - iterates on courtHouse/courtList - if these need to be shown in further
      * iterations, do it here.

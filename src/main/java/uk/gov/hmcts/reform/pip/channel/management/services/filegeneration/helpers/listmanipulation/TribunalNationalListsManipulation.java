@@ -2,11 +2,11 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Language;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.TribunalNationalList;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.ArrayList;
 import java.util.List;
