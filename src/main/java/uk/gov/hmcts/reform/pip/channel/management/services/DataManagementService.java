@@ -9,8 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Artefact;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.Location;
+import uk.gov.hmcts.reform.pip.model.location.Location;
+import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 
 import java.util.UUID;
 

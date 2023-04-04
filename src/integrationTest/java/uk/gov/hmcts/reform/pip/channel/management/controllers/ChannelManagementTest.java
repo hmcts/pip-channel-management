@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +15,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Channel;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
+import uk.gov.hmcts.reform.pip.model.subscription.Channel;
+import uk.gov.hmcts.reform.pip.model.subscription.Subscription;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,9 +45,14 @@ class ChannelManagementTest {
     private static final String VALID_EMAIL_1 = "test_account@hmcts.com";
     private static final String VALID_EMAIL_2 = "test_account_admin@hmcts.com";
     private static final String INVALID_USER_ID = "0b802b2a-cab2-4dd2-aa82-fd0dde3d93fb";
+
+    private static final Subscription SUBSCRIPTION_VALID_USER_1 = subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1);
+    private static final Subscription SUBSCRIPTION_VALID_USER_2 = subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_2);
+    private static final Subscription SUBSCRIPTION_INVALID_USER = subscriptionBuilder(Channel.EMAIL, INVALID_USER_ID);
+    private static final Subscription COURTEL_SUBSCRIPTION = subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1);
     private static final String MAPS_MATCH_MESSAGE = "maps should match";
 
-    private final ObjectMapper om = new ObjectMapper();
+    private static ObjectMapper om = new ObjectMapper();
 
     static Subscription subscriptionBuilder(Channel channel, String userId) {
         Subscription subscription = new Subscription();
@@ -58,12 +63,17 @@ class ChannelManagementTest {
     }
 
     List<Subscription> createSubscriptions() {
-        List<Subscription> subList = new ArrayList<>();
-        subList.add(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1));
-        subList.add(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1));
-        subList.add(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_2));
-        subList.add(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_2));
-        return subList;
+        return List.of(
+            SUBSCRIPTION_VALID_USER_1,
+            SUBSCRIPTION_VALID_USER_1,
+            SUBSCRIPTION_VALID_USER_2,
+            SUBSCRIPTION_VALID_USER_2
+        );
+    }
+
+    @BeforeAll
+    public static void setup() {
+        om.findAndRegisterModules();
     }
 
     @Test
@@ -77,10 +87,8 @@ class ChannelManagementTest {
         MvcResult response = mockMvc.perform(request).andExpect(status().isOk()).andReturn();
 
         Map<String, List<Subscription>> expectedResult = new ConcurrentHashMap<>();
-        expectedResult.put(VALID_EMAIL_1, List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1),
-                                                     subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1)));
-        expectedResult.put(VALID_EMAIL_2, List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_2),
-                                                      subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_2)));
+        expectedResult.put(VALID_EMAIL_1, List.of(SUBSCRIPTION_VALID_USER_1, SUBSCRIPTION_VALID_USER_1));
+        expectedResult.put(VALID_EMAIL_2, List.of(SUBSCRIPTION_VALID_USER_2, SUBSCRIPTION_VALID_USER_2));
 
         ConcurrentHashMap<String, List<Subscription>> actualResponse = om.readValue(
             response.getResponse().getContentAsString(),
@@ -93,14 +101,13 @@ class ChannelManagementTest {
     void testSingleValidUserReturns() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(EMAILS_URL)
-            .content(om.writeValueAsString(List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1),
-                                                   subscriptionBuilder(Channel.EMAIL, INVALID_USER_ID))))
+            .content(om.writeValueAsString(List.of(SUBSCRIPTION_VALID_USER_1, SUBSCRIPTION_INVALID_USER)))
             .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult response = mockMvc.perform(request).andExpect(status().isOk()).andReturn();
 
         Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
-        expected.put(VALID_EMAIL_1, List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1)));
+        expected.put(VALID_EMAIL_1, List.of(SUBSCRIPTION_VALID_USER_1));
 
         ConcurrentHashMap<String, List<Subscription>> actualResponse = om.readValue(
             response.getResponse().getContentAsString(),
@@ -113,8 +120,7 @@ class ChannelManagementTest {
     void testAllInvalidUsersThrowsNotFound() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(EMAILS_URL)
-            .content(om.writeValueAsString(List.of(subscriptionBuilder(Channel.EMAIL, INVALID_USER_ID),
-                                                   subscriptionBuilder(Channel.EMAIL, INVALID_USER_ID))))
+            .content(om.writeValueAsString(List.of(SUBSCRIPTION_INVALID_USER, SUBSCRIPTION_INVALID_USER)))
             .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult response = mockMvc.perform(request).andExpect(status().isNotFound()).andReturn();
@@ -126,8 +132,7 @@ class ChannelManagementTest {
 
     @Test
     void testReturnThirdPartyApi() throws Exception {
-        List<Subscription> subscriptions = List.of(subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1),
-                                                   subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1));
+        List<Subscription> subscriptions = List.of(COURTEL_SUBSCRIPTION, COURTEL_SUBSCRIPTION);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(API_URL)
             .content(om.writeValueAsString(subscriptions))
@@ -147,8 +152,7 @@ class ChannelManagementTest {
 
     @Test
     void testReturnThirdPartyApiReturnsNotFound() throws Exception {
-        List<Subscription> subscriptions = List.of(subscriptionBuilder(Channel.EMAIL, VALID_USER_ID_1),
-                                                   subscriptionBuilder(Channel.API_COURTEL, VALID_USER_ID_1));
+        List<Subscription> subscriptions = List.of(SUBSCRIPTION_VALID_USER_1, COURTEL_SUBSCRIPTION);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post(API_URL)
             .content(om.writeValueAsString(subscriptions))

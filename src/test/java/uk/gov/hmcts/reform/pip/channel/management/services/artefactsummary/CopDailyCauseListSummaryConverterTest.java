@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,7 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.COP_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.COP_DAILY_CAUSE_LIST;
 
 @ActiveProfiles("test")
 class CopDailyCauseListSummaryConverterTest {
@@ -24,7 +25,8 @@ class CopDailyCauseListSummaryConverterTest {
                      )), writer, Charset.defaultCharset()
         );
 
-        String emailOutput = COP_DAILY_CAUSE_LIST.getArtefactSummaryConverter().convert(writer.toString());
+        String emailOutput = new ListConversionFactory().getArtefactSummaryConverter(COP_DAILY_CAUSE_LIST)
+            .convert(writer.toString());
 
         SoftAssertions softly = new SoftAssertions();
 

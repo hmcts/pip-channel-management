@@ -8,8 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.services.SubscriberListService;
+import uk.gov.hmcts.reform.pip.model.subscription.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;

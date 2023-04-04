@@ -10,11 +10,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +42,9 @@ class SscsDailyListFileConverterTest {
     private static final String PROVENANCE = "provenance";
     private static final String CONTENT_DATE = "contentDate";
 
+    @Autowired
+    private ListConversionFactory listConversionFactory;
+
     @ParameterizedTest
     @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
     void testSscsDailyList(ListType listType) throws IOException {
@@ -54,7 +59,8 @@ class SscsDailyListFileConverterTest {
                                                  "language", "ENGLISH"
         );
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
-        String outputHtml = listType.getFileConverter().convert(inputJson, metadataMap, language);
+        String outputHtml = listConversionFactory.getFileConverter(listType)
+            .convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("no HTML found").isNotEmpty();
 
@@ -108,7 +114,8 @@ class SscsDailyListFileConverterTest {
                                                  "language", "WELSH"
         );
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
-        String outputHtml = listType.getFileConverter().convert(inputJson, metadataMap, language);
+        String outputHtml = listConversionFactory.getFileConverter(listType)
+            .convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("no HTML found").isNotEmpty();
 
@@ -142,7 +149,7 @@ class SscsDailyListFileConverterTest {
         StringWriter writer = new StringWriter();
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
 
-        assertEquals(0, listType.getFileConverter().convertToExcel(inputJson).length,
+        assertEquals(0, listConversionFactory.getFileConverter(listType).convertToExcel(inputJson).length,
                      "byte array wasn't empty"
         );
     }

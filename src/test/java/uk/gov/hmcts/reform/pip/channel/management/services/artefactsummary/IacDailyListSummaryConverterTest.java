@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,7 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static uk.gov.hmcts.reform.pip.channel.management.models.external.datamanagement.ListType.IAC_DAILY_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.IAC_DAILY_LIST;
 
 @ActiveProfiles("test")
 class IacDailyListSummaryConverterTest {
@@ -27,7 +28,8 @@ class IacDailyListSummaryConverterTest {
                      Charset.defaultCharset()
         );
 
-        String artefactSummary = IAC_DAILY_LIST.getArtefactSummaryConverter().convert(writer.toString());
+        String artefactSummary = new ListConversionFactory().getArtefactSummaryConverter(IAC_DAILY_LIST)
+            .convert(writer.toString());
 
         SoftAssertions softly = new SoftAssertions();
 

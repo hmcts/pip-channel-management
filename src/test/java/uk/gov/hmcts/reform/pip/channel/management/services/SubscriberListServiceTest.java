@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Channel;
-import uk.gov.hmcts.reform.pip.channel.management.models.external.subscriptionmanagement.Subscription;
 import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
+import uk.gov.hmcts.reform.pip.model.subscription.Channel;
+import uk.gov.hmcts.reform.pip.model.subscription.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;

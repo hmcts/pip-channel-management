@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.pip.channel.management.models.FileType;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
+import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
 import java.util.Map;
 import java.util.UUID;
