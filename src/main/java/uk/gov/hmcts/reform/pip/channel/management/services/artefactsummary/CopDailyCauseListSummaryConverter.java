@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CopListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
@@ -22,7 +22,7 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
     public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
 
-        DataManipulation.manipulateCopListData(node, Language.ENGLISH);
+        CopListHelper.manipulateCopListData(node, Language.ENGLISH);
 
         return this.processCopDailyCauseList(node);
     }

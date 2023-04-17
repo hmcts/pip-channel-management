@@ -3,18 +3,17 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
-import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.SscsListHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation.courtHouseBuilder;
 
 @Service
 public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
@@ -62,13 +61,18 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         JsonNode node = new ObjectMapper().readTree(payload);
         List<CourtHouse> courtHouseList = new ArrayList<>();
         for (JsonNode courtHouse : node.get("courtLists")) {
-            courtHouseList.add(courtHouseBuilder(courtHouse, Language.ENGLISH));
+            courtHouseList.add(SscsListHelper.courtHouseBuilder(courtHouse));
         }
         return courtHouseList;
     }
 
     private String hearingBuilder(Hearing hearing, Sitting sitting) {
-        return "\n Appellant: " + hearing.getAppellant()
+        String appellant = "\n Appellant: " + hearing.getAppellant();
+        if (StringUtils.isNotEmpty(hearing.getAppellantRepresentative())) {
+            appellant += ", Legal Advisor: " +  hearing.getAppellantRepresentative();
+        }
+
+        return appellant
             + "\nProsecutor: " + hearing.getRespondent()
             + "\nPanel: " + hearing.getJudiciary()
             + "\nTribunal type: " + sitting.getChannel();

@@ -19,12 +19,10 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
 public final class EtFortnightlyPressListHelper {
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
-    private static final String LEGAL_ADVISOR = "legalAdvisor";
     private static final String REP = "rep";
     private static final String SITTING_START = "sittingStart";
 
@@ -100,58 +98,20 @@ public final class EtFortnightlyPressListHelper {
                                                        JsonNode hearing,
                                                        Map<String, Object> language) {
         ((ObjectNode)hearing).put(COURT_ROOM,
-            GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
+                                  GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
         ((ObjectNode)hearing).put("claimant",
-            GeneralHelper.findAndReturnNodeText(hearing,"claimant"));
+                                  GeneralHelper.findAndReturnNodeText(hearing,"claimant"));
         ((ObjectNode)hearing).put("claimantRepresentative",
-            getClaimantRepresentative(GeneralHelper.findAndReturnNodeText(hearing,"claimantRepresentative"),
-            language));
-        String respondent = GeneralHelper.findAndReturnNodeText(hearing, "respondent");
+                                  language.get(REP)
+                                      + GeneralHelper.findAndReturnNodeText(hearing, "claimantRepresentative"));
         ((ObjectNode)hearing).put("respondent",
-            findRespondent(respondent, language));
+                                  GeneralHelper.findAndReturnNodeText(hearing, "respondent"));
         ((ObjectNode)hearing).put("respondentRepresentative",
-            findRespondentRepresentative(respondent,
-            language));
+                                  language.get(REP)
+                                      + GeneralHelper.findAndReturnNodeText(hearing, "respondentRepresentative"));
         ((ObjectNode)hearing).put("formattedDuration",
-            GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
+                                  GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
         ((ObjectNode)hearing).put("caseHearingChannel",
-            GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
-    }
-
-    private static String getClaimantRepresentative(String claimantRepresentative,
-        Map<String, Object> language) {
-        if (claimantRepresentative.isEmpty()) {
-            return (String) language.get(REP);
-        } else {
-            return language.get(REP)
-                + claimantRepresentative;
-        }
-    }
-
-    private static String findRespondent(String respondent,
-                                         Map<String, Object> language) {
-        String legalAdvisor = (String) language.get(LEGAL_ADVISOR);
-
-        if (respondent.contains(legalAdvisor)) {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(
-                respondent.substring(0, respondent.indexOf(legalAdvisor)));
-        }
-        return respondent;
-    }
-
-    private static String findRespondentRepresentative(String respondentRepresentative,
-                                                       Map<String, Object> language) {
-        String legalAdvisor = (String) language.get(LEGAL_ADVISOR);
-
-        if (respondentRepresentative.contains(legalAdvisor)) {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(
-                language.get(REP) + respondentRepresentative.substring(respondentRepresentative
-                     .indexOf(legalAdvisor) + legalAdvisor.length()));
-        }
-        if (respondentRepresentative.isEmpty()) {
-            return (String) language.get(REP);
-        }
-
-        return respondentRepresentative;
+                                  GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
     }
 }

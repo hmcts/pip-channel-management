@@ -3,9 +3,9 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -21,64 +21,73 @@ class PartyRoleHelperTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String PARTY = "party";
 
-    private JsonNode loadInPartyFile() throws IOException {
+    private static JsonNode inputJson;
+
+    @BeforeAll
+    static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(
-            Paths.get("src/test/resources/mocks/partyManipulation.json")), writer,
+                         Paths.get("src/test/resources/mocks/partyManipulation.json")), writer,
                      Charset.defaultCharset()
         );
-        return OBJECT_MAPPER.readTree(writer.toString());
+        inputJson = OBJECT_MAPPER.readTree(writer.toString());
     }
 
     @Test
-    void testFindManipulatePartyInformationApplicant() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
+    void testFindManipulatePartyInformationApplicant() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
         assertThat(inputJson.get("applicant").asText())
             .as("applicant is incorrect")
-            .startsWith("Applicant Title Applicant Forename Applicant Middlename Applicant Surname");
+            .isEqualTo("Applicant Title Applicant Forename Applicant Middlename Applicant Surname");
     }
 
     @Test
-    void testFindManipulatePartyInformationApplicantRepresentativeEnglish() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
+    void testFindManipulatePartyInformationApplicantRepresentative() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
-
-        assertThat(inputJson.get("applicant").asText())
-            .as("applicant is incorrect")
-            .contains("Legal Advisor: Rep Title Rep Forename Rep Middlename Rep Surname");
+        assertThat(inputJson.get("applicantRepresentative").asText())
+            .as("applicant representative is incorrect")
+            .isEqualTo("Rep Title Rep Forename Rep Middlename Rep Surname");
     }
 
     @Test
-    void testFindManipulatePartyInformationApplicantRepresentativeWelsh() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.WELSH, false);
-
-        assertThat(inputJson.get("applicant").asText())
-            .as("applicant is incorrect")
-            .contains("Cynghorydd Cyfreithiol: Rep Title Rep Forename Rep Middlename Rep Surname");
-    }
-
-    @Test
-    void testFindManipulatePartyInformationRespondent() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
+    void testFindManipulatePartyInformationRespondent() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
         assertThat(inputJson.get("respondent").asText())
             .as("respondent is incorrect")
-            .startsWith("Title Forename Middlename Surname");
+            .isEqualTo("Title Forename Middlename Surname");
     }
 
     @Test
-    void testFindManipulatePartyInformationProsecutingAuthority() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
+    void testFindManipulatePartyInformationRespondentWithInitial() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, true);
 
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
+        assertThat(inputJson.get("respondent").asText())
+            .as("respondent is incorrect")
+            .isEqualTo("Title F Surname");
+    }
+
+    @Test
+    void testFindManipulatePartyInformationRespondentRepresentative() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
+        assertThat(inputJson.get("respondentRepresentative").asText())
+            .as("respondent representative is incorrect")
+            .isEqualTo("Mr ForenameB MiddlenameB SurnameB");
+    }
+
+    @Test
+    void testFindManipulatePartyInformationRespondentRepresentativeWithInitial() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, true);
+        assertThat(inputJson.get("respondentRepresentative").asText())
+            .as("respondent representative is incorrect")
+            .isEqualTo("Mr F SurnameB");
+    }
+
+    @Test
+    void testFindManipulatePartyInformationProsecutingAuthority() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
         assertThat(inputJson.get("prosecutingAuthority").asText())
             .as("prosecuting authority is incorrect")
@@ -86,21 +95,8 @@ class PartyRoleHelperTest {
     }
 
     @Test
-    void testFindManipulatePartyInformationRespondentRepresentative() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
-
-        assertThat(inputJson.get("respondent").asText())
-            .as("respondent is incorrect")
-            .endsWith("Legal Advisor: Mr ForenameB MiddlenameB SurnameB");
-    }
-
-    @Test
-    void testFindManipulatePartyInformationClaimant() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
+    void testFindManipulatePartyInformationClaimant() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
         assertThat(inputJson.get("claimant").asText())
             .as("claimant is incorrect")
@@ -108,10 +104,17 @@ class PartyRoleHelperTest {
     }
 
     @Test
-    void testFindManipulatePartyInformationClaimantRepresentative() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
+    void testFindManipulatePartyInformationClaimantWithInitial() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, true);
 
-        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, Language.ENGLISH, false);
+        assertThat(inputJson.get("claimant").asText())
+            .as("claimant is incorrect")
+            .isEqualTo("Claimant Title C Claimant Surname");
+    }
+
+    @Test
+    void testFindManipulatePartyInformationClaimantRepresentative() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, false);
 
         assertThat(inputJson.get("claimantRepresentative").asText())
             .as("claimant representative is incorrect")
@@ -119,67 +122,40 @@ class PartyRoleHelperTest {
     }
 
     @Test
-    void testFormatPartyRepresentativeInEnglish() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
+    void testFindManipulatePartyInformationClaimantRepresentativeWithInitial() {
+        PartyRoleHelper.findAndManipulatePartyInformation(inputJson, true);
 
-        assertThat(PartyRoleHelper.formatPartyRepresentative(Language.ENGLISH, inputJson.get(PARTY).get(1),
-                                                             "forename surname"))
-            .as("Party representative incorrect")
-            .isEqualTo("Legal Advisor: forename surname, ");
+        assertThat(inputJson.get("claimantRepresentative").asText())
+            .as("claimant representative is incorrect")
+            .isEqualTo("Rep Title R Rep Surname");
     }
 
     @Test
-    void testFormatPartyRepresentativeInWelsh() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        assertThat(PartyRoleHelper.formatPartyRepresentative(Language.WELSH, inputJson.get(PARTY).get(1),
-                                                             "forename surname"))
-            .as("Party representative incorrect")
-            .isEqualTo("Cynghorydd Cyfreithiol: forename surname, ");
-    }
-
-    @Test
-    void testFormatPartyRepresentativeWithEmptyString() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
-        assertThat(PartyRoleHelper.formatPartyRepresentative(Language.ENGLISH, inputJson.get(PARTY).get(1),
-                                                             ""))
-            .as("Party representative incorrect")
-            .isEmpty();
-    }
-
-    @Test
-    void testFormatPartyNonRepresentative() throws IOException {
+    void testFormatPartyDetails() {
         StringBuilder builder = new StringBuilder("name1");
 
-        PartyRoleHelper.formatPartyNonRepresentative(builder, "name2");
+        PartyRoleHelper.formatPartyDetails(builder, "name2");
         assertThat(builder)
             .as("Party non representative incorrect")
             .hasToString("name2, name1");
     }
 
     @Test
-    void testCreateIndividualDetails() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
+    void testCreateIndividualDetails() {
         assertThat(PartyRoleHelper.createIndividualDetails(inputJson.get(PARTY).get(0), false))
             .as("Individual details incorrect")
             .isEqualTo("Applicant Title Applicant Forename Applicant Middlename Applicant Surname");
     }
 
     @Test
-    void testCreateIndividualDetailsWithInitials() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
+    void testCreateIndividualDetailsWithInitials() {
         assertThat(PartyRoleHelper.createIndividualDetails(inputJson.get(PARTY).get(0), true))
             .as("Individual details incorrect")
             .isEqualTo("Applicant Title A Applicant Surname");
     }
 
     @Test
-    void testCreateIndividualDetailsWithOrgInformation() throws IOException {
-        JsonNode inputJson = loadInPartyFile();
-
+    void testCreateIndividualDetailsWithOrgInformation() {
         assertThat(PartyRoleHelper.createIndividualDetails(inputJson.get(PARTY).get(8), false))
             .as("Individual details should be blank")
             .isEmpty();

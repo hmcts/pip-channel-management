@@ -2,15 +2,15 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.poi.util.StringUtil;
-import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class PartyRoleHelper {
     private static final String APPLICANT = "applicant";
+    private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
     private static final String RESPONDENT = "respondent";
+    private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
     private static final String CLAIMANT = "claimant";
     private static final String CLAIMANT_REPRESENTATIVE = "claimantRepresentative";
     private static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
@@ -29,67 +29,56 @@ public final class PartyRoleHelper {
     private PartyRoleHelper() {
     }
 
-    public static void findAndManipulatePartyInformation(JsonNode hearing, Language language, boolean initialised) {
+    public static void findAndManipulatePartyInformation(JsonNode hearing, boolean initialised) {
         StringBuilder applicant = new StringBuilder();
+        StringBuilder applicantRepresentative = new StringBuilder();
         StringBuilder respondent = new StringBuilder();
+        StringBuilder respondentRepresentative = new StringBuilder();
         StringBuilder claimant = new StringBuilder();
         StringBuilder claimantRepresentative = new StringBuilder();
-        StringBuilder prosecutingAuthority = new StringBuilder();
 
         hearing.get(PARTY).forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                 switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
                     case "APPLICANT_PETITIONER" ->
-                        formatPartyNonRepresentative(party, applicant, initialised);
+                        formatPartyDetails(party, applicant, initialised);
                     case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
-                        applicant.append(formatPartyRepresentative(language, party, initialised));
-                    case "RESPONDENT" -> {
-                        formatPartyNonRepresentative(party, respondent, initialised);
-                        formatPartyNonRepresentative(party, prosecutingAuthority, initialised);
-                    }
+                        formatPartyDetails(party, applicantRepresentative, initialised);
+                    case "RESPONDENT" ->
+                        formatPartyDetails(party, respondent, initialised);
                     case "RESPONDENT_REPRESENTATIVE" ->
-                        respondent.append(formatPartyRepresentative(language, party, initialised));
+                        formatPartyDetails(party, respondentRepresentative, initialised);
                     case "CLAIMANT_PETITIONER" ->
-                        formatPartyNonRepresentative(party, claimant, initialised);
+                        formatPartyDetails(party, claimant, initialised);
                     case "CLAIMANT_PETITIONER_REPRESENTATIVE" ->
-                        formatPartyNonRepresentative(party, claimantRepresentative, initialised);
+                        formatPartyDetails(party, claimantRepresentative, initialised);
                     default -> { }
                 }
             }
         });
 
-        ((ObjectNode) hearing).put(APPLICANT, GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT, GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
-        ((ObjectNode) hearing).put(CLAIMANT, GeneralHelper.trimAnyCharacterFromStringEnd(claimant.toString()));
+        ((ObjectNode) hearing).put(APPLICANT,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
+        ((ObjectNode) hearing).put(APPLICANT_REPRESENTATIVE,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
+        ((ObjectNode) hearing).put(RESPONDENT,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        ((ObjectNode) hearing).put(RESPONDENT_REPRESENTATIVE,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
+        ((ObjectNode) hearing).put(CLAIMANT,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(claimant.toString()));
         ((ObjectNode) hearing).put(CLAIMANT_REPRESENTATIVE,
                                    GeneralHelper.trimAnyCharacterFromStringEnd(claimantRepresentative.toString()));
         ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(prosecutingAuthority.toString()));
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
     }
 
-    private static String formatPartyRepresentative(Language language, JsonNode party,
-                                                   boolean initialised) {
-        final String details = createIndividualDetails(party, initialised);
-        return formatPartyRepresentative(language, party, details);
-    }
-
-    public static String formatPartyRepresentative(Language language, JsonNode party, String details) {
-        StringBuilder builder = new StringBuilder();
-        if (!party.isEmpty() && StringUtil.isNotBlank(details)) {
-            builder
-                .append(language == Language.ENGLISH ? "Legal Advisor: " : "Cynghorydd Cyfreithiol: ")
-                .append(details)
-                .append(", ");
-        }
-        return builder.toString();
-    }
-
-    private static void formatPartyNonRepresentative(JsonNode party, StringBuilder builder, boolean initialised) {
+    private static void formatPartyDetails(JsonNode party, StringBuilder builder, boolean initialised) {
         String details = createIndividualDetails(party, initialised);
-        formatPartyNonRepresentative(builder, details);
+        formatPartyDetails(builder, details);
     }
 
-    public static void formatPartyNonRepresentative(StringBuilder builder, String details) {
+    public static void formatPartyDetails(StringBuilder builder, String details) {
         String result = details + GeneralHelper.stringDelimiter(details, ", ");
         builder.insert(0, result);
     }

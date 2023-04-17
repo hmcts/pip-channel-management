@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@SuppressWarnings("PMD.TooManyMethods")
 class DataManipulationTest {
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
@@ -30,7 +29,6 @@ class DataManipulationTest {
     private static final String CASE_TYPE = "caseType";
 
     private static JsonNode inputJson;
-    private static JsonNode inputJsonCop;
 
     @BeforeAll
     public static void setup()  throws IOException {
@@ -40,13 +38,6 @@ class DataManipulationTest {
         );
 
         inputJson = new ObjectMapper().readTree(writer.toString());
-
-        StringWriter copWriter = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/copDailyCauseList.json")), copWriter,
-                     Charset.defaultCharset()
-        );
-
-        inputJsonCop = new ObjectMapper().readTree(copWriter.toString());
     }
 
     @Test
@@ -102,86 +93,6 @@ class DataManipulationTest {
                        .get("caseHearingChannel").asText())
             .as("Unable to get case hearing channel")
             .isEqualTo("Teams, Attended");
-    }
-
-    @Test
-    void testFormatCaseIndicator() {
-        DataManipulation.manipulateCopListData(inputJsonCop, Language.ENGLISH);
-
-        assertThat(inputJsonCop.get(COURT_LISTS).get(0)
-                       .get(COURT_HOUSE)
-                       .get(COURT_ROOM).get(0)
-                       .get(SESSION).get(0)
-                       .get(SITTINGS).get(0)
-                       .get(HEARING).get(0)
-                       .get(CASE).get(0)
-                       .get("caseIndicator").asText())
-            .as("Unable to get case name")
-            .contains("[1 of 2]");
-    }
-
-    @Test
-    void testFindAndManipulateJudiciary() {
-        DataManipulation.manipulateCopListData(inputJsonCop, Language.ENGLISH);
-
-        assertThat(inputJsonCop.get(COURT_LISTS).get(0)
-                       .get(COURT_HOUSE)
-                       .get(COURT_ROOM).get(0)
-                       .get(SESSION).get(0)
-                       .get("formattedSessionJoh").asText())
-            .as("Unable to get session Joh")
-            .contains("Mrs Firstname Surname");
-
-        assertThat(inputJsonCop.get(COURT_LISTS).get(1)
-                       .get(COURT_HOUSE)
-                       .get(COURT_ROOM).get(0)
-                       .get(SESSION).get(0)
-                       .get("formattedSessionJoh").asText())
-            .as("Unable to get session Joh")
-            .contains("Mrs Firstname Surname, Mrs OtherFirstname OtherSurname");
-    }
-
-    @Test
-    void testFormatRegionNameWhenNotPresent() throws IOException {
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(
-                         Paths.get("src/test/resources/mocks/copDailyCauseListMissingRegion.json")), writer,
-                     Charset.defaultCharset()
-        );
-
-        JsonNode newInputJson = new ObjectMapper().readTree(writer.toString());
-
-        DataManipulation.manipulateCopListData(newInputJson, Language.ENGLISH);
-
-        assertThat(newInputJson.get("regionName").asText())
-            .as("Unable to get region name")
-            .isEmpty();
-    }
-
-    @Test
-    void testFormatRegionalJoh() {
-        DataManipulation.manipulateCopListData(inputJsonCop, Language.ENGLISH);
-
-        assertThat(inputJsonCop.get("regionalJoh").asText())
-            .as("Unable to get regional Joh")
-            .contains("Judge Firstname Surname");
-    }
-
-    @Test
-    void testMissingRegionalJoh() throws IOException {
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(
-                         Paths.get("src/test/resources/mocks/copDailyCauseListMissingRegionalJoh.json")), writer,
-                     Charset.defaultCharset()
-        );
-
-        JsonNode newInputJson = new ObjectMapper().readTree(writer.toString());
-
-        DataManipulation.manipulateCopListData(newInputJson, Language.ENGLISH);
-
-        assertThat(newInputJson.get("regionalJoh").asText())
-            .as("Unable to get regional Joh")
-            .isEmpty();
     }
 
     @Test
