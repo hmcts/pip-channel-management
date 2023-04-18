@@ -67,9 +67,15 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
     }
 
     private String hearingBuilder(Hearing hearing, Sitting sitting) {
-        String appellant = "\n Appellant: " + hearing.getAppellant();
+        StringBuilder appellant = new StringBuilder(30);
+        appellant.append("\n Appellant: ")
+            .append(hearing.getAppellant());
         if (StringUtils.isNotEmpty(hearing.getAppellantRepresentative())) {
-            appellant += ", Legal Advisor: " +  hearing.getAppellantRepresentative();
+            if (StringUtils.isNotEmpty(hearing.getAppellant())) {
+                appellant.append(", ");
+            }
+            appellant.append("Legal Advisor: ")
+                .append(hearing.getAppellantRepresentative());
         }
 
         return appellant
