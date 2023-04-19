@@ -11,12 +11,17 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /*Configures the Web Client that is used in requests to external services.*/
 @Configuration
 @Profile("!test")
 public class WebClientConfig {
+    private static final ExchangeStrategies STRATEGIES =  ExchangeStrategies.builder()
+        .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs()
+        .maxInMemorySize(2 * 1024 * 1024))
+        .build();
 
     @Bean
     @Profile("!dev")
@@ -42,6 +47,7 @@ public class WebClientConfig {
             new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         oauth2Client.setDefaultClientRegistrationId("accountManagementApi");
         return WebClient.builder()
+            .exchangeStrategies(STRATEGIES)
             .apply(oauth2Client.oauth2Configuration())
             .build();
     }
@@ -49,6 +55,8 @@ public class WebClientConfig {
     @Bean
     @Profile("dev")
     WebClient webClientInsecure() {
-        return WebClient.builder().build();
+        return WebClient.builder()
+            .exchangeStrategies(STRATEGIES)
+            .build();
     }
 }
