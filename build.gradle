@@ -147,6 +147,7 @@ configurations {
 project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 def sonarExclusions = []
+
 sonarqube {
   properties {
     property "sonar.projectKey", "pip-channel-management"
