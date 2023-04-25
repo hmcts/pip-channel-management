@@ -8,6 +8,7 @@ public class Hearing {
     String appealRef;
     String tribunalType;
     String appellant;
+    String appellantRepresentative;
     String respondent;
     String judiciary;
 }

@@ -8,7 +8,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helper
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
-import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 /**
  * Summary class for the IAC Daily List that generates the summary in the email.
@@ -30,7 +29,7 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
 
                         DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
                         sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, Language.ENGLISH, false);
+                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
                             hearing.get("case").forEach(hearingCase -> {
                                 GeneralHelper.appendToStringBuilder(output, "List Name - ",
                                                                     courtList, "courtListName");

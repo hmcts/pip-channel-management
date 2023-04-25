@@ -23,9 +23,7 @@ public class IacDailyListFileConverter implements FileConverter {
     public String convert(JsonNode artefact, Map<String, String> metadata,
                           Map<String, Object> languageResources) throws IOException {
         Context context = new Context();
-
-        Language language = Language.valueOf(metadata.get("language"));
-        calculateListData(artefact, language);
+        calculateListData(artefact);
 
         context.setVariable("i18n", languageResources);
         context.setVariable("provenance", metadata.get("provenance"));
@@ -34,6 +32,7 @@ public class IacDailyListFileConverter implements FileConverter {
 
         context.setVariable("locationName", metadata.get("locationName"));
         String publicationDate = artefact.get("document").get("publicationDate").asText();
+        Language language = Language.valueOf(metadata.get("language"));
         context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                false, false));
         context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
@@ -49,9 +48,8 @@ public class IacDailyListFileConverter implements FileConverter {
     /**
      * This method calculates the list data for the artefact.
      * @param artefact List data to calculate.
-     * @param language The language for the list type.
      */
-    private void calculateListData(JsonNode artefact, Language language) {
+    private void calculateListData(JsonNode artefact) {
         artefact.get("courtLists").forEach(courtList -> {
 
             ((ObjectNode) courtList).put(
@@ -74,7 +72,7 @@ public class IacDailyListFileConverter implements FileConverter {
                         DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, language, false);
+                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
                             hearing.get("case").forEach(CaseHelper::formatLinkedCases);
                         });
                     });

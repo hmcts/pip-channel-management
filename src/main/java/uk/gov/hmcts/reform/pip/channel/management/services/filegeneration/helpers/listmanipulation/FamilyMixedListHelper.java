@@ -13,7 +13,9 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 @SuppressWarnings("java:S108")
 public final class FamilyMixedListHelper {
     private static final String APPLICANT = "applicant";
+    private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
     private static final String RESPONDENT = "respondent";
+    private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
     private static final String PARTY_ROLE = "partyRole";
 
     private FamilyMixedListHelper() {
@@ -32,7 +34,7 @@ public final class FamilyMixedListHelper {
 
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
-                                handleParties(hearing, language);
+                                handleParties(hearing);
                             } else {
                                 ((ObjectNode) hearing).put(APPLICANT, "");
                                 ((ObjectNode) hearing).put(RESPONDENT, "");
@@ -44,32 +46,38 @@ public final class FamilyMixedListHelper {
                 })));
     }
 
-    private static void handleParties(JsonNode hearing, Language language) {
+    private static void handleParties(JsonNode hearing) {
         StringBuilder applicant = new StringBuilder();
+        StringBuilder applicantRepresentative = new StringBuilder();
         StringBuilder respondent = new StringBuilder();
+        StringBuilder respondentRepresentative = new StringBuilder();
 
         hearing.get("party").forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                 switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
                     case "APPLICANT_PETITIONER" ->
-                        PartyRoleHelper.formatPartyNonRepresentative(applicant, createPartyDetails(party));
+                        PartyRoleHelper.formatPartyDetails(applicant, createPartyDetails(party));
                     case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
-                        applicant.append(
-                            PartyRoleHelper.formatPartyRepresentative(language, party, createPartyDetails(party))
-                        );
+                        PartyRoleHelper.formatPartyDetails(applicantRepresentative,
+                                                           createPartyDetails(party));
                     case "RESPONDENT" ->
-                        PartyRoleHelper.formatPartyNonRepresentative(respondent, createPartyDetails(party));
+                        PartyRoleHelper.formatPartyDetails(respondent, createPartyDetails(party));
                     case "RESPONDENT_REPRESENTATIVE" ->
-                        respondent.append(
-                            PartyRoleHelper.formatPartyRepresentative(language, party, createPartyDetails(party))
-                        );
+                        PartyRoleHelper.formatPartyDetails(respondentRepresentative,
+                                                           createPartyDetails(party));
                     default -> { }
                 }
             }
         });
 
-        ((ObjectNode) hearing).put(APPLICANT, GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT, GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        ((ObjectNode) hearing).put(APPLICANT,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
+        ((ObjectNode) hearing).put(APPLICANT_REPRESENTATIVE,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
+        ((ObjectNode) hearing).put(RESPONDENT,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        ((ObjectNode) hearing).put(RESPONDENT_REPRESENTATIVE,
+                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
     }
 
     private static String createPartyDetails(JsonNode party) {

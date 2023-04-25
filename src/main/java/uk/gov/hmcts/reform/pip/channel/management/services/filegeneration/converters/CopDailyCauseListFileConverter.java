@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CopListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class CopDailyCauseListFileConverter implements FileConverter {
         context.setVariable("artefact", artefact);
         context.setVariable("i18n", languageResources);
 
-        DataManipulation.manipulateCopListData(artefact, Language.valueOf(metadata.get("language")));
+        CopListHelper.manipulateCopListData(artefact, Language.valueOf(metadata.get("language")));
 
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
         return templateEngine.process("copDailyCauseList.html", context);

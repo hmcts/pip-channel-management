@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpe
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -28,7 +29,9 @@ class FamilyMixedListHelperTest {
     private static final String CASE_NAME = "caseName";
     private static final String CASE_TYPE = "caseType";
     private static final String APPLICANT = "applicant";
+    private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
     private static final String RESPONDENT = "respondent";
+    private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
 
     private static JsonNode inputJson;
 
@@ -138,13 +141,25 @@ class FamilyMixedListHelperTest {
             .get(SITTINGS).get(0)
             .get(HEARING).get(0);
 
-        assertThat(hearing.get(APPLICANT).asText())
-            .as("Applicant is incorrect")
-            .isEqualTo("Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname");
+        SoftAssertions softly = new SoftAssertions();
 
-        assertThat(hearing.get(RESPONDENT).asText())
+        softly.assertThat(hearing.get(APPLICANT).asText())
+            .as("Applicant is incorrect")
+            .isEqualTo("Surname");
+
+        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
+            .as("Applicant representative is incorrect")
+            .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
+
+        softly.assertThat(hearing.get(RESPONDENT).asText())
             .as("Respondent is incorrect")
             .isEqualTo("Surname");
+
+        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
+            .as("Respondent representative is incorrect")
+            .isEmpty();
+
+        softly.assertAll();
     }
 
     @Test
@@ -158,12 +173,24 @@ class FamilyMixedListHelperTest {
             .get(SITTINGS).get(0)
             .get(HEARING).get(1);
 
-        assertThat(hearing.get(APPLICANT).asText())
-            .as("Applicant is incorrect")
-            .isEqualTo("Applicant org name, Legal Advisor: Applicant rep org name");
+        SoftAssertions softly = new SoftAssertions();
 
-        assertThat(hearing.get(RESPONDENT).asText())
+        softly.assertThat(hearing.get(APPLICANT).asText())
+            .as("Applicant is incorrect")
+            .isEqualTo("Applicant org name");
+
+        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
+            .as("Applicant representative is incorrect")
+            .isEqualTo("Applicant rep org name");
+
+        softly.assertThat(hearing.get(RESPONDENT).asText())
             .as("Respondent is incorrect")
-            .isEqualTo("Respondent org name, Legal Advisor: Respondent rep org name");
+            .isEqualTo("Respondent org name");
+
+        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
+            .as("Respondent representative is incorrect")
+            .isEqualTo("Respondent rep org name");
+
+        softly.assertAll();
     }
 }

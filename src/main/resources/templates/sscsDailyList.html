@@ -200,7 +200,17 @@
               <td th:text="${hearing.hearingTime}"/>
               <td th:text="${hearing.appealRef}"/>
               <td th:text="${sitting.channel}"/>
-              <td th:text="${hearing.appellant}"/>
+              <th:block th:if="${#strings.isEmpty(hearing.appellantRepresentative)}">
+                <td class="govuk-table__cell" th:text="${hearing.appellant}" />
+              </th:block>
+              <th:block th:if="!${#strings.isEmpty(hearing.appellantRepresentative)}">
+                <th:block th:if="${#strings.isEmpty(hearing.appellant)}">
+                  <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + hearing.appellantRepresentative}" />
+                </th:block>
+                <th:block th:if="!${#strings.isEmpty(hearing.appellant)}">
+                  <td class="govuk-table__cell" th:text="${hearing.appellant + ', ' + i18n.legalAdvisor + hearing.appellantRepresentative}" />
+                </th:block>
+              </th:block>
               <td th:text="${hearing.respondent}"/>
               <td th:text="${sitting.judiciary}"/>
             </tr>

@@ -13,15 +13,12 @@ import java.util.Map;
 
 @Service
 public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryConverter {
-
-
     @Override
     public String convert(String payload) throws JsonProcessingException {
         JsonNode node = new ObjectMapper().readTree(payload);
         Map<String, Object> language =
             Map.of("rep", "Rep: ",
-                   "noRep", "Rep: ",
-                   "legalAdvisor", "Legal Advisor: ");
+                   "noRep", "Rep: ");
         DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, true);
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(node, language);
         EtFortnightlyPressListHelper.splitByCourtAndDate(node);
