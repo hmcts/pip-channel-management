@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
+
 
 /**
  * Connects to the account management service to request emails corresponding with subscription userIds.
@@ -40,17 +42,17 @@ public class AccountManagementService {
 
     public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
         try {
-            return  webClient.post().uri(String.format(
-                    "%s/account/emails/", url)).body(BodyInserters.fromValue(listOfUserIds))
+            return webClient.post().uri(String.format("%s/account/emails/", url))
+                .body(BodyInserters.fromValue(listOfUserIds))
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Optional<String>>>() {
                 }).block();
 
         } catch (WebClientException ex) {
-            log.error(
-                "Account management request failed to get emails. Response: {}",
-                ex.getMessage()
-            );
+            log.error(writeLog(
+                String.format("Request to Account Management to get account e-mails failed with error: %s",
+                              ex.getMessage())
+            ));
             return Collections.emptyMap();
         }
     }
@@ -68,7 +70,10 @@ public class AccountManagementService {
                     "%s/account/isAuthorised/%s/%s/%s", url, userId, listType, sensitivity))
                 .retrieve().bodyToMono(Boolean.class).block();
         } catch (WebClientException ex) {
-            log.error(String.format(ACCOUNT_MANAGEMENT_REQUEST_FAILED, ex.getMessage()));
+            log.error(writeLog(
+                String.format("Request to Account Management to check user authorisation failed with error: %s",
+                              ex.getMessage())
+            ));
             return false;
         }
     }
