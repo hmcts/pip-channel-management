@@ -8,6 +8,7 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 
@@ -160,7 +161,7 @@ public final class MagistratesStandardListHelper {
 
     private static void formatPartyInformation(ObjectNode hearing, JsonNode party, Map<String, Object> language) {
         if ("DEFENDANT".equals(PartyRoleMapper.convertPartyRole(party.get("partyRole").asText()))) {
-            String defendant = createIndividualDetails(party);
+            String defendant = PartyRoleHelper.createIndividualDetails(party);
             hearing.put(DEFENDANT_HEADING, defendant);
             hearing.put("defendantDateOfBirth", "");
             hearing.put("defendantAddress", "");
@@ -238,21 +239,6 @@ public final class MagistratesStandardListHelper {
                 .append(postCode.length() > 0 ? ", " + postCode : postCode);
 
             return address.toString();
-        }
-        return "";
-    }
-
-    private static String createIndividualDetails(JsonNode party) {
-        if (party.has(INDIVIDUAL_DETAILS)) {
-            JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
-            String forNames = GeneralHelper.findAndReturnNodeText(individualDetails, "individualForenames");
-            String separator = " ";
-            if (!forNames.isEmpty()) {
-                separator = ", ";
-            }
-            return (GeneralHelper.findAndReturnNodeText(individualDetails, "individualSurname")
-                + separator
-                + forNames).trim();
         }
         return "";
     }

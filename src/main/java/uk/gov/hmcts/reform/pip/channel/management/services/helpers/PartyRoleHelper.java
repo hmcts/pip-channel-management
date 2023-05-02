@@ -102,13 +102,16 @@ public final class PartyRoleHelper {
         return "";
     }
 
-    private static String createIndividualDetails(JsonNode party) {
-        JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
-        String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES);
-        String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
+    public static String createIndividualDetails(JsonNode party) {
+        if (party.has(INDIVIDUAL_DETAILS)) {
+            JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+            String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES);
+            String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
-        return surname + (surname.isEmpty() || forenames.isEmpty() ? "" : ", ")
-            + forenames;
+            return surname + (surname.isEmpty() || forenames.isEmpty() ? "" : ", ")
+                + forenames;
+        }
+        return "";
     }
 
     public static void handleParties(JsonNode hearing) {
