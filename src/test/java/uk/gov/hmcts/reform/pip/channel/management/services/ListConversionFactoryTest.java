@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.CivilDailyCauseListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CivilDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdail
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.SscsListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
