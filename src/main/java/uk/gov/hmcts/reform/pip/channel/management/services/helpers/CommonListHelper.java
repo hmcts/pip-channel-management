@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.FamilyMixedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -10,13 +11,20 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 
-public final class DailyCauseListHelper {
+public final class CommonListHelper {
     private static final String DOCUMENT = "document";
     private static final String VERSION = "version";
     private static final String VENUE = "venue";
     private static final String VENUE_CONTACT = "venueContact";
+    private static final String COURT_ROOM = "courtRoom";
+    private static final String SESSION = "session";
+    private static final String SITTINGS = "sittings";
+    private static final String HEARING = "hearing";
+    private static final String APPLICANT = "applicant";
+    private static final String RESPONDENT = "respondent";
+    private static final String TIME_FORMAT = "h:mma";
 
-    private DailyCauseListHelper() {
+    private CommonListHelper() {
     }
 
     public static Context preprocessArtefactForThymeLeafConverter(JsonNode artefact, Map<String, String> metadata,
@@ -55,8 +63,35 @@ public final class DailyCauseListHelper {
             || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
             FamilyMixedListHelper.manipulatedlistData(artefact, language);
         } else {
-            DataManipulation.manipulatedDailyListData(artefact, language, initialised);
+            manipulatedListData(artefact, language, initialised);
         }
         return context;
+    }
+
+    public static void manipulatedListData(JsonNode artefact, Language language, boolean initialised) {
+        artefact.get("courtLists").forEach(
+            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get(SESSION).forEach(session -> {
+                    StringBuilder formattedJudiciary = new StringBuilder();
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
+                    session.get(SITTINGS).forEach(sitting -> {
+                        DateHelper.calculateDuration(sitting, language);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
+
+                        sitting.get(HEARING).forEach(hearing -> {
+                            if (hearing.has("party")) {
+                                PartyRoleHelper.findAndManipulatePartyInformation(hearing, initialised);
+                            } else {
+                                ((ObjectNode) hearing).put(APPLICANT, "");
+                                ((ObjectNode) hearing).put(RESPONDENT, "");
+                            }
+                            hearing.get("case").forEach(CaseHelper::manipulateCaseInformation);
+                        });
+                    });
+                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
+                })
+            )
+        );
     }
 }

@@ -6,9 +6,10 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class IacDailyListFileConverter implements FileConverter {
 
             courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(session -> {
-                    String formattedJoh = DataManipulation.findAndManipulateJudiciaryForCop(session);
+                    String formattedJoh = JudiciaryHelper.findAndManipulateJudiciaryForCop(session);
                     ((ObjectNode) session).put("formattedJudiciary", formattedJoh);
 
                     session.get("sittings").forEach(sitting -> {
@@ -69,7 +70,7 @@ public class IacDailyListFileConverter implements FileConverter {
 
                         ((ObjectNode) sitting).put("formattedStart", sittingStart);
 
-                        DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);

@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -11,13 +13,16 @@ import java.io.InputStream;
 
 @ActiveProfiles("test")
 class TribunalNationalListsSummaryConverterTest {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     @Test
     void testPrimaryHealthListTemplate() throws IOException {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/primaryHealthList.json")) {
+            JsonNode payload = MAPPER.readTree(new String(mockFile.readAllBytes()));
             output = new ListConversionFactory().getArtefactSummaryConverter(ListType.PRIMARY_HEALTH_LIST)
-                .convert(new String(mockFile.readAllBytes()));
+                .convert(payload);
         }
 
         SoftAssertions softly = new SoftAssertions();
@@ -53,8 +58,9 @@ class TribunalNationalListsSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/careStandardsList.json")) {
+            JsonNode payload = MAPPER.readTree(new String(mockFile.readAllBytes()));
             output = new ListConversionFactory().getArtefactSummaryConverter(ListType.CARE_STANDARDS_LIST)
-                .convert(new String(mockFile.readAllBytes()));
+                .convert(payload);
         }
 
         SoftAssertions softly = new SoftAssertions();

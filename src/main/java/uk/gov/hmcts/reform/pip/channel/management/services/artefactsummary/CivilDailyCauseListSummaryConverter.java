@@ -12,13 +12,12 @@ import java.util.List;
 
 @Service
 public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
-
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
-
 
     /**
      * Civil cause list parent method - iterates on courtHouse/courtList - if these need to be shown in further
@@ -29,10 +28,9 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
+    public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
-        JsonNode node = new ObjectMapper().readTree(payload);
-        Iterator<JsonNode> courtHouseNode = node.get(COURT_LISTS).elements();
+        Iterator<JsonNode> courtHouseNode = payload.get(COURT_LISTS).elements();
         while (courtHouseNode.hasNext()) {
             JsonNode thisCourtHouse = courtHouseNode.next().get(COURT_HOUSE);
             output.append(processCivilDailyCourtRooms(thisCourtHouse)).append('\n');
@@ -49,7 +47,6 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      */
     private String processCivilDailyCourtRooms(JsonNode node) {
         Iterator<JsonNode> courtRoomNode = node.get(COURT_ROOM).elements();
-        ObjectMapper mapper = new ObjectMapper();
         StringBuilder outputString = new StringBuilder();
         List<String> sessionChannel;
         TypeReference<List<String>> typeReference = new TypeReference<>() {
@@ -57,7 +54,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
         while (courtRoomNode.hasNext()) {
             JsonNode thisCourtRoom = courtRoomNode.next();
             JsonNode sessionChannelNode = thisCourtRoom.get(SESSION).get(0).path("sessionChannel");
-            sessionChannel = mapper.convertValue(sessionChannelNode, typeReference);
+            sessionChannel = MAPPER.convertValue(sessionChannelNode, typeReference);
             outputString.append("\n\nCourtroom: ").append(thisCourtRoom.get("courtRoomName").asText())
                 .append(processCivilDailyJudiciary(thisCourtRoom))
                 .append(processCivilDailySittings(thisCourtRoom, sessionChannel));
@@ -131,7 +128,6 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      */
     private String processCivilDailyChannels(List<String> sessionChannel, JsonNode currentSittingNode) {
         StringBuilder outputString = new StringBuilder("\nHearing Channel: ");
-        ObjectMapper mapper = new ObjectMapper();
         if (currentSittingNode.isMissingNode() || currentSittingNode.isEmpty()) {
             if (sessionChannel.isEmpty()) {
                 return "";
@@ -140,7 +136,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
                 outputString.append(channel);
             }
         } else {
-            List<String> channelList = mapper.convertValue(currentSittingNode, new TypeReference<List<String>>() {
+            List<String> channelList = MAPPER.convertValue(currentSittingNode, new TypeReference<List<String>>() {
             });
             outputString.append(String.join(", ", channelList));
         }

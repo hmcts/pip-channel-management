@@ -2,12 +2,14 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @SuppressWarnings("java:S108")
@@ -26,11 +28,11 @@ public final class FamilyMixedListHelper {
             .forEach(courtList -> courtList.get(LocationHelper.COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(DataManipulation.findAndManipulateJudiciary(session));
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma", true);
-                        DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
@@ -39,7 +41,7 @@ public final class FamilyMixedListHelper {
                                 ((ObjectNode) hearing).put(APPLICANT, "");
                                 ((ObjectNode) hearing).put(RESPONDENT, "");
                             }
-                            hearing.get("case").forEach(DataManipulation::manipulateCaseInformation);
+                            hearing.get("case").forEach(CaseHelper::manipulateCaseInformation);
                         });
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);

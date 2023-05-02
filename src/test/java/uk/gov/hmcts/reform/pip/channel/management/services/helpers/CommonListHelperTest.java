@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-class DataManipulationTest {
+class CommonListHelperTest {
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
@@ -42,7 +42,7 @@ class DataManipulationTest {
 
     @Test
     void testFormatCourtRoomName() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -55,7 +55,7 @@ class DataManipulationTest {
 
     @Test
     void testFormatHearingDuration() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -69,7 +69,7 @@ class DataManipulationTest {
 
     @Test
     void testFormatHearingTime() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -83,7 +83,7 @@ class DataManipulationTest {
 
     @Test
     void testFormatHearingChannel() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -97,7 +97,7 @@ class DataManipulationTest {
 
     @Test
     void testFormatCaseName() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -113,7 +113,7 @@ class DataManipulationTest {
 
     @Test
     void testCaseType() {
-        DataManipulation.manipulatedDailyListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)

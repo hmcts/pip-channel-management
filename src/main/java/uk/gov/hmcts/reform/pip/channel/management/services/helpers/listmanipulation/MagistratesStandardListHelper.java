@@ -16,10 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @SuppressWarnings({"PMD.TooManyMethods"})
 public final class MagistratesStandardListHelper {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private static final String COURT_LIST = "courtLists";
     private static final String CASE = "case";
     private static final String COURT_ROOM = "courtRoom";
@@ -46,11 +48,10 @@ public final class MagistratesStandardListHelper {
     }
 
     public static void manipulatedMagistratesStandardList(JsonNode artefact, Map<String, Object> language) {
-        ObjectMapper mapper = new ObjectMapper();
         artefact.get(COURT_LIST).forEach(
             courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(session -> {
-                    ArrayNode allDefendants = mapper.createArrayNode();
+                    ArrayNode allDefendants = MAPPER.createArrayNode();
                     session.get("sittings").forEach(sitting -> {
                         SittingHelper.manipulatedSitting(courtRoom, session, sitting,
                                         "formattedSessionCourtRoom");
@@ -72,10 +73,9 @@ public final class MagistratesStandardListHelper {
     }
 
     private static ArrayNode combineDefendantSittings(ArrayNode allDefendants) {
-        ObjectMapper mapper = new ObjectMapper();
         AtomicReference<ObjectNode> defendantNode = new AtomicReference<>();
         List<String> uniqueDefendantNames = new ArrayList<>();
-        ArrayNode defendantsPerSessions = mapper.createArrayNode();
+        ArrayNode defendantsPerSessions = MAPPER.createArrayNode();
         AtomicReference<ArrayNode> defendantInfo = new AtomicReference<>();
         allDefendants.forEach(df -> {
             if (!uniqueDefendantNames.contains(df.get(DEFENDANT_HEADING).asText())) {
@@ -84,8 +84,8 @@ public final class MagistratesStandardListHelper {
         });
 
         uniqueDefendantNames.forEach(uniqueName -> {
-            defendantNode.set(mapper.createObjectNode());
-            defendantInfo.set(mapper.createArrayNode());
+            defendantNode.set(MAPPER.createObjectNode());
+            defendantInfo.set(MAPPER.createArrayNode());
             int sittingSequence = 1;
             for (JsonNode defendant : allDefendants) {
                 if (uniqueName.equals(defendant.get(DEFENDANT_HEADING).asText())) {
@@ -116,10 +116,9 @@ public final class MagistratesStandardListHelper {
     }
 
     private static void findOffences(ObjectNode hearing) {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode allOffences = mapper.createArrayNode();
+        ArrayNode allOffences = MAPPER.createArrayNode();
         hearing.get("offence").forEach(offence -> {
-            ObjectNode offenceNode = mapper.createObjectNode();
+            ObjectNode offenceNode = MAPPER.createObjectNode();
             offenceNode.put("offenceTitle",
                 GeneralHelper.findAndReturnNodeText(offence, "offenceTitle"));
             offenceNode.put(PLEA, GeneralHelper.findAndReturnNodeText(hearing, PLEA));

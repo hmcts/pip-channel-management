@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class TribunalNationalListsManipulationTest {
+class TribunalNationalListHelperTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static JsonNode topLevelNode;
 
@@ -37,7 +37,7 @@ class TribunalNationalListsManipulationTest {
     void testTribunalNationalListsManipulation() {
         LocationHelper.formatCourtAddress(topLevelNode, ", ", true);
         List<TribunalNationalList> tribunalNationalList =
-            TribunalNationalListsManipulation.processRawListData(topLevelNode, Language.ENGLISH);
+            TribunalNationalListHelper.processRawListData(topLevelNode, Language.ENGLISH);
 
         assertThat(tribunalNationalList.get(0).getHearingDate())
             .as("Unable to get hearing date")

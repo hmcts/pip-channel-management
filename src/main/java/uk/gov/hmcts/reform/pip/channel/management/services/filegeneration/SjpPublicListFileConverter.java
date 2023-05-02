@@ -11,7 +11,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -85,7 +85,7 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(
                         sitting -> sitting.get("hearing").forEach(hearing -> {
-                            Optional<SjpPublicList> sjpCase = SjpManipulation.constructSjpCase(hearing);
+                            Optional<SjpPublicList> sjpCase = SjpListHelper.constructSjpCase(hearing);
                             if (sjpCase.isPresent()) {
                                 sjpCases.add(sjpCase.get());
                             }

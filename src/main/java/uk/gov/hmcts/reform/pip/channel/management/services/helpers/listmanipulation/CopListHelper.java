@@ -2,10 +2,11 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 public final class CopListHelper {
@@ -29,12 +30,12 @@ public final class CopListHelper {
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     ((ObjectNode) session).put(
                         "formattedSessionJoh",
-                        DataManipulation.findAndManipulateJudiciaryForCop(session)
+                        JudiciaryHelper.findAndManipulateJudiciaryForCop(session)
                     );
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
-                        DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get(HEARING).forEach(
                             hearing -> hearing.get("case")

@@ -99,7 +99,7 @@ public final class DateHelper {
         return mins + " " + format;
     }
 
-    public static ZonedDateTime convertStringToBst(String timestamp) {
+    static ZonedDateTime convertStringToBst(String timestamp) {
         Instant unZonedDateTime = Instant.parse(timestamp);
         ZoneId zone = ZoneId.of(EUROPE_LONDON);
         return unZonedDateTime.atZone(zone);

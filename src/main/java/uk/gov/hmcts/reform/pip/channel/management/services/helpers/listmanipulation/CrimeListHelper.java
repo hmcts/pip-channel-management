@@ -14,7 +14,7 @@ import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CROWN_DAILY_LIST;
 
 /**
@@ -24,6 +24,8 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.CROWN_DAILY_LIS
  */
 @SuppressWarnings({"PMD.TooManyMethods"})
 public final class CrimeListHelper {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     public static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
     public static final String DEFENDANT = "defendant";
     public static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
@@ -81,8 +83,7 @@ public final class CrimeListHelper {
     }
 
     public static void findUnallocatedCasesInCrownDailyListData(JsonNode artefact) {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode unAllocatedCasesNodeArray = mapper.createArrayNode();
+        ArrayNode unAllocatedCasesNodeArray = MAPPER.createArrayNode();
         artefact.get(COURT_LIST).forEach(courtList -> {
             final int[] roomCount = {0};
             courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
@@ -104,7 +105,7 @@ public final class CrimeListHelper {
             ((ObjectNode)cloneCourtList.get(LocationHelper.COURT_HOUSE))
                 .putArray(COURT_ROOM).addAll(unAllocatedCasesNodeArray);
 
-            ArrayNode courtListArray = mapper.createArrayNode();
+            ArrayNode courtListArray = MAPPER.createArrayNode();
 
             if (artefact.get(COURT_LIST).isArray()) {
                 for (final JsonNode courtList : artefact.get(COURT_LIST)) {

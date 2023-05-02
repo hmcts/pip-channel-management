@@ -10,7 +10,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 import java.io.IOException;
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Service
 public class CivilAndFamilyDailyCauseListFileConverter implements FileConverter {

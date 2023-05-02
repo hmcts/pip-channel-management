@@ -17,9 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 public final class CrownFirmListHelper {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
@@ -59,17 +61,16 @@ public final class CrownFirmListHelper {
         List<String> uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
         String[] uniqueDates =  uniqueSittingDates.toArray(new String[0]);
         setListToDates(artefact, uniqueSittingDates);
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode courtListByDateArray = mapper.createArrayNode();
+        ArrayNode courtListByDateArray = MAPPER.createArrayNode();
         for (int i = 0; i < uniqueSittingDates.size(); i++) {
             int finalI = i;
-            ArrayNode courtListArray = mapper.createArrayNode();
+            ArrayNode courtListArray = MAPPER.createArrayNode();
             artefact.get(COURT_LIST).forEach(courtList -> {
 
-                ObjectNode courtListNode = mapper.createObjectNode();
-                ArrayNode courtRoomsArray = mapper.createArrayNode();
-                ObjectNode unAllocatedCourtRoom = mapper.createObjectNode();
-                ArrayNode unAllocatedCourtRoomHearings = mapper.createArrayNode();
+                ObjectNode courtListNode = MAPPER.createObjectNode();
+                ArrayNode courtRoomsArray = MAPPER.createArrayNode();
+                ObjectNode unAllocatedCourtRoom = MAPPER.createObjectNode();
+                ArrayNode unAllocatedCourtRoomHearings = MAPPER.createArrayNode();
 
                 courtListNode.put("courtName",
                     GeneralHelper.findAndReturnNodeText(courtList.get(LocationHelper.COURT_HOUSE),
@@ -77,8 +78,8 @@ public final class CrownFirmListHelper {
                 courtListNode.put("courtSittingDate", uniqueSittingDates.get(finalI));
 
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                    ObjectNode courtRoomNode = mapper.createObjectNode();
-                    ArrayNode hearingArray = mapper.createArrayNode();
+                    ObjectNode courtRoomNode = MAPPER.createObjectNode();
+                    ArrayNode hearingArray = MAPPER.createArrayNode();
                     courtRoom.get("session").forEach(session -> {
                         session.get(SITTINGS).forEach(sitting ->
                             SittingHelper.checkSittingDateAlreadyExists(
@@ -143,7 +144,7 @@ public final class CrownFirmListHelper {
                             SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
 
                             sitting.get("hearing").forEach(hearing -> {
-                                SittingHelper.formatCaseTime(sitting, hearing);
+                                formatCaseTime(sitting, hearing);
                                 PartyRoleHelper.handleParties(hearing);
                                 CrimeListHelper.formatCaseInformationCrownDaily(hearing);
                                 CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
@@ -194,5 +195,14 @@ public final class CrownFirmListHelper {
             .substring(uniqueSittingDates.get(uniqueSittingDates.size() - 1).indexOf(' ') + 1);
         ((ObjectNode)artefact).put("listStartDate", startDate);
         ((ObjectNode)artefact).put("listEndDate", endDate);
+    }
+
+    private static void formatCaseTime(JsonNode sitting, JsonNode node) {
+        if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
+            ((ObjectNode)node).put("time",
+                                   DateHelper.timeStampToBstTime(
+                                       GeneralHelper.findAndReturnNodeText(sitting, SITTING_START), "h:mma"
+                                   ).replace(":00", ""));
+        }
     }
 }

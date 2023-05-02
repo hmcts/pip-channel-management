@@ -2,9 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesStandardListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -22,13 +21,12 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
+    public String convert(JsonNode payload) throws JsonProcessingException {
         Map<String, Object> language =
             Map.of("age", "Age: ");
-        DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, false);
-        MagistratesStandardListHelper.manipulatedMagistratesStandardList(node, language);
-        return this.processMagistratesStandardList(node);
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
+        MagistratesStandardListHelper.manipulatedMagistratesStandardList(payload, language);
+        return this.processMagistratesStandardList(payload);
     }
 
     private String processMagistratesStandardList(JsonNode node) {

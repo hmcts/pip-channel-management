@@ -2,9 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -24,14 +23,12 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
+    public String convert(JsonNode payload) throws JsonProcessingException {
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
+        CrimeListHelper.manipulatedCrimeListData(payload, ListType.CROWN_DAILY_LIST);
+        CrimeListHelper.findUnallocatedCasesInCrownDailyListData(payload);
 
-        DataManipulation.manipulatedDailyListData(node, Language.ENGLISH, false);
-        CrimeListHelper.manipulatedCrimeListData(node, ListType.CROWN_DAILY_LIST);
-        CrimeListHelper.findUnallocatedCasesInCrownDailyListData(node);
-
-        return processCrownDailyList(node);
+        return processCrownDailyList(payload);
     }
 
     private String processCrownDailyList(JsonNode node) {

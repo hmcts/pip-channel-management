@@ -6,7 +6,7 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtDailyListManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
@@ -27,7 +27,7 @@ public class EtDailyListFileConverter implements FileConverter {
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("i18n", languageResources);
 
-        EtDailyListManipulation.processRawListData(artefact, language);
+        EtDailyListHelper.processRawListData(artefact, language);
         context.setVariable("artefact", artefact);
         setVenue(context, artefact.get("venue"));
 

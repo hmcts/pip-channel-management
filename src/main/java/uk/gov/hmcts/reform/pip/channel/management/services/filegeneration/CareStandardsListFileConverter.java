@@ -6,7 +6,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.TribunalNationalListsManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.TribunalNationalListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class CareStandardsListFileConverter implements FileConverter {
         Language language = Language.valueOf(metadata.get("language"));
         languageResources.putAll(LanguageResourceHelper.readResourcesFromPath("openJusticeStatement", language));
 
-        Context context = TribunalNationalListsManipulation
+        Context context = TribunalNationalListHelper
             .preprocessArtefactForTribunalNationalListsThymeLeafConverter(artefact, metadata, languageResources);
 
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();

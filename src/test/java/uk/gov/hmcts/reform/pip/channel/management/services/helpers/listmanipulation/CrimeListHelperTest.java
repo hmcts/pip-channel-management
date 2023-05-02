@@ -6,7 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DataManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
@@ -85,7 +85,7 @@ class CrimeListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethodCrownDailyList() {
-        DataManipulation.manipulatedDailyListData(inputJsonCrownDailyList, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.ENGLISH, false);
         CrimeListHelper.manipulatedCrimeListData(inputJsonCrownDailyList, ListType.CROWN_DAILY_LIST);
         CrimeListHelper.findUnallocatedCasesInCrownDailyListData(inputJsonCrownDailyList);
         CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList);
@@ -178,7 +178,7 @@ class CrimeListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethodMagistratesPublicList() {
-        DataManipulation.manipulatedDailyListData(inputJsonMagistratesPublicList, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJsonMagistratesPublicList, Language.ENGLISH, false);
         CrimeListHelper.manipulatedCrimeListData(inputJsonMagistratesPublicList, ListType.MAGISTRATES_PUBLIC_LIST);
         CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
 

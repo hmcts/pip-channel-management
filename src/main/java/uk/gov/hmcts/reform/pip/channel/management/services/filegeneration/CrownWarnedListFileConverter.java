@@ -6,7 +6,7 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ public class CrownWarnedListFileConverter implements FileConverter {
         context.setVariable("version", artefact.get("document").get("version").asText());
         context.setVariable("i18n", languageResources);
 
-        context.setVariable("cases", CrownWarnedListManipulation.processRawListData(artefact, Language.ENGLISH));
+        context.setVariable("cases", CrownWarnedListHelper.processRawListData(artefact, Language.ENGLISH));
         context.setVariable("venueName", artefact.get("venue").get("venueName").asText());
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
 

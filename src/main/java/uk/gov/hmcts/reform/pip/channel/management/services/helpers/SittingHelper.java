@@ -17,6 +17,8 @@ public final class SittingHelper {
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
     private static final String SITTING_START = "sittingStart";
+    private static final String CHANNEL = "channel";
+    private static final String SESSION_CHANNEL = "sessionChannel";
 
     private SittingHelper() {
     }
@@ -52,11 +54,11 @@ public final class SittingHelper {
 
     public static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting,
                                           String destinationNodeName) {
-        String judiciary = DataManipulation.findAndManipulateJudiciary(sitting, false);
+        String judiciary = JudiciaryHelper.findAndManipulateJudiciary(sitting, false);
         String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
 
         if (judiciary.isBlank()) {
-            judiciary = DataManipulation.findAndManipulateJudiciary(session, false);
+            judiciary = JudiciaryHelper.findAndManipulateJudiciary(session, false);
 
         }
 
@@ -64,12 +66,16 @@ public final class SittingHelper {
         ((ObjectNode) session).put(destinationNodeName, judiciary);
     }
 
-    public static void formatCaseTime(JsonNode sitting, JsonNode node) {
-        if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
-            ((ObjectNode)node).put("time",
-                DateHelper.timeStampToBstTime(GeneralHelper
-                    .findAndReturnNodeText(sitting, SITTING_START), "h:mma")
-                    .replace(":00", ""));
+    public static void findAndConcatenateHearingPlatform(JsonNode sitting, JsonNode session) {
+        StringBuilder formattedHearingPlatform = new StringBuilder();
+
+        if (sitting.has(CHANNEL)) {
+            GeneralHelper.loopAndFormatString(sitting, CHANNEL, formattedHearingPlatform, ", ");
+        } else if (session.has(SESSION_CHANNEL)) {
+            GeneralHelper.loopAndFormatString(session, SESSION_CHANNEL, formattedHearingPlatform, ", ");
         }
+
+        ((ObjectNode) sitting).put("caseHearingChannel", GeneralHelper.trimAnyCharacterFromStringEnd(
+            formattedHearingPlatform.toString().trim()));
     }
 }

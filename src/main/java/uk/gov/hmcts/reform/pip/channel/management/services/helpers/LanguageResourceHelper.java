@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+
 public final class LanguageResourceHelper {
     private static final String PATH_TO_LANGUAGES = "templates/languages/";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -37,7 +40,8 @@ public final class LanguageResourceHelper {
     }
 
     private static Map<String, Object> readResources(ListType listType, Language language) throws IOException {
-        return readResourcesFromPath(GeneralHelper.listTypeToCamelCase(listType), language);
+        String resourceName = UPPER_UNDERSCORE.to(LOWER_CAMEL, listType.name());
+        return readResourcesFromPath(resourceName, language);
     }
 
     public static Map<String, Object> readResourcesFromPath(String resourceName, Language language) throws IOException {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.TribunalNationalListsManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.TribunalNationalListHelper;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 public class PrimaryHealthListFileConverter implements FileConverter {
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
-        Context context = TribunalNationalListsManipulation
+        Context context = TribunalNationalListHelper
             .preprocessArtefactForTribunalNationalListsThymeLeafConverter(artefact, metadata, languageResources);
         SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
         return templateEngine.process("primaryHealthList.html", context);

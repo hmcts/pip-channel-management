@@ -19,7 +19,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listma
 import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper.DEFENDANT_REPRESENTATIVE;
 import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper.PROSECUTING_AUTHORITY;
 
-public final class CrownWarnedListManipulation {
+public final class CrownWarnedListHelper {
 
     private static final String TO_BE_ALLOCATED = "To be allocated";
 
@@ -32,7 +32,7 @@ public final class CrownWarnedListManipulation {
         return 0;
     };
 
-    private CrownWarnedListManipulation() {
+    private CrownWarnedListHelper() {
     }
 
     @SuppressWarnings("PMD.UseConcurrentHashMap")

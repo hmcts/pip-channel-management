@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class TribunalNationalListsManipulation {
-    private TribunalNationalListsManipulation() {
+public final class TribunalNationalListHelper {
+    private TribunalNationalListHelper() {
     }
 
     public static Context preprocessArtefactForTribunalNationalListsThymeLeafConverter(

@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CrownWarnedListManipulationTest {
+class CrownWarnedListHelperTest {
     private static final String HEARING_TYPE_MESSAGE = "Hearing types do not match";
     private static final String ROW_COUNT_MESSAGE = "Row count does not match";
     private static final String ROW_VALUE_MESSAGE = "Row values do not match";
@@ -52,7 +52,7 @@ class CrownWarnedListManipulationTest {
             )
         );
 
-        assertThat(CrownWarnedListManipulation.processRawListData(rawListJson, Language.ENGLISH))
+        assertThat(CrownWarnedListHelper.processRawListData(rawListJson, Language.ENGLISH))
             .as(HEARING_TYPE_MESSAGE)
             .hasSize(6)
             .extracting(r -> r.keySet())
@@ -61,7 +61,7 @@ class CrownWarnedListManipulationTest {
 
     @Test
     void testTableRowCountForEachHearingType() {
-        List<List<CrownWarnedList>> values = CrownWarnedListManipulation
+        List<List<CrownWarnedList>> values = CrownWarnedListHelper
             .processRawListData(rawListJson, Language.ENGLISH)
             .values()
             .stream()
@@ -98,7 +98,7 @@ class CrownWarnedListManipulationTest {
 
     @Test
     void testTableRowValuesForFirstHearingType() {
-        List<CrownWarnedList> rows = CrownWarnedListManipulation.processRawListData(rawListJson, Language.ENGLISH)
+        List<CrownWarnedList> rows = CrownWarnedListHelper.processRawListData(rawListJson, Language.ENGLISH)
             .values()
             .stream()
             .toList()

@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -114,13 +113,6 @@ class GeneralHelperTest {
         assertThat(builder)
             .as(ERR_MSG)
             .hasToString("Address Line 1,");
-    }
-
-    @Test
-    void testListTypeToCamelCase() {
-        assertThat(GeneralHelper.listTypeToCamelCase(ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST))
-            .as(ERR_MSG)
-            .isEqualTo("civilAndFamilyDailyCauseList");
     }
 
     @Test

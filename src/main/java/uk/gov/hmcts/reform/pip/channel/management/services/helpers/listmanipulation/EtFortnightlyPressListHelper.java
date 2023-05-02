@@ -16,10 +16,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.DailyCauseListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Slf4j
 public final class EtFortnightlyPressListHelper {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
@@ -41,16 +43,15 @@ public final class EtFortnightlyPressListHelper {
 
     public static void splitByCourtAndDate(JsonNode artefact) {
         artefact.get("courtLists").forEach(courtList -> {
-            ObjectMapper mapper = new ObjectMapper();
-            ArrayNode sittingArray = mapper.createArrayNode();
+            ArrayNode sittingArray = MAPPER.createArrayNode();
             Map<Date, String> sittingDateTimes = SittingHelper.findAllSittingDates(
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
             List<String> uniqueSittingDate = GeneralHelper.findUniqueDateAndSort(sittingDateTimes);
             String[] uniqueSittingDates = uniqueSittingDate.toArray(new String[0]);
             for (int i = 0; i < uniqueSittingDates.length; i++) {
                 int finalI = i;
-                ObjectNode sittingNode = mapper.createObjectNode();
-                ArrayNode hearingNodeArray = mapper.createArrayNode();
+                ObjectNode sittingNode = MAPPER.createObjectNode();
+                ArrayNode hearingNodeArray = MAPPER.createArrayNode();
                 (sittingNode).put(SITTING_DATE, uniqueSittingDates[finalI]);
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
                     courtRoom -> courtRoom.get("session").forEach(

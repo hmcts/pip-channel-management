@@ -1,16 +1,14 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpListHelper;
 
 import java.util.Optional;
 
 @Service
 public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String HEARING = "hearing";
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
@@ -26,16 +24,16 @@ public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
      * @throws JsonProcessingException - jackson prereq.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
+    public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
-        OBJECT_MAPPER.readTree(payload).get(COURT_LISTS).forEach(courtList ->
+        payload.get(COURT_LISTS).forEach(courtList ->
             courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(
                     session -> session.get(SITTINGS).forEach(
                         sitting -> sitting.get(HEARING).forEach(hearing -> {
                             Optional<uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList>
-                                sjpCaseOptional = SjpManipulation.constructSjpCase(hearing);
+                                sjpCaseOptional = SjpListHelper.constructSjpCase(hearing);
                             if (sjpCaseOptional.isPresent()) {
                                 uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList
                                     sjpCase = sjpCaseOptional.get();
