@@ -13,7 +13,7 @@ public final class EtDailyListHelper {
     }
 
     public static void processRawListData(JsonNode data, Language language) {
-        LocationHelper.formatCourtAddress(data, System.lineSeparator());
+        LocationHelper.formatCourtAddress(data, System.lineSeparator(), false);
 
         data.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(

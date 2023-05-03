@@ -60,7 +60,7 @@ class LocationHelperTest {
 
     @Test
     void testFormatCourtAddress() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER);
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
@@ -74,7 +74,7 @@ class LocationHelperTest {
 
     @Test
     void testFormatCourtAddressWithNewLineDelimiter() {
-        LocationHelper.formatCourtAddress(inputJson, "\n");
+        LocationHelper.formatCourtAddress(inputJson, "\n", false);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
@@ -102,7 +102,7 @@ class LocationHelperTest {
 
     @Test
     void testFormatWithNoCourtAddress() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER);
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(1).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))

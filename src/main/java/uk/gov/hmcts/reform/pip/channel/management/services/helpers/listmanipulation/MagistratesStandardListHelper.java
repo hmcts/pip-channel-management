@@ -202,7 +202,6 @@ public final class MagistratesStandardListHelper {
 
     private static void formatDobAndAge(ObjectNode hearing, JsonNode individualDetails,
                                         Map<String, Object> language) {
-
         String dateOfBirth = GeneralHelper.findAndReturnNodeText(individualDetails,
                                                                  "dateOfBirth");
         String age = GeneralHelper.findAndReturnNodeText(individualDetails,
@@ -217,7 +216,6 @@ public final class MagistratesStandardListHelper {
         }
 
         hearing.put("defendantDateOfBirthAndAge",  dateOfBirthAndAge);
-
     }
 
     private static String formatDefendantAddress(JsonNode individualDetails) {

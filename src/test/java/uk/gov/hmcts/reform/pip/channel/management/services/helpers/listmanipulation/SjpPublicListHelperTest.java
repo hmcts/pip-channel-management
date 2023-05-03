@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SjpListHelperTest {
+class SjpPublicListHelperTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static JsonNode topLevelNode;
 
@@ -45,7 +45,7 @@ class SjpListHelperTest {
             "This is an organisation"
         );
 
-        assertThat(SjpListHelper.constructSjpCase(hearingNode))
+        assertThat(SjpPublicListHelper.constructSjpCase(hearingNode))
             .isPresent()
             .hasValue(expectedSjpCase);
     }
@@ -59,6 +59,6 @@ class SjpListHelperTest {
             .get("sittings").get(2)
             .get("hearing").get(0);
 
-        assertThat(SjpListHelper.constructSjpCase(hearingNode)).isEmpty();
+        assertThat(SjpPublicListHelper.constructSjpCase(hearingNode)).isEmpty();
     }
 }

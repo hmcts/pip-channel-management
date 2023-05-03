@@ -8,11 +8,11 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPubli
 import java.util.Iterator;
 import java.util.Optional;
 
-public final class SjpListHelper {
+public final class SjpPublicListHelper {
     private static final String ACCUSED = "ACCUSED";
     private static final String PROSECUTOR = "PROSECUTOR";
 
-    private SjpListHelper() {
+    private SjpPublicListHelper() {
     }
 
     public static Optional<SjpPublicList> constructSjpCase(JsonNode hearing) {

@@ -22,7 +22,6 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.CROWN_DAILY_LIS
  *  Crown Daily List.
  *  Magistrates Public List.
  */
-@SuppressWarnings({"PMD.TooManyMethods"})
 public final class CrimeListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

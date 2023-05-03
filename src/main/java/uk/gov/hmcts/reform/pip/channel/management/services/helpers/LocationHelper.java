@@ -50,10 +50,6 @@ public final class LocationHelper {
         return address;
     }
 
-    public static void formatCourtAddress(JsonNode artefact, String delimiter) {
-        formatCourtAddress(artefact, delimiter, false);
-    }
-
     public static void formatCourtAddress(JsonNode artefact, String delimiter, boolean addCourtHouseName) {
         artefact.get("courtLists").forEach(courtList -> {
             StringBuilder formattedCourtAddress = new StringBuilder();

@@ -31,7 +31,7 @@ public final class CommonListHelper {
                                                                   Map<String, Object> languageResources,
                                                                   boolean initialised) {
         Context context = new Context();
-        LocationHelper.formatCourtAddress(artefact, "|");
+        LocationHelper.formatCourtAddress(artefact, "|", false);
         context.setVariable("metadata", metadata);
         context.setVariable("i18n", languageResources);
 

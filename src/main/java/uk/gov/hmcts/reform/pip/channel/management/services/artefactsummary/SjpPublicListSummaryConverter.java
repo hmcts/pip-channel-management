@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpPublicListHelper;
 
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
                     session -> session.get(SITTINGS).forEach(
                         sitting -> sitting.get(HEARING).forEach(hearing -> {
                             Optional<uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList>
-                                sjpCaseOptional = SjpListHelper.constructSjpCase(hearing);
+                                sjpCaseOptional = SjpPublicListHelper.constructSjpCase(hearing);
                             if (sjpCaseOptional.isPresent()) {
                                 uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList
                                     sjpCase = sjpCaseOptional.get();
