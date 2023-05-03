@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.codec.language.bm.Lang;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;

@@ -146,8 +146,8 @@ public final class CrownFirmListHelper {
                             sitting.get("hearing").forEach(hearing -> {
                                 formatCaseTime(sitting, hearing);
                                 PartyRoleHelper.handleParties(hearing);
-                                CrimeListHelper.formatCaseInformationCrownDaily(hearing);
-                                CrimeListHelper.formatCaseHtmlTableCrownDailyList(hearing);
+                                CrimeListHelper.formatCaseInformation(hearing);
+                                CrimeListHelper.formatCaseHtmlTable(hearing);
                                 hearing.get("case").forEach(
                                     caseNode -> moveTableColumnValuesToHearing(sitting, hearing, caseNode)
                                 );

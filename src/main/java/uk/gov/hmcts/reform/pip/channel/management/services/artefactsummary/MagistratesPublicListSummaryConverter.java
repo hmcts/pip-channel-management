@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesPublicListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
-import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 @Service
 public class MagistratesPublicListSummaryConverter implements ArtefactSummaryConverter {
@@ -40,7 +39,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
         CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
-        CrimeListHelper.manipulatedCrimeListData(payload, ListType.MAGISTRATES_PUBLIC_LIST);
+        MagistratesPublicListHelper.manipulatedMagistratesPublicListData(payload);
 
         return processMagistratesPublicList(payload);
     }

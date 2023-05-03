@@ -15,12 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper.DEFENDANT;
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper.DEFENDANT_REPRESENTATIVE;
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper.PROSECUTING_AUTHORITY;
-
 public final class CrownWarnedListHelper {
-
+    private static final String PROSECUTING_AUTHORITY = "prosecutingAuthority";
+    private static final String DEFENDANT = "defendant";
+    private static final String DEFENDANT_REPRESENTATIVE = "defendantRepresentative";
     private static final String TO_BE_ALLOCATED = "To be allocated";
 
     private static final Comparator<Map.Entry<String, List<CrownWarnedList>>> COMPARATOR = (s1, s2) -> {

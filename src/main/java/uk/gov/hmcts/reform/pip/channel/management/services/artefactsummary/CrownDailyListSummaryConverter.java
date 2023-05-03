@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
-import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 @Service
 public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter {
@@ -25,8 +24,8 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
         CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
-        CrimeListHelper.manipulatedCrimeListData(payload, ListType.CROWN_DAILY_LIST);
-        CrimeListHelper.findUnallocatedCasesInCrownDailyListData(payload);
+        CrownDailyListHelper.manipulatedCrownDailyListData(payload);
+        CrownDailyListHelper.findUnallocatedCases(payload);
 
         return processCrownDailyList(payload);
     }
