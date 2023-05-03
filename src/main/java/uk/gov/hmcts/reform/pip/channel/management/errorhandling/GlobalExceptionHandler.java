@@ -31,8 +31,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ChannelNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(ChannelNotFoundException ex) {
-        log.error("Channel not found exception thrown: {}", ex.getMessage());
-
         log.error(writeLog("404, no channels found for any subscribers"));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
@@ -44,7 +42,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceToServiceException.class)
     public ResponseEntity<ExceptionResponse> handleServiceToService(ServiceToServiceException ex) {
-        log.error(String.format("ServiceToServiceException was thrown with the init cause: %s", ex.getCause()));
+        log.error(writeLog(
+            String.format("ServiceToServiceException was thrown with the init cause: %s", ex.getCause())
+        ));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
@@ -55,7 +55,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex) {
-        log.error(String.format("NotFoundException was thrown with the init cause: %s", ex.getCause()));
+        log.error(writeLog(
+            String.format("NotFoundException was thrown with the init cause: %s", ex.getCause())
+        ));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
@@ -66,7 +68,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProcessingException.class)
     public ResponseEntity<ExceptionResponse> handleProcessingException(ProcessingException ex) {
-        log.error(String.format("ProcessingException was thrown with the init cause: %s", ex.getCause()));
+        log.error(writeLog(
+            String.format("ProcessingException was thrown with the init cause: %s", ex.getCause())
+        ));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());
@@ -77,7 +81,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorisedException.class)
     public ResponseEntity<ExceptionResponse> handleUnauthorisedException(UnauthorisedException ex) {
-        log.error(String.format("UnauthorisedException was thrown with the init cause: %s", ex.getCause()));
+        log.error(writeLog(
+            String.format("UnauthorisedException was thrown with the init cause: %s", ex.getCause())
+        ));
 
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setMessage(ex.getMessage());

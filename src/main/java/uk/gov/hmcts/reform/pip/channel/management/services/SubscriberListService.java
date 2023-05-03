@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
+
 
 /**
  * Service that handles the creation of a per-user Email to List of Subscriptions map which is created from a list of
@@ -98,7 +100,7 @@ public class SubscriberListService {
         cloneMap.forEach((userId, subscriptions) -> {
 
             if (userEmailMap.get(userId).isEmpty()) {
-                log.error(userId + "- no email found.");
+                log.error(writeLog(String.format("No email with user ID %s found", userId)));
             } else {
                 userIdMap.put(userEmailMap.get(userId).get(), subscriptions);
             }

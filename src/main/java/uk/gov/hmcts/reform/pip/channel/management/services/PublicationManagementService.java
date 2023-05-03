@@ -72,7 +72,7 @@ public class PublicationManagementService {
             FileConverter fileConverter = listConversionFactory.getFileConverter(artefact.getListType());
 
             if (fileConverter == null) {
-                log.info("Failed to find converter for list type");
+                log.error("Failed to find converter for list type");
                 return;
             }
 
@@ -110,7 +110,7 @@ public class PublicationManagementService {
         );
 
         if (artefactSummaryConverter == null) {
-            log.info("Failed to find converter for list type");
+            log.error("Failed to find converter for list type");
             return summary;
         }
 
