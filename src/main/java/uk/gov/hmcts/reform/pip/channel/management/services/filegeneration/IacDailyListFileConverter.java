@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.codec.language.bm.Lang;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
@@ -65,8 +66,9 @@ public class IacDailyListFileConverter implements FileConverter {
                     ((ObjectNode) session).put("formattedJudiciary", formattedJoh);
 
                     session.get("sittings").forEach(sitting -> {
-                        String sittingStart = DateHelper.timeStampToBstTime(
-                            sitting.get("sittingStart").asText(), "h:mma");
+                        String sittingStart = DateHelper.formatTimeStampToBst(
+                            sitting.get("sittingStart").asText(), Language.ENGLISH, false, false,"h:mma"
+                        );
 
                         ((ObjectNode) sitting).put("formattedStart", sittingStart);
 

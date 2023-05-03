@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelpe
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,11 +138,11 @@ public final class MagistratesStandardListHelper {
 
     private static void manipulatedCase(JsonNode sitting, ObjectNode hearing, JsonNode thisCase) {
         hearing.put(FORMATTED_CONVICTION_DATE,
-                    DateHelper.timeStampToBstTime(GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
-                                                  "dd/MM/yyyy"));
+                    DateHelper.formatTimeStampToBst(GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
+                                                    Language.ENGLISH, false, false, "dd/MM/yyyy"));
         hearing.put(FORMATTED_ADJOURNED_DATE,
-                    DateHelper.timeStampToBstTime(GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
-                                                  "dd/MM/yyyy"));
+                    DateHelper.formatTimeStampToBst(GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
+                                                    Language.ENGLISH, false, false, "dd/MM/yyyy"));
         hearing.put("prosecutionAuthorityCode",
                     GeneralHelper.findAndReturnNodeText(thisCase.get("informant"), "prosecutionAuthorityCode"));
         hearing.put("hearingNumber",

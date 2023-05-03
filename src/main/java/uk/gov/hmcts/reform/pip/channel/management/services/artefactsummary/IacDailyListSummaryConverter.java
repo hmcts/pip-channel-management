@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 /**
  * Summary class for the IAC Daily List that generates the summary in the email.
@@ -20,8 +21,9 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
-                        String sittingStart = DateHelper.timeStampToBstTime(sitting.get("sittingStart").asText(),
-                                                                            "h:mma");
+                        String sittingStart = DateHelper.formatTimeStampToBst(
+                            sitting.get("sittingStart").asText(), Language.ENGLISH, false, false, "h:mma"
+                        );
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);

@@ -37,8 +37,10 @@ public class SscsDailyListFileConverter implements FileConverter {
         String format = (language == Language.ENGLISH)
             ? "dd MMMM yyyy 'at' HH:mm"
             : "dd MMMM yyyy 'yn' HH:mm";
-        context.setVariable("publishedDate", DateHelper.timeStampToBstTime(
-            GeneralHelper.safeGet("document.publicationDate", highestLevelNode), format));
+        context.setVariable("publishedDate", DateHelper.formatTimeStampToBst(
+            GeneralHelper.safeGet("document.publicationDate", highestLevelNode), Language.ENGLISH,
+            false, false, format)
+        );
 
         List<CourtHouse> listOfCourtHouses = new ArrayList<>();
         for (JsonNode courtHouse : highestLevelNode.get("courtLists")) {

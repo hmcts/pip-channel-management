@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
@@ -34,8 +36,18 @@ class DateHelperTest {
             .isEqualTo("29 September 1988");
     }
 
+    private static Stream<Arguments> parametersForFormatTimestamp() {
+        return Stream.of(
+            Arguments.of(TEST_DATETIME_1, "HH:mm", "10:30"),
+            Arguments.of("2022-08-19T13:30:00Z", "HH:mm", "14:30"),
+            Arguments.of(TEST_DATETIME_1, TIME_FORMAT, "10:30am"),
+            Arguments.of("2022-08-19T13:30:00Z", TIME_FORMAT, "2:30pm"),
+            Arguments.of("2022-08-19T10:30:00Z", "hh:mma", "11:30am")
+        );
+    }
+
     @Test
-    void testZonedDateMethod() {
+    void testFormatTimestamp() {
         assertThat(DateHelper.formatTimeStampToBst(
             TEST_DATETIME_2, Language.ENGLISH, false, false))
             .as(ERR_MSG)
@@ -43,15 +55,23 @@ class DateHelperTest {
     }
 
     @Test
-    void testZonedDateMethodWithDateFormat() {
+    void testFormatTimestampWithDateFormat() {
         assertThat(DateHelper.formatTimeStampToBst(
             TEST_DATETIME_2, Language.ENGLISH, false, false, "dd MMMM"))
             .as(ERR_MSG)
             .isEqualTo("26 July");
     }
 
+    @ParameterizedTest
+    @MethodSource("parametersForFormatTimestamp")
+    void testFormatTimestampWithTimeFormat(String input, String format, String expectedOutput) {
+        assertThat(DateHelper.formatTimeStampToBst(input, Language.ENGLISH, false, false, format))
+            .as(ERR_MSG)
+            .isEqualTo(expectedOutput);
+    }
+
     @Test
-    void testZonedTimeOnlyHoursMethod() {
+    void testFormatTimestampOnlyHoursMethod() {
         assertThat(DateHelper.formatTimeStampToBst(
             "2022-07-26T16:00:00.416924Z", Language.ENGLISH, true, false))
             .as(ERR_MSG)
@@ -59,7 +79,7 @@ class DateHelperTest {
     }
 
     @Test
-    void testZonedTimeOnlyTwoDigitsHoursMethod() {
+    void testFormatTimestampOnlyTwoDigitsHoursMethod() {
         assertThat(DateHelper.formatTimeStampToBst(
             "2022-07-26T22:00:00.416924Z", Language.ENGLISH, true, false))
             .as(ERR_MSG)
@@ -67,7 +87,7 @@ class DateHelperTest {
     }
 
     @Test
-    void testZonedDateTimeMethod() {
+    void testFormatTimestampWithBothDateAndTime() {
         assertThat(DateHelper.formatTimeStampToBst(
             TEST_DATETIME_2,Language.ENGLISH, false, true))
             .as(ERR_MSG)
@@ -156,41 +176,6 @@ class DateHelperTest {
         assertThat(DateHelper.formatDuration(0, 0, Language.ENGLISH))
             .as(ERR_MSG)
             .isEmpty();
-    }
-
-    @Test
-    void testTimeStampToBstTimeMethodForMorningTime() {
-        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, "HH:mm"))
-            .as(ERR_MSG)
-            .isEqualTo("10:30");
-    }
-
-    @Test
-    void testTimeStampToBstTimeForAfternoonTime() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", "HH:mm"))
-            .as(ERR_MSG)
-            .isEqualTo("14:30");
-    }
-
-    @Test
-    void testTimeStampToBstTimeWithFormatForAmMethod() {
-        assertThat(DateHelper.timeStampToBstTime(TEST_DATETIME_1, TIME_FORMAT))
-            .as(ERR_MSG)
-            .isEqualTo("10:30am");
-    }
-
-    @Test
-    void testTimeStampToBstTimeWithFormatForPmMethod() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T13:30:00Z", TIME_FORMAT))
-            .as(ERR_MSG)
-            .isEqualTo("2:30pm");
-    }
-
-    @Test
-    void testTimestampToBstTimeWithFormat() {
-        assertThat(DateHelper.timeStampToBstTime("2022-08-19T10:30:00Z", "hh:mma"))
-            .as(ERR_MSG)
-            .isEqualTo("11:30am");
     }
 
     @Test

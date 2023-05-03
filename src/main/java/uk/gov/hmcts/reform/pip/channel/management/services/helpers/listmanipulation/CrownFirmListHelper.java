@@ -200,8 +200,9 @@ public final class CrownFirmListHelper {
     private static void formatCaseTime(JsonNode sitting, JsonNode node) {
         if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
             ((ObjectNode)node).put("time",
-                                   DateHelper.timeStampToBstTime(
-                                       GeneralHelper.findAndReturnNodeText(sitting, SITTING_START), "h:mma"
+                                   DateHelper.formatTimeStampToBst(
+                                       GeneralHelper.findAndReturnNodeText(sitting, SITTING_START), Language.ENGLISH,
+                                       false, false, "h:mma"
                                    ).replace(":00", ""));
         }
     }

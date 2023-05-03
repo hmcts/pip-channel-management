@@ -105,12 +105,6 @@ public final class DateHelper {
         return unZonedDateTime.atZone(zone);
     }
 
-    public static String timeStampToBstTime(String timestamp, String format) {
-        ZonedDateTime zonedDateTime = convertStringToBst(timestamp);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format).withLocale(Locale.UK);
-        return dtf.format(zonedDateTime);
-    }
-
     public static void calculateDuration(JsonNode sitting, Language language) {
         calculateDuration(sitting, language, false);
     }
