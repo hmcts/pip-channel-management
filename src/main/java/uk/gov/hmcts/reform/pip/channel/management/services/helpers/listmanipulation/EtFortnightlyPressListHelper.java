@@ -49,16 +49,16 @@ public final class EtFortnightlyPressListHelper {
             List<String> uniqueSittingDate = GeneralHelper.findUniqueDateAndSort(sittingDateTimes);
             String[] uniqueSittingDates = uniqueSittingDate.toArray(new String[0]);
             for (int i = 0; i < uniqueSittingDates.length; i++) {
-                int finalI = i;
+                int currentSittingDate = i;
                 ObjectNode sittingNode = MAPPER.createObjectNode();
                 ArrayNode hearingNodeArray = MAPPER.createArrayNode();
-                (sittingNode).put(SITTING_DATE, uniqueSittingDates[finalI]);
+                (sittingNode).put(SITTING_DATE, uniqueSittingDates[currentSittingDate]);
                 courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
                     courtRoom -> courtRoom.get("session").forEach(
                         session -> session.get(SITTINGS).forEach(sitting -> {
                             (sittingNode).put("time", sitting.get("time").asText());
                             SittingHelper.checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
-                                                          hearingNodeArray, finalI);
+                                                          hearingNodeArray, currentSittingDate);
                         })
                     )
                 );
@@ -80,7 +80,7 @@ public final class EtFortnightlyPressListHelper {
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
                         DateHelper.formatStartTime(sitting,"h:mma", true);
                         sitting.get("hearing").forEach(hearing -> {
-                            moveTableColumnValuesToHearing(courtRoom, sitting, hearing, language);
+                            moveTableColumnValuesToHearing(courtRoom, sitting, (ObjectNode) hearing, language);
                             if (hearing.has("case")) {
                                 hearing.get("case").forEach(cases -> {
                                     if (!cases.has("caseSequenceIndicator")) {
@@ -96,23 +96,21 @@ public final class EtFortnightlyPressListHelper {
     }
 
     private static void moveTableColumnValuesToHearing(JsonNode courtRoom, JsonNode sitting,
-                                                       JsonNode hearing,
+                                                       ObjectNode hearing,
                                                        Map<String, Object> language) {
-        ((ObjectNode)hearing).put(COURT_ROOM,
-                                  GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
-        ((ObjectNode)hearing).put("claimant",
-                                  GeneralHelper.findAndReturnNodeText(hearing,"claimant"));
-        ((ObjectNode)hearing).put("claimantRepresentative",
-                                  language.get(REP)
-                                      + GeneralHelper.findAndReturnNodeText(hearing, "claimantRepresentative"));
-        ((ObjectNode)hearing).put("respondent",
-                                  GeneralHelper.findAndReturnNodeText(hearing, "respondent"));
-        ((ObjectNode)hearing).put("respondentRepresentative",
-                                  language.get(REP)
-                                      + GeneralHelper.findAndReturnNodeText(hearing, "respondentRepresentative"));
-        ((ObjectNode)hearing).put("formattedDuration",
-                                  GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
-        ((ObjectNode)hearing).put("caseHearingChannel",
-                                  GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
+        hearing.put(COURT_ROOM,
+                    GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
+        hearing.put("claimant",
+                    GeneralHelper.findAndReturnNodeText(hearing,"claimant"));
+        hearing.put("claimantRepresentative",
+                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearing, "claimantRepresentative"));
+        hearing.put("respondent",
+                    GeneralHelper.findAndReturnNodeText(hearing, "respondent"));
+        hearing.put("respondentRepresentative",
+                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearing, "respondentRepresentative"));
+        hearing.put("formattedDuration",
+                    GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
+        hearing.put("caseHearingChannel",
+                    GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
     }
 }

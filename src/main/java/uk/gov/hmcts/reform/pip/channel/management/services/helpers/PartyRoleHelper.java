@@ -57,20 +57,21 @@ public final class PartyRoleHelper {
             }
         });
 
-        ((ObjectNode) hearing).put(APPLICANT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        ((ObjectNode) hearing).put(APPLICANT_REPRESENTATIVE,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT_REPRESENTATIVE,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
-        ((ObjectNode) hearing).put(CLAIMANT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(claimant.toString()));
-        ((ObjectNode) hearing).put(CLAIMANT_REPRESENTATIVE,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(claimantRepresentative.toString()));
-        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        ObjectNode hearingObj = (ObjectNode) hearing;
+        hearingObj.put(APPLICANT,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
+        hearingObj.put(APPLICANT_REPRESENTATIVE,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
+        hearingObj.put(RESPONDENT,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        hearingObj.put(RESPONDENT_REPRESENTATIVE,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
+        hearingObj.put(CLAIMANT,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(claimant.toString()));
+        hearingObj.put(CLAIMANT_REPRESENTATIVE,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(claimantRepresentative.toString()));
+        hearingObj.put(PROSECUTING_AUTHORITY,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
     }
 
     private static void formatPartyDetails(JsonNode party, StringBuilder builder, boolean initialised) {
@@ -135,9 +136,10 @@ public final class PartyRoleHelper {
             });
         }
 
-        ((ObjectNode) hearing).put(DEFENDANT, String.join(DELIMITER, defendants));
-        ((ObjectNode) hearing).put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
-        ((ObjectNode) hearing).put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
+        ObjectNode hearingObj = (ObjectNode) hearing;
+        hearingObj.put(DEFENDANT, String.join(DELIMITER, defendants));
+        hearingObj.put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
+        hearingObj.put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
     }
 
     private static String createOrganisationDetails(JsonNode party) {

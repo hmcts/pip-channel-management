@@ -56,25 +56,24 @@ public final class CrimeListHelper {
         StringBuilder listingNotes = new StringBuilder();
 
         if (hearing.has(CASE)) {
-            hearing.get(CASE).forEach(cases -> {
+            hearing.get(CASE).forEach(hearingCase -> {
                 linkedCases.set(new StringBuilder());
-                if (!cases.has("caseNumber")) {
-                    ((ObjectNode) cases).put("caseNumber", "");
+                ObjectNode caseObj = (ObjectNode) hearingCase;
+
+                if (!hearingCase.has("caseNumber")) {
+                    caseObj.put("caseNumber", "");
                 }
 
-                if (cases.has("caseLinked")) {
-                    cases.get("caseLinked").forEach(
+                if (hearingCase.has("caseLinked")) {
+                    hearingCase.get("caseLinked").forEach(
                         caseLinked -> linkedCases.get()
                             .append(GeneralHelper.findAndReturnNodeText(caseLinked, "caseId")).append(", ")
                     );
                 }
-                ((ObjectNode) cases).put(
-                    LINKED_CASES,
-                    GeneralHelper.trimAnyCharacterFromStringEnd(linkedCases.toString())
-                );
+                caseObj.put(LINKED_CASES, GeneralHelper.trimAnyCharacterFromStringEnd(linkedCases.toString()));
 
-                if (!cases.has(CASE_SEQUENCE_INDICATOR)) {
-                    ((ObjectNode) cases).put(CASE_SEQUENCE_INDICATOR, "");
+                if (!hearingCase.has(CASE_SEQUENCE_INDICATOR)) {
+                    caseObj.put(CASE_SEQUENCE_INDICATOR, "");
                 }
             });
         }
@@ -91,16 +90,17 @@ public final class CrimeListHelper {
 
     public static void formatCaseHtmlTable(JsonNode hearing) {
         if (hearing.has(CASE)) {
-            hearing.get(CASE).forEach(cases -> {
-                ((ObjectNode)cases).put("caseCellBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()
+            hearing.get(CASE).forEach(hearingCase -> {
+                ObjectNode caseObj = (ObjectNode) hearingCase;
+                (caseObj).put("caseCellBorder", "");
+                if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
-                    ((ObjectNode)cases).put("caseCellBorder", NO_BORDER_BOTTOM);
+                    caseObj.put("caseCellBorder", NO_BORDER_BOTTOM);
                 }
 
-                ((ObjectNode)cases).put("linkedCasesBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(cases, LINKED_CASES).isEmpty()) {
-                    ((ObjectNode)cases).put("linkedCasesBorder", NO_BORDER_BOTTOM);
+                caseObj.put("linkedCasesBorder", "");
+                if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
+                    caseObj.put("linkedCasesBorder", NO_BORDER_BOTTOM);
                 }
             });
         }

@@ -162,30 +162,31 @@ public final class CrownFirmListHelper {
     private static void moveTableColumnValuesToHearing(JsonNode sitting,
                                                        JsonNode hearing,
                                                        JsonNode caseNode) {
-        ((ObjectNode)hearing).put("sittingAt",
-            GeneralHelper.findAndReturnNodeText(hearing,"time"));
-        ((ObjectNode)hearing).put("caseReference",
-            GeneralHelper.findAndReturnNodeText(caseNode,"caseNumber"));
-        ((ObjectNode)hearing).put(DEFENDANT,
-            GeneralHelper.findAndReturnNodeText(hearing, DEFENDANT));
-        ((ObjectNode)hearing).put("hearingType",
-            GeneralHelper.findAndReturnNodeText(hearing,"hearingType"));
-        ((ObjectNode)hearing).put("formattedDuration",
-            GeneralHelper.findAndReturnNodeText(sitting,"formattedDuration"));
-        ((ObjectNode)hearing).put("caseSequenceIndicator",
-            GeneralHelper.findAndReturnNodeText(caseNode,"caseSequenceIndicator"));
-        ((ObjectNode)hearing).put(DEFENDANT_REPRESENTATIVE,
-            GeneralHelper.findAndReturnNodeText(hearing,DEFENDANT_REPRESENTATIVE));
-        ((ObjectNode)hearing).put(PROSECUTING_AUTHORITY,
-            GeneralHelper.findAndReturnNodeText(hearing, PROSECUTING_AUTHORITY));
-        ((ObjectNode)hearing).put(LINKED_CASES,
-            GeneralHelper.findAndReturnNodeText(caseNode, LINKED_CASES));
-        ((ObjectNode)hearing).put(LISTING_NOTES,
-            GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES));
-        ((ObjectNode)hearing).put("caseCellBorder",
-            GeneralHelper.findAndReturnNodeText(caseNode, "caseCellBorder"));
-        ((ObjectNode)hearing).put("linkedCasesBorder",
-            GeneralHelper.findAndReturnNodeText(caseNode, "linkedCasesBorder"));
+        ObjectNode hearingObj = (ObjectNode) hearing;
+        hearingObj.put("sittingAt",
+                       GeneralHelper.findAndReturnNodeText(hearing,"time"));
+        hearingObj.put("caseReference",
+                       GeneralHelper.findAndReturnNodeText(caseNode,"caseNumber"));
+        hearingObj.put(DEFENDANT,
+                       GeneralHelper.findAndReturnNodeText(hearing, DEFENDANT));
+        hearingObj.put("hearingType",
+                       GeneralHelper.findAndReturnNodeText(hearing,"hearingType"));
+        hearingObj.put("formattedDuration",
+                       GeneralHelper.findAndReturnNodeText(sitting,"formattedDuration"));
+        hearingObj.put("caseSequenceIndicator",
+                       GeneralHelper.findAndReturnNodeText(caseNode,"caseSequenceIndicator"));
+        hearingObj.put(DEFENDANT_REPRESENTATIVE,
+                       GeneralHelper.findAndReturnNodeText(hearing,DEFENDANT_REPRESENTATIVE));
+        hearingObj.put(PROSECUTING_AUTHORITY,
+                       GeneralHelper.findAndReturnNodeText(hearing, PROSECUTING_AUTHORITY));
+        hearingObj.put(LINKED_CASES,
+                       GeneralHelper.findAndReturnNodeText(caseNode, LINKED_CASES));
+        hearingObj.put(LISTING_NOTES,
+                       GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES));
+        hearingObj.put("caseCellBorder",
+                       GeneralHelper.findAndReturnNodeText(caseNode, "caseCellBorder"));
+        hearingObj.put("linkedCasesBorder",
+                       GeneralHelper.findAndReturnNodeText(caseNode, "linkedCasesBorder"));
     }
 
     private static void setListToDates(JsonNode artefact, List<String> uniqueSittingDates) {
