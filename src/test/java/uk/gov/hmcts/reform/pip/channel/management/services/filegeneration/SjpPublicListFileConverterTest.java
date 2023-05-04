@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SjpPublicListFileConverterTest {
     private final SjpPublicListFileConverter converter = new SjpPublicListFileConverter();
     private final Map<String, String> metaData = Map.of("contentDate", "1 July 2022",
-                                                        "language", "ENGLISH");
+                                                        "language", "ENGLISH",
+                                                        "listType", "SJP_PUBLIC_LIST");
     private final Map<String, Object> language = handleLanguage();
 
     SjpPublicListFileConverterTest() throws IOException {

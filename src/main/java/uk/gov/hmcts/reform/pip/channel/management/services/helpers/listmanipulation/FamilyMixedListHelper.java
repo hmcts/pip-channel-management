@@ -19,13 +19,14 @@ public final class FamilyMixedListHelper {
     private static final String RESPONDENT = "respondent";
     private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
     private static final String PARTY_ROLE = "partyRole";
+    private static final String COURT_HOUSE = "courtHouse";
 
     private FamilyMixedListHelper() {
     }
 
     public static void manipulatedlistData(JsonNode artefact, Language language) {
         artefact.get("courtLists")
-            .forEach(courtList -> courtList.get(LocationHelper.COURT_HOUSE).get("courtRoom")
+            .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
                     formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));

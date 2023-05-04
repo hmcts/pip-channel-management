@@ -8,8 +8,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPressList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -61,8 +59,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         context.setVariable("metaData", metadata);
         context.setVariable("cases", caseList);
         context.setVariable("artefact", jsonBody);
-        SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
-        return templateEngine.process("sjpPressList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
     /**

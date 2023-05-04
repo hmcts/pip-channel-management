@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,8 +46,7 @@ public class SscsDailyListFileConverter implements FileConverter {
             listOfCourtHouses.add(SscsListHelper.courtHouseBuilder(courtHouse));
         }
         context.setVariable("courtList", listOfCourtHouses);
-        SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
-        return templateEngine.process("sscsDailyList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 }
 

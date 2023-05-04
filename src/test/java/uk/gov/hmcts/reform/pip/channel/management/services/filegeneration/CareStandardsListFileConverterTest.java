@@ -23,7 +23,8 @@ class CareStandardsListFileConverterTest {
     @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
     void testSuccessfulConversion() throws IOException {
         Map<String, String> metaData = Map.of("contentDate", "02 October 2022",
-                                              "language", "ENGLISH");
+                                              "language", "ENGLISH",
+                                              "listType", "CARE_STANDARDS_LIST");
         Map<String, Object> language = handleLanguage();
         JsonNode input = getInput("/mocks/careStandardsList.json");
 

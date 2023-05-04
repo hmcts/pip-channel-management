@@ -23,7 +23,8 @@ class CrownWarnedListFileConverterTest {
     private static final String CONTENT_DATE = "23 October 2022";
     private static final String ENGLISH = "ENGLISH";
     private static final Map<String, String> METADATA = Map.of("contentDate", CONTENT_DATE,
-                                                               "language", ENGLISH);
+                                                               "language", ENGLISH,
+                                                               "listType", "CROWN_WARNED_LIST");
 
     private final CrownWarnedListFileConverter converter = new CrownWarnedListFileConverter();
     private JsonNode inputJson;

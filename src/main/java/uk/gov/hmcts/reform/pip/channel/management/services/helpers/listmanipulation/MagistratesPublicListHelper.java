@@ -13,8 +13,9 @@ import java.util.Map;
 
 public final class MagistratesPublicListHelper {
     private static final String COURT_LIST = "courtLists";
-    private static final String CASE = "case";
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
+    private static final String CASE = "case";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String LISTING_DETAILS = "listingDetails";
     private static final String LISTING_NOTES = "listingNotes";
@@ -36,7 +37,7 @@ public final class MagistratesPublicListHelper {
 
     public static void manipulatedMagistratesPublicListData(JsonNode artefact) {
         artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
                         DateHelper.formatStartTime(sitting, "h:mma", false);

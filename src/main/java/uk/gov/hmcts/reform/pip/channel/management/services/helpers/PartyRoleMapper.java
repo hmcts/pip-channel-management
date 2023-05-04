@@ -1,7 +1,10 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.emptyList;
 
 public final class PartyRoleMapper {
     private static final Map<String, List<String>> MAPPINGS = Map.of(
@@ -9,11 +12,11 @@ public final class PartyRoleMapper {
         "APPLICANT_PETITIONER_REPRESENTATIVE", List.of("CREP", "CREP20"),
         "RESPONDENT", List.of("DEBT", "DEF", "DEF20", "RES"),
         "RESPONDENT_REPRESENTATIVE", List.of("DREP", "DREP20", "RREP"),
-        "PROSECUTING_AUTHORITY", List.of(""),
-        "DEFENDANT", List.of(""),
-        "CLAIMANT_PETITIONER", List.of(),
-        "CLAIMANT_PETITIONER_REPRESENTATIVE", List.of(),
-        "DEFENDANT_REPRESENTATIVE", List.of("")
+        "PROSECUTING_AUTHORITY", emptyList(),
+        "DEFENDANT", emptyList(),
+        "CLAIMANT_PETITIONER", emptyList(),
+        "CLAIMANT_PETITIONER_REPRESENTATIVE", emptyList(),
+        "DEFENDANT_REPRESENTATIVE", emptyList()
     );
 
     private PartyRoleMapper() {

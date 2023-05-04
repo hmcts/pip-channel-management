@@ -25,8 +25,9 @@ public final class MagistratesStandardListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String COURT_LIST = "courtLists";
-    private static final String CASE = "case";
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
+    private static final String CASE = "case";
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
     private static final String AGE = "age";
     private static final String IN_CUSTODY = "inCustody";
@@ -51,7 +52,7 @@ public final class MagistratesStandardListHelper {
 
     public static void manipulatedMagistratesStandardList(JsonNode artefact, Map<String, Object> language) {
         artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(session -> {
                     ArrayNode allDefendants = MAPPER.createArrayNode();
                     session.get("sittings").forEach(sitting -> {

@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
@@ -22,6 +21,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.Common
 public final class EtFortnightlyPressListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
@@ -45,15 +45,16 @@ public final class EtFortnightlyPressListHelper {
         artefact.get("courtLists").forEach(courtList -> {
             ArrayNode sittingArray = MAPPER.createArrayNode();
             Map<Date, String> sittingDateTimes = SittingHelper.findAllSittingDates(
-                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
+                courtList.get(COURT_HOUSE).get(COURT_ROOM));
             List<String> uniqueSittingDate = GeneralHelper.findUniqueDateAndSort(sittingDateTimes);
             String[] uniqueSittingDates = uniqueSittingDate.toArray(new String[0]);
+
             for (int i = 0; i < uniqueSittingDates.length; i++) {
                 int currentSittingDate = i;
                 ObjectNode sittingNode = MAPPER.createObjectNode();
                 ArrayNode hearingNodeArray = MAPPER.createArrayNode();
                 (sittingNode).put(SITTING_DATE, uniqueSittingDates[currentSittingDate]);
-                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                     courtRoom -> courtRoom.get("session").forEach(
                         session -> session.get(SITTINGS).forEach(sitting -> {
                             (sittingNode).put("time", sitting.get("time").asText());
@@ -71,7 +72,7 @@ public final class EtFortnightlyPressListHelper {
 
     public static void etFortnightlyListFormatted(JsonNode artefact, Map<String, Object> language) {
         artefact.get("courtLists").forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get(SITTINGS).forEach(sitting -> {
                         String sittingDate = DateHelper.formatTimeStampToBst(

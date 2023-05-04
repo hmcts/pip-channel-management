@@ -28,7 +28,8 @@ class EtDailyListFileConverterTest {
     void testSuccessfulConversion() throws IOException {
         Map<String, String> metaData = Map.of("contentDate", CONTENT_DATE,
                                               "language", ENGLISH,
-                                              "region", REGION_NAME
+                                              "region", REGION_NAME,
+                                              "listType", "ET_DAILY_LIST"
         );
         Map<String, Object> language = handleLanguage();
         JsonNode input = getInput("/mocks/etDailyList.json");

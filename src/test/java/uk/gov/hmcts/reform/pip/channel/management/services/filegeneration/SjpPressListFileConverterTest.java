@@ -57,7 +57,8 @@ class SjpPressListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  "provenance", "provenance",
                                                  "locationName", "location",
-                                                 "language", "ENGLISH"
+                                                 "language", "ENGLISH",
+                                                 "listType", "SJP_PRESS_LIST"
         );
 
         String outputHtml = sjpPressListConverter.convert(getInput("/mocks/sjpPressMockJul22.json"), metadataMap,

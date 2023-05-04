@@ -30,7 +30,8 @@ class IacDailyListFileConverterTest {
         Map<String, String> metaData = Map.of("contentDate", "02 October 2022",
                                               "language", "ENGLISH",
                                               "provenance", "MANUAL_UPLOAD",
-                                              "locationName", "Location Name");
+                                              "locationName", "Location Name",
+                                              "listType", "IAC_DAILY_LIST");
         Map<String, Object> language = handleLanguage();
         JsonNode input = getInput("/mocks/iacDailyList.json");
 

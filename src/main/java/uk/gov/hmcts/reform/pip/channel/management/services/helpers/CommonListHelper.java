@@ -16,6 +16,7 @@ public final class CommonListHelper {
     private static final String VERSION = "version";
     private static final String VENUE = "venue";
     private static final String VENUE_CONTACT = "venueContact";
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
@@ -70,7 +71,7 @@ public final class CommonListHelper {
 
     public static void manipulatedListData(JsonNode artefact, Language language, boolean initialised) {
         artefact.get("courtLists").forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
                     formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));

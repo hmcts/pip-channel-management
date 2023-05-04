@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
@@ -42,8 +40,7 @@ public class IacDailyListFileConverter implements FileConverter {
         context.setVariable("telephone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
         context.setVariable("email", artefact.get("venue").get("venueContact").get("venueEmail").asText());
 
-        SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
-        return templateEngine.process("iacDailyList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
     /**

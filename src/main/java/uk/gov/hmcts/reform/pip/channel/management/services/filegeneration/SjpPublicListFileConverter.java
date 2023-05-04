@@ -7,8 +7,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpPublicListHelper;
@@ -41,9 +39,7 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
         context.setVariable("contentDate", metadata.get("contentDate"));
         context.setVariable("i18n", language);
         context.setVariable("cases", processRawListData(artefact));
-
-        SpringTemplateEngine templateEngine = new ThymeleafConfiguration().templateEngine();
-        return templateEngine.process("sjpPublicList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
     /**

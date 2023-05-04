@@ -49,7 +49,8 @@ class CrownFirmListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "ENGLISH"
+                                                 "language", "ENGLISH",
+                                                 "listType", "CROWN_FIRM_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
@@ -86,7 +87,8 @@ class CrownFirmListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "WELSH"
+                                                 "language", "WELSH",
+                                                 "listType", "CROWN_FIRM_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());

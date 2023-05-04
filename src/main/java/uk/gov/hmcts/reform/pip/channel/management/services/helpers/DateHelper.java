@@ -50,8 +50,7 @@ public final class DateHelper {
     }
 
     public static String formatLocalDateTimeToBst(LocalDateTime date) {
-        return date.format(
-            DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.UK));
+        return date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.UK));
     }
 
     static String formatDurationInDays(int days, Language language) {

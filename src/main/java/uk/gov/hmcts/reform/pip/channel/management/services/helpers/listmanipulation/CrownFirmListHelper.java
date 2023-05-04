@@ -22,6 +22,7 @@ import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.Common
 public final class CrownFirmListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String SITTING_DATE = "sittingDate";
     private static final String SITTINGS = "sittings";
@@ -51,7 +52,7 @@ public final class CrownFirmListHelper {
         Map<Date, String> allSittingDateTimes = new ConcurrentHashMap<>();
         artefact.get(COURT_LIST).forEach(courtList -> {
             Map<Date, String> sittingDateTimes = SittingHelper.findAllSittingDates(
-                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM));
+                courtList.get(COURT_HOUSE).get(COURT_ROOM));
             allSittingDateTimes.putAll(sittingDateTimes);
         });
         return GeneralHelper.findUniqueDateAndSort(allSittingDateTimes);
@@ -73,11 +74,11 @@ public final class CrownFirmListHelper {
                 ArrayNode unAllocatedCourtRoomHearings = MAPPER.createArrayNode();
 
                 courtListNode.put("courtName",
-                    GeneralHelper.findAndReturnNodeText(courtList.get(LocationHelper.COURT_HOUSE),
+                    GeneralHelper.findAndReturnNodeText(courtList.get(COURT_HOUSE),
                                                         "courtHouseName"));
                 courtListNode.put("courtSittingDate", uniqueSittingDates.get(finalI));
 
-                courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
+                courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                     ObjectNode courtRoomNode = MAPPER.createObjectNode();
                     ArrayNode hearingArray = MAPPER.createArrayNode();
                     courtRoom.get("session").forEach(session -> {
@@ -101,7 +102,8 @@ public final class CrownFirmListHelper {
             });
             courtListByDateArray.add(courtListArray);
         }
-        ((ObjectNode)artefact).putArray("courtListsByDate").addAll(courtListByDateArray);
+        ((ObjectNode)artefact).putArray("courtListsByDate")
+            .addAll(courtListByDateArray);
     }
 
     private static void checkAndAddToArrayNode(ArrayNode arrayToCheck, ObjectNode destinationNode,
@@ -133,7 +135,7 @@ public final class CrownFirmListHelper {
 
     public static void crownFirmListFormatted(JsonNode artefact) {
         artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get(SITTINGS).forEach(
                         sitting -> {

@@ -25,13 +25,13 @@ public final class SittingHelper {
 
     public static Map<Date, String> findAllSittingDates(JsonNode courtRooms) {
         Map<Date, String> sittingDateTimes = new ConcurrentHashMap<>();
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.UK);
 
         courtRooms.forEach(
             courtRoom -> courtRoom.get("session").forEach(
                 session -> session.get(SITTINGS).forEach(sitting -> {
                     try {
-                        sittingDateTimes.put(sf.parse(sitting.get(SITTING_START).asText()),
+                        sittingDateTimes.put(dateFormat.parse(sitting.get(SITTING_START).asText()),
                                              GeneralHelper.findAndReturnNodeText(sitting, SITTING_DATE));
                     } catch (ParseException e) {
                         log.error(e.getMessage());

@@ -45,12 +45,11 @@ public final class LanguageResourceHelper {
     }
 
     public static Map<String, Object> readResourcesFromPath(String resourceName, Language language) throws IOException {
-        String path;
-        if (language.equals(Language.ENGLISH)) {
-            path = PATH_TO_LANGUAGES + "en/" + resourceName + ".json";
-        } else {
-            path = PATH_TO_LANGUAGES + "cy/" + resourceName + ".json";
-        }
+        String path =  PATH_TO_LANGUAGES
+            + (language.equals(Language.ENGLISH) ? "en/" : "cy/")
+            + resourceName
+            + ".json";
+
         try (InputStream languageFile = Thread.currentThread()
             .getContextClassLoader().getResourceAsStream(path)) {
             if (languageFile == null) {

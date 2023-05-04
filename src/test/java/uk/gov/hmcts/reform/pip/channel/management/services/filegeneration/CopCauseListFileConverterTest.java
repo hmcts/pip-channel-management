@@ -50,7 +50,8 @@ class CopCauseListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "ENGLISH"
+                                                 "language", "ENGLISH",
+                                                 "listType", "COP_DAILY_CAUSE_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
@@ -92,7 +93,8 @@ class CopCauseListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "ENGLISH"
+                                                 "language", "WELSH",
+                                                 "listType", "COP_DAILY_CAUSE_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());

@@ -50,7 +50,8 @@ class EtFortnightlyPressListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "ENGLISH"
+                                                 "language", "ENGLISH",
+                                                 "listType", "ET_FORTNIGHTLY_PRESS_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
@@ -88,7 +89,8 @@ class EtFortnightlyPressListFileConverterTest {
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "location",
-                                                 "language", "WELSH"
+                                                 "language", "WELSH",
+                                                 "listType", "ET_FORTNIGHTLY_PRESS_LIST"
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());

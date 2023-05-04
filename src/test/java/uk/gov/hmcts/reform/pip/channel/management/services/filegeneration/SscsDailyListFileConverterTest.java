@@ -56,7 +56,8 @@ class SscsDailyListFileConverterTest {
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "Livingston",
-                                                 "language", "ENGLISH"
+                                                 "language", "ENGLISH",
+                                                 "listType", listType.name()
         );
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
         String outputHtml = listConversionFactory.getFileConverter(listType)
@@ -111,7 +112,8 @@ class SscsDailyListFileConverterTest {
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
                                                  "locationName", "Livingston",
-                                                 "language", "WELSH"
+                                                 "language", "WELSH",
+                                                 "listType", listType.name()
         );
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
         String outputHtml = listConversionFactory.getFileConverter(listType)

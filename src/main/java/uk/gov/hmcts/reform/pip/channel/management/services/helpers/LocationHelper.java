@@ -16,15 +16,14 @@ public final class LocationHelper {
     private static final String TOWN = "town";
     private static final String COUNTY = "county";
     private static final String POSTCODE = "postCode";
-    public static final String COURT_HOUSE = "courtHouse";
+    private static final String COURT_HOUSE = "courtHouse";
 
     private LocationHelper() {
         throw new UnsupportedOperationException();
     }
 
     public static List<String> formatVenueAddress(JsonNode artefact) {
-        List<String> address = new ArrayList<>();
-        address.addAll(addAddressLines(artefact));
+        List<String> address = addAddressLines(artefact);
 
         if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), POSTCODE).isEmpty()) {
             address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(POSTCODE).asText());
@@ -33,8 +32,7 @@ public final class LocationHelper {
     }
 
     public static List<String> formatFullVenueAddress(JsonNode artefact) {
-        List<String> address = new ArrayList<>();
-        address.addAll(addAddressLines(artefact));
+        List<String> address = addAddressLines(artefact);
 
         if (!GeneralHelper.findAndReturnNodeText(artefact.get(VENUE).get(VENUE_ADDRESS), TOWN).isEmpty()) {
             address.add(artefact.get(VENUE).get(VENUE_ADDRESS).get(TOWN).asText());
@@ -124,8 +122,7 @@ public final class LocationHelper {
         }
     }
 
-    public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session,
-                                       StringBuilder formattedJudiciary) {
+    public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session, StringBuilder formattedJudiciary) {
         if (StringUtils.isBlank(formattedJudiciary.toString())) {
             formattedJudiciary.append(courtRoom.get("courtRoomName").asText());
         } else {

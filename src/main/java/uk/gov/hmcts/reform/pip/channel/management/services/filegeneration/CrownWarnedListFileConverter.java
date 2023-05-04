@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
@@ -28,7 +27,7 @@ public class CrownWarnedListFileConverter implements FileConverter {
         context.setVariable("venueName", artefact.get("venue").get("venueName").asText());
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
 
-        return new ThymeleafConfiguration().templateEngine().process("crownWarnedList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
     private void setPublicationDateTime(Context context, String publicationDate, Language language) {

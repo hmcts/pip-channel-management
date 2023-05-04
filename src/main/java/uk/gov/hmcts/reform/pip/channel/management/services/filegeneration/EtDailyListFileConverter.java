@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtDailyListHelper;
@@ -31,7 +30,7 @@ public class EtDailyListFileConverter implements FileConverter {
         context.setVariable("artefact", artefact);
         setVenue(context, artefact.get("venue"));
 
-        return new ThymeleafConfiguration().templateEngine().process("etDailyList.html", context);
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
     private void setPublicationDateTime(Context context, String publicationDate, Language language) {

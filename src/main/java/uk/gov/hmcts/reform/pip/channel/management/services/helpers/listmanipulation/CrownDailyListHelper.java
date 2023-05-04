@@ -8,7 +8,6 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 
 import java.util.Map;
@@ -17,6 +16,7 @@ public final class CrownDailyListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String COURT_LIST = "courtLists";
+    private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
     private static final String COURT_ROOM_NAME = "courtRoomName";
 
@@ -37,7 +37,7 @@ public final class CrownDailyListHelper {
 
     public static void manipulatedCrownDailyListData(JsonNode artefact) {
         artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
                         DateHelper.formatStartTime(sitting, "h:mma", false);
@@ -56,7 +56,7 @@ public final class CrownDailyListHelper {
         ArrayNode unAllocatedCasesNodeArray = MAPPER.createArrayNode();
         artefact.get(COURT_LIST).forEach(courtList -> {
             final int[] roomCount = {0};
-            courtList.get(LocationHelper.COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
+            courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
                 if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME).contains("to be allocated")) {
                     JsonNode cloneCourtRoom = courtRoom.deepCopy();
                     unAllocatedCasesNodeArray.add(cloneCourtRoom);
@@ -69,10 +69,10 @@ public final class CrownDailyListHelper {
         //IF THERE IS ANY UNALLOCATED CASES, ADD THE SECTION AT END OF COURTLIST ARRAY
         if (unAllocatedCasesNodeArray.size() > 0) {
             JsonNode cloneCourtList = artefact.get(COURT_LIST).get(0).deepCopy();
-            ((ObjectNode)cloneCourtList.get(LocationHelper.COURT_HOUSE)).put("courtHouseName", "");
-            ((ObjectNode)cloneCourtList.get(LocationHelper.COURT_HOUSE)).put("courtHouseAddress", "");
+            ((ObjectNode)cloneCourtList.get(COURT_HOUSE)).put("courtHouseName", "");
+            ((ObjectNode)cloneCourtList.get(COURT_HOUSE)).put("courtHouseAddress", "");
             ((ObjectNode)cloneCourtList).put("unallocatedCases", true);
-            ((ObjectNode)cloneCourtList.get(LocationHelper.COURT_HOUSE))
+            ((ObjectNode)cloneCourtList.get(COURT_HOUSE))
                 .putArray(COURT_ROOM).addAll(unAllocatedCasesNodeArray);
 
             ArrayNode courtListArray = MAPPER.createArrayNode();
