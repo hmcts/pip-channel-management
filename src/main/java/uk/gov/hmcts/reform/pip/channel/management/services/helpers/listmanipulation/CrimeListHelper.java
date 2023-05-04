@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 
 import java.util.concurrent.atomic.AtomicReference;
 

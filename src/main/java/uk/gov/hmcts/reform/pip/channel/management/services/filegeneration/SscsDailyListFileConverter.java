@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
-import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
