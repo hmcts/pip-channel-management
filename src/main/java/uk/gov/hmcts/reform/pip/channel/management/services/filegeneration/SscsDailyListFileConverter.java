@@ -32,12 +32,9 @@ public class SscsDailyListFileConverter implements FileConverter {
         context.setVariable("telephone", GeneralHelper.safeGet("venue.venueContact.venueTelephone", highestLevelNode));
         context.setVariable("email", GeneralHelper.safeGet("venue.venueContact.venueEmail", highestLevelNode));
 
-        String format = (language == Language.ENGLISH)
-            ? "dd MMMM yyyy 'at' HH:mm"
-            : "dd MMMM yyyy 'yn' HH:mm";
         context.setVariable("publishedDate", DateHelper.formatTimeStampToBst(
             GeneralHelper.safeGet("document.publicationDate", highestLevelNode), Language.ENGLISH,
-            false, false, format)
+            false, true)
         );
 
         List<CourtHouse> listOfCourtHouses = new ArrayList<>();

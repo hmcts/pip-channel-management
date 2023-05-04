@@ -18,8 +18,9 @@ public class CareStandardsListFileConverter implements FileConverter {
         Language language = Language.valueOf(metadata.get("language"));
         languageResources.putAll(LanguageResourceHelper.readResourcesFromPath("openJusticeStatement", language));
 
-        Context context = TribunalNationalListHelper
-            .preprocessArtefactForTribunalNationalListsThymeLeafConverter(artefact, metadata, languageResources);
+        Context context = TribunalNationalListHelper.preprocessArtefactForThymeLeafConverter(
+            artefact, metadata, languageResources
+        );
         return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 }

@@ -42,16 +42,12 @@ public class EtDailyListFileConverter implements FileConverter {
 
     private void setVenue(Context context, JsonNode venue) {
         context.setVariable("venueName", GeneralHelper.findAndReturnNodeText(venue, "venueName"));
-
-        String venueEmail = "";
-        String venueTelephone = "";
-        if (venue.has(VENUE_CONTACT)) {
-            venueEmail = GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueEmail");
-            venueTelephone = GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueTelephone");
-        }
-
-        context.setVariable("venueEmail", venueEmail);
-        context.setVariable("venueTelephone", venueTelephone);
+        context.setVariable("venueEmail", venue.has(VENUE_CONTACT)
+            ? GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueEmail")
+            : "");
+        context.setVariable("venueTelephone", venue.has(VENUE_CONTACT)
+            ? GeneralHelper.findAndReturnNodeText(venue.get(VENUE_CONTACT),"venueTelephone")
+            : "");
     }
 
 }

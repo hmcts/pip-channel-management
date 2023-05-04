@@ -49,10 +49,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
             false,
             true
         );
-        context.setVariable(
-            "contentDate",
-            metadata.get("contentDate")
-        );
+        context.setVariable("contentDate", metadata.get("contentDate"));
         context.setVariable("i18n", language);
         context.setVariable("publishedDate", publishedDate);
         context.setVariable("jsonBody", jsonBody);

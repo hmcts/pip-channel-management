@@ -16,7 +16,7 @@ public final class TribunalNationalListHelper {
     private TribunalNationalListHelper() {
     }
 
-    public static Context preprocessArtefactForTribunalNationalListsThymeLeafConverter(
+    public static Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
         Context context = new Context();
         Language language = Language.valueOf(metadata.get("language"));

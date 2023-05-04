@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
@@ -15,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 public final class CrownFirmListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -36,15 +33,6 @@ public final class CrownFirmListHelper {
     private static final String FORMATTED_COURT_ROOM = "formattedCourtRoom";
 
     private CrownFirmListHelper() {
-    }
-
-    public static Context preprocessArtefactForCrownFirmListThymeLeafConverter(
-        JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
-        crownFirmListFormatted(artefact);
-        splitByCourtAndDate(artefact);
-        return context;
     }
 
     private static List<String> findUniqueSittingDatesPerCounts(JsonNode artefact) {

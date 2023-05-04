@@ -2,13 +2,12 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.util.Map;
-
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Service
 public class CivilAndFamilyDailyCauseListFileConverter implements FileConverter {
@@ -20,7 +19,7 @@ public class CivilAndFamilyDailyCauseListFileConverter implements FileConverter 
 
         return TemplateEngine.processTemplate(
             metadata.get("listType"),
-            preprocessArtefactForThymeLeafConverter(artefact, metadata, languageResources, false)
+            CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, languageResources, false)
         );
     }
 }

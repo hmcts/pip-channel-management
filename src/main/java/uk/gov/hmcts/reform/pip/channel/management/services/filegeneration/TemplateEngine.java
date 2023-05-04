@@ -19,6 +19,7 @@ public final class TemplateEngine {
         String templateFileName = listType.getParentListType() == null
             ? listTypeName
             : listType.getParentListType().name();
+
         String template = UPPER_UNDERSCORE.to(LOWER_CAMEL, templateFileName) + ".html";
         return TEMPLATE_ENGINE.process(template, context);
     }

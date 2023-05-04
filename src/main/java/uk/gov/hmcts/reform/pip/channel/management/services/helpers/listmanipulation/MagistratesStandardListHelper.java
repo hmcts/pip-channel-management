@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
@@ -17,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @SuppressWarnings({"PMD.TooManyMethods"})
 public final class MagistratesStandardListHelper {
@@ -38,16 +34,6 @@ public final class MagistratesStandardListHelper {
     private static final String FORMATTED_CONVICTION_DATE = "formattedConvictionDate";
 
     private MagistratesStandardListHelper() {
-    }
-
-    public static Context processArtefactForMagistratesStandardListThymeLeaf(
-        JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
-        manipulatedMagistratesStandardList(artefact, language);
-        context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
-        context.setVariable("version", artefact.get("document").get("version").asText());
-        return context;
     }
 
     public static void manipulatedMagistratesStandardList(JsonNode artefact, Map<String, Object> language) {

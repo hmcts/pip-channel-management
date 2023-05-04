@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
-import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
@@ -14,8 +13,6 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
 
 @Slf4j
 public final class EtFortnightlyPressListHelper {
@@ -29,16 +26,6 @@ public final class EtFortnightlyPressListHelper {
     private static final String SITTING_START = "sittingStart";
 
     private EtFortnightlyPressListHelper() {
-    }
-
-    public static Context preprocessArtefactForEtFortnightlyListThymeLeafConverter(
-        JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
-        etFortnightlyListFormatted(artefact, language);
-        splitByCourtAndDate(artefact);
-        context.setVariable("regionName", metadata.get("regionName"));
-        return context;
     }
 
     public static void splitByCourtAndDate(JsonNode artefact) {

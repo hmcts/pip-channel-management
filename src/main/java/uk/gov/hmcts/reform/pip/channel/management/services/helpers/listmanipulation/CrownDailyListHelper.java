@@ -4,13 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
-
-import java.util.Map;
 
 public final class CrownDailyListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -21,18 +17,6 @@ public final class CrownDailyListHelper {
     private static final String COURT_ROOM_NAME = "courtRoomName";
 
     private CrownDailyListHelper() {
-    }
-
-    public static Context preprocessArtefactForThymeLeafConverter(
-        JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
-        findUnallocatedCases(artefact);
-
-        manipulatedCrownDailyListData(artefact);
-        CrimeListHelper.formattedCourtRoomName(artefact);
-        context.setVariable("version", artefact.get("document").get("version").asText());
-        return context;
     }
 
     public static void manipulatedCrownDailyListData(JsonNode artefact) {
