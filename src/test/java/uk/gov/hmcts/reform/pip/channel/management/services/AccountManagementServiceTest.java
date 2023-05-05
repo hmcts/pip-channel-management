@@ -104,7 +104,8 @@ class AccountManagementServiceTest {
         try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
             assertTrue(accountManagementService.getEmails(emailList).isEmpty(),
                        "should be empty when an exception is thrown");
-            assertTrue(logCaptor.getErrorLogs().get(0).contains("Account management request failed to get emails"),
+            assertTrue(logCaptor.getErrorLogs().get(0)
+                           .contains("Request to Account Management to get account e-mails failed with error"),
                        "Messages do not match");
         } catch (Exception ex) {
             throw new IOException(ex);
