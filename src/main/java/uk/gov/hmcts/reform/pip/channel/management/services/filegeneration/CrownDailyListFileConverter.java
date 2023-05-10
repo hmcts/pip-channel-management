@@ -24,11 +24,11 @@ public class CrownDailyListFileConverter implements FileConverter {
         Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(
             artefact, metadata, language, false
         );
+        context.setVariable("version", artefact.get("document").get("version").asText());
         CrownDailyListHelper.findUnallocatedCases(artefact);
 
         CrownDailyListHelper.manipulatedCrownDailyListData(artefact);
         CrimeListHelper.formattedCourtRoomName(artefact);
-        context.setVariable("version", artefact.get("document").get("version").asText());
         return context;
     }
 }
