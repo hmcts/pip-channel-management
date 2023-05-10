@@ -58,9 +58,10 @@ public final class MagistratesPublicListHelper {
     private static void formatCaseHtmlTable(JsonNode hearing) {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(cases -> {
-                ((ObjectNode)cases).put("bottomBorder", "");
+                ObjectNode caseObj = (ObjectNode) cases;
+                caseObj.put("bottomBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isBlank()) {
-                    ((ObjectNode)cases).put("bottomBorder", NO_BORDER_BOTTOM);
+                    caseObj.put("bottomBorder", NO_BORDER_BOTTOM);
                 }
             });
         }

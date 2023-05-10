@@ -20,8 +20,7 @@ public class EtFortnightlyPressListFileConverter implements FileConverter {
 
     private Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
+        Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(artefact, language);
         EtFortnightlyPressListHelper.splitByCourtAndDate(artefact);
         context.setVariable("regionName", metadata.get("regionName"));

@@ -48,7 +48,7 @@ public final class CrownFirmListHelper {
     public static void splitByCourtAndDate(JsonNode artefact) {
         List<String> uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
         String[] uniqueDates =  uniqueSittingDates.toArray(new String[0]);
-        setListToDates(artefact, uniqueSittingDates);
+        setListToDates((ObjectNode) artefact, uniqueSittingDates);
         ArrayNode courtListByDateArray = MAPPER.createArrayNode();
         for (int i = 0; i < uniqueSittingDates.size(); i++) {
             int finalI = i;
@@ -133,7 +133,7 @@ public final class CrownFirmListHelper {
                             SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
 
                             sitting.get("hearing").forEach(hearing -> {
-                                formatCaseTime(sitting, hearing);
+                                formatCaseTime(sitting, (ObjectNode) hearing);
                                 PartyRoleHelper.handleParties(hearing);
                                 CrimeListHelper.formatCaseInformation(hearing);
                                 CrimeListHelper.formatCaseHtmlTable(hearing);
@@ -178,22 +178,22 @@ public final class CrownFirmListHelper {
                        GeneralHelper.findAndReturnNodeText(caseNode, "linkedCasesBorder"));
     }
 
-    private static void setListToDates(JsonNode artefact, List<String> uniqueSittingDates) {
+    private static void setListToDates(ObjectNode artefact, List<String> uniqueSittingDates) {
         String startDate = uniqueSittingDates.get(0)
             .substring(uniqueSittingDates.get(0).indexOf(' ') + 1);
         String endDate = uniqueSittingDates.get(uniqueSittingDates.size() - 1)
             .substring(uniqueSittingDates.get(uniqueSittingDates.size() - 1).indexOf(' ') + 1);
-        ((ObjectNode)artefact).put("listStartDate", startDate);
-        ((ObjectNode)artefact).put("listEndDate", endDate);
+        artefact.put("listStartDate", startDate);
+        artefact.put("listEndDate", endDate);
     }
 
-    private static void formatCaseTime(JsonNode sitting, JsonNode node) {
+    private static void formatCaseTime(JsonNode sitting, ObjectNode hearing) {
         if (!GeneralHelper.findAndReturnNodeText(sitting, SITTING_START).isEmpty()) {
-            ((ObjectNode)node).put("time",
-                                   DateHelper.formatTimeStampToBst(
-                                       GeneralHelper.findAndReturnNodeText(sitting, SITTING_START), Language.ENGLISH,
-                                       false, false, "h:mma"
-                                   ).replace(":00", ""));
+            hearing.put("time",
+                        DateHelper.formatTimeStampToBst(
+                            GeneralHelper.findAndReturnNodeText(sitting, SITTING_START), Language.ENGLISH,
+                            false, false, "h:mma"
+                        ).replace(":00", ""));
         }
     }
 }

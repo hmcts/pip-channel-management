@@ -53,11 +53,11 @@ public final class CrownDailyListHelper {
         //IF THERE IS ANY UNALLOCATED CASES, ADD THE SECTION AT END OF COURTLIST ARRAY
         if (unAllocatedCasesNodeArray.size() > 0) {
             JsonNode cloneCourtList = artefact.get(COURT_LIST).get(0).deepCopy();
-            ((ObjectNode)cloneCourtList.get(COURT_HOUSE)).put("courtHouseName", "");
-            ((ObjectNode)cloneCourtList.get(COURT_HOUSE)).put("courtHouseAddress", "");
+            ObjectNode courtHouseObj = (ObjectNode) cloneCourtList.get(COURT_HOUSE);
+            courtHouseObj.put("courtHouseName", "");
+            courtHouseObj.put("courtHouseAddress", "");
             ((ObjectNode)cloneCourtList).put("unallocatedCases", true);
-            ((ObjectNode)cloneCourtList.get(COURT_HOUSE))
-                .putArray(COURT_ROOM).addAll(unAllocatedCasesNodeArray);
+            courtHouseObj.putArray(COURT_ROOM).addAll(unAllocatedCasesNodeArray);
 
             ArrayNode courtListArray = MAPPER.createArrayNode();
 

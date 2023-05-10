@@ -20,8 +20,7 @@ public class CrownFirmListFileConverter  implements FileConverter {
 
     private Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
+        Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, true);
         CrownFirmListHelper.crownFirmListFormatted(artefact);
         CrownFirmListHelper.splitByCourtAndDate(artefact);
         return context;

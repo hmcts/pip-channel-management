@@ -39,10 +39,13 @@ public final class FamilyMixedListHelper {
                             if (hearing.has("party")) {
                                 handleParties(hearing);
                             } else {
-                                ((ObjectNode) hearing).put(APPLICANT, "");
-                                ((ObjectNode) hearing).put(RESPONDENT, "");
+                                ObjectNode hearingObj = (ObjectNode) hearing;
+                                hearingObj.put(APPLICANT, "");
+                                hearingObj.put(RESPONDENT, "");
                             }
-                            hearing.get("case").forEach(CaseHelper::manipulateCaseInformation);
+                            hearing.get("case").forEach(
+                                hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
+                            );
                         });
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
@@ -73,14 +76,15 @@ public final class FamilyMixedListHelper {
             }
         });
 
-        ((ObjectNode) hearing).put(APPLICANT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        ((ObjectNode) hearing).put(APPLICANT_REPRESENTATIVE,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
-        ((ObjectNode) hearing).put(RESPONDENT_REPRESENTATIVE,
-                                   GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
+        ObjectNode hearingObj = (ObjectNode) hearing;
+        hearingObj.put(APPLICANT,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
+        hearingObj.put(APPLICANT_REPRESENTATIVE,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
+        hearingObj.put(RESPONDENT,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
+        hearingObj.put(RESPONDENT_REPRESENTATIVE,
+                       GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
     }
 
     private static String createPartyDetails(JsonNode party) {

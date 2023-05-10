@@ -33,14 +33,15 @@ public final class CrimeListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> {
+                        ObjectNode sessionObj = (ObjectNode) session;
                         if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
                             .contains("to be allocated")) {
-                            ((ObjectNode) session).put(
+                            sessionObj.put(
                                 SESSION_COURT_ROOM,
                                 GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
                             );
                         } else {
-                            ((ObjectNode) session).put(
+                            sessionObj.put(
                                 SESSION_COURT_ROOM,
                                 GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
                                     .replace("Before: ", "")

@@ -21,8 +21,9 @@ public class CrownDailyListFileConverter implements FileConverter {
 
     private Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
+        Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(
+            artefact, metadata, language, false
+        );
         CrownDailyListHelper.findUnallocatedCases(artefact);
 
         CrownDailyListHelper.manipulatedCrownDailyListData(artefact);

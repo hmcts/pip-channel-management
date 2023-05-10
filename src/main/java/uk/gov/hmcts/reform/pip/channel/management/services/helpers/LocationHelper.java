@@ -94,16 +94,15 @@ public final class LocationHelper {
         return addressLines;
     }
 
-    public static void formatRegionName(JsonNode artefact) {
+    public static void formatRegionName(ObjectNode artefact) {
         try {
-            ((ObjectNode) artefact).put("regionName",
-                                        artefact.get("locationDetails").get("region").get("name").asText());
+            artefact.put("regionName", artefact.get("locationDetails").get("region").get("name").asText());
         } catch (Exception e) {
-            ((ObjectNode) artefact).put("regionName", "");
+            artefact.put("regionName", "");
         }
     }
 
-    public static void formatRegionalJoh(JsonNode artefact) {
+    public static void formatRegionalJoh(ObjectNode artefact) {
         StringBuilder formattedJoh = new StringBuilder();
         try {
             artefact.get("locationDetails").get("region").get("regionalJOH").forEach(joh -> {
@@ -116,9 +115,9 @@ public final class LocationHelper {
                 formattedJoh.append(GeneralHelper.findAndReturnNodeText(joh, "johNameSurname"));
             });
 
-            ((ObjectNode) artefact).put("regionalJoh", formattedJoh.toString());
+            artefact.put("regionalJoh", formattedJoh.toString());
         } catch (Exception e) {
-            ((ObjectNode) artefact).put("regionalJoh", "");
+            artefact.put("regionalJoh", "");
         }
     }
 

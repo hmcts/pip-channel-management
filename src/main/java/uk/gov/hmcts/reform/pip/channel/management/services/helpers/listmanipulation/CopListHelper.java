@@ -22,8 +22,9 @@ public final class CopListHelper {
     }
 
     public static void manipulateCopListData(JsonNode artefact, Language language) {
-        LocationHelper.formatRegionName(artefact);
-        LocationHelper.formatRegionalJoh(artefact);
+        ObjectNode artefactObj = (ObjectNode) artefact;
+        LocationHelper.formatRegionName(artefactObj);
+        LocationHelper.formatRegionalJoh(artefactObj);
 
         artefact.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get(COURT_ROOM).forEach(

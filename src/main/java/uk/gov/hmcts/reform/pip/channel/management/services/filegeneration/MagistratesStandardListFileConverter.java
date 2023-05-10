@@ -21,8 +21,9 @@ public class MagistratesStandardListFileConverter implements FileConverter {
 
     private Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context;
-        context = CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, language, false);
+        Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(
+            artefact, metadata, language, false
+        );
         MagistratesStandardListHelper.manipulatedMagistratesStandardList(artefact, language);
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
         context.setVariable("version", artefact.get("document").get("version").asText());

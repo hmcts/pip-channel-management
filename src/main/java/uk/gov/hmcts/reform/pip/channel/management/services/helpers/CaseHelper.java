@@ -27,9 +27,9 @@ public final class CaseHelper {
         ((ObjectNode) caseInfo).put("formattedLinkedCases", formattedLinked.toString());
     }
 
-    public static void manipulateCaseInformation(JsonNode hearingCase) {
+    public static void manipulateCaseInformation(ObjectNode hearingCase) {
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR).isEmpty()) {
-            ((ObjectNode) hearingCase).put(
+            hearingCase.put(
                 "caseName",
                 GeneralHelper.findAndReturnNodeText(hearingCase, "caseName")
                     + " " + hearingCase.get(CASE_SEQUENCE_INDICATOR).asText()
@@ -37,7 +37,7 @@ public final class CaseHelper {
         }
 
         if (!hearingCase.has("caseType")) {
-            ((ObjectNode) hearingCase).put("caseType", "");
+            hearingCase.put("caseType", "");
         }
     }
 }

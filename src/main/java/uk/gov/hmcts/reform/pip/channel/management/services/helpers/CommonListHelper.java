@@ -84,10 +84,13 @@ public final class CommonListHelper {
                             if (hearing.has("party")) {
                                 PartyRoleHelper.findAndManipulatePartyInformation(hearing, initialised);
                             } else {
-                                ((ObjectNode) hearing).put(APPLICANT, "");
-                                ((ObjectNode) hearing).put(RESPONDENT, "");
+                                ObjectNode hearingObj = (ObjectNode) hearing;
+                                hearingObj.put(APPLICANT, "");
+                                hearingObj.put(RESPONDENT, "");
                             }
-                            hearing.get("case").forEach(CaseHelper::manipulateCaseInformation);
+                            hearing.get("case").forEach(
+                                hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
+                            );
                         });
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
