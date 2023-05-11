@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,8 @@ class MagistratesStandardListSummaryConverterTest {
                      Charset.defaultCharset()
         );
 
-        String emailOutput = magistratesStandardList.convert(writer.toString());
+        JsonNode payload = new ObjectMapper().readTree(writer.toString());
+        String emailOutput = magistratesStandardList.convert(payload);
 
         SoftAssertions softly = new SoftAssertions();
 

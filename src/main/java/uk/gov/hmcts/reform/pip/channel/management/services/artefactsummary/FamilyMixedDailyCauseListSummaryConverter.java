@@ -2,15 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.FamilyMixedListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.FamilyMixedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
 public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
-
     /**
      * Family and mixed daily cause list method that generates the summary in the email.
      *
@@ -19,12 +17,9 @@ public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummar
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
-
-        FamilyMixedListHelper.manipulatedlistData(node, Language.ENGLISH);
-
-        return this.processDailyCauseList(node);
+    public String convert(JsonNode payload) throws JsonProcessingException {
+        FamilyMixedListHelper.manipulatedlistData(payload, Language.ENGLISH);
+        return this.processDailyCauseList(payload);
     }
 
     public String processDailyCauseList(JsonNode node) {

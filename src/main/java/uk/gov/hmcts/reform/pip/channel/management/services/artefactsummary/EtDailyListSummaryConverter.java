@@ -2,23 +2,19 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.EtDailyListManipulation;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
 public class EtDailyListSummaryConverter implements ArtefactSummaryConverter {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode jsonPayload = OBJECT_MAPPER.readTree(payload);
-        EtDailyListManipulation.processRawListData(jsonPayload, Language.ENGLISH);
+    public String convert(JsonNode payload) throws JsonProcessingException {
+        EtDailyListHelper.processRawListData(payload, Language.ENGLISH);
 
         StringBuilder output = new StringBuilder(140);
-        jsonPayload.get("courtLists").forEach(
+        payload.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(
