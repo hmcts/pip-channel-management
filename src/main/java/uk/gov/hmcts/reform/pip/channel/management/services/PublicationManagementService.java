@@ -164,9 +164,10 @@ public class PublicationManagementService {
             artefact.getListType(), artefact.getLanguage());
         Language languageEntry = artefact.getLanguage();
         String locationName = (languageEntry == Language.ENGLISH) ? location.getName() : location.getWelshName();
+        String provenance = (artefact.getProvenance().equals("SNL")) ? "List Assist" : artefact.getProvenance();
         Map<String, String> metadataMap = Map.of(
             "contentDate", DateHelper.formatLocalDateTimeToBst(artefact.getContentDate()),
-            "provenance", artefact.getProvenance(),
+            "provenance", provenance,
             "locationName", locationName,
             "region", String.join(", ", location.getRegion()),
             "regionName", String.join(", ", location.getRegion()),
