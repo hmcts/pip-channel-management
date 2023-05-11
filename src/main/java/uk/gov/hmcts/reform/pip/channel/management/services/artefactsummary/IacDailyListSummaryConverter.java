@@ -2,32 +2,29 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DataManipulation;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.PartyRoleHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 /**
  * Summary class for the IAC Daily List that generates the summary in the email.
  */
 @Service
 public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
-
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
-
+    public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
-        node.get("courtLists").forEach(
+        payload.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
-                        String sittingStart = DateHelper.timeStampToBstTime(
-                            sitting.get("sittingStart").asText(), "h:mma");
-
-                        DataManipulation.findAndConcatenateHearingPlatform(sitting, session);
+                        String sittingStart = DateHelper.formatTimeStampToBst(
+                            sitting.get("sittingStart").asText(), Language.ENGLISH, false, false, "h:mma"
+                        );
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
                             hearing.get("case").forEach(hearingCase -> {

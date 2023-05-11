@@ -2,15 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.GeneralHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.CopListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CopListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
 public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConverter {
-
     /**
      * COP Daily Cause List summary producer.
      *
@@ -19,12 +17,9 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
      * @throws JsonProcessingException - Thrown if there has been an error while processing the JSON payload.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
-
-        CopListHelper.manipulateCopListData(node, Language.ENGLISH);
-
-        return this.processCopDailyCauseList(node);
+    public String convert(JsonNode payload) throws JsonProcessingException {
+        CopListHelper.manipulateCopListData(payload, Language.ENGLISH);
+        return this.processCopDailyCauseList(payload);
     }
 
     /**

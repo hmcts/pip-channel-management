@@ -12,9 +12,9 @@ import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.converters.FileConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.LanguageResourceHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.FileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
 import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
@@ -36,6 +36,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST
 @SuppressWarnings({"PMD.PreserveStackTrace"})
 public class PublicationManagementService {
     private static final int MAX_FILE_SIZE = 2_000_000;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
@@ -68,7 +69,7 @@ public class PublicationManagementService {
         JsonNode topLevelNode;
 
         try {
-            topLevelNode = new ObjectMapper().readTree(rawJson);
+            topLevelNode = MAPPER.readTree(rawJson);
             FileConverter fileConverter = listConversionFactory.getFileConverter(artefact.getListType());
 
             if (fileConverter == null) {
@@ -116,7 +117,7 @@ public class PublicationManagementService {
 
         try {
             String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
-            summary = artefactSummaryConverter.convert(rawJson);
+            summary = artefactSummaryConverter.convert(MAPPER.readTree(rawJson));
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(String.format("Failed to generate summary for artefact id %s", artefactId));
         }

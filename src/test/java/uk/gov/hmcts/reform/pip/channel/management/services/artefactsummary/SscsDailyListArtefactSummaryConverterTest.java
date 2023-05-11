@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -18,8 +20,9 @@ class SscsDailyListArtefactSummaryConverterTest {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/sscsDailyList.json")) {
+            JsonNode payload = new ObjectMapper().readTree(new String(mockFile.readAllBytes()));
             output = new ListConversionFactory().getArtefactSummaryConverter(listType)
-                .convert(new String(mockFile.readAllBytes()));
+                .convert(payload);
         }
 
         SoftAssertions softly = new SoftAssertions();

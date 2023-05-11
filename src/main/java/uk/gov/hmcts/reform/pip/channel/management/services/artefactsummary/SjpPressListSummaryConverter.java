@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
@@ -10,8 +9,6 @@ import java.util.Locale;
 
 @Service
 public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
 
     /**
@@ -23,10 +20,10 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
+    public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder();
 
-        OBJECT_MAPPER.readTree(payload).get("courtLists").forEach(
+        payload.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(
@@ -53,7 +50,6 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      */
     private String processOffencesSjpPress(JsonNode offencesNode) {
         StringBuilder outputString = new StringBuilder();
-        // below line is due to pmd "avoid using literals in conditional statements" rule.
         boolean offencesNodeSizeBool = offencesNode.size() > 1;
         if (offencesNodeSizeBool) {
             Iterator<JsonNode> offences = offencesNode.elements();
