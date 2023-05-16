@@ -2,14 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.helpers.listmanipulation.SscsListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Service
 public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
-
     /**
      * parent method - first iterates through json file to build courthouse object list (with nested courtroom,
      * hearing and sitting objects within. Then iterate through those to produce final string output. Utilises a lot
@@ -28,7 +26,7 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
      * @throws JsonProcessingException - jackson req.
      */
     @Override
-    public String convert(String payload) throws JsonProcessingException {
+    public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder(67);
         List<CourtHouse> courtHouseList = jsonParsePayload(payload);
         for (CourtHouse courtHouse : courtHouseList) {
@@ -57,10 +55,9 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         return output.toString();
     }
 
-    private List<CourtHouse> jsonParsePayload(String payload) throws JsonProcessingException {
-        JsonNode node = new ObjectMapper().readTree(payload);
+    private List<CourtHouse> jsonParsePayload(JsonNode payload) throws JsonProcessingException {
         List<CourtHouse> courtHouseList = new ArrayList<>();
-        for (JsonNode courtHouse : node.get("courtLists")) {
+        for (JsonNode courtHouse : payload.get("courtLists")) {
             courtHouseList.add(SscsListHelper.courtHouseBuilder(courtHouse));
         }
         return courtHouseList;

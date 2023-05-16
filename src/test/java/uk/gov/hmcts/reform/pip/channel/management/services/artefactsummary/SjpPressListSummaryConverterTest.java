@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -16,8 +18,9 @@ class SjpPressListSummaryConverterTest {
         String[] outputLines;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/sjpPressList.json")) {
+            JsonNode payload = new ObjectMapper().readTree(new String(mockFile.readAllBytes()));
             String result = new ListConversionFactory().getArtefactSummaryConverter(ListType.SJP_PRESS_LIST)
-                .convert(new String(mockFile.readAllBytes()));
+                .convert(payload);
             outputLines = result.split(System.lineSeparator());
         }
 
