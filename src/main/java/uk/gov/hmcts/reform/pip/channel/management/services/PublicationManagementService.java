@@ -38,7 +38,7 @@ public class PublicationManagementService {
     private static final int MAX_FILE_SIZE = 2_000_000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String OUTDATED_LA_REF = "SNL";
-    private static final String UPDATED_LA_REF = "List Assist";
+    private static final String UPDATED_LA_REF = "ListAssist";
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
     private final AccountManagementService accountManagementService;
