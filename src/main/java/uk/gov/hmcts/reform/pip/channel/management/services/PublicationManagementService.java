@@ -37,8 +37,6 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST
 public class PublicationManagementService {
     private static final int MAX_FILE_SIZE = 2_000_000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String OUTDATED_LA_REF = "SNL";
-    private static final String UPDATED_LA_REF = "LIST_ASSIST";
     private final AzureBlobService azureBlobService;
     private final DataManagementService dataManagementService;
     private final AccountManagementService accountManagementService;
@@ -166,8 +164,7 @@ public class PublicationManagementService {
             artefact.getListType(), artefact.getLanguage());
         Language languageEntry = artefact.getLanguage();
         String locationName = (languageEntry == Language.ENGLISH) ? location.getName() : location.getWelshName();
-        String provenance = OUTDATED_LA_REF.equals(artefact.getProvenance())
-            ? UPDATED_LA_REF : artefact.getProvenance();
+        String provenance = maskDataSourceName(artefact.getProvenance());
         Map<String, String> metadataMap = Map.of(
             "contentDate", DateHelper.formatLocalDateTimeToBst(artefact.getContentDate()),
             "provenance", provenance,
@@ -214,5 +211,9 @@ public class PublicationManagementService {
             return accountManagementService.getIsAuthorised(UUID.fromString(userId), artefact.getListType(),
                                                             artefact.getSensitivity());
         }
+    }
+
+    public static String maskDataSourceName(String provenance) {
+        return "SNL".equals(provenance) ? "ListAssist" : provenance;
     }
 }

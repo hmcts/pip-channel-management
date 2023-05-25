@@ -246,4 +246,11 @@ class PublicationManagementServiceTest {
             Arguments.of(sjpPressArtefact)
         );
     }
+
+    @Test
+    void testMaskDataSourceName() {
+        ARTEFACT.setProvenance("SNL");
+        String result = PublicationManagementService.maskDataSourceName(ARTEFACT.getProvenance());
+        assertEquals("ListAssist", result, "Provenance should be changed to ListAssist");
+    }
 }
