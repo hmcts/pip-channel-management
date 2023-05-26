@@ -253,4 +253,11 @@ class PublicationManagementServiceTest {
         String result = PublicationManagementService.maskDataSourceName(ARTEFACT.getProvenance());
         assertEquals("ListAssist", result, "Provenance should be changed to ListAssist");
     }
+
+    @Test
+    void testDoNotMaskDataSourceName() {
+        ARTEFACT.setProvenance("MANUAL_UPLOAD");
+        String result = PublicationManagementService.maskDataSourceName(ARTEFACT.getProvenance());
+        assertEquals("MANUAL_UPLOAD", result, "Provenance should not be changed");
+    }
 }
