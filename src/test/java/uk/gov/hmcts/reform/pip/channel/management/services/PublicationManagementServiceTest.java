@@ -16,6 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
@@ -28,8 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -37,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,7 +68,9 @@ class PublicationManagementServiceTest {
     private static final Location LOCATION = new Location();
 
     private static final String RESPONSE_MESSAGE = "Response didn't contain expected text";
+    private static final String NOT_FOUND_MESSAGE = "File not found";
     private static final String BYTES_NO_MATCH = "Bytes didn't match";
+    private static final String EXCEPTION_NOT_MATCH = "Exception message should contain expected";
     private static final String TEST = "test";
     private static final byte[] TEST_BYTE = TEST.getBytes();
 
@@ -159,60 +165,117 @@ class PublicationManagementServiceTest {
         verify(dataManagementService, never()).getArtefactJsonBlob(TEST_ARTEFACT_ID);
     }
 
+    @Test
+    void testGetStoredPdfPublicationSjp() {
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        String response = publicationManagementService.getStoredPublication(
+            TEST_ARTEFACT_ID, FileType.PDF, null, TEST, true
+        );
+
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        assertEquals(Arrays.toString(TEST_BYTE), Arrays.toString(decodedBytes), BYTES_NO_MATCH);
+    }
+
     @ParameterizedTest
     @MethodSource("sjpParameters")
-    void testGetStoredPublicationsSjp(Artefact artefact) {
+    void testGetStoredExcelPublicationSjp(Artefact artefact) {
         when(dataManagementService.getArtefact(any())).thenReturn(artefact);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
+        String response = publicationManagementService.getStoredPublication(
+            TEST_ARTEFACT_ID, FileType.EXCEL, null, TEST, true
+        );
 
-        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
-        assertEquals(TEST_BYTE, response.get(FileType.EXCEL), BYTES_NO_MATCH);
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        assertEquals(Arrays.toString(TEST_BYTE), Arrays.toString(decodedBytes), BYTES_NO_MATCH);
     }
 
     @Test
-    void testGetStoredPublicationsNonSjp() {
+    void testGetStoredPdfPublicationNonSjp() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
+        String response = publicationManagementService.getStoredPublication(
+            TEST_ARTEFACT_ID, FileType.PDF, null, TEST, true
+        );
 
-        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
-        assertEquals(0, response.get(FileType.EXCEL).length, BYTES_NO_MATCH);
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        assertEquals(Arrays.toString(TEST_BYTE), Arrays.toString(decodedBytes), BYTES_NO_MATCH);
     }
 
     @Test
-    void testGetStoredPublicationsAuthorisedPublic() {
+    void testGetStoredExcelPublicationNonSjp() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        doThrow(new NotFoundException(NOT_FOUND_MESSAGE)).when(azureBlobService).getBlobFile(any());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () ->
+            publicationManagementService.getStoredPublication(
+                TEST_ARTEFACT_ID, FileType.EXCEL, null, TEST, true
+            ));
+
+        assertTrue(ex.getMessage().contains(NOT_FOUND_MESSAGE), EXCEPTION_NOT_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationWithinFileSizeLimit() {
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        String response = publicationManagementService.getStoredPublication(
+            TEST_ARTEFACT_ID, FileType.PDF, 20, TEST, true
+        );
+
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        assertEquals(Arrays.toString(TEST_BYTE), Arrays.toString(decodedBytes), BYTES_NO_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationOverFileSizeLimit() {
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        FileSizeLimitException ex = assertThrows(FileSizeLimitException.class, () ->
+            publicationManagementService.getStoredPublication(
+                TEST_ARTEFACT_ID, FileType.PDF, 2, TEST, true
+            ));
+
+        assertTrue(ex.getMessage().contains("File with type PDF for artefact with id " + TEST_ARTEFACT_ID
+                                                + " has size over the limit of 2 bytes"), EXCEPTION_NOT_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationAuthorisedPublic() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
         ARTEFACT.setSensitivity(Sensitivity.PUBLIC);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, false);
+        String response = publicationManagementService.getStoredPublication(
+            TEST_ARTEFACT_ID, FileType.PDF, null, TEST, false
+        );
 
-        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
-        assertEquals(0, response.get(FileType.EXCEL).length, BYTES_NO_MATCH);
+        byte[] decodedBytes = Base64.getDecoder().decode(response);
+        assertEquals(Arrays.toString(TEST_BYTE), Arrays.toString(decodedBytes), BYTES_NO_MATCH);
     }
 
     @Test
-    void testGetStoredPublicationsAuthorisedUserIdNull() {
+    void testGetStoredPublicationAuthorisedUserIdNull() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
         ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
 
         UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
-            publicationManagementService
-                .getStoredPublications(TEST_ARTEFACT_ID, null, false),
-                                              "Expected exception to be thrown");
+            publicationManagementService.getStoredPublication(
+                TEST_ARTEFACT_ID, FileType.PDF, null, null, false
+            ));
 
         assertTrue(ex.getMessage().contains("User with id null is not authorised to access artefact with id"),
-                   "Message should contain expected");
+                   EXCEPTION_NOT_MATCH);
     }
 
     @Test
@@ -224,12 +287,12 @@ class PublicationManagementServiceTest {
         when(accountManagementService.getIsAuthorised(any(), any(), any())).thenReturn(false);
 
         UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
-                                                  publicationManagementService
-                                                      .getStoredPublications(TEST_ARTEFACT_ID, TEST_USER_ID, false),
-                                              "Expected exception to be thrown");
+            publicationManagementService.getStoredPublication(
+                TEST_ARTEFACT_ID, FileType.PDF, null, TEST_USER_ID, false
+            ), "Expected exception to be thrown");
 
         assertTrue(ex.getMessage().contains("is not authorised to access artefact with id"),
-                   "Message should contain expected");
+                   EXCEPTION_NOT_MATCH);
     }
 
     private static Stream<Arguments> sjpParameters() throws JsonProcessingException {

@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PublicationManagementControllerTest {
+    private static final String FILE = "123";
 
     @Mock
     private PublicationManagementService publicationManagementService;
@@ -47,16 +46,15 @@ class PublicationManagementControllerTest {
     }
 
     @Test
-    void testGetFiles() {
-        Map<FileType, byte[]> testMap = new ConcurrentHashMap<>();
-        testMap.put(FileType.PDF, new byte[100]);
-        testMap.put(FileType.EXCEL, new byte[0]);
-        when(publicationManagementService.getStoredPublications(any(), eq("test"), eq(true))).thenReturn(testMap);
+    void testGetFile() {
+        when(publicationManagementService.getStoredPublication(any(), any(), any(), eq("test"), eq(true)))
+            .thenReturn(FILE);
 
-        ResponseEntity<Map<FileType, byte[]>> response = publicationManagementController
-            .getFiles(UUID.randomUUID(), "test", true);
+        ResponseEntity<String> response = publicationManagementController.getFile(
+            UUID.randomUUID(), "test", true, FileType.PDF, null
+        );
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Status did not match");
-        assertEquals(testMap, response.getBody(), "Body did not match");
+        assertEquals(FILE, response.getBody(), "Body did not match");
     }
 }

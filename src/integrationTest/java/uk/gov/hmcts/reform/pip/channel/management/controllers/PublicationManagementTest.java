@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
-import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -19,7 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
 
@@ -27,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -50,9 +46,6 @@ class PublicationManagementTest {
 
     @Autowired
     BlobClient blobClient;
-
-    @Value("${VERIFIED_USER_ID}")
-    private String verifiedUserId;
 
     private static final String ROOT_URL = "/publication";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
@@ -428,84 +421,6 @@ class PublicationManagementTest {
     @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
     void testGenerateFileUnauthorized() throws Exception {
         mockMvc.perform(post(ROOT_URL + "/" + ARTEFACT_ID))
-            .andExpect(status().isForbidden());
-    }
-
-    @ParameterizedTest
-    @MethodSource(INPUT_PARAMETERS)
-    void testGetFilesOK(String listArtefactId) throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.downloadContent()).thenReturn(
-            BinaryData.fromString(new String(file.getBytes())));
-
-        MvcResult response = mockMvc.perform(
-                get(ROOT_URL + "/" + listArtefactId)
-                    .header("x-system", "true"))
-            .andExpect(status().isOk()).andReturn();
-
-        assertNotNull(
-            response.getResponse().getContentAsString(),
-            "Response should contain a Artefact"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("PDF"),
-            "Response does not contain PDF information"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("EXCEL"),
-            "Response does not contain excel"
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource(INPUT_PARAMETERS)
-    void testGetFilesForUserId(String listArtefactId) throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.downloadContent()).thenReturn(
-            BinaryData.fromString(new String(file.getBytes())));
-
-        MockHttpServletRequestBuilder request =
-            get(ROOT_URL + "/" + listArtefactId)
-                .header("x-user-id", verifiedUserId)
-                .header("x-system", "false");
-
-        MvcResult response = mockMvc.perform(request)
-            .andExpect(status().isOk()).andReturn();
-
-        assertNotNull(
-            response.getResponse().getContentAsString(),
-            "Response should contain a Artefact"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("PDF"),
-            "Response does not contain PDF information"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("EXCEL"),
-            "Response does not contain excel"
-        );
-    }
-
-    @Test
-    void testGetFilesNotFound() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID_NOT_FOUND))
-            .andExpect(status().isNotFound())
-            .andReturn();
-
-        ExceptionResponse exceptionResponse = objectMapper.readValue(
-            mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
-
-        assertEquals(
-            exceptionResponse.getMessage(),
-            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
-            NOT_FOUND_RESPONSE_MESSAGE
-        );
-    }
-
-    @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
-    void testGetFilesUnauthorized() throws Exception {
-        mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID))
             .andExpect(status().isForbidden());
     }
 }

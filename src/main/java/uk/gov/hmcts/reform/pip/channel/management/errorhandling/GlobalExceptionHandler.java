@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
@@ -33,11 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleChannelNotFound(ChannelNotFoundException ex) {
         log.error(writeLog("404, no channels found for any subscribers"));
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(ex.getMessage());
-        exceptionResponse.setTimestamp(LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(generateExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(ServiceToServiceException.class)
@@ -46,11 +43,7 @@ public class GlobalExceptionHandler {
             String.format("ServiceToServiceException was thrown with the init cause: %s", ex.getCause())
         ));
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(ex.getMessage());
-        exceptionResponse.setTimestamp(LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(exceptionResponse);
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(generateExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -59,11 +52,16 @@ public class GlobalExceptionHandler {
             String.format("NotFoundException was thrown with the init cause: %s", ex.getCause())
         ));
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(ex.getMessage());
-        exceptionResponse.setTimestamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(generateExceptionResponse(ex.getMessage()));
+    }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    @ExceptionHandler(FileSizeLimitException.class)
+    public ResponseEntity<ExceptionResponse> handleFileSizeLimitException(FileSizeLimitException ex) {
+        log.error(writeLog(
+            String.format("FileSizeLimitException was thrown with the init cause: %s", ex.getCause())
+        ));
+
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(generateExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(ProcessingException.class)
@@ -72,11 +70,7 @@ public class GlobalExceptionHandler {
             String.format("ProcessingException was thrown with the init cause: %s", ex.getCause())
         ));
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(ex.getMessage());
-        exceptionResponse.setTimestamp(LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(generateExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(UnauthorisedException.class)
@@ -85,10 +79,13 @@ public class GlobalExceptionHandler {
             String.format("UnauthorisedException was thrown with the init cause: %s", ex.getCause())
         ));
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setMessage(ex.getMessage());
-        exceptionResponse.setTimestamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(generateExceptionResponse(ex.getMessage()));
+    }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
+    private ExceptionResponse generateExceptionResponse(String message) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setMessage(message);
+        exceptionResponse.setTimestamp(LocalDateTime.now());
+        return exceptionResponse;
     }
 }
