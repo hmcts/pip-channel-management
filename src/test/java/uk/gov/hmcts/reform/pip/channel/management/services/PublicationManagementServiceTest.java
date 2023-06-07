@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -279,7 +280,7 @@ class PublicationManagementServiceTest {
     }
 
     @Test
-    void testGetStoredPublicationsAuthorisedFalse() {
+    void testGetStoredPublicationAuthorisedFalse() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
         ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
@@ -293,6 +294,79 @@ class PublicationManagementServiceTest {
 
         assertTrue(ex.getMessage().contains("is not authorised to access artefact with id"),
                    EXCEPTION_NOT_MATCH);
+    }
+
+    @ParameterizedTest
+    @MethodSource("sjpParameters")
+    void testGetStoredPublicationsSjp(Artefact artefact) {
+        when(dataManagementService.getArtefact(any())).thenReturn(artefact);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        Map<FileType, byte[]> response = publicationManagementService
+            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
+
+        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
+        assertEquals(TEST_BYTE, response.get(FileType.EXCEL), BYTES_NO_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationsNonSjp() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        Map<FileType, byte[]> response = publicationManagementService
+            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
+
+        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
+        assertEquals(0, response.get(FileType.EXCEL).length, BYTES_NO_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationsAuthorisedPublic() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        ARTEFACT.setSensitivity(Sensitivity.PUBLIC);
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        Map<FileType, byte[]> response = publicationManagementService
+            .getStoredPublications(TEST_ARTEFACT_ID, TEST, false);
+
+        assertEquals(TEST_BYTE, response.get(FileType.PDF), BYTES_NO_MATCH);
+        assertEquals(0, response.get(FileType.EXCEL).length, BYTES_NO_MATCH);
+    }
+
+    @Test
+    void testGetStoredPublicationsAuthorisedUserIdNull() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+
+        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
+                                                    publicationManagementService
+                                                        .getStoredPublications(TEST_ARTEFACT_ID, null, false),
+                                                "Expected exception to be thrown");
+
+        assertTrue(ex.getMessage().contains("User with id null is not authorised to access artefact with id"),
+                   "Message should contain expected");
+    }
+
+    @Test
+    void testGetStoredPublicationsAuthorisedFalse() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
+        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
+        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
+        when(accountManagementService.getIsAuthorised(any(), any(), any())).thenReturn(false);
+
+        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
+                                                    publicationManagementService
+                                                        .getStoredPublications(TEST_ARTEFACT_ID, TEST_USER_ID, false),
+                                                "Expected exception to be thrown");
+
+        assertTrue(ex.getMessage().contains("is not authorised to access artefact with id"),
+                   "Message should contain expected");
     }
 
     private static Stream<Arguments> sjpParameters() throws JsonProcessingException {

@@ -4,6 +4,7 @@ import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
@@ -57,6 +58,7 @@ class PublicationManagementTest {
     private String verifiedUserId;
 
     private static final String ROOT_URL = "/publication";
+    private static final String V2_URL = "/v2";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
     private static final String ARTEFACT_ID = "3d498688-bbad-4a53-b253-a16ddf8737a9";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
@@ -86,6 +88,7 @@ class PublicationManagementTest {
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
     private static final String UNAUTHORIZED_ROLE = "APPROLE_unknown.role";
+    private static final String SYSTEM_HEADER = "x-system";
 
     private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
@@ -451,8 +454,8 @@ class PublicationManagementTest {
             BinaryData.fromString(new String(file.getBytes())));
 
         MvcResult response = mockMvc.perform(
-                get(ROOT_URL + "/" + listArtefactId)
-                    .header("x-system", "true")
+                get(ROOT_URL + V2_URL + "/" + listArtefactId)
+                    .header(SYSTEM_HEADER, "true")
                     .header(FILE_TYPE_HEADER, FileType.PDF)
                     .param("maxFileSize", "2048000"))
 
@@ -479,9 +482,9 @@ class PublicationManagementTest {
             BinaryData.fromString(new String(file.getBytes())));
 
         MockHttpServletRequestBuilder request =
-            get(ROOT_URL + "/" + listArtefactId)
+            get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
-                .header("x-system", "false")
+                .header(SYSTEM_HEADER, "false")
                 .header(FILE_TYPE_HEADER, FileType.PDF)
                 .param("maxFileSize", "2048000");
 
@@ -509,9 +512,9 @@ class PublicationManagementTest {
             BinaryData.fromString(new String(file.getBytes())));
 
         MockHttpServletRequestBuilder request =
-            get(ROOT_URL + "/" + listArtefactId)
+            get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
-                .header("x-system", "false")
+                .header(SYSTEM_HEADER, "false")
                 .header(FILE_TYPE_HEADER, FileType.PDF)
                 .param("maxFileSize", "10");
 
@@ -532,7 +535,7 @@ class PublicationManagementTest {
 
     @Test
     void testGetFileNotFound() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID_NOT_FOUND)
+        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID_NOT_FOUND)
                                                   .header(FILE_TYPE_HEADER, FileType.PDF))
             .andExpect(status().isNotFound())
             .andReturn();
@@ -550,8 +553,87 @@ class PublicationManagementTest {
     @Test
     @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGetFileUnauthorized() throws Exception {
-        mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID)
+        mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID)
                             .header(FILE_TYPE_HEADER, FileType.PDF))
             .andExpect(status().isForbidden());
     }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFilesOK(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MvcResult response = mockMvc.perform(
+                get(ROOT_URL + "/" + listArtefactId)
+                    .header(SYSTEM_HEADER, "true"))
+            .andExpect(status().isOk()).andReturn();
+
+        Assertions.assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should contain a Artefact"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("PDF"),
+            "Response does not contain PDF information"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("EXCEL"),
+            "Response does not contain excel"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFilesForUserId(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MockHttpServletRequestBuilder request =
+            get(ROOT_URL + "/" + listArtefactId)
+                .header("x-user-id", verifiedUserId)
+                .header(SYSTEM_HEADER, "false");
+
+        MvcResult response = mockMvc.perform(request)
+            .andExpect(status().isOk()).andReturn();
+
+        Assertions.assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should contain a Artefact"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("PDF"),
+            "Response does not contain PDF information"
+        );
+        assertTrue(
+            response.getResponse().getContentAsString().contains("EXCEL"),
+            "Response does not contain excel"
+        );
+    }
+
+    @Test
+    void testGetFilesNotFound() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID_NOT_FOUND))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+        ExceptionResponse exceptionResponse = objectMapper.readValue(
+            mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
+
+        assertEquals(
+            exceptionResponse.getMessage(),
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
+        );
+    }
+
+    @Test
+    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    void testGetFilesUnauthorized() throws Exception {
+        mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID))
+            .andExpect(status().isForbidden());
+    }
+
 }

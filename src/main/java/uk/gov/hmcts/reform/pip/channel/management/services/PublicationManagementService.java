@@ -28,9 +28,12 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
 
 @Slf4j
 @Service
@@ -147,6 +150,31 @@ public class PublicationManagementService {
             );
         }
         return Base64.getEncoder().encodeToString(file);
+    }
+
+    /**
+     * Get the sorted files for an artefact.
+     *
+     * @param artefactId The artefact Id to get the files for.
+     * @return A map of the filetype to file byte array
+     */
+    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
+        Artefact artefact = dataManagementService.getArtefact(artefactId);
+        if (isAuthorised(artefact, userId, system)) {
+            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
+            publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
+
+            if (SJP_PUBLIC_LIST.equals(artefact.getListType())
+                || SJP_PRESS_LIST.equals(artefact.getListType())) {
+                publicationFilesMap.put(EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+            } else {
+                publicationFilesMap.put(EXCEL, new byte[0]);
+            }
+            return publicationFilesMap;
+        } else {
+            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
+                                                              + " %s", userId, artefactId));
+        }
     }
 
     /**
