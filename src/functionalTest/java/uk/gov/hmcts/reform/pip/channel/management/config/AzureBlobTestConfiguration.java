@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
  * Mock class for testing to mock out external calls to Azure.
  */
 @Configuration
-@ActiveProfiles("integration")
+@ActiveProfiles("functional")
 public class AzureBlobTestConfiguration {
 
     @Mock
