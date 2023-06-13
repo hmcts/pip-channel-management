@@ -51,7 +51,7 @@ class CopListHelperTest {
                        .get(CASE).get(0)
                        .get("caseIndicator").asText())
             .as("Unable to get case name")
-            .contains("[1 of 2]");
+            .contains("1 of 2");
     }
 
     @Test

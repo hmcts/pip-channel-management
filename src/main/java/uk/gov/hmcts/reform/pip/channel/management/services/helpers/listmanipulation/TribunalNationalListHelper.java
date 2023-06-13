@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 import com.fasterxml.jackson.databind.JsonNode;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.TribunalNationalList;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
@@ -52,8 +53,9 @@ public final class TribunalNationalListHelper {
                         sitting.get("hearing").forEach(hearing -> {
                             String hearingType = GeneralHelper.findAndReturnNodeText(hearing, "hearingType");
                             hearing.get("case").forEach(hearingCase -> {
-                                String duration = formatDurationWithCaseSequence(
-                                    sitting.get("formattedDuration").asText(), hearingCase
+                                String duration = CaseHelper.appendCaseSequenceIndicator(
+                                    sitting.get("formattedDuration").asText(),
+                                    GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
                                 );
                                 cases.add(new TribunalNationalList(
                                     hearingDate, hearingCase.get("caseName").asText(), duration, hearingType,
@@ -66,11 +68,5 @@ public final class TribunalNationalListHelper {
             )
         );
         return cases;
-    }
-
-    private static String formatDurationWithCaseSequence(String duration, JsonNode hearingCase) {
-        return hearingCase.has("caseSequenceIndicator")
-            ? duration + " " + hearingCase.get("caseSequenceIndicator").asText()
-            : duration;
     }
 }

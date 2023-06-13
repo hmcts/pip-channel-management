@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
@@ -16,7 +17,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder(30);
         payload.get("courtLists").forEach(
             courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(
@@ -30,10 +31,15 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                             hearing.get("case").forEach(hearingCase -> {
                                 GeneralHelper.appendToStringBuilder(output, "List Name - ",
                                                                     courtList, "courtListName");
-                                output.append("\nStart Time - ");
-                                output.append(sittingStart);
-                                GeneralHelper.appendToStringBuilder(output, "Case Ref - ",
-                                                                    hearingCase, "caseNumber");
+                                output
+                                    .append("\nStart Time - ")
+                                    .append(sittingStart)
+                                    .append("\nCase Ref - ")
+                                    .append(CaseHelper.appendCaseSequenceIndicator(
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"),
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+                                    ));
+
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Channel - ",
                                                                     sitting, "caseHearingChannel");
                                 GeneralHelper.appendToStringBuilder(output, "Appellant - ",

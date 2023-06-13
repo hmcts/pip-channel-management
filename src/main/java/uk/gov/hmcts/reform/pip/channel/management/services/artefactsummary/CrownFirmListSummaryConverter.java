@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownFirmListHelper;
@@ -34,8 +35,12 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
                                                                 hearing, "defendant");
                             GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                 hearing, "hearingType");
-                            output.append('\n');
-                            checkCaseSequenceNo(output, hearing);
+                            output.append("\nDuration - ")
+                                .append(CaseHelper.appendCaseSequenceIndicator(
+                                    GeneralHelper.findAndReturnNodeText(hearing, "formattedDuration"),
+                                    GeneralHelper.findAndReturnNodeText(hearing, "caseSequenceIndicator")
+                                ));
+
                             GeneralHelper.appendToStringBuilder(output, "Representative - ",
                                                                 hearing, "defendantRepresentative");
                             GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
@@ -47,19 +52,6 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
             )
         );
         return output.toString();
-    }
-
-    private void checkCaseSequenceNo(StringBuilder output, JsonNode hearingCase) {
-        String caseSequenceNo = "";
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
-            .isEmpty()) {
-            caseSequenceNo = " " + GeneralHelper.findAndReturnNodeText(
-                hearingCase,"caseSequenceIndicator");
-        }
-        String formattedDuration = "Duration - "
-            + GeneralHelper.findAndReturnNodeText(hearingCase, "formattedDuration")
-            + caseSequenceNo;
-        output.append(formattedDuration);
     }
 
     private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode hearingCase) {

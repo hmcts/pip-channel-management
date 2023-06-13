@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -22,12 +23,13 @@ public class EtDailyListSummaryConverter implements ArtefactSummaryConverter {
                             hearing -> hearing.get("case").forEach(hearingCase -> {
                                 GeneralHelper.appendToStringBuilderWithPrefix(output, "Start Time: ",
                                                                               sitting, "time", "\t•");
-                                GeneralHelper.appendToStringBuilderWithPrefix(output, "Duration: ",
-                                                                              sitting, "formattedDuration",
-                                                                              "\n\t\t");
-                                output.append(hearingCase.has("caseSequenceIndicator")
-                                                  ? " " + hearingCase.get("caseSequenceIndicator").asText()
-                                                  : "");
+
+                                String formattedDuration = "\n\t\tDuration: "
+                                    + CaseHelper.appendCaseSequenceIndicator(
+                                        GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"),
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+                                );
+                                output.append(formattedDuration);
 
                                 GeneralHelper.appendToStringBuilder(output, "Case Number: ",
                                                                     hearingCase, "caseNumber");

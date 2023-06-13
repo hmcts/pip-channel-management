@@ -37,7 +37,7 @@
                           {
                             "caseName": "A Vs B",
                             "caseNumber": "45684548",
-                            "caseSequenceIndicator": "[1 of 2]"
+                            "caseSequenceIndicator": "1 of 2"
                           }
                         ]
                       },
@@ -47,7 +47,7 @@
                           {
                             "caseName": "A Vs B",
                             "caseNumber": "45684548",
-                            "caseSequenceIndicator": "[2 of 2]"
+                            "caseSequenceIndicator": "2 of 2"
                           }
                         ]
                       }

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtFortnightlyPressListHelper;
@@ -36,7 +37,13 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                             GeneralHelper.appendToStringBuilder(output, "Start Time - ",
                                                                 sitting, "time");
                             output.append('\n');
-                            checkCaseSequenceNo(output, hearing, hearingCase);
+                            String formattedDuration = "Duration - "
+                                + CaseHelper.appendCaseSequenceIndicator(
+                                GeneralHelper.findAndReturnNodeText(hearing, "formattedDuration"),
+                                GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+                            );
+                            output.append(formattedDuration);
+
                             GeneralHelper.appendToStringBuilder(output, "Case Number - ",
                                                                 hearingCase, "caseNumber");
                             GeneralHelper.appendToStringBuilder(output, "Claimant - ",
@@ -57,18 +64,5 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
             )
         );
         return output.toString();
-    }
-
-    private void checkCaseSequenceNo(StringBuilder output, JsonNode hearing, JsonNode hearingCase) {
-        String caseSequenceNo = "";
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
-            .isEmpty()) {
-            caseSequenceNo = " " + GeneralHelper.findAndReturnNodeText(hearingCase,
-                                                                       "caseSequenceIndicator");
-        }
-        String formattedDuration = "Duration - "
-            + GeneralHelper.findAndReturnNodeText(hearing, "formattedDuration")
-            + caseSequenceNo;
-        output.append(formattedDuration);
     }
 }

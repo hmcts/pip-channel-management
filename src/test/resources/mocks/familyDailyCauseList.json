@@ -60,13 +60,13 @@
                             "caseNumber": "12341234",
                             "caseType": "normal",
                             "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "[2 of 3]"
+                            "caseSequenceIndicator": "2 of 3"
                           },
                           {
                             "caseName": "This is a case name",
                             "caseNumber": "12341234",
                             "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "[2 of 3]"
+                            "caseSequenceIndicator": "2 of 3"
                           }
                         ],
                         "party": [
@@ -189,7 +189,7 @@
                             "caseNumber": "12341234",
                             "caseType": "normal",
                             "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "[2 of 3]"
+                            "caseSequenceIndicator": "2 of 3"
                           }
                         ]
                       }
@@ -251,7 +251,7 @@
                             "caseNumber": "12341234",
                             "caseType": "normal",
                             "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "[2 of 3]"
+                            "caseSequenceIndicator": "2 of 3"
                           }
                         ],
                         "party": [

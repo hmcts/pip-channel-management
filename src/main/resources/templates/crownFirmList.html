@@ -233,7 +233,14 @@
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('caseReference').asText()}"/>
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
                       <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
-                      <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('formattedDuration').asText() + ' ' + hearing.get('caseSequenceIndicator').asText()}"/>
+                      <th:block th:if="${hearing.get('caseSequenceIndicator').asText() != ''}">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}"
+                          th:text="${hearing.get('formattedDuration').asText() + ' [' + hearing.get('caseSequenceIndicator').asText() + ']'}"/>
+                      </th:block>
+                      <th:block th:if="${hearing.get('caseSequenceIndicator').asText() == ''}">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}"
+                          th:text="${hearing.get('formattedDuration').asText()}"/>
+                      </th:block>
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('defendantRepresentative').asText()}"/>
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
                     </tr>
