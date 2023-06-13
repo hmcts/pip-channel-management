@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ServiceToServiceException;
@@ -56,6 +57,18 @@ class GlobalExceptionHandlerTest {
         assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
         assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(),
                      MESSAGES_MATCH);
+    }
+
+    @Test
+    void testHandleFileSizeLimitException() {
+        FileSizeLimitException exception = new FileSizeLimitException(TEST_MESSAGE);
+
+        ResponseEntity<ExceptionResponse> responseEntity = globalExceptionHandler
+            .handleFileSizeLimitException(exception);
+
+        assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, responseEntity.getStatusCode(), STATUS_CODE_MATCH);
+        assertNotNull(responseEntity.getBody(), RESPONSE_BODY_MESSAGE);
+        assertEquals(TEST_MESSAGE, responseEntity.getBody().getMessage(), MESSAGES_MATCH);
     }
 
     @Test
