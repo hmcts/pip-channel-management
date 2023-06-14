@@ -4,6 +4,7 @@ import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,12 +23,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
+import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -35,9 +38,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("integration")
+@ActiveProfiles("functional")
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
@@ -55,6 +58,7 @@ class PublicationManagementTest {
     private String verifiedUserId;
 
     private static final String ROOT_URL = "/publication";
+    private static final String V2_URL = "/v2";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
     private static final String ARTEFACT_ID = "3d498688-bbad-4a53-b253-a16ddf8737a9";
     private static final String ARTEFACT_ID_NOT_FOUND = "11111111-1111-1111-1111-111111111111";
@@ -81,6 +85,10 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
+    private static final String FILE_TYPE_HEADER = "x-file-type";
+    private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
+    private static final String UNAUTHORIZED_ROLE = "APPROLE_unknown.role";
+    private static final String SYSTEM_HEADER = "x-system";
 
     private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
@@ -123,7 +131,7 @@ class PublicationManagementTest {
     @Test
     void testGenerateArtefactSummaryCareStandardsList() throws Exception {
         MvcResult response = mockMvc.perform(
-            get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CARE_STANDARDS_LIST))
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CARE_STANDARDS_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Hearing Date: 04 October"), CONTENT_MISMATCH_ERROR);
@@ -164,7 +172,7 @@ class PublicationManagementTest {
     @Test
     void testGenerateArtefactSummaryCourtOfProtectionDailyCauseList() throws Exception {
         MvcResult response = mockMvc.perform(
-            get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_COP_DAILY_CAUSE_LIST))
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_COP_DAILY_CAUSE_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Name of Party(ies) - ThisIsACaseSupressionName"), CONTENT_MISMATCH_ERROR);
@@ -231,7 +239,7 @@ class PublicationManagementTest {
     @Test
     void testGenerateArtefactSummaryEmploymentTribunalsFortnightlyPressList() throws Exception {
         MvcResult response = mockMvc.perform(
-            get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST))
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Courtroom - Court 1"), CONTENT_MISMATCH_ERROR);
@@ -239,8 +247,11 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Duration - 2 hours [2 of 3]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Number - 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Claimant - , Rep: Mr T Test Surname 2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent
-                    .contains("Respondent - Capt. T Test Surname, Rep: Dr T Test Surname 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent
+                .contains("Respondent - Capt. T Test Surname, Rep: Dr T Test Surname 2"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Hearing Type - This is a hearing type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Jurisdiction - This is a case type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("earing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
@@ -355,9 +366,11 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SSCS_DAILY_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains(
-            "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains(
+                "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
@@ -369,9 +382,11 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains(
-            "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains(
+                "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
@@ -393,7 +408,7 @@ class PublicationManagementTest {
     }
 
     @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGenerateArtefactSummaryUnauthorized() throws Exception {
         mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID))
             .andExpect(status().isForbidden());
@@ -425,9 +440,121 @@ class PublicationManagementTest {
     }
 
     @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGenerateFileUnauthorized() throws Exception {
         mockMvc.perform(post(ROOT_URL + "/" + ARTEFACT_ID))
+            .andExpect(status().isForbidden());
+    }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFileOK(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MvcResult response = mockMvc.perform(
+                get(ROOT_URL + V2_URL + "/" + listArtefactId)
+                    .header(SYSTEM_HEADER, "true")
+                    .header(FILE_TYPE_HEADER, FileType.PDF)
+                    .param("maxFileSize", "2048000"))
+
+            .andExpect(status().isOk()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should not be null"
+        );
+        byte[] decodedBytes = Base64.getDecoder().decode(response.getResponse().getContentAsString());
+        String decodedResponse = new String(decodedBytes);
+
+        assertTrue(
+            decodedResponse.contains("test content"),
+            "Response does not contain expected result"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFileForUserId(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MockHttpServletRequestBuilder request =
+            get(ROOT_URL + V2_URL + "/" + listArtefactId)
+                .header("x-user-id", verifiedUserId)
+                .header(SYSTEM_HEADER, "false")
+                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .param("maxFileSize", "2048000");
+
+        MvcResult response = mockMvc.perform(request)
+            .andExpect(status().isOk()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should not be null"
+        );
+        byte[] decodedBytes = Base64.getDecoder().decode(response.getResponse().getContentAsString());
+        String decodedResponse = new String(decodedBytes);
+
+        assertTrue(
+            decodedResponse.contains("test content"),
+            "Response does not contain expected result"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(INPUT_PARAMETERS)
+    void testGetFileSizeTooLarge(String listArtefactId) throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MockHttpServletRequestBuilder request =
+            get(ROOT_URL + V2_URL + "/" + listArtefactId)
+                .header("x-user-id", verifiedUserId)
+                .header(SYSTEM_HEADER, "false")
+                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .param("maxFileSize", "10");
+
+        MvcResult response = mockMvc.perform(request)
+            .andExpect(status().isPayloadTooLarge()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should not be null"
+        );
+
+        assertTrue(
+            response.getResponse().getContentAsString().contains("File with type PDF for artefact with id "
+                                        + listArtefactId + " has size over the limit of 10 bytes"),
+            "Response does not contain expected result"
+        );
+    }
+
+    @Test
+    void testGetFileNotFound() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID_NOT_FOUND)
+                                                  .header(FILE_TYPE_HEADER, FileType.PDF))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+        ExceptionResponse exceptionResponse = objectMapper.readValue(
+            mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
+
+        assertEquals(
+            exceptionResponse.getMessage(),
+            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+            NOT_FOUND_RESPONSE_MESSAGE
+        );
+    }
+
+    @Test
+    @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
+    void testGetFileUnauthorized() throws Exception {
+        mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID)
+                            .header(FILE_TYPE_HEADER, FileType.PDF))
             .andExpect(status().isForbidden());
     }
 
@@ -440,10 +567,10 @@ class PublicationManagementTest {
 
         MvcResult response = mockMvc.perform(
                 get(ROOT_URL + "/" + listArtefactId)
-                    .header("x-system", "true"))
+                    .header(SYSTEM_HEADER, "true"))
             .andExpect(status().isOk()).andReturn();
 
-        assertNotNull(
+        Assertions.assertNotNull(
             response.getResponse().getContentAsString(),
             "Response should contain a Artefact"
         );
@@ -467,12 +594,12 @@ class PublicationManagementTest {
         MockHttpServletRequestBuilder request =
             get(ROOT_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
-                .header("x-system", "false");
+                .header(SYSTEM_HEADER, "false");
 
         MvcResult response = mockMvc.perform(request)
             .andExpect(status().isOk()).andReturn();
 
-        assertNotNull(
+        Assertions.assertNotNull(
             response.getResponse().getContentAsString(),
             "Response should contain a Artefact"
         );
@@ -508,4 +635,5 @@ class PublicationManagementTest {
         mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID))
             .andExpect(status().isForbidden());
     }
+
 }

@@ -21,6 +21,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PublicationManagementControllerTest {
+    private static final String FILE = "123";
+    private static final String USER_ID = "test";
+    private static final String STATUS_MESSAGE = "Status did not match";
+    private static final String RESPONSE_BODY_MESSAGE = "Body did not match";
 
     @Mock
     private PublicationManagementService publicationManagementService;
@@ -34,8 +38,8 @@ class PublicationManagementControllerTest {
         ResponseEntity<String> response = publicationManagementController
             .generateArtefactSummary(UUID.randomUUID());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "Status did not match");
-        assertEquals("test1234", response.getBody(), "Body did not match");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
+        assertEquals("test1234", response.getBody(), RESPONSE_BODY_MESSAGE);
     }
 
     @Test
@@ -43,7 +47,20 @@ class PublicationManagementControllerTest {
         ResponseEntity<Void> response = publicationManagementController
             .generateFiles(UUID.randomUUID());
 
-        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode(), "Status did not match");
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode(), STATUS_MESSAGE);
+    }
+
+    @Test
+    void testGetFile() {
+        when(publicationManagementService.getStoredPublication(any(), any(), any(), eq(USER_ID), eq(true)))
+            .thenReturn(FILE);
+
+        ResponseEntity<String> response = publicationManagementController.getFile(
+            UUID.randomUUID(), USER_ID, true, FileType.PDF, null
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
+        assertEquals(FILE, response.getBody(), RESPONSE_BODY_MESSAGE);
     }
 
     @Test
@@ -51,12 +68,12 @@ class PublicationManagementControllerTest {
         Map<FileType, byte[]> testMap = new ConcurrentHashMap<>();
         testMap.put(FileType.PDF, new byte[100]);
         testMap.put(FileType.EXCEL, new byte[0]);
-        when(publicationManagementService.getStoredPublications(any(), eq("test"), eq(true))).thenReturn(testMap);
+        when(publicationManagementService.getStoredPublications(any(), eq(USER_ID), eq(true))).thenReturn(testMap);
 
         ResponseEntity<Map<FileType, byte[]>> response = publicationManagementController
-            .getFiles(UUID.randomUUID(), "test", true);
+            .getFiles(UUID.randomUUID(), USER_ID, true);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "Status did not match");
-        assertEquals(testMap, response.getBody(), "Body did not match");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
+        assertEquals(testMap, response.getBody(), RESPONSE_BODY_MESSAGE);
     }
 }

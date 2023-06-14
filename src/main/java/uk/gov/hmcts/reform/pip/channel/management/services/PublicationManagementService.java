@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
+import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
@@ -24,10 +25,13 @@ import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
 
@@ -79,7 +83,7 @@ public class PublicationManagementService {
             // Generate the Excel and store it
             byte[] outputExcel = fileConverter.convertToExcel(topLevelNode);
             if (outputExcel.length > 0) {
-                azureBlobService.uploadFile(artefactId + ".xlsx", outputExcel);
+                azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), outputExcel);
             }
 
             // Generate the PDF and store it
@@ -89,7 +93,7 @@ public class PublicationManagementService {
             }
 
             if (outputPdf.length > 0) {
-                azureBlobService.uploadFile(artefactId + ".pdf", outputPdf);
+                azureBlobService.uploadFile(artefactId + PDF.getExtension(), outputPdf);
             }
         } catch (IOException ex) {
             throw new ProcessingException(String.format("Failed to generate files for artefact id %s", artefactId));
@@ -124,6 +128,31 @@ public class PublicationManagementService {
     }
 
     /**
+     * Get the stored file (PDF or Excel) for an artefact.
+     *
+     * @param artefactId The artefact Id to get the file for.
+     * @return A Base64 encoded string of the file.
+     */
+    public String getStoredPublication(UUID artefactId, FileType fileType, Integer maxFileSize, String userId,
+                                       boolean system) {
+        Artefact artefact = dataManagementService.getArtefact(artefactId);
+        if (!isAuthorised(artefact, userId, system)) {
+            throw new UnauthorisedException(
+                String.format("User with id %s is not authorised to access artefact with id %s", userId, artefactId)
+            );
+        }
+
+        byte[] file = azureBlobService.getBlobFile(artefactId + fileType.getExtension());
+        if (maxFileSize != null && file.length > maxFileSize) {
+            throw new FileSizeLimitException(
+                String.format("File with type %s for artefact with id %s has size over the limit of %s bytes",
+                              fileType, artefactId, maxFileSize)
+            );
+        }
+        return Base64.getEncoder().encodeToString(file);
+    }
+
+    /**
      * Get the sorted files for an artefact.
      *
      * @param artefactId The artefact Id to get the files for.
@@ -133,18 +162,18 @@ public class PublicationManagementService {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         if (isAuthorised(artefact, userId, system)) {
             Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-            publicationFilesMap.put(FileType.PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
+            publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
             if (SJP_PUBLIC_LIST.equals(artefact.getListType())
                 || SJP_PRESS_LIST.equals(artefact.getListType())) {
-                publicationFilesMap.put(FileType.EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
+                publicationFilesMap.put(EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
             } else {
-                publicationFilesMap.put(FileType.EXCEL, new byte[0]);
+                publicationFilesMap.put(EXCEL, new byte[0]);
             }
             return publicationFilesMap;
         } else {
             throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
-                                                            + " %s", userId, artefactId));
+                                                              + " %s", userId, artefactId));
         }
     }
 

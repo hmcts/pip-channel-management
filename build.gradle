@@ -4,10 +4,10 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.7.11'
+  id 'org.springframework.boot' version '2.7.12'
   id 'org.owasp.dependencycheck' version '8.2.1'
   id 'com.github.ben-manes.versions' version '0.46.0'
-  id 'org.sonarqube' version '4.0.0.2929'
+  id 'org.sonarqube' version '4.2.0.3129'
   id 'io.freefair.lombok' version '8.0.1'
   id 'org.jetbrains.kotlin.jvm' version '1.8.21'
 }
@@ -29,18 +29,9 @@ sourceSets {
     java {
       compileClasspath += main.output
       runtimeClasspath += main.output
-      srcDir file('src/integrationTest/java')
+      srcDir file('src/functionalTest/java')
     }
-    resources.srcDir file('src/integrationTest/resources')
-  }
-
-  integrationTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/integrationTest/java')
-    }
-    resources.srcDir file('src/integrationTest/resources')
+    resources.srcDir file('src/functionalTest/resources')
   }
 
   smokeTest {
@@ -81,14 +72,6 @@ task functional(type: Test) {
   classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
-task integration(type: Test) {
-  description = "Runs integration tests"
-  group = "Verification"
-  testClassesDirs = sourceSets.integrationTest.output.classesDirs
-  classpath = sourceSets.integrationTest.runtimeClasspath
-  failFast = true
-}
-
 task smoke(type: Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
@@ -103,7 +86,7 @@ checkstyle {
 
 pmd {
   toolVersion = "6.52.0"
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = []
@@ -134,9 +117,6 @@ jacocoTestCoverageVerification {
 }
 
 configurations {
-  integrationTestImplementation.extendsFrom testImplementation
-  integrationTestRuntimeOnly.extendsFrom runtimeOnly
-
   functionalTestImplementation.extendsFrom testImplementation
   functionalTestRuntimeOnly.extendsFrom runtimeOnly
 
@@ -204,12 +184,12 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-  implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+  implementation group: 'com.google.guava', name: 'guava', version: '32.0.0-jre'
 
-  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.7.0'
+  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:4.8.0'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-  implementation group: 'com.github.hmcts', name: 'pip-data-models', version: '2.0.3', {
+  implementation group: 'com.github.hmcts', name: 'pip-data-models', version: '2.0.6', {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
   }
 
@@ -223,7 +203,7 @@ dependencies {
 
   implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
   implementation group: 'com.openhtmltopdf', name: 'openhtmltopdf-pdfbox', version: '1.0.10'
-  implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.22.0'
+  implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.22.2'
 
   // Force upgrade snakeyaml version for CVE-2022-38752
   implementation( group: 'org.yaml', name: 'snakeyaml').version {
