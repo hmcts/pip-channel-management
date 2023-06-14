@@ -179,7 +179,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case ID - 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type - Criminal"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, In-Person"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Duration - 1 hour [1 of 2]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Duration - 1 hour [[1 of 2]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Before - Mrs Firstname Surname"), CONTENT_MISMATCH_ERROR);
     }
 
