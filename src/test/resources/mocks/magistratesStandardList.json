@@ -53,7 +53,7 @@
                         "case": [
                           {
                             "caseNumber": "45684548",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "informant": {
                               "prosecutionAuthorityRef": "Test",
                               "prosecutionAuthorityId": "1234",
@@ -185,7 +185,7 @@
                         "case": [
                           {
                             "caseNumber": "45684548",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "informant": {
                               "prosecutionAuthorityRef": "Test",
                               "prosecutionAuthorityId": "1234",

@@ -179,7 +179,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case ID - 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type - Criminal"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, In-Person"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Duration - 1 hour [1 of 2]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Duration - 1 hour [[1 of 2]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Before - Mrs Firstname Surname"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -207,7 +207,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case Reference - 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Defendant Name(s) - Surname, Forenames"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Duration - 1 min [2 of 3]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Duration - 1 min [[2 of 3]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecuting Authority - Org name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Linked Cases - 1234"), CONTENT_MISMATCH_ERROR);
     }
@@ -244,7 +244,7 @@ class PublicationManagementTest {
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Courtroom - Court 1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Start Time - 9:30am"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Duration - 2 hours [2 of 3]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Duration - 2 hours [[2 of 3]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Number - 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Claimant - , Rep: Mr T Test Surname 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(

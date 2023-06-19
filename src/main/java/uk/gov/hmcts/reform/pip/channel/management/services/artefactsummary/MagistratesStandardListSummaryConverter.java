@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesStandardListHelper;
@@ -89,9 +90,13 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
     }
 
     private void formatSittingTime(StringBuilder output, JsonNode hearingCase) {
-        String sittingTime = hearingCase.get("time").asText() + " " + "for "
-            + hearingCase.get("formattedDuration").asText()
-            + " " + hearingCase.get("caseSequenceIndicator").asText();
+        String sittingTime = hearingCase.get("time").asText()
+            + " for "
+            + CaseHelper.appendCaseSequenceIndicator(
+                GeneralHelper.findAndReturnNodeText(hearingCase, "formattedDuration"),
+                GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+        );
+
         String sequence = "\n\t" + hearingCase.get("sittingSequence").asText() + ". ";
         output.append(sequence).append("Sitting at - ").append(sittingTime);
     }

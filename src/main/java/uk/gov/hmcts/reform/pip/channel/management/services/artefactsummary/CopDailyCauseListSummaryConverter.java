@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CopListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -36,21 +37,24 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
                     session -> session.get("sittings").forEach(
                         sitting -> sitting.get("hearing").forEach(
                             hearing -> hearing.get("case").forEach(
-                                hearingCase -> output
-                                    .append("\n\nName of Party(ies) - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseSuppressionName"))
-                                    .append("\nCase ID - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"))
-                                    .append("\nHearing Type - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(hearing, "hearingType"))
-                                    .append("\nLocation - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"))
-                                    .append("\nDuration - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"))
-                                    .append(' ')
-                                    .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseIndicator"))
-                                    .append("\nBefore - ")
-                                    .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"))
+                                hearingCase -> {
+                                    output
+                                        .append("\n\nName of Party(ies) - ")
+                                        .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseSuppressionName"))
+                                        .append("\nCase ID - ")
+                                        .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"))
+                                        .append("\nHearing Type - ")
+                                        .append(GeneralHelper.findAndReturnNodeText(hearing, "hearingType"))
+                                        .append("\nLocation - ")
+                                        .append(GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"))
+                                        .append("\nDuration - ")
+                                        .append(CaseHelper.appendCaseSequenceIndicator(
+                                            GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"),
+                                            GeneralHelper.findAndReturnNodeText(hearingCase, "caseIndicator")
+                                        ))
+                                        .append("\nBefore - ")
+                                        .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"));
+                                }
                             )
                         )
                     )

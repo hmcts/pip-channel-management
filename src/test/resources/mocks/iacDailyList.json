@@ -46,7 +46,7 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
                             "caseLinked": [
                               {
@@ -123,7 +123,7 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
                             "caseLinked": [
                               {
@@ -212,7 +212,7 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
                             "caseLinked": []
                           }
@@ -256,7 +256,7 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
                             "caseLinked": []
                           }
@@ -328,7 +328,7 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSequenceIndicator": "[2 of 3]",
+                            "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
                             "caseLinked": []
                           }

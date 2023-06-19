@@ -205,7 +205,7 @@
                         <td class="govuk-table__cell no-wrap" th:text="${sitting.get('time').asText()}"/>
 
                         <th:block th:if="${case.has('caseSequenceIndicator')}">
-                          <td class="govuk-table__cell" th:text="${sitting.get('formattedDuration').asText() + ' ' + case.get('caseSequenceIndicator').asText()}"/>
+                          <td class="govuk-table__cell" th:text="${sitting.get('formattedDuration').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
                         </th:block>
                         <th:block th:if="!${case.has('caseSequenceIndicator')}">
                           <td class="govuk-table__cell" th:text="${sitting.get('formattedDuration').asText()}"/>

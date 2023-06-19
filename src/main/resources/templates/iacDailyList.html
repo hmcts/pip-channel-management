@@ -189,7 +189,7 @@
                     <tr class="govuk-table__row">
                       <td class="govuk-table__cell" th:text="${sitting.get('formattedStart').asText()}"/>
                       <th:block th:if="${case.get('caseSequenceIndicator') != null}">
-                        <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText() + ' ' + case.get('caseSequenceIndicator').asText()}"/>
+                        <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
                       </th:block>
                       <th:block th:if="${case.get('caseSequenceIndicator') == null}">
                         <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>

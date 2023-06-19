@@ -268,7 +268,12 @@
                         <div class="govuk-grid-column-two-thirds no_padding">
                           <div th:if="${defendantInfo.get('formattedDuration').asText() != ''}">
                             <p class="govuk-body">
-                              <span class="linked-cases-heading" th:text="${defendantInfo.get('sittingSequence').asText() + '. ' + i18n.sittingAt + defendantInfo.get('time').asText() + ' ' + i18n.sittingFor + ' ' + defendantInfo.get('formattedDuration').asText() + ' ' + defendantInfo.get('caseSequenceIndicator').asText()}" />
+                              <th:block th:if="${defendantInfo.get('caseSequenceIndicator').asText() != ''}">
+                                <span class="linked-cases-heading" th:text="${defendantInfo.get('sittingSequence').asText() + '. ' + i18n.sittingAt + defendantInfo.get('time').asText() + ' ' + i18n.sittingFor + ' ' + defendantInfo.get('formattedDuration').asText() + ' [' + defendantInfo.get('caseSequenceIndicator').asText() + ']'}" />
+                              </th:block>
+                              <th:block th:if="${defendantInfo.get('caseSequenceIndicator').asText() == ''}">
+                                <span class="linked-cases-heading" th:text="${defendantInfo.get('sittingSequence').asText() + '. ' + i18n.sittingAt + defendantInfo.get('time').asText() + ' ' + i18n.sittingFor + ' ' + defendantInfo.get('formattedDuration').asText()}" />
+                              </th:block>
                             </p><br />
                           </div>
                           <div th:if="${defendantInfo.get('defendantDateOfBirthAndAge').asText() != ''}">

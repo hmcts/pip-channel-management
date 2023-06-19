@@ -49,8 +49,8 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "[1 of 2]"
+                            "caseSuppressionName": "ThisIsACaseSuppressionName",
+                            "caseSequenceIndicator": "1 of 2"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -81,8 +81,8 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "[1 of 2]"
+                            "caseSuppressionName": "ThisIsACaseSuppressionName",
+                            "caseSequenceIndicator": "1 of 2"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -134,8 +134,8 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "[1 of 2]"
+                            "caseSuppressionName": "ThisIsACaseSuppressionName",
+                            "caseSequenceIndicator": "1 of 2"
                           }
                         ],
                         "hearingType": "Criminal"
@@ -172,8 +172,8 @@
                         "case": [
                           {
                             "caseNumber": "12341234",
-                            "caseSuppressionName": "ThisIsACaseSupressionName",
-                            "caseSequenceIndicator": "[1 of 2]"
+                            "caseSuppressionName": "ThisIsACaseSuppressionName",
+                            "caseSequenceIndicator": "1 of 2"
                           }
                         ],
                         "hearingType": "Criminal"

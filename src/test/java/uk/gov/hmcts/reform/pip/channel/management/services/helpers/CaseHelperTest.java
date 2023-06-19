@@ -12,9 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CaseHelperTest {
     private static final String CASE_ID = "caseId";
     private static final String CASE_NUMBER = "caseNumber";
+    private static final String CASE_NAME = "caseName";
+    private static final String CASE_TYPE = "caseType";
+    private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String CASE_LINKED = "caseLinked";
     private static final String FORMATTED_LINKED_CASES = "formattedLinkedCases";
-    private static final String ERROR_MESSAGE = "Linked cases do not match";
+    private static final String TEST_DATA = "testData";
+    private static final String LINKED_CASES_ERROR_MESSAGE = "Linked cases do not match";
+    private static final String CASE_DATA_ERROR_MESSAGE = "Case data do not match";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -42,7 +47,7 @@ class CaseHelperTest {
 
         CaseHelper.formatLinkedCases(caseNode.get(0));
         assertThat(caseNode.get(0).get(FORMATTED_LINKED_CASES).asText())
-            .as(ERROR_MESSAGE)
+            .as(LINKED_CASES_ERROR_MESSAGE)
             .isEqualTo("123, 456, 789");
     }
 
@@ -62,7 +67,7 @@ class CaseHelperTest {
 
         CaseHelper.formatLinkedCases(caseNode.get(0));
         assertThat(caseNode.get(0).get(FORMATTED_LINKED_CASES).asText())
-            .as(ERROR_MESSAGE)
+            .as(LINKED_CASES_ERROR_MESSAGE)
             .isEqualTo("999");
     }
 
@@ -76,7 +81,53 @@ class CaseHelperTest {
 
         CaseHelper.formatLinkedCases(caseNode.get(0));
         assertThat(caseNode.get(0).get(FORMATTED_LINKED_CASES).asText())
-            .as(ERROR_MESSAGE)
+            .as(LINKED_CASES_ERROR_MESSAGE)
             .isEmpty();
+    }
+
+    @Test
+    void testCaseNameWithoutCaseSequenceIndicator() {
+        ObjectNode caseNode = MAPPER.createObjectNode();
+        caseNode.put(CASE_NAME, TEST_DATA);
+
+        CaseHelper.manipulateCaseInformation(caseNode);
+        assertThat(caseNode.get(CASE_NAME).asText())
+            .as(CASE_DATA_ERROR_MESSAGE)
+            .isEqualTo(TEST_DATA);
+    }
+
+    @Test
+    void testCaseNameWithCaseSequenceIndicator() {
+        ObjectNode caseNode = MAPPER.createObjectNode();
+        caseNode.put(CASE_NAME, TEST_DATA);
+        caseNode.put(CASE_SEQUENCE_INDICATOR, "1 of 2");
+
+        CaseHelper.manipulateCaseInformation(caseNode);
+        assertThat(caseNode.get(CASE_NAME).asText())
+            .as(CASE_DATA_ERROR_MESSAGE)
+            .isEqualTo(TEST_DATA + " [1 of 2]");
+    }
+
+    @Test
+    void testEmptyCaseType() {
+        ObjectNode caseNode = MAPPER.createObjectNode();
+        CaseHelper.manipulateCaseInformation(caseNode);
+        assertThat(caseNode.get(CASE_TYPE).asText())
+            .as("Case type does not match")
+            .isEmpty();
+    }
+
+    @Test
+    void testAppendCaseSequenceIndicatorWhenPresent() {
+        assertThat(CaseHelper.appendCaseSequenceIndicator(TEST_DATA, "2 of 3"))
+            .as(CASE_DATA_ERROR_MESSAGE)
+            .isEqualTo(TEST_DATA + " [2 of 3]");
+    }
+
+    @Test
+    void testAppendCaseSequenceIndicatorWhenMissing() {
+        assertThat(CaseHelper.appendCaseSequenceIndicator(TEST_DATA, ""))
+            .as(CASE_DATA_ERROR_MESSAGE)
+            .isEqualTo(TEST_DATA);
     }
 }

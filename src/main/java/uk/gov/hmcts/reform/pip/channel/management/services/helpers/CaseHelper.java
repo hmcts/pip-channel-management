@@ -28,16 +28,18 @@ public final class CaseHelper {
     }
 
     public static void manipulateCaseInformation(ObjectNode hearingCase) {
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR).isEmpty()) {
-            hearingCase.put(
-                "caseName",
-                GeneralHelper.findAndReturnNodeText(hearingCase, "caseName")
-                    + " " + hearingCase.get(CASE_SEQUENCE_INDICATOR).asText()
-            );
-        }
+        hearingCase.put(
+            "caseName",
+            appendCaseSequenceIndicator(GeneralHelper.findAndReturnNodeText(hearingCase, "caseName"),
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR))
+        );
 
         if (!hearingCase.has("caseType")) {
             hearingCase.put("caseType", "");
         }
+    }
+
+    public static String appendCaseSequenceIndicator(String data, String caseSequence) {
+        return caseSequence.isEmpty() ? data : data + " [" + caseSequence + "]";
     }
 }

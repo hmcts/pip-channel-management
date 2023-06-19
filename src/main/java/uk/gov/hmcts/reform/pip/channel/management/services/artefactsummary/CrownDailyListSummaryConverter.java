@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
@@ -60,15 +61,12 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
     private void appendAdditionalListInfo(StringBuilder output, JsonNode sitting, JsonNode hearing,
                                              JsonNode hearingCase) {
         output.append('\n');
-        String caseSequenceNo = "";
-
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
-            caseSequenceNo = " " + GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator");
-        }
 
         String formattedDuration = "Duration - "
-            + GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration")
-            + caseSequenceNo;
+            + CaseHelper.appendCaseSequenceIndicator(
+                GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"),
+                GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+        );
         output.append(formattedDuration);
 
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",

@@ -35,7 +35,7 @@ class CopDailyCauseListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect case suppression name found")
-            .contains("ThisIsACaseSupressionName");
+            .contains("ThisIsACaseSuppressionName");
 
         softly.assertThat(emailOutput)
             .as("incorrect case ID found")
