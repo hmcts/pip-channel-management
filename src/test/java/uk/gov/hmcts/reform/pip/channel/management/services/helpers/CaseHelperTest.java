@@ -40,7 +40,7 @@ class CaseHelperTest {
         caseIdArrayNode.add(caseIdNode3);
 
         ObjectNode linkedCasesNode = MAPPER.createObjectNode();
-        linkedCasesNode.put(CASE_LINKED, caseIdArrayNode);
+        linkedCasesNode.set(CASE_LINKED, caseIdArrayNode);
 
         ArrayNode caseNode = MAPPER.createArrayNode();
         caseNode.add(linkedCasesNode);
@@ -60,7 +60,7 @@ class CaseHelperTest {
         caseIdArrayNode.add(caseIdNode);
 
         ObjectNode linkedCasesNode = MAPPER.createObjectNode();
-        linkedCasesNode.put(CASE_LINKED, caseIdArrayNode);
+        linkedCasesNode.set(CASE_LINKED, caseIdArrayNode);
 
         ArrayNode caseNode = MAPPER.createArrayNode();
         caseNode.add(linkedCasesNode);
