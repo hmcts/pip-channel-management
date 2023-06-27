@@ -19,11 +19,14 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ActiveProfiles("test")
 class SscsListHelperTest {
     private static final String COURT_LISTS = "courtLists";
 
     private static JsonNode inputCourtHouse;
+    private static JsonNode inputCourtHouseWithProsecutors;
 
     @BeforeAll
     public static void setup()  throws IOException {
@@ -33,9 +36,8 @@ class SscsListHelperTest {
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
-        inputCourtHouse = inputJson.get(COURT_LISTS)
-            .get(0);
-
+        inputCourtHouse = inputJson.get(COURT_LISTS).get(0);
+        inputCourtHouseWithProsecutors = inputJson.get(COURT_LISTS).get(2);
     }
 
     @Test
@@ -148,4 +150,15 @@ class SscsListHelperTest {
         softly.assertAll();
     }
 
+    @Test
+    void testFormatRespondentWithNoInformants() throws JsonProcessingException {
+        Hearing hearing = SscsListHelper.courtHouseBuilder(inputCourtHouseWithProsecutors)
+            .getListOfCourtRooms().get(0)
+            .getListOfSittings().get(0)
+            .getListOfHearings().get(0);
+
+        assertThat(hearing.getRespondent())
+            .as("Prosecutor does not match")
+            .isEqualTo("Prosecutor1, Prosecutor2");
+    }
 }

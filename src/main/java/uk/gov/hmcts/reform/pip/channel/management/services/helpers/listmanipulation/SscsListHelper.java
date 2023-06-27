@@ -19,6 +19,7 @@ import java.util.List;
 public final class SscsListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String TIME_FORMAT = "h:mma";
+    private static final String DELIMITER = ", ";
 
     private static final String CHANNEL = "channel";
     private static final String JUDICIARY = "judiciary";
@@ -29,6 +30,11 @@ public final class SscsListHelper {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String SESSION_CHANNEL = "sessionChannel";
+    private static final String PARTY = "party";
+    private static final String PARTY_ROLE = "partyRole";
+    private static final String ORGANISATION_DETAILS = "organisationDetails";
+    private static final String ORGANISATION_NAME = "organisationName";
+    private static final String PROSECUTOR_ROLE = "PROSECUTOR";
 
     private SscsListHelper() {
     }
@@ -60,7 +66,7 @@ public final class SscsListHelper {
                 typeReference
             );
             String judiciary = formatJudiciary(session);
-            String sessionChannelString = String.join(", ", sessionChannel);
+            String sessionChannelString = String.join(DELIMITER, sessionChannel);
             for (JsonNode sitting : session.get(SITTINGS)) {
                 sittingList.add(sittingBuilder(sessionChannelString, sitting, judiciary));
             }
@@ -79,7 +85,7 @@ public final class SscsListHelper {
             List<String> channelList = MAPPER.readValue(
                 node.get(CHANNEL).toString(), new TypeReference<>() {
                 });
-            sitting.setChannel(String.join(", ", channelList));
+            sitting.setChannel(String.join(DELIMITER, channelList));
         } else {
             sitting.setChannel(sessionChannel);
         }
@@ -105,7 +111,7 @@ public final class SscsListHelper {
         StringBuilder formattedJudiciaryBuilder = new StringBuilder();
         session.get(JUDICIARY).forEach(judiciary -> {
             if (formattedJudiciaryBuilder.length() > 0) {
-                formattedJudiciaryBuilder.append(", ");
+                formattedJudiciaryBuilder.append(DELIMITER);
             }
             formattedJudiciaryBuilder
                 .append(GeneralHelper.safeGet("johTitle", judiciary))
@@ -120,9 +126,34 @@ public final class SscsListHelper {
         PartyRoleHelper.findAndManipulatePartyInformation(hearingNode, false);
         currentHearing.setAppellant(hearingNode.get(APPLICANT).asText());
         currentHearing.setAppellantRepresentative(hearingNode.get(APPLICANT_REPRESENTATIVE).asText());
-        currentHearing.setRespondent(dealWithInformants(hearingNode));
+        currentHearing.setRespondent(formatRespondent(hearingNode));
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
+    }
+
+    private static String formatRespondent(JsonNode hearingNode) {
+        String informants = dealWithInformants(hearingNode);
+        if (informants.isBlank()) {
+            return getPartyProsecutors(hearingNode);
+        }
+        return informants;
+    }
+
+    private static String getPartyProsecutors(JsonNode hearingNode) {
+        List<String> prosecutors = new ArrayList<>();
+
+        for (JsonNode party : hearingNode.get(PARTY)) {
+            String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
+            if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
+                String prosecutor = GeneralHelper.findAndReturnNodeText(
+                    party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
+                );
+                if (!prosecutor.isBlank()) {
+                    prosecutors.add(prosecutor);
+                }
+            }
+        }
+        return String.join(DELIMITER, prosecutors);
     }
 
     private static String dealWithInformants(JsonNode node) {
@@ -132,6 +163,6 @@ public final class SscsListHelper {
                 informant -> informants.add(informant.asText())
             );
         }
-        return String.join(", ", informants);
+        return String.join(DELIMITER, informants);
     }
 }
