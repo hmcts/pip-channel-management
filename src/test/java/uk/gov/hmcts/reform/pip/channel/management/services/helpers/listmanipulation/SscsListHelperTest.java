@@ -158,7 +158,7 @@ class SscsListHelperTest {
             .getListOfHearings().get(0);
 
         assertThat(hearing.getRespondent())
-            .as("Prosecutor does not match")
+            .as("Party prosecutor does not match")
             .isEqualTo("Prosecutor1, Prosecutor2");
     }
 }
