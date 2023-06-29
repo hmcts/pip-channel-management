@@ -80,7 +80,7 @@ task smoke(type: Test) {
 
 checkstyle {
   maxWarnings = 0
-  toolVersion = '10.5.0'
+  toolVersion = '10.12.1'
   getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
@@ -122,6 +122,10 @@ configurations {
 
   smokeTestImplementation.extendsFrom testImplementation
   smokeTestRuntimeOnly.extendsFrom runtimeOnly
+
+  all {
+    exclude group: 'commons-logging', module: 'commons-logging'
+  }
 }
 
 project.tasks['sonarqube'].dependsOn jacocoTestReport
