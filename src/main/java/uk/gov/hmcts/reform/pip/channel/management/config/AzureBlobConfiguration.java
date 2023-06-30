@@ -23,11 +23,14 @@ public class AzureBlobConfiguration {
     @Bean
     public BlobContainerClient blobContainerClient(AzureBlobConfigurationProperties azureBlobConfigurationProperties) {
         if (managedIdentityClientId.isEmpty()) {
+            System.out.println("*****Use connection string to connect to Azure blob");
+
             return new BlobContainerClientBuilder()
                 .connectionString(azureBlobConfigurationProperties.getConnectionString())
                 .containerName(azureBlobConfigurationProperties.getContainerName())
                 .buildClient();
         }
+        System.out.println("*****Use MI to connect to Azure blob");
 
         DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder()
             .tenantId(tenantId)
