@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.micrometer.common.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPublicList;
 
