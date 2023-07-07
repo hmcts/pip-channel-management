@@ -276,13 +276,6 @@
                             "caseNumber": "TEST-98765"
                           }
                         ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "DWP"
-                            ]
-                          }
-                        ],
                         "party": [
                           {
                             "partyRole": "APPLICANT_PETITIONER",
@@ -314,6 +307,18 @@
                               "individualMiddleName": "Bending",
                               "individualSurname": "Rodriguez",
                               "title": "Mr"
+                            }
+                          },
+                          {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Prosecutor1"
+                            }
+                          },
+                          {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Prosecutor2"
                             }
                           }
                         ]
