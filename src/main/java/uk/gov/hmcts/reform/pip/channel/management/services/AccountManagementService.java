@@ -32,9 +32,6 @@ public class AccountManagementService {
 
     private final WebClient webClient;
 
-    private static final String ACCOUNT_MANAGEMENT_REQUEST_FAILED =
-        "Request to account management failed with error message: %s";
-
     @Autowired
     public AccountManagementService(WebClient webClient) {
         this.webClient = webClient;
@@ -42,7 +39,7 @@ public class AccountManagementService {
 
     public Map<String, Optional<String>> getEmails(List<String> listOfUserIds) {
         try {
-            return webClient.post().uri(String.format("%s/account/emails/", url))
+            return webClient.post().uri(String.format("%s/account/emails", url))
                 .body(BodyInserters.fromValue(listOfUserIds))
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Optional<String>>>() {

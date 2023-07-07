@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.atomic.AtomicReference;
 
