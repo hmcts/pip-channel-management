@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import org.thymeleaf.context.IContext;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import uk.gov.hmcts.reform.pip.channel.management.config.ThymeleafConfiguration;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
