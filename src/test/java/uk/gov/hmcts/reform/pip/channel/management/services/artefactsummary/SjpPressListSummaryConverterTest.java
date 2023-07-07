@@ -32,7 +32,7 @@ class SjpPressListSummaryConverterTest {
 
         softly.assertThat(outputLines[0])
             .as("Accused does not match")
-            .isEqualTo("•Accused: Forename1 Surname1");
+            .isEqualTo("•Accused: Mr. Forename1 Middle Surname1");
 
         softly.assertThat(outputLines[1])
             .as("Postcode does not match")

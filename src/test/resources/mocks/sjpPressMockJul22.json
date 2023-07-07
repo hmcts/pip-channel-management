@@ -61,7 +61,7 @@
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Nigel",
-                              "individualSurname": "Sausage",
+                              "individualSurname": "Surname",
                               "dateOfBirth": "25/12/1977",
                               "age": 36,
                               "address": {
@@ -152,6 +152,12 @@
                       {
                         "party": [
                           {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Hampshire Police"
+                            }
+                          },
+                          {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Hello",
@@ -165,15 +171,7 @@
                                 "line": [
                                   "1 High Street,"
                                 ]
-                              },
-                              "title": "Mr.",
-                              "individualMiddleName": "Middle"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Hampshire Police"
+                              }
                             }
                           }
                         ],
