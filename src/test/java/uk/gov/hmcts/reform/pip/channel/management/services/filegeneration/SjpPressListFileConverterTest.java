@@ -87,7 +87,7 @@ class SjpPressListFileConverterTest {
         List<String> expectedOffender = List.of(
             "Mr. Thomas Middle Minister",
             "Mr. Nigel Middle Surname",
-            "Joe Bloggs",
+            "Accused's organisation",
             "Hello World"
         );
         AtomicInteger count = new AtomicInteger();

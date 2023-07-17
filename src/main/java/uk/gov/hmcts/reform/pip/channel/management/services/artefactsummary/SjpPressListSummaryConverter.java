@@ -11,8 +11,8 @@ import java.util.Iterator;
 @Service
 public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
-    private static final String INDIVIDUAL_FORENAMES = "individualForenames";
-    private static final String INDIVIDUAL_SURNAME = "individualSurname";
+    private static final String ORGANISATION_DETAILS = "organisationDetails";
+    private static final String ORGANISATION_ADDRESS = "organisationAddress";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
 
@@ -85,7 +85,7 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      * @return - text based on whether restriction exists.
      */
     private String processReportingRestrictionSjpPress(JsonNode node) {
-        return node.get("reportingRestriction").asBoolean() ? "(Reporting restriction)" : "";
+        return node.get("reportingRestriction").asBoolean() ? " (Reporting restriction)" : "";
     }
 
     /**
@@ -104,7 +104,7 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
             JsonNode party = partyNode.next();
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                 if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
-                    accused = PartyRoleHelper.createIndividualDetails(party, false);
+                    accused = getAccusedName(party);
                     postcode = getAccusedPostcode(party);
                 } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
                     prosecutor = PartyRoleHelper.createOrganisationDetails(party);
@@ -114,10 +114,26 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
         return "Accused: " + accused + "\nPostcode: " + postcode + "\nProsecutor: " + prosecutor;
     }
 
+    private String getAccusedName(JsonNode party) {
+        if (party.has(INDIVIDUAL_DETAILS)) {
+            return PartyRoleHelper.createIndividualDetails(party, false);
+        }
+        return PartyRoleHelper.createOrganisationDetails(party);
+    }
+
     private String getAccusedPostcode(JsonNode party) {
-        return party.get(INDIVIDUAL_DETAILS)
-            .get("address")
-            .get("postCode")
-            .asText();
+        if (party.has(INDIVIDUAL_DETAILS)) {
+            return party.get(INDIVIDUAL_DETAILS)
+                .get("address")
+                .get("postCode")
+                .asText();
+        } else if (party.has(ORGANISATION_DETAILS)
+            && party.get(ORGANISATION_DETAILS).has(ORGANISATION_ADDRESS)) {
+            return party.get(ORGANISATION_DETAILS)
+                .get(ORGANISATION_ADDRESS)
+                .get("postCode")
+                .asText();
+        }
+        return "";
     }
 }
