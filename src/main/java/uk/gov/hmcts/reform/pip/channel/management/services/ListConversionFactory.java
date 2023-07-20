@@ -56,6 +56,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_STA
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.PRIMARY_HEALTH_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SSCS_DAILY_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SSCS_DAILY_LIST_ADDITIONAL_HEARINGS;
 
@@ -66,6 +67,8 @@ public class ListConversionFactory {
         Map.entry(SJP_PUBLIC_LIST, Pair.of(new SjpPublicListFileConverter(),
                                            new SjpPublicListSummaryConverter())),
         Map.entry(SJP_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
+                                          new SjpPressListSummaryConverter())),
+        Map.entry(SJP_DELTA_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
                                           new SjpPressListSummaryConverter())),
         Map.entry(CROWN_DAILY_LIST, Pair.of(new CrownDailyListFileConverter(),
                                             new CrownDailyListSummaryConverter())),

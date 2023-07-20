@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
 
@@ -79,6 +80,7 @@ public class PublicationManagementService {
                 log.error("Failed to find converter for list type");
                 return;
             }
+
 
             // Generate the Excel and store it
             byte[] outputExcel = fileConverter.convertToExcel(topLevelNode);
@@ -165,6 +167,7 @@ public class PublicationManagementService {
             publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
 
             if (SJP_PUBLIC_LIST.equals(artefact.getListType())
+                || SJP_DELTA_PRESS_LIST.equals(artefact.getListType())
                 || SJP_PRESS_LIST.equals(artefact.getListType())) {
                 publicationFilesMap.put(EXCEL, azureBlobService.getBlobFile(artefactId + ".xlsx"));
             } else {
