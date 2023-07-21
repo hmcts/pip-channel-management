@@ -81,7 +81,6 @@ public class PublicationManagementService {
                 return;
             }
 
-
             // Generate the Excel and store it
             byte[] outputExcel = fileConverter.convertToExcel(topLevelNode);
             if (outputExcel.length > 0) {
