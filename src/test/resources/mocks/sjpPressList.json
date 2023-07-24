@@ -17,6 +17,12 @@
                       {
                         "party": [
                           {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Hampshire Police"
+                            }
+                          },
+                          {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Forename1",
@@ -33,12 +39,6 @@
                               },
                               "title": "Mr.",
                               "individualMiddleName": "Middle"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Hampshire Police"
                             }
                           }
                         ],

@@ -3,13 +3,18 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 
 import java.util.Iterator;
-import java.util.Locale;
 
 @Service
 public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
+    private static final String INDIVIDUAL_FORENAMES = "individualForenames";
+    private static final String INDIVIDUAL_SURNAME = "individualSurname";
+    private static final String PARTY = "party";
+    private static final String PARTY_ROLE = "partyRole";
 
     /**
      * sjp press parent method - iterates over session data. Routes to specific methods which handle offences and
@@ -90,21 +95,29 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      * @return list of roles.
      */
     private String processRolesSjpPress(JsonNode hearing) {
-        Iterator<JsonNode> partyNode = hearing.get("party").elements();
+        Iterator<JsonNode> partyNode = hearing.get(PARTY).elements();
         String accused = "";
-        String postCode = "";
+        String postcode = "";
         String prosecutor = "";
+
         while (partyNode.hasNext()) {
-            JsonNode currentParty = partyNode.next();
-            if ("accused".equals(currentParty.get("partyRole").asText().toLowerCase(Locale.ROOT))) {
-                String forename = currentParty.get(INDIVIDUAL_DETAILS).get("individualForenames").asText();
-                String surname = currentParty.get(INDIVIDUAL_DETAILS).get("individualSurname").asText();
-                postCode = currentParty.get(INDIVIDUAL_DETAILS).get("address").get("postCode").asText();
-                accused = forename + " " + surname;
-            } else {
-                prosecutor = currentParty.get("organisationDetails").get("organisationName").asText();
+            JsonNode party = partyNode.next();
+            if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
+                if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
+                    accused = PartyRoleHelper.createIndividualDetails(party, false);
+                    postcode = getAccusedPostcode(party);
+                } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
+                    prosecutor = PartyRoleHelper.createOrganisationDetails(party);
+                }
             }
         }
-        return "Accused: " + accused + "\nPostcode: " + postCode + "\nProsecutor: " + prosecutor;
+        return "Accused: " + accused + "\nPostcode: " + postcode + "\nProsecutor: " + prosecutor;
+    }
+
+    private String getAccusedPostcode(JsonNode party) {
+        return party.get(INDIVIDUAL_DETAILS)
+            .get("address")
+            .get("postCode")
+            .asText();
     }
 }

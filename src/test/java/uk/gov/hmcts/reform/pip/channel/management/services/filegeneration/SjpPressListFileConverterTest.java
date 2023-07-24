@@ -84,7 +84,12 @@ class SjpPressListFileConverterTest {
             .as("Incorrect number of pages")
             .hasSize(4);
 
-        List<String> expectedOffender = List.of("Thomas Minister", "Nigel Sausage", "Joe Bloggs", "Hello World");
+        List<String> expectedOffender = List.of(
+            "Mr. Thomas Middle Minister",
+            "Mr. Nigel Middle Surname",
+            "Joe Bloggs",
+            "Hello World"
+        );
         AtomicInteger count = new AtomicInteger();
         pages.forEach(p -> assertThat(p.text())
             .as("Incorrect offender at index " + count.get())
