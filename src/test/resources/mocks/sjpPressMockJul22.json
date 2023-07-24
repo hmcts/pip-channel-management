@@ -108,25 +108,20 @@
                         "party": [
                           {
                             "partyRole": "ACCUSED",
-                            "individualDetails": {
-                              "individualForenames": "Joe",
-                              "individualSurname": "Bloggs",
-                              "dateOfBirth": "20/03/1981",
-                              "age": 36,
-                              "address": {
+                            "organisationDetails": {
+                              "organisationName": "Accused's organisation",
+                              "organisationAddress": {
                                 "county": "",
                                 "town": "London",
                                 "postCode": "NW1 2XY",
                                 "line": [
                                   "72 Guild Street,"
                                 ]
-                              },
-                              "title": "",
-                              "individualMiddleName": ""
+                              }
                             }
                           },
                           {
-                            "partyRole": "Prosecuter",
+                            "partyRole": "PROSECUTOR",
                             "organisationDetails": {
                               "organisationName": "Hampshire Police"
                             }

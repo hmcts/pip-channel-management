@@ -348,7 +348,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Postcode: AA1 AA1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent
-                       .contains("Offence: This is an offence title(Reporting restriction)"), CONTENT_MISMATCH_ERROR);
+                       .contains("Offence: This is an offence title (Reporting restriction)"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
