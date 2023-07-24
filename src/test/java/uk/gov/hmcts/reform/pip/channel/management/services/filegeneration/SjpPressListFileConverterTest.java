@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -11,12 +10,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
+import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,7 +27,6 @@ import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +39,9 @@ class SjpPressListFileConverterTest {
     @Autowired
     SjpPressListFileConverter sjpPressListConverter;
 
+    @Autowired
+    private ListConversionFactory listConversionFactory;
+
     private JsonNode getInput(String resourcePath) throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream(resourcePath)) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
@@ -45,34 +49,32 @@ class SjpPressListFileConverterTest {
         }
     }
 
-    @Test
-    void testSjpPressListTemplate() throws IOException {
-        Map<String, Object> language;
-        try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("sjpPressList-language.json")) {
-            language = new ObjectMapper().readValue(
-                Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
-                });
-        }
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SJP_PRESS_LIST", "SJP_DELTA_PRESS_LIST"})
+    void testSjpPressListTemplate(ListType listType) throws IOException {
+        Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                                  "provenance", "provenance",
                                                  "locationName", "location",
                                                  "language", "ENGLISH",
-                                                 "listType", "SJP_PRESS_LIST"
+                                                 "listType", listType.name()
         );
 
-        String outputHtml = sjpPressListConverter.convert(getInput("/mocks/sjpPressMockJul22.json"), metadataMap,
-                                                          language);
+        String outputHtml =  listConversionFactory.getFileConverter(listType)
+            .convert(getInput("/mocks/sjpPressMockJul22.json"), metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
+        String expectedTitle = listType.equals(ListType.SJP_PRESS_LIST)
+            ? "Single Justice Procedure - Press List (Full list)"
+            : "Single Justice Procedure - Press List (New cases)";
+
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Single Justice Procedure - Press List "
-                           + metadataMap.get("contentDate"));
+            .isEqualTo(expectedTitle + " " + metadataMap.get("contentDate"));
 
         assertThat(document.getElementsByClass("mainHeaderText")
                        .select(".mainHeaderText > h1:nth-child(1)").text())
-            .as("incorrect header text").isEqualTo("Single Justice Procedure - Press List");
+            .as("incorrect header text").isEqualTo(expectedTitle);
 
         assertThat(document.select(
             "div.pageSeparatedCase:nth-child(2) > table:nth-child(3) > tbody:nth-child(1) >"
@@ -92,16 +94,21 @@ class SjpPressListFileConverterTest {
         );
     }
 
-    @Test
-    void testSuccessfulExcelConversion() throws IOException {
-        byte[] result = sjpPressListConverter.convertToExcel(getInput("/mocks/sjpPressMockJul22.json"));
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SJP_PRESS_LIST", "SJP_DELTA_PRESS_LIST"})
+    void testSuccessfulExcelConversion(ListType listType) throws IOException {
+        byte[] result = sjpPressListConverter.convertToExcel(getInput("/mocks/sjpPressMockJul22.json"), listType);
 
         ByteArrayInputStream file = new ByteArrayInputStream(result);
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
         Row headingRow = sheet.getRow(0);
 
-        assertEquals("SJP Press List", sheet.getSheetName(), "Sheet name does not match");
+        String expectedSheetName = listType.equals(ListType.SJP_PRESS_LIST)
+            ? "SJP Press List (Full list)"
+            : "SJP Press List (New cases)";
+
+        assertEquals(expectedSheetName, sheet.getSheetName(), "Sheet name does not match");
         assertEquals("Address", headingRow.getCell(0).getStringCellValue(),
                      "Address column is different");
         assertEquals("Case URN", headingRow.getCell(1).getStringCellValue(),

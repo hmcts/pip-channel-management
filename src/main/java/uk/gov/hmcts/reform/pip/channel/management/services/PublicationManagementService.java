@@ -82,7 +82,7 @@ public class PublicationManagementService {
             }
 
             // Generate the Excel and store it
-            byte[] outputExcel = fileConverter.convertToExcel(topLevelNode);
+            byte[] outputExcel = fileConverter.convertToExcel(topLevelNode, artefact.getListType());
             if (outputExcel.length > 0) {
                 azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), outputExcel);
             }
