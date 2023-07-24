@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class PartyRoleHelper {
     private static final String APPLICANT = "applicant";
@@ -87,17 +89,20 @@ public final class PartyRoleHelper {
     public static String createIndividualDetails(JsonNode party, boolean initialised) {
         if (party.has(INDIVIDUAL_DETAILS)) {
             JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+            String title = GeneralHelper.findAndReturnNodeText(individualDetails, TITLE);
+            String forename = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES);
+            String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_MIDDLE_NAME);
+            String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
+
             if (initialised) {
-                String forename = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES);
                 String forenameInitial = forename.isEmpty() ? "" : forename.substring(0, 1);
-                return (GeneralHelper.findAndReturnNodeText(individualDetails, TITLE) + " "
-                    + forenameInitial + " "
-                    + GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME)).trim();
+                return Stream.of(title, forenameInitial, surname)
+                    .filter(str -> !str.isEmpty())
+                    .collect(Collectors.joining(" "));
             } else {
-                return (GeneralHelper.findAndReturnNodeText(individualDetails, TITLE) + " "
-                    + GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES) + " "
-                    + GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_MIDDLE_NAME) + " "
-                    + GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME)).trim();
+                return Stream.of(title, forename, middleName, surname)
+                    .filter(str -> !str.isEmpty())
+                    .collect(Collectors.joining(" "));
             }
         }
         return "";
@@ -142,8 +147,11 @@ public final class PartyRoleHelper {
         hearingObj.put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
     }
 
-    private static String createOrganisationDetails(JsonNode party) {
-        JsonNode organisationDetails = party.get("organisationDetails");
-        return GeneralHelper.findAndReturnNodeText(organisationDetails, "organisationName");
+    public static String createOrganisationDetails(JsonNode party) {
+        if (party.has("organisationDetails")) {
+            JsonNode organisationDetails = party.get("organisationDetails");
+            return GeneralHelper.findAndReturnNodeText(organisationDetails, "organisationName");
+        }
+        return "";
     }
 }

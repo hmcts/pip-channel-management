@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -10,13 +11,15 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPressList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -28,8 +31,12 @@ import java.util.Map;
 public class SjpPressListFileConverter extends ExcelAbstractList implements FileConverter {
 
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
+    private static final String ORGANISATION_DETAILS = "organisationDetails";
+    private static final String ORGANISATION_ADDRESS = "organisationAddress";
     private static final String REPORTING_RESTRICTION = "reportingRestriction";
     private static final String OFFENCE = "offence";
+    private static final String PARTY = "party";
+    private static final String PARTY_ROLE = "partyRole";
 
     /**
      * parent method for the process.
@@ -99,11 +106,16 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
             // Write out the data to the sheet
             for (SjpPressList entry : cases) {
                 Row dataRow = sheet.createRow(rowIdx++);
-                setCellValue(dataRow, 0, concatenateStrings(entry.getAddressLine1(),
-                                                            String.join(" ", entry.getAddressRemainder())));
-                setCellValue(dataRow, 1, concatenateStrings(entry.getReference1(),
-                                                            String.join(" ", entry.getReferenceRemainder())));
-                setCellValue(dataRow, 2, String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge()));
+                String addressRemainder = entry.getAddressRemainder() == null ? ""
+                    : String.join(" ", entry.getAddressRemainder());
+                String referenceRemainder = entry.getReferenceRemainder() == null ? ""
+                    : String.join(" ", entry.getReferenceRemainder());
+                String accusedDob = entry.getDateOfBirth() == null ? ""
+                    : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+
+                setCellValue(dataRow, 0, concatenateStrings(entry.getAddressLine1(), addressRemainder));
+                setCellValue(dataRow, 1, concatenateStrings(entry.getReference1(), referenceRemainder));
+                setCellValue(dataRow, 2, accusedDob);
                 setCellValue(dataRow, 3, entry.getName());
 
                 int offenceColumnIdx = 4;
@@ -137,7 +149,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
                     session -> session.get("sittings").forEach(
                         sitting -> sitting.get("hearing").forEach(hearing -> {
                             SjpPressList thisCase = new SjpPressList();
-                            processRoles(thisCase, hearing);
+                            processPartyRoles(thisCase, hearing);
                             processCaseUrns(thisCase, hearing.get("case"));
                             processOffences(thisCase, hearing.get(OFFENCE));
                             thisCase.setNumberOfOffences(thisCase.getOffences().size());
@@ -157,21 +169,16 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @param thisCase - case model which is updated by the method.
      * @param hearing    - node to be parsed.
      */
-    void processRoles(SjpPressList thisCase, JsonNode hearing) {
-        Iterator<JsonNode> partyNode = hearing.get("party").elements();
-        while (partyNode.hasNext()) {
-            JsonNode currentParty = partyNode.next();
-            if ("accused".equals(currentParty.get("partyRole").asText().toLowerCase(Locale.ROOT))) {
-                JsonNode individualDetailsNode = currentParty.get(INDIVIDUAL_DETAILS);
-                thisCase.setName(individualDetailsNode.get("individualForenames").asText() + " "
-                                     + individualDetailsNode.get("individualSurname").asText());
-                processAddress(thisCase, individualDetailsNode.get("address"));
-                thisCase.setDateOfBirth(individualDetailsNode.get("dateOfBirth").asText());
-                thisCase.setAge(individualDetailsNode.get("age").asText());
-            } else {
-                thisCase.setProsecutor(currentParty.get("organisationDetails").get("organisationName").asText());
+    private void processPartyRoles(SjpPressList thisCase, JsonNode hearing) {
+        hearing.get(PARTY).forEach(party -> {
+            if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
+                if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
+                    processAccusedParty(thisCase, party);
+                } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
+                    thisCase.setProsecutor(PartyRoleHelper.createOrganisationDetails(party));
+                }
             }
-        }
+        });
     }
 
     /**
@@ -182,7 +189,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @param thisCase - model representing case data.
      * @param caseNode - json node containing cases on given case.
      */
-    void processCaseUrns(SjpPressList thisCase, JsonNode caseNode) {
+    private void processCaseUrns(SjpPressList thisCase, JsonNode caseNode) {
         List<String> caseUrns = new ArrayList<>();
         for (final JsonNode currentCase : caseNode) {
             caseUrns.add(currentCase.get("caseUrn").asText());
@@ -197,7 +204,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @param thisCase    - our case model.
      * @param addressNode - our node containing address data.
      */
-    void processAddress(SjpPressList thisCase, JsonNode addressNode) {
+    private void processAddress(SjpPressList thisCase, JsonNode addressNode) {
         List<String> address = new ArrayList<>();
         JsonNode lineArray = addressNode.get("line");
         if (lineArray.isArray()) {
@@ -221,14 +228,14 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @param currentCase  - case model.
      * @param offencesNode - node containing our offence data.
      */
-    void processOffences(SjpPressList currentCase, JsonNode offencesNode) {
+    private void processOffences(SjpPressList currentCase, JsonNode offencesNode) {
         List<Map<String, String>> listOfOffences = new ArrayList<>();
         Iterator<JsonNode> offences = offencesNode.elements();
         while (offences.hasNext()) {
             JsonNode thisOffence = offences.next();
             Map<String, String> thisOffenceMap = Map.of(
                 OFFENCE, thisOffence.get("offenceTitle").asText(),
-                REPORTING_RESTRICTION, processReportingRestrictionsjpPress(thisOffence),
+                REPORTING_RESTRICTION, processReportingRestrictionSjpPress(thisOffence),
                 "wording", thisOffence.get("offenceWording").asText()
             );
             listOfOffences.add(thisOffenceMap);
@@ -242,14 +249,36 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * @param node - json node representing an offence.
      * @return a String containing the relevant text based on reporting restriction.
      */
-    private String processReportingRestrictionsjpPress(JsonNode node) {
+    private String processReportingRestrictionSjpPress(JsonNode node) {
         return node.get(REPORTING_RESTRICTION).asBoolean() ? "Active" : "None";
+    }
+
+    private void processAccusedParty(SjpPressList thisCase, JsonNode party) {
+        thisCase.setAddressLine1("");
+        thisCase.setAddressRemainder(Collections.emptyList());
+
+        if (party.has(INDIVIDUAL_DETAILS)) {
+            JsonNode individualDetailsNode = party.get(INDIVIDUAL_DETAILS);
+            thisCase.setName(PartyRoleHelper.createIndividualDetails(party, false));
+            processAddress(thisCase, individualDetailsNode.get("address"));
+            thisCase.setDateOfBirth(individualDetailsNode.get("dateOfBirth").asText());
+            thisCase.setAge(individualDetailsNode.get("age").asText());
+        } else if (party.has(ORGANISATION_DETAILS)) {
+            thisCase.setName(PartyRoleHelper.createOrganisationDetails(party));
+            JsonNode organisationDetailsNode = party.get(ORGANISATION_DETAILS);
+
+            if (organisationDetailsNode.has(ORGANISATION_ADDRESS)) {
+                processAddress(thisCase, organisationDetailsNode.get(ORGANISATION_ADDRESS));
+            }
+        }
     }
 
     private String concatenateStrings(String... groupOfStrings) {
         StringBuilder stringBuilder = new StringBuilder();
         for (String stringToAdd : groupOfStrings) {
-            stringBuilder.append(stringToAdd).append(' ');
+            if (!StringUtils.isBlank(stringToAdd)) {
+                stringBuilder.append(stringToAdd).append(' ');
+            }
         }
         return stringBuilder.toString();
     }

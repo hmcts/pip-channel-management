@@ -31,8 +31,8 @@ class SjpPressListSummaryConverterTest {
             .hasSize(13);
 
         softly.assertThat(outputLines[0])
-            .as("Accused does not match")
-            .isEqualTo("•Accused: Forename1 Surname1");
+            .as("Accused (using individual details) does not match")
+            .isEqualTo("•Accused: Mr. Forename1 Middle Surname1");
 
         softly.assertThat(outputLines[1])
             .as("Postcode does not match")
@@ -44,11 +44,15 @@ class SjpPressListSummaryConverterTest {
 
         softly.assertThat(outputLines[3])
             .as("Offence does not match")
-            .isEqualTo("Offence: Sedition(Reporting restriction)");
+            .isEqualTo("Offence: Sedition (Reporting restriction)");
+
+        softly.assertThat(outputLines[4])
+            .as("Accused (using organisation details) does not match")
+            .isEqualTo("•Accused: Accused's organisation");
 
         softly.assertThat(outputLines[7])
             .as("Multiple offence line 1 does not match")
-            .isEqualTo("Offence 1: Criminal Mischief(Reporting restriction)");
+            .isEqualTo("Offence 1: Criminal Mischief (Reporting restriction)");
 
         softly.assertThat(outputLines[8])
             .as("Multiple offence line 2 does not match")
