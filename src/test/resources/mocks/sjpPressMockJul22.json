@@ -61,7 +61,7 @@
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Nigel",
-                              "individualSurname": "Sausage",
+                              "individualSurname": "Surname",
                               "dateOfBirth": "25/12/1977",
                               "age": 36,
                               "address": {
@@ -108,25 +108,20 @@
                         "party": [
                           {
                             "partyRole": "ACCUSED",
-                            "individualDetails": {
-                              "individualForenames": "Joe",
-                              "individualSurname": "Bloggs",
-                              "dateOfBirth": "20/03/1981",
-                              "age": 36,
-                              "address": {
+                            "organisationDetails": {
+                              "organisationName": "Accused's organisation",
+                              "organisationAddress": {
                                 "county": "",
                                 "town": "London",
                                 "postCode": "NW1 2XY",
                                 "line": [
                                   "72 Guild Street,"
                                 ]
-                              },
-                              "title": "",
-                              "individualMiddleName": ""
+                              }
                             }
                           },
                           {
-                            "partyRole": "Prosecuter",
+                            "partyRole": "PROSECUTOR",
                             "organisationDetails": {
                               "organisationName": "Hampshire Police"
                             }
@@ -152,6 +147,12 @@
                       {
                         "party": [
                           {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Hampshire Police"
+                            }
+                          },
+                          {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Hello",
@@ -165,15 +166,7 @@
                                 "line": [
                                   "1 High Street,"
                                 ]
-                              },
-                              "title": "Mr.",
-                              "individualMiddleName": "Middle"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Hampshire Police"
+                              }
                             }
                           }
                         ],

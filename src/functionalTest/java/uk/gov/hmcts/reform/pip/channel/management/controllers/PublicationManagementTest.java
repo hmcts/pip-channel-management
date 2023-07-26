@@ -342,11 +342,13 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SJP_PRESS_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Accused: This is a forename This is a surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains(
+            "Accused: This is a title This is a forename This is a middle name This is a surname"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Postcode: AA1 AA1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent
-                       .contains("Offence: This is an offence title(Reporting restriction)"), CONTENT_MISMATCH_ERROR);
+                       .contains("Offence: This is an offence title (Reporting restriction)"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test

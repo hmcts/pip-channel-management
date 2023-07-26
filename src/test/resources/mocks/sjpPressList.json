@@ -17,6 +17,12 @@
                       {
                         "party": [
                           {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Hampshire Police"
+                            }
+                          },
+                          {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "Forename1",
@@ -33,12 +39,6 @@
                               },
                               "title": "Mr.",
                               "individualMiddleName": "Middle"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Hampshire Police"
                             }
                           }
                         ],
@@ -59,21 +59,16 @@
                         "party": [
                           {
                             "partyRole": "ACCUSED",
-                            "individualDetails": {
-                              "individualForenames": "Forename2",
-                              "individualSurname": "Surname2",
-                              "dateOfBirth": "25/07/1985",
-                              "age": 36,
-                              "address": {
+                            "organisationDetails": {
+                              "organisationName": "Accused's organisation",
+                              "organisationAddress": {
                                 "county": "",
                                 "town": "London",
-                                "postCode": "BD1 2XY",
+                                "postCode": "NW1 2XY",
                                 "line": [
                                   "72 Guild Street,"
                                 ]
-                              },
-                              "title": "Mr.",
-                              "individualMiddleName": "Middle"
+                              }
                             }
                           },
                           {
@@ -123,7 +118,7 @@
                             }
                           },
                           {
-                            "partyRole": "Prosecuter",
+                            "partyRole": "PROSECUTOR",
                             "organisationDetails": {
                               "organisationName": "Hampshire Police"
                             }
