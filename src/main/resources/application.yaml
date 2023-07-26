@@ -40,7 +40,11 @@ azure:
     instrumentation-key: ${INSTRUMENTATION_KEY:00000000-0000-0000-0000-000000000000}
   blob:
     connection-string: ${CONNECTION_STRING}
+    storage-account-name: ${STORAGE_ACCOUNT_NAME}
     container-name: publications
+  managed-identity:
+    client-id: ${MANAGED_IDENTITY_CLIENT_ID:}
+
 service-to-service:
   account-management: ${ACCOUNT_MANAGEMENT_URL:https://pip-account-management.staging.platform.hmcts.net}
   subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-subscription-management.staging.platform.hmcts.net}
