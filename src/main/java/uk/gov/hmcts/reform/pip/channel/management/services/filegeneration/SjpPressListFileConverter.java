@@ -23,9 +23,9 @@ import java.util.Map;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 
 /**
- * FileConverter class for SJP Press Lists - builds a nice pdf from input json and an html template (found in
- * resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final output string is
- * passed in to PDF Creation Service.
+ * FileConverter class for SJP press list and SJP delta press list - builds a nice pdf from input json and a html
+ * template (found in resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final
+ * output string is passed in to PDF Creation Service.
  */
 @Service
 public class SjpPressListFileConverter extends ExcelAbstractList implements FileConverter {
@@ -63,7 +63,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     }
 
     /**
-     * Create SJP press list Excel spreadsheet from list data.
+     * Create SJP press list or SJP delta press list Excel spreadsheet from list data.
      *
      * @param artefact Tree object model for artefact.
      * @return The converted Excel spreadsheet as a byte array.
