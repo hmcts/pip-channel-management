@@ -73,6 +73,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      * Create SJP press list or SJP delta press list Excel spreadsheet from list data.
      *
      * @param artefact Tree object model for artefact.
+     * @param listType The list type of the publication.
      * @return The converted Excel spreadsheet as a byte array.
      */
     @Override
