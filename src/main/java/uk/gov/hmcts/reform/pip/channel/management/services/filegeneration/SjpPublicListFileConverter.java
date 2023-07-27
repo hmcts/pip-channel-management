@@ -47,6 +47,7 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
      * Create SJP public list Excel spreadsheet from list data.
      *
      * @param artefact Tree object model for artefact.
+     * @param listType The list type of the publication.
      * @return The converted Excel spreadsheet as a byte array.
      */
     @Override
