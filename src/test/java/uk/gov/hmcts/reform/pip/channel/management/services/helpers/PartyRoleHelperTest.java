@@ -160,4 +160,18 @@ class PartyRoleHelperTest {
             .as("Individual details should be blank")
             .isEmpty();
     }
+
+    @Test
+    void testCreateOrganisationDetails() {
+        assertThat(PartyRoleHelper.createOrganisationDetails(inputJson.get(PARTY).get(8)))
+            .as("Organisation details incorrect")
+            .isEqualTo("Defendant rep name");
+    }
+
+    @Test
+    void testCreateOrganisationDetailsWithIndividualInformation() {
+        assertThat(PartyRoleHelper.createOrganisationDetails(inputJson.get(PARTY).get(0)))
+            .as("Organisation details incorrect")
+            .isEmpty();
+    }
 }
