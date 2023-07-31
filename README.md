@@ -27,7 +27,6 @@
 - [Deployment](#deployment)
 - [Monitoring and Logging](#monitoring-and-logging)
   - [Application Insights](#application-insights)
-- [Troubleshooting](#troubleshooting)
 - [Security & Quality Considerations](#security--quality-considerations)
 - [Test Suite](#test-suite)
   - [Unit tests](#unit-tests)
