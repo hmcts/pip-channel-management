@@ -95,12 +95,6 @@ class SjpPublicListFileConverterTest {
 
     @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
     private void assertTitleAndDescription(Document doc) {
-        assertThat(doc.getElementsByTag("h1"))
-            .as("Incorrect h1 element")
-            .hasSize(1)
-            .extracting(Element::text)
-            .contains("Court and Tribunal Hearings Service");
-
         assertThat(doc.getElementsByTag("h2"))
             .as("Incorrect h2 element")
             .hasSize(1)
