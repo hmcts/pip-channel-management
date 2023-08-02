@@ -204,7 +204,7 @@ dependencies {
   testImplementation group: 'io.github.hakky54', name: 'logcaptor', version: '2.9.0'
   testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '4.11.0'
 
-  testImplementation(platform('org.junit:junit-bom:5.9.3'))
+  testImplementation(platform('org.junit:junit-bom:5.10.0'))
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
