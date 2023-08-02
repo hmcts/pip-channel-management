@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.Map;
@@ -19,7 +20,7 @@ public interface FileConverter {
      *
      * @return The converted Excel spreadsheet as a byte array.
      */
-    default byte[] convertToExcel(JsonNode artefact) throws IOException {
+    default byte[] convertToExcel(JsonNode artefact, ListType listType) throws IOException {
         return new byte[0];
     }
 }

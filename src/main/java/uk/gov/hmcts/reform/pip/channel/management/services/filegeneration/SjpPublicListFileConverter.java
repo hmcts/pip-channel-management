@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPubli
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SjpPublicListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,10 +47,11 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
      * Create SJP public list Excel spreadsheet from list data.
      *
      * @param artefact Tree object model for artefact.
+     * @param listType The list type of the publication.
      * @return The converted Excel spreadsheet as a byte array.
      */
     @Override
-    public byte[] convertToExcel(JsonNode artefact) throws IOException {
+    public byte[] convertToExcel(JsonNode artefact, ListType listType) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("SJP Public List");
             CellStyle boldStyle = createBoldStyle(workbook);

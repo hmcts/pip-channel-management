@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -19,17 +18,13 @@ import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Map;
-import java.util.Objects;
 
-import static com.google.common.base.CaseFormat.LOWER_CAMEL;
-import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
 class SscsDailyListFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final String LANGUAGE_FILE_PATH = "templates/languages/";
 
     private static final String PROVENANCE = "provenance";
     private static final String CONTENT_DATE = "contentDate";
@@ -48,7 +42,7 @@ class SscsDailyListFileConverterTest {
     @ParameterizedTest
     @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
     void testSscsDailyList(ListType listType) throws IOException {
-        Map<String, Object> language = getLanguageResources(listType, "en");
+        Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/", "sscsDailyList.json")), writer,
                      Charset.defaultCharset()
@@ -104,7 +98,7 @@ class SscsDailyListFileConverterTest {
     @ParameterizedTest
     @EnumSource(value = ListType.class, names = {"SSCS_DAILY_LIST", "SSCS_DAILY_LIST_ADDITIONAL_HEARINGS"})
     void testSscsDailyListWelsh(ListType listType) throws IOException {
-        Map<String, Object> language = getLanguageResources(listType, "cy");
+        Map<String, Object> language = TestUtils.getLanguageResources(listType, "cy");
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/", "sscsDailyList.json")), writer,
                      Charset.defaultCharset()
@@ -151,31 +145,8 @@ class SscsDailyListFileConverterTest {
         StringWriter writer = new StringWriter();
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
 
-        assertEquals(0, listConversionFactory.getFileConverter(listType).convertToExcel(inputJson).length,
+        assertEquals(0, listConversionFactory.getFileConverter(listType).convertToExcel(inputJson, listType).length,
                      "byte array wasn't empty"
         );
-    }
-
-    private Map<String, Object> getLanguageResources(ListType listType, String language) throws IOException {
-        Map<String, Object> languageResources = readResources(listType, language);
-
-        if (listType == ListType.SSCS_DAILY_LIST_ADDITIONAL_HEARINGS) {
-            Map<String, Object> parentLanguageResources = readResources(listType.getParentListType(), language);
-            parentLanguageResources.putAll(languageResources);
-            return parentLanguageResources;
-        }
-        return languageResources;
-    }
-
-    private Map<String, Object> readResources(ListType listType, String language) throws IOException {
-        String languageFileName = UPPER_UNDERSCORE.to(LOWER_CAMEL, listType.name());
-
-        try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader()
-            .getResourceAsStream(LANGUAGE_FILE_PATH + language + "/" + languageFileName + ".json")) {
-            return OBJECT_MAPPER.readValue(
-                Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
-                });
-        }
     }
 }
