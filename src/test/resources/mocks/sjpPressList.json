@@ -25,16 +25,15 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Forename1",
-                              "individualSurname": "Surname1",
+                              "individualForenames": "Forename",
+                              "individualSurname": "Surname",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
                               "address": {
-                                "county": "",
                                 "town": "London",
                                 "postCode": "SE23 6FH",
                                 "line": [
-                                  "72 Guild Street,"
+                                  "72 Guild Street"
                                 ]
                               },
                               "title": "Mr.",
@@ -64,9 +63,8 @@
                               "organisationAddress": {
                                 "county": "",
                                 "town": "London",
-                                "postCode": "NW1 2XY",
                                 "line": [
-                                  "72 Guild Street,"
+                                  "2 Main Road"
                                 ]
                               }
                             }
@@ -101,20 +99,10 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Forenames",
-                              "individualSurname": "Surnames",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
-                              "address": {
-                                "county": "",
-                                "town": "London",
-                                "postCode": "NW1 2XY",
-                                "line": [
-                                  "72 Guild Street,"
-                                ]
-                              },
-                              "title": "",
-                              "individualMiddleName": ""
+                              "title": "Mrs.",
+                              "individualMiddleName": "Middle"
                             }
                           },
                           {

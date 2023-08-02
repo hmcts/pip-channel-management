@@ -18,10 +18,12 @@ import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 
@@ -213,19 +215,21 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
      */
     private void processAddress(SjpPressList thisCase, JsonNode addressNode) {
         List<String> address = new ArrayList<>();
-        JsonNode lineArray = addressNode.get("line");
-        if (lineArray.isArray()) {
-            for (final JsonNode addressLine : lineArray) {
-                address.add(addressLine.asText());
-            }
+        if (addressNode.has("line")) {
+            addressNode.get("line")
+                .forEach(line -> address.add(line.asText()));
         }
-        address.add(addressNode.get("town").asText());
-        address.add(addressNode.get("county").asText());
-        address.add(addressNode.get("postCode").asText());
-        thisCase.setAddressLine1(address.get(0));
-        thisCase.setAddressRemainder(address.stream()
+        address.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
+        address.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
+        address.add(GeneralHelper.findAndReturnNodeText(addressNode, "postCode"));
+
+        List<String> addressLines = address.stream()
+            .filter(line -> !StringUtils.isBlank(line))
+            .toList();
+
+        thisCase.setAddressLine1(addressLines.get(0));
+        thisCase.setAddressRemainder(addressLines.stream()
                                          .skip(1)
-                                         .filter(e -> !e.isEmpty())
                                          .toList());
     }
 
@@ -267,9 +271,12 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         if (party.has(INDIVIDUAL_DETAILS)) {
             JsonNode individualDetailsNode = party.get(INDIVIDUAL_DETAILS);
             thisCase.setName(PartyRoleHelper.createIndividualDetails(party, false));
-            processAddress(thisCase, individualDetailsNode.get("address"));
             thisCase.setDateOfBirth(individualDetailsNode.get("dateOfBirth").asText());
             thisCase.setAge(individualDetailsNode.get("age").asText());
+
+            if (individualDetailsNode.has("address")) {
+                processAddress(thisCase, individualDetailsNode.get("address"));
+            }
         } else if (party.has(ORGANISATION_DETAILS)) {
             thisCase.setName(PartyRoleHelper.createOrganisationDetails(party));
             JsonNode organisationDetailsNode = party.get(ORGANISATION_DETAILS);
@@ -281,12 +288,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     }
 
     private String concatenateStrings(String... groupOfStrings) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String stringToAdd : groupOfStrings) {
-            if (!StringUtils.isBlank(stringToAdd)) {
-                stringBuilder.append(stringToAdd).append(' ');
-            }
-        }
-        return stringBuilder.toString();
+        return Arrays.stream(groupOfStrings)
+            .filter(s -> !StringUtils.isBlank(s))
+            .collect(Collectors.joining(" "));
     }
 }
