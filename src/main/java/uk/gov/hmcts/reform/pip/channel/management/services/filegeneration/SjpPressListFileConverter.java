@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,10 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
+
 /**
- * FileConverter class for SJP Press Lists - builds a nice pdf from input json and an html template (found in
- * resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final output string is
- * passed in to PDF Creation Service.
+ * FileConverter class for SJP press list and SJP delta press list - builds a nice pdf from input json and a html
+ * template (found in resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final
+ * output string is passed in to PDF Creation Service.
  */
 @Service
 public class SjpPressListFileConverter extends ExcelAbstractList implements FileConverter {
@@ -67,17 +70,21 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     }
 
     /**
-     * Create SJP press list Excel spreadsheet from list data.
+     * Create SJP press list or SJP delta press list Excel spreadsheet from list data.
      *
      * @param artefact Tree object model for artefact.
+     * @param listType The list type of the publication.
      * @return The converted Excel spreadsheet as a byte array.
      */
     @Override
-    public byte[] convertToExcel(JsonNode artefact) throws IOException {
+    public byte[] convertToExcel(JsonNode artefact, ListType listType) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             final List<SjpPressList> cases = processRawJson(artefact);
 
-            Sheet sheet = workbook.createSheet("SJP Press List");
+            String sheetName = SJP_PRESS_LIST.equals(listType)
+                ? "SJP Press List (Full list)"
+                : "SJP Press List (New cases)";
+            Sheet sheet = workbook.createSheet(sheetName);
             CellStyle boldStyle = createBoldStyle(workbook);
 
             int rowIdx = 0;
