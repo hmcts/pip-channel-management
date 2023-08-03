@@ -43,11 +43,6 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionMetadata() {
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1").get(0))
-            .as("Incorrect h1 element")
-            .extracting(Element::text)
-            .isEqualTo("Court and Tribunal Hearings Service");
-
         softly.assertThat(doc.getElementsByTag("h2"))
             .as("Incorrect h2 element")
             .hasSize(2)
@@ -78,7 +73,7 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionBailList() {
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1").get(1))
+        softly.assertThat(doc.getElementsByTag("h1").get(0))
             .as("Incorrect h1 element")
             .extracting(Element::text)
             .isEqualTo("Bail List");
@@ -119,7 +114,7 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionNonBailList() {
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1").get(2))
+        softly.assertThat(doc.getElementsByTag("h1").get(1))
             .as("Incorrect h1 element")
             .extracting(Element::text)
             .isEqualTo("Non Bail List");
