@@ -111,7 +111,12 @@ class SjpPressListFileConverterTest {
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(3) > table > tbody > tr:nth-child(3) > td").text())
-            .as("Address line should be empty")
+            .as("Address line should be empty (for missing address field)")
+            .isEmpty();
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(4) > table > tbody > tr:nth-child(3) > td").text())
+            .as("Address line should be empty (for empty address field)")
             .isEmpty();
 
         softly.assertThat(document.select(
@@ -122,12 +127,13 @@ class SjpPressListFileConverterTest {
         Elements pages = document.getElementsByClass("pageSeparatedCase");
         softly.assertThat(pages)
             .as("Incorrect number of pages")
-            .hasSize(3);
+            .hasSize(4);
 
         List<String> expectedOffender = List.of(
             "Mr. Forename Middle Surname",
             "Accused's organisation",
-            "Mrs. Middle"
+            "Mrs. Middle",
+            "Surname"
         );
 
         AtomicInteger count = new AtomicInteger();

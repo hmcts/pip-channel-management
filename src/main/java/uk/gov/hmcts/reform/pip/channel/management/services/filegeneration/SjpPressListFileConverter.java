@@ -227,10 +227,12 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
             .filter(line -> !StringUtils.isBlank(line))
             .toList();
 
-        thisCase.setAddressLine1(addressLines.get(0));
-        thisCase.setAddressRemainder(addressLines.stream()
-                                         .skip(1)
-                                         .toList());
+        if (!addressLines.isEmpty()) {
+            thisCase.setAddressLine1(addressLines.get(0));
+            thisCase.setAddressRemainder(addressLines.stream()
+                                             .skip(1)
+                                             .toList());
+        }
     }
 
     /**

@@ -30,7 +30,7 @@ class SjpPressListSummaryConverterTest {
 
         softly.assertThat(outputLines)
             .as("Output line count does not match")
-            .hasSize(13);
+            .hasSize(17);
 
         softly.assertThat(outputLines[0])
             .as("Accused (using individual details) does not match")
@@ -65,7 +65,11 @@ class SjpPressListSummaryConverterTest {
             .isEqualTo("•Accused: Mrs. Middle");
 
         softly.assertThat(outputLines[10])
-            .as("Postcode (missing address) does not match")
+            .as("Postcode (missing address field) does not match")
+            .isEqualTo("Postcode: ");
+
+        softly.assertThat(outputLines[14])
+            .as("Postcode (empty address field) does not match")
             .isEqualTo("Postcode: ");
 
         softly.assertAll();
