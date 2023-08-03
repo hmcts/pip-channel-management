@@ -63,7 +63,7 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .contains(
                 "List for 02 October 2022",
-                "Last Updated 20 October 2022 at 9pm"
+                "Last updated 20 October 2022 at 9pm"
             );
 
         softly.assertThat(doc.getElementsByTag("section").get(0).getElementsByTag("p").get(0))
