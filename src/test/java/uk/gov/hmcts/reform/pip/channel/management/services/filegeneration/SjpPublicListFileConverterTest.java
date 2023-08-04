@@ -12,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -131,7 +132,7 @@ class SjpPublicListFileConverterTest {
 
     @Test
     void testSuccessfulExcelConversion() throws IOException {
-        byte[] result = converter.convertToExcel(getInput("/mocks/sjpPublicList.json"));
+        byte[] result = converter.convertToExcel(getInput("/mocks/sjpPublicList.json"), ListType.SJP_PRESS_LIST);
         ByteArrayInputStream file = new ByteArrayInputStream(result);
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
