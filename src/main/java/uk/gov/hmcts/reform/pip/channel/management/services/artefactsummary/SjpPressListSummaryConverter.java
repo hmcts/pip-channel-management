@@ -122,17 +122,17 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     }
 
     private String getAccusedPostcode(JsonNode party) {
-        if (party.has(INDIVIDUAL_DETAILS)) {
-            return party.get(INDIVIDUAL_DETAILS)
-                .get("address")
-                .get("postCode")
-                .asText();
+        if (party.has(INDIVIDUAL_DETAILS) && party.get(INDIVIDUAL_DETAILS).has("address")) {
+            return GeneralHelper.findAndReturnNodeText(
+                party.get(INDIVIDUAL_DETAILS).get("address"),
+                "postCode"
+            );
         } else if (party.has(ORGANISATION_DETAILS)
             && party.get(ORGANISATION_DETAILS).has(ORGANISATION_ADDRESS)) {
-            return party.get(ORGANISATION_DETAILS)
-                .get(ORGANISATION_ADDRESS)
-                .get("postCode")
-                .asText();
+            return GeneralHelper.findAndReturnNodeText(
+                party.get(ORGANISATION_DETAILS).get(ORGANISATION_ADDRESS),
+                "postCode"
+            );
         }
         return "";
     }
