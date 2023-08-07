@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public final class LocationHelper {
@@ -50,35 +51,27 @@ public final class LocationHelper {
 
     public static void formatCourtAddress(JsonNode artefact, String delimiter, boolean addCourtHouseName) {
         artefact.get("courtLists").forEach(courtList -> {
-            StringBuilder formattedCourtAddress = new StringBuilder();
             JsonNode courtHouse = courtList.get(COURT_HOUSE);
-
+            List<String> courtAddress = new ArrayList<>();
             if (addCourtHouseName && courtHouse.has("courtHouseName")) {
-                formattedCourtAddress
-                    .append(courtHouse.get("courtHouseName").asText())
-                    .append(delimiter);
+                courtAddress.add(courtHouse.get("courtHouseName").asText());
             }
 
             if (courtHouse.has("courtHouseAddress")) {
                 JsonNode courtHouseAddress = courtHouse.get("courtHouseAddress");
-                GeneralHelper.loopAndFormatString(courtHouseAddress, LINE, formattedCourtAddress, delimiter);
-                checkAndFormatAddress(courtHouseAddress, TOWN, formattedCourtAddress, delimiter);
-                checkAndFormatAddress(courtHouseAddress, COUNTY, formattedCourtAddress, delimiter);
-                checkAndFormatAddress(courtHouseAddress, POSTCODE, formattedCourtAddress, delimiter);
+                if (courtHouseAddress.has("line")) {
+                    courtHouseAddress.get("line").forEach(line -> courtAddress.add(line.asText()));
+                }
+                courtAddress.add(GeneralHelper.findAndReturnNodeText(courtHouseAddress, TOWN));
+                courtAddress.add(GeneralHelper.findAndReturnNodeText(courtHouseAddress, COUNTY));
+                courtAddress.add(GeneralHelper.findAndReturnNodeText(courtHouseAddress, POSTCODE));
             }
 
-            ((ObjectNode)courtHouse).put("formattedCourtHouseAddress",
-                                         StringUtils.stripEnd(formattedCourtAddress.toString(), delimiter));
+            String formattedCourtAddress = courtAddress.stream()
+                .filter(line -> StringUtils.isNotBlank(line))
+                .collect(Collectors.joining(delimiter));
+            ((ObjectNode)courtHouse).put("formattedCourtHouseAddress", formattedCourtAddress);
         });
-    }
-
-    private static void checkAndFormatAddress(JsonNode node, String nodeName,
-                                              StringBuilder builder, String delimiter) {
-        if (!GeneralHelper.findAndReturnNodeText(node, nodeName).isEmpty()) {
-            builder
-                .append(node.get(nodeName).asText())
-                .append(delimiter);
-        }
     }
 
     private static List<String> addAddressLines(JsonNode artefact) {
