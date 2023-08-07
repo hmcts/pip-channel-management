@@ -36,8 +36,6 @@ spring:
     name: PIP Channel Management
 
 azure:
-  application-insights:
-    instrumentation-key: ${INSTRUMENTATION_KEY:00000000-0000-0000-0000-000000000000}
   blob:
     connection-string: ${CONNECTION_STRING}
     storage-account-name: ${STORAGE_ACCOUNT_NAME}
