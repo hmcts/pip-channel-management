@@ -63,7 +63,7 @@ class CrownDailyListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Daily List");
+            .as(HEADER_TEXT).contains("Crown Daily List for ");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
