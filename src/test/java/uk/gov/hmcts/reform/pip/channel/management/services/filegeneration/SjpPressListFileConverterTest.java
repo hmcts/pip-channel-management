@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -28,9 +29,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
@@ -61,48 +59,96 @@ class SjpPressListFileConverterTest {
         );
 
         String outputHtml =  listConversionFactory.getFileConverter(listType)
-            .convert(getInput("/mocks/sjpPressMockJul22.json"), metadataMap, language);
+            .convert(getInput("/mocks/sjpPressList.json"), metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
-        assertThat(outputHtml).as("No html found").isNotEmpty();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(outputHtml).as("No html found").isNotEmpty();
 
         String expectedTitle = listType.equals(ListType.SJP_PRESS_LIST)
             ? "Single Justice Procedure - Press List (Full list)"
             : "Single Justice Procedure - Press List (New cases)";
 
-        assertThat(document.title()).as("incorrect title found.")
+        softly.assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo(expectedTitle + " " + metadataMap.get("contentDate"));
 
-        assertThat(document.getElementsByClass("mainHeaderText")
+        softly.assertThat(document.getElementsByClass("mainHeaderText")
                        .select(".mainHeaderText > h1:nth-child(1)").text())
-            .as("incorrect header text").isEqualTo(expectedTitle);
+            .as("incorrect header text")
+            .isEqualTo(expectedTitle);
 
-        assertThat(document.select(
-            "div.pageSeparatedCase:nth-child(2) > table:nth-child(3) > tbody:nth-child(1) >"
-                + " tr:nth-child(7) > td:nth-child(2)").text())
-            .as("incorrect value found").isEqualTo("Hampshire Police");
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(2) > td").text())
+            .as("Date of birth and age does not match")
+            .isEqualTo("25/07/1985 (36)");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(3) > td").text())
+            .as("Address line 1 does not match")
+            .isEqualTo("72 Guild Street");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(4) > td").text())
+            .as("Address line 2 does not match")
+            .isEqualTo("London");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(5) > td").text())
+            .as("Address line 3 does not match")
+            .isEqualTo("SE23 6FH");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(2) > table > tbody > tr:nth-child(3) > td").text())
+            .as("Organisation address line 1 does not match")
+            .isEqualTo("2 Main Road");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(2) > table > tbody > tr:nth-child(4) > td").text())
+            .as("Organisation address line 2 does not match")
+            .isEqualTo("London");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(3) > table > tbody > tr:nth-child(3) > td").text())
+            .as("Address line should be empty (for missing address field)")
+            .isEmpty();
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(4) > table > tbody > tr:nth-child(3) > td").text())
+            .as("Address line should be empty (for empty address field)")
+            .isEmpty();
+
+        softly.assertThat(document.select(
+            "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(6) > td").text())
+            .as("incorrect prosecutor found")
+            .isEqualTo("Hampshire Police");
 
         Elements pages = document.getElementsByClass("pageSeparatedCase");
-        assertThat(pages)
+        softly.assertThat(pages)
             .as("Incorrect number of pages")
             .hasSize(4);
 
         List<String> expectedOffender = List.of(
-            "Mr. Thomas Middle Minister",
-            "Mr. Nigel Middle Surname",
+            "Mr. Forename Middle Surname",
             "Accused's organisation",
-            "Hello World"
+            "Mrs. Middle",
+            "Surname"
         );
+
         AtomicInteger count = new AtomicInteger();
-        pages.forEach(p -> assertThat(p.text())
+        pages.forEach(p -> softly.assertThat(p.text())
             .as("Incorrect offender at index " + count.get())
             .contains(expectedOffender.get(count.getAndIncrement()))
         );
+
+        softly.assertAll();
     }
 
     @ParameterizedTest
     @EnumSource(value = ListType.class, names = {"SJP_PRESS_LIST", "SJP_DELTA_PRESS_LIST"})
     void testSuccessfulExcelConversion(ListType listType) throws IOException {
-        byte[] result = sjpPressListConverter.convertToExcel(getInput("/mocks/sjpPressMockJul22.json"), listType);
+        byte[] result = sjpPressListConverter.convertToExcel(getInput("/mocks/sjpPressList.json"), listType);
 
         ByteArrayInputStream file = new ByteArrayInputStream(result);
         Workbook workbook = new XSSFWorkbook(file);
@@ -113,32 +159,56 @@ class SjpPressListFileConverterTest {
             ? "SJP Press List (Full list)"
             : "SJP Press List (New cases)";
 
-        assertEquals(expectedSheetName, sheet.getSheetName(), "Sheet name does not match");
-        assertEquals("Address", headingRow.getCell(0).getStringCellValue(),
-                     "Address column is different");
-        assertEquals("Case URN", headingRow.getCell(1).getStringCellValue(),
-                     "Case URN column is different");
-        assertEquals("Date of Birth", headingRow.getCell(2).getStringCellValue(),
-                     "Date of Birth column is different");
-        assertEquals("Defendant Name", headingRow.getCell(3).getStringCellValue(),
-                     "Defendant Name column is different");
+        SoftAssertions softly = new SoftAssertions();
 
-        // Dynamic column headings
-        assertEquals("Offence 1 Press Restriction Requested", headingRow.getCell(4).getStringCellValue(),
-                     "Offence 1 Press Restriction Requested column is different");
-        assertEquals("Offence 1 Title", headingRow.getCell(5).getStringCellValue(),
-                     "Offence 1 Title column is different");
-        assertEquals("Offence 1 Wording", headingRow.getCell(6).getStringCellValue(),
-                     "Offence 1 Wording column is different");
+        softly.assertThat(sheet.getSheetName())
+            .as("Sheet name does not match")
+            .isEqualTo(expectedSheetName);
 
-        assertEquals("Offence 2 Press Restriction Requested", headingRow.getCell(7).getStringCellValue(),
-                     "Offence 2 Press Restriction Requested column is different");
-        assertEquals("Offence 2 Title", headingRow.getCell(8).getStringCellValue(),
-                     "Offence 2 Title column is different");
-        assertEquals("Offence 2 Wording", headingRow.getCell(9).getStringCellValue(),
-                     "Offence 2 Wording column is different");
+        softly.assertThat(headingRow.getCell(0).getStringCellValue())
+            .as("Address column is different")
+            .isEqualTo("Address");
 
-        assertEquals("Prosecutor Name", headingRow.getCell(10).getStringCellValue(),
-                     "Prosecutor Name column is different");
+        softly.assertThat(headingRow.getCell(1).getStringCellValue())
+            .as("Case URN column is different")
+            .isEqualTo("Case URN");
+
+        softly.assertThat(headingRow.getCell(2).getStringCellValue())
+            .as("Date of Birth column is different")
+            .isEqualTo("Date of Birth");
+
+        softly.assertThat(headingRow.getCell(3).getStringCellValue())
+            .as("Defendant Name column is different")
+            .isEqualTo("Defendant Name");
+
+        softly.assertThat(headingRow.getCell(4).getStringCellValue())
+            .as("Offence 1 Press Restriction Requested column is different")
+            .isEqualTo("Offence 1 Press Restriction Requested");
+
+        softly.assertThat(headingRow.getCell(5).getStringCellValue())
+            .as("Offence 1 Title column is different")
+            .isEqualTo("Offence 1 Title");
+
+        softly.assertThat(headingRow.getCell(6).getStringCellValue())
+            .as("Offence 1 Wording column is different")
+            .isEqualTo("Offence 1 Wording");
+
+        softly.assertThat(headingRow.getCell(7).getStringCellValue())
+            .as("Offence 2 Press Restriction Requested column is different")
+            .isEqualTo("Offence 2 Press Restriction Requested");
+
+        softly.assertThat(headingRow.getCell(8).getStringCellValue())
+            .as("Offence 2 Title column is different")
+            .isEqualTo("Offence 2 Title");
+
+        softly.assertThat(headingRow.getCell(9).getStringCellValue())
+            .as("Offence 2 Wording column is different")
+            .isEqualTo("Offence 2 Wording");
+
+        softly.assertThat(headingRow.getCell(10).getStringCellValue())
+            .as("Prosecutor Name column is different")
+            .isEqualTo("Prosecutor Name");
+
+        softly.assertAll();
     }
 }
