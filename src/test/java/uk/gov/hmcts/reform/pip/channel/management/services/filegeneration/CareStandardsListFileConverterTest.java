@@ -37,7 +37,7 @@ class CareStandardsListFileConverterTest {
             .hasSize(1)
             .first()
             .extracting(Element::text)
-            .isEqualTo("Care Standards Tribunal Hearing List");
+            .isEqualTo("Tribunal Hearing List for Care Standards");
 
         softly.assertThat(doc.getElementsByClass("header").get(0).getElementsByTag("p"))
             .as("Incorrect p elements")
