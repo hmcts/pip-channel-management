@@ -32,7 +32,7 @@ public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummar
                             .forEach(hearing -> hearing.get("case")
                                 .forEach(hearingCase -> {
                                     output.append('\n');
-                                    GeneralHelper.appendToStringBuilder(output, "Name of Party(ies) - ",
+                                    GeneralHelper.appendToStringBuilder(output, "Case Name - ",
                                                                         hearingCase, "caseName"
                                     );
                                     GeneralHelper.appendToStringBuilder(output, "Case ID - ",

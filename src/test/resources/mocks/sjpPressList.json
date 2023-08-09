@@ -25,16 +25,15 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Forename1",
-                              "individualSurname": "Surname1",
+                              "individualForenames": "Forename",
+                              "individualSurname": "Surname",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
                               "address": {
-                                "county": "",
                                 "town": "London",
                                 "postCode": "SE23 6FH",
                                 "line": [
-                                  "72 Guild Street,"
+                                  "72 Guild Street"
                                 ]
                               },
                               "title": "Mr.",
@@ -64,9 +63,8 @@
                               "organisationAddress": {
                                 "county": "",
                                 "town": "London",
-                                "postCode": "NW1 2XY",
                                 "line": [
-                                  "72 Guild Street,"
+                                  "2 Main Road"
                                 ]
                               }
                             }
@@ -101,20 +99,10 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "Forenames",
-                              "individualSurname": "Surnames",
                               "dateOfBirth": "25/07/1985",
                               "age": 36,
-                              "address": {
-                                "county": "",
-                                "town": "London",
-                                "postCode": "NW1 2XY",
-                                "line": [
-                                  "72 Guild Street,"
-                                ]
-                              },
-                              "title": "",
-                              "individualMiddleName": ""
+                              "title": "Mrs.",
+                              "individualMiddleName": "Middle"
                             }
                           },
                           {
@@ -127,6 +115,37 @@
                         "offence": [
                           {
                             "offenceTitle": "Grand Theft Auto",
+                            "offenceWording": "Speeding - exceed 30 mph on restricted road - manned equipment - On 25/03/2021 at BLACKWATER HAMPSHIRE YOU drove a motor vehicle namely VW REG NO: 0000 ABC on a restricted road namely B3272 HAWLEY ROAD at a speed exceeding 30 miles per hour NAMELY 35MPH.",
+                            "reportingRestriction": true
+                          }
+                        ],
+                        "case": [
+                          {
+                            "caseUrn": "0012345"
+                          }
+                        ]
+                      },
+                      {
+                        "party": [
+                          {
+                            "partyRole": "PROSECUTOR",
+                            "organisationDetails": {
+                              "organisationName": "Hampshire Police"
+                            }
+                          },
+                          {
+                            "partyRole": "ACCUSED",
+                            "individualDetails": {
+                              "individualSurname": "Surname",
+                              "dateOfBirth": "25/07/1985",
+                              "age": 36,
+                              "address": {}
+                            }
+                          }
+                        ],
+                        "offence": [
+                          {
+                            "offenceTitle": "Sedition",
                             "offenceWording": "Speeding - exceed 30 mph on restricted road - manned equipment - On 25/03/2021 at BLACKWATER HAMPSHIRE YOU drove a motor vehicle namely VW REG NO: 0000 ABC on a restricted road namely B3272 HAWLEY ROAD at a speed exceeding 30 miles per hour NAMELY 35MPH.",
                             "reportingRestriction": true
                           }
