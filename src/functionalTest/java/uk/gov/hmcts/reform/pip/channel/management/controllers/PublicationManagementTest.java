@@ -146,7 +146,7 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Name of Party(ies) - A1 Vs B1"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Name - A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case ID - 12345678"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type - FMPO"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
@@ -263,7 +263,7 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Name of Party(ies) - A2 Vs B2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Name - A2 Vs B2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case ID - 112233445"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains(
             "Hearing Type - FHDRA1 (First Hearing and Dispute Resolution Appointment)"), CONTENT_MISMATCH_ERROR);
