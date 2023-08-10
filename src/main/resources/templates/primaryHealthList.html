@@ -125,13 +125,11 @@
   <meta name="subject" content="Accessible PDF template"/>
   <meta name="author" content="HMCTS Court and Tribunal Hearings"/>
   <meta name="description" content="Document description - vital for compliance."/>
-  <title th:text="${i18n.listName + ' ' + i18n.listType}" />
+  <title th:text="${i18n.listName}" />
 </head>
 <body>
 <div class="header">
-  <h1 th:text="${i18n.serviceName}"/>
   <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listName}"/>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.listType}"/>
 
   <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1" th:text="${i18n.listFor + contentDate}"/>
   <p class="govuk-body" th:text="${i18n.lastUpdated + publicationDate + i18n.at + publicationTime}"/>
