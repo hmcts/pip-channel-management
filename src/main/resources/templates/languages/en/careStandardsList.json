@@ -2,10 +2,9 @@
   "serviceName": "Court and Tribunal Hearings Service",
   "pdfAccessibility": " PDF/UA page ",
   "of": " of ",
-  "listName": "Care Standards",
-  "listType": "Tribunal Hearing List",
+  "listName": "Tribunal Hearing List for Care Standards",
   "listFor": "List for ",
-  "lastUpdated": "Last Updated ",
+  "lastUpdated": "Last updated ",
   "at": " at ",
   "importantInformationHeading": "Important information",
   "tableHeadings": [

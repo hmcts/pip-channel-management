@@ -222,14 +222,16 @@
     },
     {
       "courtHouse": {
-        "courtHouseName": "This is the site name",
+        "courtHouseName": "",
         "courtHouseContact": {
           "venueTelephone": "01234 123 123",
           "venueEmail": "a@b.com"
         },
         "courtHouseAddress": {
           "line": [
-            "Address Line 1"
+            "Address Line 1",
+            "",
+            "Address Line 2"
           ],
           "postCode": "AA1 AA1"
         },
