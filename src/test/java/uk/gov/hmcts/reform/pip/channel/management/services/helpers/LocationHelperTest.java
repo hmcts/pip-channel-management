@@ -127,4 +127,32 @@ class LocationHelperTest {
             .as(COURT_ADDRESS_ERROR)
             .isEqualTo("This is the site name");
     }
+
+    @Test
+    void testFormatWithNoCourtNameAndAddressLine() {
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
+        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(2).get(COURT_HOUSE);
+
+        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
+            .as(COURT_ADDRESS_ERROR)
+            .isTrue();
+
+        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
+            .as(COURT_ADDRESS_ERROR)
+            .isEqualTo("Address Line 1|Address Line 2|AA1 AA1");
+    }
+
+    @Test
+    void testFormatWithBlankCourtNameAndAddressLine() {
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, true);
+        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(2).get(COURT_HOUSE);
+
+        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
+            .as(COURT_ADDRESS_ERROR)
+            .isTrue();
+
+        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
+            .as(COURT_ADDRESS_ERROR)
+            .isEqualTo("Address Line 1|Address Line 2|AA1 AA1");
+    }
 }
