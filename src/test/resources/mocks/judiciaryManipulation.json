@@ -1,0 +1,47 @@
+[
+  {
+    "judiciary": [
+      {
+        "johKnownAs": "Judge 1",
+        "isPresiding": false
+      },
+      {
+        "johKnownAs": "Judge 2",
+        "isPresiding": false
+      },
+      {
+        "johKnownAs": "Judge 3",
+        "isPresiding": false
+      }
+    ]
+  },
+  {
+    "judiciary": [
+      {
+        "johKnownAs": "Judge 1"
+      },
+      {
+        "johKnownAs": "Judge 2"
+      },
+      {
+        "johKnownAs": "Judge 3"
+      }
+    ]
+  },
+  {
+    "judiciary": [
+      {
+        "johKnownAs": "Judge 1",
+        "isPresiding": false
+      },
+      {
+        "johKnownAs": "Judge 2",
+        "isPresiding": false
+      },
+      {
+        "johKnownAs": "Crown Judge",
+        "isPresiding": true
+      }
+    ]
+  }
+]
