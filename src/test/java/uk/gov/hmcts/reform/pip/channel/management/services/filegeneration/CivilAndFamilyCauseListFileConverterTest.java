@@ -92,7 +92,7 @@ class CivilAndFamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 yn 3:01pm");
+            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 am 3:01pm");
     }
 
     @Test
