@@ -59,20 +59,30 @@ class CopCauseListFileConverterTest {
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
+        assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo("Court of Protection Daily Cause List");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("In the Court of Protection Regional COP Court");
+            .as(HEADER_TEXT)
+            .isEqualTo("In the Court of Protection Regional COP Court");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
-            .as(HEADER_TEXT).contains("Last updated 14 February 2022 at 10:30am");
+            .as(HEADER_TEXT)
+            .contains("Last updated 14 February 2022 at 10:30am");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Before Mrs Firstname Surname");
+            .as(HEADER_TEXT)
+            .contains("Room 1, Before Crown Judge");
+
+        assertThat(document.getElementsByClass("govuk-accordion__section-heading")
+                       .get(3).text())
+            .as(HEADER_TEXT)
+            .contains("Room 2")
+            .doesNotContain("Before");
 
     }
 
@@ -102,19 +112,23 @@ class CopCauseListFileConverterTest {
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
+        assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo("Rhestr Achosion Ddyddiol y Llys Gwarchod");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).isEqualTo("Yn y Llys Gwarchod Regional COP Court");
+            .as(HEADER_TEXT)
+            .isEqualTo("Yn y Llys Gwarchod Regional COP Court");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
-            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 14 February 2022 yn 10:30am");
+            .as(HEADER_TEXT)
+            .contains("Diweddarwyd ddiwethaf 14 February 2022 yn 10:30am");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Cyn Mrs Firstname Surname");
+            .as(HEADER_TEXT)
+            .contains("Room 1, Cyn Crown Judge");
     }
 }

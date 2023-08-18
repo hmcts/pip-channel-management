@@ -35,7 +35,7 @@ public final class JudiciaryHelper {
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    public static String findAndManipulateJudiciaryForCop(JsonNode session) {
+    public static String findAndManipulateJudiciaryForIac(JsonNode session) {
         StringBuilder formattedJudiciary = new StringBuilder();
 
         try {
