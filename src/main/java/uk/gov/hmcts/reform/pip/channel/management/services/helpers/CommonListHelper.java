@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulat
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
@@ -74,7 +75,7 @@ public final class CommonListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, Optional.of(language)));
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, TIME_FORMAT, true);

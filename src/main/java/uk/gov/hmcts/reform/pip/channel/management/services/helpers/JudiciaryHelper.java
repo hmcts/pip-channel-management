@@ -2,7 +2,9 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class JudiciaryHelper {
@@ -11,7 +13,7 @@ public final class JudiciaryHelper {
     private JudiciaryHelper() {
     }
 
-    public static String findAndManipulateJudiciary(JsonNode judiciaryNode, boolean addBeforeToJudgeName) {
+    public static String findAndManipulateJudiciary(JsonNode judiciaryNode, Optional<Language> languageForBefore) {
         AtomicReference<StringBuilder> formattedJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
 
@@ -27,8 +29,8 @@ public final class JudiciaryHelper {
             });
 
             if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()
-                && addBeforeToJudgeName) {
-                formattedJudiciary.get().insert(0, "Before: ");
+                && languageForBefore.isPresent()) {
+                formattedJudiciary.get().insert(0, languageForBefore.get().equals(Language.ENGLISH) ? "Before: " : "Gerbron: ");
             }
         }
 

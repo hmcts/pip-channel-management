@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -54,11 +55,11 @@ public final class SittingHelper {
 
     public static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting,
                                           String destinationNodeName) {
-        String judiciary = JudiciaryHelper.findAndManipulateJudiciary(sitting, false);
+        String judiciary = JudiciaryHelper.findAndManipulateJudiciary(sitting, Optional.empty());
         String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
 
         if (judiciary.isBlank()) {
-            judiciary = JudiciaryHelper.findAndManipulateJudiciary(session, false);
+            judiciary = JudiciaryHelper.findAndManipulateJudiciary(session, Optional.empty());
 
         }
 

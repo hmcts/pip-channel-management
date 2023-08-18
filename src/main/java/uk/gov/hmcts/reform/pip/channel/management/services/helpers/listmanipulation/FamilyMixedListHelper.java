@@ -12,6 +12,8 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapp
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
+import java.util.Optional;
+
 @SuppressWarnings("java:S108")
 public final class FamilyMixedListHelper {
     private static final String APPLICANT = "applicant";
@@ -29,7 +31,7 @@ public final class FamilyMixedListHelper {
             .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, Optional.of(language)));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma", true);

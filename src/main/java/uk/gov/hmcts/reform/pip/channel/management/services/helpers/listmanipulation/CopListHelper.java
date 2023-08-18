@@ -9,6 +9,8 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelpe
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
+import java.util.Optional;
+
 public final class CopListHelper {
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String TIME_FORMAT = "h:mma";
@@ -31,7 +33,7 @@ public final class CopListHelper {
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     ((ObjectNode) session).put(
                         "formattedSessionJoh",
-                        JudiciaryHelper.findAndManipulateJudiciary(session, false)
+                        JudiciaryHelper.findAndManipulateJudiciary(session, Optional.empty())
                     );
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
