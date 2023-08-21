@@ -31,6 +31,7 @@
         },
         "courtRoom": [
           {
+            "courtRoomName": "Room 1",
             "session": [
               {
                 "sittings": [
@@ -57,8 +58,6 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Mrs",
-                    "johNameSurname": "Firstname Surname",
                     "johKnownAs": "Crown Judge",
                     "isPresiding": true
                   }
@@ -89,8 +88,6 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Mrs",
-                    "johNameSurname": "Firstname Surname",
                     "johKnownAs": "Crown Judge",
                     "isPresiding": true
                   }
@@ -116,6 +113,7 @@
         },
         "courtRoom": [
           {
+            "courtRoomName": "Room 2",
             "session": [
               {
                 "sittings": [
@@ -142,14 +140,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Mrs",
-                    "johNameSurname": "Firstname Surname",
                     "johKnownAs": "Crown Judge",
                     "isPresiding": true
                   },
                   {
-                    "johTitle": "Mrs",
-                    "johNameSurname": "OtherFirstname OtherSurname",
                     "johKnownAs": "Crown Judge",
                     "isPresiding": false
                   }
@@ -180,8 +174,6 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Mrs",
-                    "johNameSurname": "Firstname Surname",
                     "johKnownAs": "Crown Judge",
                     "isPresiding": true
                   }
