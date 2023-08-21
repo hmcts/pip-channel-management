@@ -41,7 +41,7 @@ class CommonListHelperTest {
     }
 
     @Test
-    void testFormatCourtRoomName() {
+    void testFormatCourtRoomNameInEnglish() {
         CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
@@ -50,7 +50,20 @@ class CommonListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionCourtRoom").asText())
             .as("Unable to get courtroom name")
-            .isEqualTo("This is the court room name");
+            .isEqualTo("This is the court room name: Before: First known as");
+    }
+
+    @Test
+    void testFormatCourtRoomNameInWelsh() {
+        CommonListHelper.manipulatedListData(inputJson, Language.WELSH, false);
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(0)
+                       .get("formattedSessionCourtRoom").asText())
+            .as("Unable to get courtroom name")
+            .isEqualTo("This is the court room name: Gerbron: First known as");
     }
 
     @Test

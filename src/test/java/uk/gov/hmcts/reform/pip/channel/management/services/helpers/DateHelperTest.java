@@ -93,6 +93,14 @@ class DateHelperTest {
     }
 
     @Test
+    void testFormatTimestampWithBothDateAndTimeInWelsh() {
+        assertThat(DateHelper.formatTimeStampToBst(
+            TEST_DATETIME_2,Language.WELSH, false, true))
+            .as(ERR_MSG)
+            .isEqualTo("26 July 2022 am 17:04");
+    }
+
+    @Test
     void testConvertStringToBstMethod() {
         assertThat(DateHelper.convertStringToBst(TEST_DATETIME_1).toLocalDateTime())
             .as(ERR_MSG)
