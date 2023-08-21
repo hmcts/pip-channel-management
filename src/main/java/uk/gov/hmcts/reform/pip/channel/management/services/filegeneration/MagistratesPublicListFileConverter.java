@@ -6,6 +6,7 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesPublicListHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class MagistratesPublicListFileConverter implements FileConverter {
             artefact, metadata, language, false
         );
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(artefact);
-        CrimeListHelper.formattedCourtRoomName(artefact);
+        CrimeListHelper.formattedCourtRoomName(artefact, Language.valueOf(metadata.get("language")));
         context.setVariable("version", artefact.get("document").get("version").asText());
         return context;
     }

@@ -6,6 +6,7 @@ import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrimeListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class CrownDailyListFileConverter implements FileConverter {
         CrownDailyListHelper.findUnallocatedCases(artefact);
 
         CrownDailyListHelper.manipulatedCrownDailyListData(artefact);
-        CrimeListHelper.formattedCourtRoomName(artefact);
+        CrimeListHelper.formattedCourtRoomName(artefact, Language.valueOf(metadata.get("language")));
         return context;
     }
 }

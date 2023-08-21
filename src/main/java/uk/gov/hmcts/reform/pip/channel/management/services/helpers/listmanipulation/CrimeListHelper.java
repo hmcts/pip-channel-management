@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -28,7 +29,7 @@ public final class CrimeListHelper {
     private CrimeListHelper() {
     }
 
-    public static void formattedCourtRoomName(JsonNode artefact) {
+    public static void formattedCourtRoomName(JsonNode artefact, Language language) {
         artefact.get(COURT_LIST).forEach(
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
@@ -44,7 +45,8 @@ public final class CrimeListHelper {
                             sessionObj.put(
                                 SESSION_COURT_ROOM,
                                 GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
-                                    .replace("Before: ", "")
+                                    .replace(language.equals(Language.ENGLISH) ?
+                                                 "Before: " : "Gerbron: ", "")
                             );
                         }
                     })
