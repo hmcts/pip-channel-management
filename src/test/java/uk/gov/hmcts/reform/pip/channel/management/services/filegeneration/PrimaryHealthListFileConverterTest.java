@@ -32,20 +32,12 @@ class PrimaryHealthListFileConverterTest {
         Document doc = Jsoup.parse(result);
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1"))
-            .as("Incorrect h1 element")
-            .hasSize(1)
-            .extracting(Element::text)
-            .contains("Court and Tribunal Hearings Service");
-
         softly.assertThat(doc.getElementsByTag("h2"))
             .as("Incorrect h2 element")
-            .hasSize(2)
+            .hasSize(1)
+            .first()
             .extracting(Element::text)
-            .containsExactly(
-                "Primary Health",
-                "Tribunal Hearing List"
-            );
+            .isEqualTo("Tribunal Hearing List for Primary Health");
 
         softly.assertThat(doc.getElementsByClass("header").get(0).getElementsByTag("p"))
             .as("Incorrect p elements")
@@ -53,7 +45,7 @@ class PrimaryHealthListFileConverterTest {
             .extracting(Element::text)
             .contains(
                 "List for 02 October 2022",
-                "Last Updated 04 October 2022 at 10am"
+                "Last updated 04 October 2022 at 10am"
             );
 
         softly.assertThat(doc.getElementsByTag("th"))

@@ -64,7 +64,7 @@ class CopListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionJoh").asText())
             .as("Unable to get session Joh")
-            .contains("Mrs Firstname Surname");
+            .contains("Crown Judge");
 
         assertThat(inputJson.get(COURT_LISTS).get(1)
                        .get(COURT_HOUSE)
@@ -72,7 +72,7 @@ class CopListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionJoh").asText())
             .as("Unable to get session Joh")
-            .contains("Mrs Firstname Surname, Mrs OtherFirstname OtherSurname");
+            .contains("Judge 1, Judge 2");
     }
 
     @Test

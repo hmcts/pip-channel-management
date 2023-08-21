@@ -142,7 +142,7 @@ class CivilDailyCauseListFileConverterTest {
             .containsExactly(
                 "Time",
                 "Case ID",
-                "Name of party or parties involved",
+                "Case name",
                 "Hearing type",
                 "Location",
                 "Duration"
