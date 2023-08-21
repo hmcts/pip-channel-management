@@ -31,7 +31,8 @@ public final class FamilyMixedListHelper {
             .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, Optional.of(language)));
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(
+                        session, Optional.of(language)));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma", true);

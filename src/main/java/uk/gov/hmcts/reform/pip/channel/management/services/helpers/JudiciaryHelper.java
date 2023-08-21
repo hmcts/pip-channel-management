@@ -30,7 +30,8 @@ public final class JudiciaryHelper {
 
             if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()
                 && languageForBefore.isPresent()) {
-                formattedJudiciary.get().insert(0, languageForBefore.get().equals(Language.ENGLISH) ? "Before: " : "Gerbron: ");
+                formattedJudiciary.get().insert(0, languageForBefore.get().equals(Language.ENGLISH)
+                    ? "Before: " : "Gerbron: ");
             }
         }
 
