@@ -75,7 +75,7 @@ class MagistratesPublicListHelperTest {
     void testFormattedCourtRoomNameMethodMagistratesPublicList() {
         CommonListHelper.manipulatedListData(inputJsonMagistratesPublicList, Language.ENGLISH, false);
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList);
-        CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
+        CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList, Language.ENGLISH);
 
         assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonMagistratesPublicList
                          .get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)

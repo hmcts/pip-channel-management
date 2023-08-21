@@ -69,7 +69,7 @@ class CrownDailyListHelperTest {
         CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.ENGLISH, false);
         CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
         CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
-        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList);
+        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonCrownDailyList.get(COURT_LISTS)
                          .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
