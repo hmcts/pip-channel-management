@@ -74,9 +74,12 @@ public class PublicationManagementController {
         @RequestHeader(value = "x-user-id", required = false) String userId,
         @RequestHeader(value = "x-system", required = false) boolean system,
         @RequestHeader(name = "x-file-type") FileType fileType,
+        @RequestHeader(name = "x-additional-pdf", defaultValue = "false") boolean additionalPdf,
         @RequestParam(name = "maxFileSize", required = false) Integer maxFileSize) {
         return ResponseEntity.ok(
-            publicationManagementService.getStoredPublication(artefactId, fileType, maxFileSize, userId, system)
+            publicationManagementService.getStoredPublication(
+                artefactId, fileType, maxFileSize, userId, system, additionalPdf
+            )
         );
     }
 
