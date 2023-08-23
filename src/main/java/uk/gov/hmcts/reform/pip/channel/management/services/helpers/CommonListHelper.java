@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulat
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;

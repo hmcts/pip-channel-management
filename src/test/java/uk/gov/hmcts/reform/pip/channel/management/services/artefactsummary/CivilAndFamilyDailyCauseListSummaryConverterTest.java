@@ -55,8 +55,8 @@ class CivilAndFamilyDailyCauseListSummaryConverterTest {
             .contains("1 hour 25 mins");
 
         softly.assertThat(emailOutput)
-            .as("incorrect judge found")
-            .contains("This is the court room name");
+            .as("incorrect court room + judge found")
+            .contains("This is the court room name, Before: This is a known as");
 
         softly.assertAll();
     }
