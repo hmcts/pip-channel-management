@@ -21,6 +21,7 @@
     "Applicant/Petitioner",
     "Respondent"
   ],
+  "beforeJudge": "Before: ",
   "legalAdvisor": "Legal Advisor: ",
   "dataSource": "Data Source: ",
   "thanks": "Thank you for reading this document thoroughly.",

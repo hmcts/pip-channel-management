@@ -34,36 +34,23 @@ class JudiciaryHelperTest {
 
     @Test
     void testJudiciaryManipulationWithNoPresidingJudge() {
-        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(0), Optional.empty()))
+        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(0)))
             .as(JUDICIARY_MESSAGE)
             .isEqualTo("Judge 1, Judge 2, Judge 3");
     }
 
     @Test
     void testJudiciaryManipulationWithMissingPresidingJudge() {
-        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(1), Optional.empty()))
+        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(1)))
             .as(JUDICIARY_MESSAGE)
             .isEqualTo("Judge 1, Judge 2, Judge 3");
     }
 
     @Test
     void testJudiciaryManipulationWithAPresidingJudge() {
-        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(2), Optional.empty()))
+        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(2)))
             .as(JUDICIARY_MESSAGE)
             .isEqualTo("Crown Judge");
     }
 
-    @Test
-    void testJudiciaryManipulationWithBeforeAddedToJudgeNameInEnglish() {
-        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(2), Optional.of(Language.ENGLISH)))
-            .as(JUDICIARY_MESSAGE)
-            .isEqualTo("Before: Crown Judge");
-    }
-
-    @Test
-    void testJudiciaryManipulationWithBeforeAddedToJudgeNameInWelsh() {
-        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(2), Optional.of(Language.WELSH)))
-            .as(JUDICIARY_MESSAGE)
-            .isEqualTo("Gerbron: Crown Judge");
-    }
 }

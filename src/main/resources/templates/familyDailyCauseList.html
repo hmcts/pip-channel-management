@@ -180,7 +180,13 @@
       <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default" th:each="courtRoom : ${courtList.get('courtHouse').get('courtRoom')}">
         <div th:each="session : ${courtRoom.get('session')}">
           <div class="govuk-accordion__section-header">
-            <h2 class="govuk-accordion__section-heading" th:text="${session.get('formattedSessionCourtRoom').asText()}" />
+            <th:block th:if="${#strings.length(session.get('formattedSessionJudiciary').asText()) > 0}">
+              <h2 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText() + ',' + i18n.beforeJudge + session.get('formattedSessionJudiciary').asText()}"/>
+            </th:block>
+
+            <th:block th:if="${#strings.length(session.get('formattedSessionJudiciary').asText()) == 0}">
+              <h2 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText()}"/>
+            </th:block>
           </div>
           <div class="govuk-accordion__section-content">
             <div class="parent-box overflow-table">

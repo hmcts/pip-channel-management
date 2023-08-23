@@ -33,7 +33,7 @@ public final class CopListHelper {
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     ((ObjectNode) session).put(
                         "formattedSessionJoh",
-                        JudiciaryHelper.findAndManipulateJudiciary(session, Optional.empty())
+                        JudiciaryHelper.findAndManipulateJudiciary(session)
                     );
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);

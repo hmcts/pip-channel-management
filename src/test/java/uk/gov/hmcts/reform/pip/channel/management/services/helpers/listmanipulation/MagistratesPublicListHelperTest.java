@@ -73,7 +73,7 @@ class MagistratesPublicListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethodMagistratesPublicList() {
-        CommonListHelper.manipulatedListData(inputJsonMagistratesPublicList, Language.ENGLISH, false, false);
+        CommonListHelper.manipulatedListData(inputJsonMagistratesPublicList, Language.ENGLISH, false);
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList);
         CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
 
