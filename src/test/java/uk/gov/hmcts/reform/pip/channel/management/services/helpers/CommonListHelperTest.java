@@ -67,6 +67,19 @@ class CommonListHelperTest {
     }
 
     @Test
+    void testFormatCourtRoomNameNoBefore() {
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, false);
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(0)
+                       .get("formattedSessionCourtRoom").asText())
+            .as("Unable to get courtroom name")
+            .isEqualTo("This is the court room name: First known as");
+    }
+
+    @Test
     void testFormatHearingDuration() {
         CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
