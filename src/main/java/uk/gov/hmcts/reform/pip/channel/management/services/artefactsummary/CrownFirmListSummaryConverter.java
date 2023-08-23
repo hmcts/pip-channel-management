@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter {
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true, true);
         CrownFirmListHelper.crownFirmListFormatted(payload);
         CrownFirmListHelper.splitByCourtAndDate(payload);
         return this.processCrownFirmList(payload);

@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.FamilyMixedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.util.Map;
 import java.util.Optional;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_DAILY_CAUSE_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class CommonListHelper {
@@ -61,22 +63,25 @@ public final class CommonListHelper {
         }
 
         String listType = metadata.get("listType");
-        if (FAMILY_DAILY_CAUSE_LIST.name().equals(listType)
-            || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
-            FamilyMixedListHelper.manipulatedlistData(artefact, language);
-        } else {
-            manipulatedListData(artefact, language, initialised);
+        switch (ListType.valueOf(listType)) {
+            case FAMILY_DAILY_CAUSE_LIST, CIVIL_AND_FAMILY_DAILY_CAUSE_LIST ->
+                FamilyMixedListHelper.manipulatedlistData(artefact, language);
+            case CIVIL_DAILY_CAUSE_LIST, CROWN_DAILY_LIST, MAGISTRATES_PUBLIC_LIST ->
+                manipulatedListData(artefact, language, initialised, false);
+            default -> manipulatedListData(artefact, language, initialised, true);
         }
+
         return context;
     }
 
-    public static void manipulatedListData(JsonNode artefact, Language language, boolean initialised) {
+    public static void manipulatedListData(JsonNode artefact, Language language,
+                                           boolean initialised, boolean generateBefore) {
         artefact.get("courtLists").forEach(
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
                     formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(
-                        session, Optional.of(language)));
+                        session, generateBefore ? Optional.of(language) : Optional.empty()));
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, TIME_FORMAT, true);

@@ -25,7 +25,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
     public String convert(JsonNode payload) throws JsonProcessingException {
         Map<String, Object> language =
             Map.of("age", "Age: ");
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false, true);
         MagistratesStandardListHelper.manipulatedMagistratesStandardList(payload, language);
         return this.processMagistratesStandardList(payload);
     }

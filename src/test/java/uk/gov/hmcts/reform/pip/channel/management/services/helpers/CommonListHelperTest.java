@@ -42,7 +42,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatCourtRoomNameInEnglish() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -55,7 +55,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatCourtRoomNameInWelsh() {
-        CommonListHelper.manipulatedListData(inputJson, Language.WELSH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.WELSH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -68,7 +68,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingDuration() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -82,7 +82,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingTime() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -96,7 +96,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingChannel() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -110,7 +110,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatCaseName() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -126,7 +126,7 @@ class CommonListHelperTest {
 
     @Test
     void testCaseType() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false, true);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)

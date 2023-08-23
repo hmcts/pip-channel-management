@@ -43,10 +43,10 @@ class CrimeListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethod() {
-        CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.ENGLISH, false, false);
         CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
         CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
-        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList, Language.ENGLISH);
+        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList);
 
         assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonCrownDailyList.get(COURT_LISTS)
                          .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
@@ -62,25 +62,5 @@ class CrimeListHelperTest {
                      "Unable to find formatted courtroom name without judge");
     }
 
-    @Test
-    void testFormattedCourtRoomNameMethodWelsh() {
-        CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.WELSH, false);
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
-        CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
-        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList, Language.WELSH);
-
-        assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonCrownDailyList.get(COURT_LISTS)
-                         .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
-                         .get(FORMATTED_SESSION_COURT_ROOM).asText(),
-                     "Unable to find formatted courtroom name");
-
-        assertEquals("to be allocated", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(1).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
-                     "Unable to find unallocated formatted courtroom name");
-
-        assertEquals("CourtRoom 1", inputJsonCrownDailyList.get(COURT_LISTS).get(1).get(COURT_HOUSE)
-                         .get(COURT_ROOM).get(0).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
-                     "Unable to find formatted courtroom name without judge");
-    }
 }
 

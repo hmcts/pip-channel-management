@@ -36,7 +36,8 @@ class CrownFirmListHelperTest {
     Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                              PROVENANCE, PROVENANCE,
                                              "locationName", "location",
-                                             "language", "ENGLISH"
+                                             "language", "ENGLISH",
+                                             "listType", "CROWN_FIRM_LIST"
     );
 
     @BeforeAll

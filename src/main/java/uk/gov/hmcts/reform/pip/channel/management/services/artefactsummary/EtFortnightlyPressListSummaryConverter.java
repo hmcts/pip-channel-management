@@ -18,7 +18,7 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
         Map<String, Object> language =
             Map.of("rep", "Rep: ",
                    "noRep", "Rep: ");
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true, true);
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(payload, language);
         EtFortnightlyPressListHelper.splitByCourtAndDate(payload);
         return this.processEtFortnightlyPressList(payload);
