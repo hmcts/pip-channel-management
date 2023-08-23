@@ -57,19 +57,6 @@ class FamilyMixedListHelperTest {
     }
 
     @Test
-    void testFormatCourtRoomName() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.WELSH);
-
-        assertThat(inputJson.get(COURT_LISTS).get(0)
-                       .get(COURT_HOUSE)
-                       .get(COURT_ROOM).get(0)
-                       .get(SESSION).get(0)
-                       .get("formattedSessionCourtRoom").asText())
-            .as("Unable to get courtroom name")
-            .isEqualTo("This is the court room name: First known as");
-    }
-
-    @Test
     void testFormatHearingDuration() {
         FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
 

@@ -30,9 +30,8 @@ public final class FamilyMixedListHelper {
         artefact.get("courtLists")
             .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
-                    StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session).trim());
-                    ((ObjectNode) session).put("formattedSessionJudiciary", formattedJudiciary.toString());
+                    ((ObjectNode) session).put("formattedSessionJudiciary",
+                                               JudiciaryHelper.findAndManipulateJudiciary(session));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma", true);
@@ -51,7 +50,6 @@ public final class FamilyMixedListHelper {
                             );
                         });
                     });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
                 })));
     }
 
