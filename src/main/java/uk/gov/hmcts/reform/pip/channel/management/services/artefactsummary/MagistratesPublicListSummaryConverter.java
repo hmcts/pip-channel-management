@@ -38,7 +38,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false, true);
+        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false, false);
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(payload);
 
         return processMagistratesPublicList(payload);
