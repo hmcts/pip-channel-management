@@ -1,31 +1,21 @@
 package uk.gov.hmcts.reform.pip.channel.management.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.FileConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
-import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
@@ -38,7 +28,6 @@ import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 @Service
 @SuppressWarnings({"PMD.PreserveStackTrace"})
 public class PublicationManagementService {
-    private static final int MAX_FILE_SIZE = 2_000_000;
     private static final String ADDITIONAL_PDF_SUFFIX = "_cy";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -46,19 +35,19 @@ public class PublicationManagementService {
     private final DataManagementService dataManagementService;
     private final AccountManagementService accountManagementService;
     private final ListConversionFactory listConversionFactory;
-
-    @Value("${pdf.font}")
-    private String pdfFont;
+    private final PublicationFileGenerationService publicationFileGenerationService;
 
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
                                         DataManagementService dataManagementService,
                                         AccountManagementService accountManagementService,
-                                        ListConversionFactory listConversionFactory) {
+                                        ListConversionFactory listConversionFactory,
+                                        PublicationFileGenerationService publicationFileGenerationService) {
         this.azureBlobService = azureBlobService;
         this.dataManagementService = dataManagementService;
         this.accountManagementService = accountManagementService;
         this.listConversionFactory = listConversionFactory;
+        this.publicationFileGenerationService = publicationFileGenerationService;
     }
 
     /**
@@ -67,38 +56,18 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to generate the files for.
      */
     public void generateFiles(UUID artefactId) {
-        String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
-        Artefact artefact = dataManagementService.getArtefact(artefactId);
-        Location location = dataManagementService.getLocation(artefact.getLocationId());
-        JsonNode topLevelNode;
+        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(artefactId);
 
-        try {
-            topLevelNode = MAPPER.readTree(rawJson);
-            FileConverter fileConverter = listConversionFactory.getFileConverter(artefact.getListType());
+        if (files.getLeft().length > 0) {
+            azureBlobService.uploadFile(artefactId + PDF.getExtension(), files.getLeft());
+        }
 
-            if (fileConverter == null) {
-                log.error("Failed to find converter for list type");
-                return;
-            }
+        if (files.getMiddle().length > 0) {
+            azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(), files.getMiddle());
+        }
 
-            // Generate the Excel and store it
-            byte[] outputExcel = fileConverter.convertToExcel(topLevelNode, artefact.getListType());
-            if (outputExcel.length > 0) {
-                azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), outputExcel);
-            }
-
-            // Generate the English and/or Welsh PDFs and store in Azure blob storage
-            Pair<byte[], byte[]> pdfs = generatePdfs(topLevelNode, artefact, location);
-
-            if (pdfs.getLeft().length > 0) {
-                azureBlobService.uploadFile(artefactId + PDF.getExtension(), pdfs.getLeft());
-            }
-
-            if (pdfs.getRight().length > 0) {
-                azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(), pdfs.getRight());
-            }
-        } catch (IOException ex) {
-            throw new ProcessingException(String.format("Failed to generate files for artefact id %s", artefactId));
+        if (files.getRight().length > 0) {
+            azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), files.getRight());
         }
     }
 
@@ -182,91 +151,24 @@ public class PublicationManagementService {
     }
 
     /**
-     * Generate the English and/or Welsh PDF for a given artefact.
+     * Delete all publication files for a given artefact.
      *
-     * @param topLevelNode The data node.
-     * @param artefact The artefact.
-     * @param location The location.
-     * @return a byte array of the generated pdf.
-     * @throws IOException error.
+     * @param artefactId The artefact ID to delete the files for.
      */
-    private Pair<byte[], byte[]> generatePdfs(JsonNode topLevelNode, Artefact artefact, Location location)
-        throws IOException {
-        Language language = artefact.getLanguage();
+    public void deleteFiles(UUID artefactId) {
+        Artefact artefact = dataManagementService.getArtefact(artefactId);
+        azureBlobService.deleteBlobFile(artefact.getArtefactId() + PDF.getExtension());
 
-        if (artefact.getListType().hasAdditionalPdf() && language != Language.ENGLISH) {
-            byte[] englishPdf = generatePdf(topLevelNode, artefact, location, Language.ENGLISH, true);
-            if (englishPdf.length > MAX_FILE_SIZE) {
-                englishPdf = generatePdf(topLevelNode, artefact, location, Language.ENGLISH, false);
-            }
-
-            byte[] welshPdf = generatePdf(topLevelNode, artefact, location, Language.WELSH, true);
-            if (welshPdf.length > MAX_FILE_SIZE) {
-                welshPdf = generatePdf(topLevelNode, artefact, location, Language.WELSH, false);
-            }
-
-            return Pair.of(englishPdf, welshPdf);
+        if (artefact.getListType().hasAdditionalPdf() && artefact.getLanguage() != Language.ENGLISH) {
+            azureBlobService.deleteBlobFile(artefact.getArtefactId() + ADDITIONAL_PDF_SUFFIX
+                                                + PDF.getExtension());
         }
 
-        byte[] pdf = generatePdf(topLevelNode, artefact, location, language, true);
-        if (pdf.length > MAX_FILE_SIZE) {
-            pdf = generatePdf(topLevelNode, artefact, location, language, false);
-        }
-
-        return Pair.of(pdf, new byte[0]);
-    }
-
-    /**
-     * Generate the PDF for a given artefact.
-     *
-     * @param topLevelNode The data node.
-     * @param artefact The artefact.
-     * @param location The location where the artefact is uploaded to.
-     * @param language The language of the artefact.
-     * @param accessibility If the pdf should be accessibility generated.
-     * @return a byte array of the generated pdf.
-     * @throws IOException Throw if error generating.
-     */
-    private byte[] generatePdf(JsonNode topLevelNode, Artefact artefact, Location location, Language language,
-                               boolean accessibility) throws IOException {
-        Map<String, Object> languageResource = LanguageResourceHelper.getLanguageResources(
-            artefact.getListType(), language);
-        String html = listConversionFactory.getFileConverter(artefact.getListType())
-            .convert(topLevelNode, buildArtefactMetadata(artefact, location, language), languageResource);
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-
-            PdfRendererBuilder builder = new PdfRendererBuilder();
-            builder.useFastMode()
-                .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_A);
-
-            File file = new File(pdfFont);
-            if (file.exists()) {
-                builder.useFont(file, "openSans");
-            } else {
-                builder.useFont(new File(Thread.currentThread().getContextClassLoader()
-                                             .getResource("openSans.ttf").getFile()), "openSans");
-            }
-            builder.usePdfUaAccessbility(accessibility);
-            builder.withHtmlContent(html, null)
-                .toStream(baos)
-                .run();
-            return baos.toByteArray();
+        if (artefact.getListType().hasExcel()) {
+            azureBlobService.deleteBlobFile(artefact.getArtefactId() + EXCEL.getExtension());
         }
     }
 
-    private Map<String, String> buildArtefactMetadata(Artefact artefact, Location location, Language language) {
-        String locationName = (language == Language.ENGLISH) ? location.getName() : location.getWelshName();
-        String provenance = maskDataSourceName(artefact.getProvenance());
-        return Map.of(
-            "contentDate", DateHelper.formatLocalDateTimeToBst(artefact.getContentDate()),
-            "provenance", provenance,
-            "locationName", locationName,
-            "region", String.join(", ", location.getRegion()),
-            "regionName", String.join(", ", location.getRegion()),
-            "language", language.toString(),
-            "listType", artefact.getListType().name()
-        );
-    }
 
     private boolean isAuthorised(Artefact artefact, String userId, boolean system) {
         if (system || artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {
@@ -276,9 +178,5 @@ public class PublicationManagementService {
         }
         return accountManagementService.getIsAuthorised(UUID.fromString(userId), artefact.getListType(),
                                                         artefact.getSensitivity());
-    }
-
-    public static String maskDataSourceName(String provenance) {
-        return "SNL".equals(provenance) ? "ListAssist" : provenance;
     }
 }

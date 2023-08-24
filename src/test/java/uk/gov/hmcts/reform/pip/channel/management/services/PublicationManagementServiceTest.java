@@ -45,7 +45,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
@@ -102,12 +101,14 @@ class PublicationManagementServiceTest {
 
     @BeforeEach
     void setup() {
+        ARTEFACT.setArtefactId(TEST_ARTEFACT_ID);
         ARTEFACT.setContentDate(LocalDateTime.now());
         ARTEFACT.setLocationId("1");
         ARTEFACT.setProvenance("france");
         ARTEFACT.setLanguage(Language.ENGLISH);
         ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
 
+        WELSH_ARTEFACT.setArtefactId(TEST_ARTEFACT_ID);
         WELSH_ARTEFACT.setContentDate(LocalDateTime.now());
         WELSH_ARTEFACT.setLocationId("1");
         WELSH_ARTEFACT.setProvenance("france");
@@ -179,17 +180,6 @@ class PublicationManagementServiceTest {
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + PDF.getExtension()), any());
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension()), any());
         verify(azureBlobService, never()).uploadFile(eq(TEST_ARTEFACT_ID + EXCEL.getExtension()), any());
-    }
-
-    @Test
-    void testGenerateFilesWithoutConverter() {
-        ARTEFACT.setListType(ListType.SJP_PRESS_REGISTER);
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(sjpPublicListInput);
-        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
-        when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
-
-        publicationManagementService.generateFiles(TEST_ARTEFACT_ID);
-        verifyNoInteractions(azureBlobService);
     }
 
     @Test
@@ -449,6 +439,54 @@ class PublicationManagementServiceTest {
                    "Message should contain expected");
     }
 
+    @Test
+    void testDeleteFilesSjpEnglish() {
+        ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
+        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(ARTEFACT);
+
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesSjpWelsh() {
+        WELSH_ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
+        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
+
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesNonSjpEnglish() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(ARTEFACT);
+
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesNonSjpWelsh() {
+        WELSH_ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
+
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
     private static Stream<Arguments> sjpParameters() throws JsonProcessingException {
         Artefact sjpPublicArtefact = ARTEFACT;
         sjpPublicArtefact.setListType(ListType.SJP_PUBLIC_LIST);
@@ -462,19 +500,5 @@ class PublicationManagementServiceTest {
             Arguments.of(sjpPublicArtefact),
             Arguments.of(sjpPressArtefact)
         );
-    }
-
-    @Test
-    void testMaskDataSourceName() {
-        ARTEFACT.setProvenance("SNL");
-        String result = PublicationManagementService.maskDataSourceName(ARTEFACT.getProvenance());
-        assertEquals("ListAssist", result, "Provenance should be changed to ListAssist");
-    }
-
-    @Test
-    void testDoNotMaskDataSourceName() {
-        ARTEFACT.setProvenance("MANUAL_UPLOAD");
-        String result = PublicationManagementService.maskDataSourceName(ARTEFACT.getProvenance());
-        assertEquals("MANUAL_UPLOAD", result, "Provenance should not be changed");
     }
 }
