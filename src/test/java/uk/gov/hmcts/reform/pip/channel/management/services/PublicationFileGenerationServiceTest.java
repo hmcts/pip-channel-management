@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles(profiles = "test")
-@SpringBootTest(classes = {Application.class, AzureBlobTestConfiguration.class})
+@SpringBootTest(classes = {Application.class})
 class PublicationFileGenerationServiceTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Artefact ARTEFACT = new Artefact();
