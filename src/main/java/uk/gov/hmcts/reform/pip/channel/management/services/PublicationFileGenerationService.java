@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFiles;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.FileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -51,10 +52,10 @@ public class PublicationFileGenerationService {
      * Generate publication files for a given artefact.
      *
      * @param artefactId The artefact ID to generate the files for.
-     * @return all generated files (English PDF + Welsh PDF + Excel).
+     * @return all generated files (primary PDF + additional PDF + Excel).
      * @throws ProcessingException error.
      */
-    public Triple<byte[], byte[], byte[]> generate(UUID artefactId) {
+    public Optional<PublicationFiles> generate(UUID artefactId) {
         String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         Location location = dataManagementService.getLocation(artefact.getLocationId());
@@ -66,16 +67,14 @@ public class PublicationFileGenerationService {
 
             if (fileConverter == null) {
                 log.error("Failed to find converter for list type");
-                return Triple.of(new byte[0], new byte[0], new byte[0]);
+                return Optional.empty();
             }
 
             byte[] excel = fileConverter.convertToExcel(topLevelNode, artefact.getListType());
 
             // Generate the English and/or Welsh PDFs and store in Azure blob storage
             Pair<byte[], byte[]> pdfs = generatePdfs(topLevelNode, artefact, location);
-
-            // Return in the order of English PDF, Welsh PDF and Excel
-            return Triple.of(pdfs.getLeft(), pdfs.getRight(), excel);
+            return Optional.of(new PublicationFiles(pdfs.getLeft(), pdfs.getRight(), excel));
 
         } catch (IOException ex) {
             throw new ProcessingException(String.format("Failed to generate files for artefact id %s", artefactId));

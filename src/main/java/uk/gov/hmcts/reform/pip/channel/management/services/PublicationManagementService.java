@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
@@ -56,19 +55,20 @@ public class PublicationManagementService {
      * @param artefactId The artefact Id to generate the files for.
      */
     public void generateFiles(UUID artefactId) {
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(artefactId);
+        publicationFileGenerationService.generate(artefactId).ifPresent(files -> {
+            if (files.getPrimaryPdf().length > 0) {
+                azureBlobService.uploadFile(artefactId + PDF.getExtension(), files.getPrimaryPdf());
+            }
 
-        if (files.getLeft().length > 0) {
-            azureBlobService.uploadFile(artefactId + PDF.getExtension(), files.getLeft());
-        }
+            if (files.getAdditionalPdf().length > 0) {
+                azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(),
+                                            files.getAdditionalPdf());
+            }
 
-        if (files.getMiddle().length > 0) {
-            azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(), files.getMiddle());
-        }
-
-        if (files.getRight().length > 0) {
-            azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), files.getRight());
-        }
+            if (files.getExcel().length > 0) {
+                azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), files.getExcel());
+            }
+        });
     }
 
     /**

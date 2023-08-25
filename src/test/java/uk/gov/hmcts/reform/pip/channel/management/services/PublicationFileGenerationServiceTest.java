@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobTestConfiguration;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFiles;
 import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -23,6 +22,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +40,8 @@ class PublicationFileGenerationServiceTest {
     private static final UUID ARTEFACT_ID = UUID.randomUUID();
     private static final String LOCATION_ID = "1";
 
+    private static final String FILE_PRESENT_MESSAGE = "Files should be present";
+    private static final String FILE_NOT_PRESENT_MESSAGE = "Files should not be present";
     private static final String FILE_EMPTY_MESSAGE = "File should be empty";
     private static final String FILE_NOT_EMPTY_MESSAGE = "File should not be empty";
 
@@ -93,18 +95,22 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(files.getLeft())
+        softly.assertThat(files)
+            .as(FILE_PRESENT_MESSAGE)
+            .isPresent();
+
+        softly.assertThat(files.get().getPrimaryPdf())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
-        softly.assertThat(files.getMiddle())
+        softly.assertThat(files.get().getAdditionalPdf())
             .as(FILE_EMPTY_MESSAGE)
             .isEmpty();
 
-        softly.assertThat(files.getRight())
+        softly.assertThat(files.get().getExcel())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
@@ -117,18 +123,22 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(ARTEFACT_ID);
-        SoftAssertions softly = new SoftAssertions();
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
 
-        softly.assertThat(files.getLeft())
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(files)
+            .as(FILE_PRESENT_MESSAGE)
+            .isPresent();
+
+        softly.assertThat(files.get().getPrimaryPdf())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
-        softly.assertThat(files.getMiddle())
+        softly.assertThat(files.get().getAdditionalPdf())
             .as(FILE_EMPTY_MESSAGE)
             .isEmpty();
 
-        softly.assertThat(files.getRight())
+        softly.assertThat(files.get().getExcel())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
@@ -142,18 +152,22 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(ARTEFACT_ID);
-        SoftAssertions softly = new SoftAssertions();
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
 
-        softly.assertThat(files.getLeft())
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(files)
+            .as(FILE_PRESENT_MESSAGE)
+            .isPresent();
+
+        softly.assertThat(files.get().getPrimaryPdf())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
-        softly.assertThat(files.getMiddle())
+        softly.assertThat(files.get().getAdditionalPdf())
             .as(FILE_EMPTY_MESSAGE)
             .isEmpty();
 
-        softly.assertThat(files.getRight())
+        softly.assertThat(files.get().getExcel())
             .as(FILE_EMPTY_MESSAGE)
             .isEmpty();
 
@@ -167,18 +181,22 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+
         SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(files)
+            .as(FILE_PRESENT_MESSAGE)
+            .isPresent();
 
-        softly.assertThat(files.getLeft())
+        softly.assertThat(files.get().getPrimaryPdf())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
-        softly.assertThat(files.getMiddle())
+        softly.assertThat(files.get().getAdditionalPdf())
             .as(FILE_NOT_EMPTY_MESSAGE)
             .isNotEmpty();
 
-        softly.assertThat(files.getRight())
+        softly.assertThat(files.get().getExcel())
             .as(FILE_EMPTY_MESSAGE)
             .isEmpty();
 
@@ -192,22 +210,9 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
 
-        Triple<byte[], byte[], byte[]> files = publicationFileGenerationService.generate(ARTEFACT_ID);
-        SoftAssertions softly = new SoftAssertions();
-
-        softly.assertThat(files.getLeft())
-            .as(FILE_EMPTY_MESSAGE)
+        assertThat(publicationFileGenerationService.generate(ARTEFACT_ID))
+            .as(FILE_NOT_PRESENT_MESSAGE)
             .isEmpty();
-
-        softly.assertThat(files.getMiddle())
-            .as(FILE_EMPTY_MESSAGE)
-            .isEmpty();
-
-        softly.assertThat(files.getRight())
-            .as(FILE_EMPTY_MESSAGE)
-            .isEmpty();
-
-        softly.assertAll();
     }
 
     @Test
