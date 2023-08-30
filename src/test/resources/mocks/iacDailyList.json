@@ -9,9 +9,6 @@
       "venueEmail": "a@b.com"
     }
   },
-  "locationDetails": {
-    "jurisdiction": "Tribunal"
-  },
   "courtLists": [
     {
       "courtListName": "Bail List",
@@ -21,9 +18,6 @@
             "courtRoomName": "Court Room A",
             "session": [
               {
-                "sessionChannel": [
-                  "Teams"
-                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -98,9 +92,6 @@
                 ]
               },
               {
-                "sessionChannel": [
-                  "Teams"
-                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -187,9 +178,6 @@
             "courtRoomName": "Court Room B",
             "session": [
               {
-                "sessionChannel": [
-                  "Teams"
-                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -303,9 +291,6 @@
                 ]
               },
               {
-                "sessionChannel": [
-                  "Teams"
-                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
