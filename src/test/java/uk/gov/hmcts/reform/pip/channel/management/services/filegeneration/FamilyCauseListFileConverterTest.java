@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -68,6 +69,13 @@ class FamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Last updated 21 July 2022");
+
+        assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
+            .as("Incorrect table titles")
+            .extracting(Element::text)
+            .containsAll(List.of(
+                "This is the court room name, Before: First known as",
+                "This is the court room name"));
     }
 
 
@@ -95,7 +103,14 @@ class FamilyCauseListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 yn 3:01pm");
+            .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 am 3:01pm");
+
+        assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
+            .as("Incorrect table titles")
+            .extracting(Element::text)
+            .containsAll(List.of(
+                "This is the court room name, Gerbron: First known as",
+                "This is the court room name"));
     }
 
     @Test

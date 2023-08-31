@@ -149,7 +149,8 @@
                     "johTitle": "Judge",
                     "johNameSurname": "Test Name",
                     "role": "JUDGE",
-                    "isPresiding": true
+                    "isPresiding": true,
+                    "johKnownAs": "This is a known as"
                   },
                   {
                     "johTitle": "Magistrate",
@@ -173,7 +174,7 @@
         },
         "courtRoom": [
           {
-            "courtRoomName": "This is the court room name",
+            "courtRoomName": "This is another court room name",
             "session": [
               {
                 "sittings": [

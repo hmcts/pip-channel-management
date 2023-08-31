@@ -48,9 +48,17 @@ public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummar
                                     GeneralHelper.appendToStringBuilder(output, "Duration - ",
                                                                         sitting, "formattedDuration"
                                     );
+
                                     GeneralHelper.appendToStringBuilder(output, "Judge - ",
-                                                                        session, "formattedSessionCourtRoom"
+                                                                        courtRoom, "courtRoomName"
                                     );
+
+                                    String judiciary = GeneralHelper.findAndReturnNodeText(
+                                        session, "formattedSessionJudiciary");
+                                    if (!judiciary.isEmpty()) {
+                                        output.append(", Before: ").append(judiciary);
+
+                                    }
                                 }))))));
 
         return output.toString();

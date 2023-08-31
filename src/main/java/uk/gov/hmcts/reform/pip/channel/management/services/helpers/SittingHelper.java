@@ -54,11 +54,11 @@ public final class SittingHelper {
 
     public static void manipulatedSitting(JsonNode courtRoom, JsonNode session, JsonNode sitting,
                                           String destinationNodeName) {
-        String judiciary = JudiciaryHelper.findAndManipulateJudiciary(sitting, false);
+        String judiciary = JudiciaryHelper.findAndManipulateJudiciary(sitting);
         String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
 
         if (judiciary.isBlank()) {
-            judiciary = JudiciaryHelper.findAndManipulateJudiciary(session, false);
+            judiciary = JudiciaryHelper.findAndManipulateJudiciary(session);
 
         }
 

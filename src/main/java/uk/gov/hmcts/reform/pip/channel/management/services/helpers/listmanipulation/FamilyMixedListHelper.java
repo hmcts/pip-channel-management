@@ -6,7 +6,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
@@ -28,8 +27,8 @@ public final class FamilyMixedListHelper {
         artefact.get("courtLists")
             .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
                 .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
-                    StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
+                    ((ObjectNode) session).put("formattedSessionJudiciary",
+                                               JudiciaryHelper.findAndManipulateJudiciary(session));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma", true);
@@ -48,7 +47,6 @@ public final class FamilyMixedListHelper {
                             );
                         });
                     });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
                 })));
     }
 
