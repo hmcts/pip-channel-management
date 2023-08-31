@@ -34,12 +34,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 
 @SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
@@ -91,14 +93,18 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
-    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE
+    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
-    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE = "055bea62-713b-45f0-b3d2-1f30430804d6";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
+    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
+        = "23d03397-de93-4ad5-b168-0130cf27d1db";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "0bc246b8-ab6b-4f80-89e6-0fc8c2eb69c8";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
     private static final String UNAUTHORIZED_ROLE = "APPROLE_unknown.role";
     private static final String SYSTEM_HEADER = "x-system";
+    private static final String WELSH_PDF_SUFFIX = "_cy";
 
     private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
@@ -649,30 +655,67 @@ class PublicationManagementTest {
     }
 
     @Test
-    void testDeleteFilesSuccess() throws Exception {
+    void testDeleteFilesNonSjpWelshSuccess() throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.deleteIfExists()).thenReturn(true);
 
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE))
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
             .andExpect(status().isNoContent());
         verify(azureBlobService)
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE + PDF.getExtension());
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
+        verify(azureBlobService)
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
+                                + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never())
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
     }
 
     @Test
-    void testDeleteFilesSjpSuccess() throws Exception {
+    void testDeleteFilesNonSjpEnglishSuccess() throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.deleteIfExists()).thenReturn(true);
 
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE))
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH))
             .andExpect(status().isNoContent());
-        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE + PDF.getExtension());
+        verify(azureBlobService)
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
+        verify(azureBlobService, never())
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
+                                + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never())
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesSjpWelshSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH))
+            .andExpect(status().isNoContent());
+        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
+        verify(azureBlobService, never())
+            .deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH  + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesSjpEnglishSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH))
+            .andExpect(status().isNoContent());
+        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
+        verify(azureBlobService, never())
+            .deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH  + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
     }
 
     @Test
     @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
     void testDeleteFilesUnauthorized() throws Exception {
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE))
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
             .andExpect(status().isForbidden());
     }
 }
