@@ -149,13 +149,15 @@
                     "johTitle": "Judge",
                     "johNameSurname": "Test Name",
                     "role": "JUDGE",
-                    "isPresiding": true
+                    "isPresiding": true,
+                    "johKnownAs": "First known as"
                   },
                   {
                     "johTitle": "Magistrate",
                     "johNameSurname": "Test Name",
                     "role": "MAGISTRATE",
-                    "isPresiding": false
+                    "isPresiding": false,
+                    "johKnownAs": "Second known as"
                   }
                 ]
               }

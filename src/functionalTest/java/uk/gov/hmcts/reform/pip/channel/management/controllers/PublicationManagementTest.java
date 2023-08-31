@@ -161,7 +161,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - FMPO"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1: Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -279,7 +279,7 @@ class PublicationManagementTest {
             "Hearing Type - FHDRA1 (First Hearing and Dispute Resolution Appointment)"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1: Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test

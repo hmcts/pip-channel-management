@@ -11,7 +11,7 @@ public final class JudiciaryHelper {
     private JudiciaryHelper() {
     }
 
-    public static String findAndManipulateJudiciary(JsonNode judiciaryNode, boolean addBeforeToJudgeName) {
+    public static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
         AtomicReference<StringBuilder> formattedJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
 
@@ -25,11 +25,6 @@ public final class JudiciaryHelper {
                     appendJohKnownAs(judiciary, formattedJudiciary.get());
                 }
             });
-
-            if (!GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()).isEmpty()
-                && addBeforeToJudgeName) {
-                formattedJudiciary.get().insert(0, "Before: ");
-            }
         }
 
         return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
