@@ -44,7 +44,6 @@ public final class CrimeListHelper {
                             sessionObj.put(
                                 SESSION_COURT_ROOM,
                                 GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
-                                    .replace("Before: ", "")
                             );
                         }
                     })

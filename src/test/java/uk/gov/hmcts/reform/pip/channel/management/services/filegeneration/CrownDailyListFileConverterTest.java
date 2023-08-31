@@ -68,6 +68,8 @@ class CrownDailyListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Draft: Version");
+
+        assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
     }
 
     @Test
@@ -107,5 +109,6 @@ class CrownDailyListFileConverterTest {
                        .get(2).text())
             .as(HEADER_TEXT).contains("Drafft:Fersiwn");
 
+        assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
     }
 }

@@ -33,7 +33,7 @@ public class SscsDailyListFileConverter implements FileConverter {
         context.setVariable("email", GeneralHelper.safeGet("venue.venueContact.venueEmail", highestLevelNode));
 
         context.setVariable("publishedDate", DateHelper.formatTimeStampToBst(
-            GeneralHelper.safeGet("document.publicationDate", highestLevelNode), Language.ENGLISH,
+            GeneralHelper.safeGet("document.publicationDate", highestLevelNode), language,
             false, true)
         );
 

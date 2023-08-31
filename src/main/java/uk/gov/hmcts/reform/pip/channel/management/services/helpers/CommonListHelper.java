@@ -74,7 +74,7 @@ public final class CommonListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session, true));
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
