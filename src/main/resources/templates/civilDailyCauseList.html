@@ -188,7 +188,8 @@
       <div th:each="session : ${courtRoom.get('session')}">
         <div class="govuk-accordion__section-header">
           <h2 class="govuk-accordion__section-heading"
-              th:text="${#strings.replace(session.get('formattedSessionCourtRoom').asText(), 'Before: ', '')}"/>
+              th:text="${session.get('formattedSessionCourtRoom').asText()}"
+          />
         </div>
         <div class="govuk-accordion__section-content">
           <div class="parent-box overflow-table">

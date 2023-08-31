@@ -26,13 +26,13 @@ class CivilDailyCauseListFileConverterTest {
     private static final String MANUAL_UPLOAD = "MANUAL_UPLOAD";
 
     private static final Map<String, String> METADATA = Map.of(
-        "contentDate", "1 July 2022",
+        "contentDate", "20 August 2023",
         "locationName", OXFORD_COURT,
         "provenance", MANUAL_UPLOAD,
         "language", "ENGLISH",
         "listType", "CIVIL_DAILY_CAUSE_LIST"
     );
-    private static final int NUMBER_OF_TABLES = 3;
+    private static final int NUMBER_OF_TABLES = 2;
 
     CivilDailyCauseListFileConverter converter = new CivilDailyCauseListFileConverter();
 
@@ -83,6 +83,14 @@ class CivilDailyCauseListFileConverterTest {
             .as("incorrect document title")
             .isEqualTo("Rhestr Ddyddiol o Achosion Sifil gyfer");
 
+        assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
+            .as("Incorrect table titles")
+            .hasSize(NUMBER_OF_TABLES)
+            .extracting(Element::text)
+            .containsExactly(
+                "Courtroom 1: This is the known as",
+                "Courtroom 2");
+
     }
 
     private void assertFirstPageContent(Element element) {
@@ -97,9 +105,9 @@ class CivilDailyCauseListFileConverterTest {
             .as("Incorrect first page p elements")
             .hasSize(8)
             .extracting(Element::text)
-            .contains("THE LAW COURTS town name PR1 2LL",
-                      "List for 1 July 2022",
-                      "Last updated 20 April 2022 at 3:36pm"
+            .contains("The venue line 1 town name AAA AAA",
+                      "List for 20 August 2023",
+                      "Last updated 21 August 2023 at 2:01am"
             );
     }
 
@@ -109,9 +117,9 @@ class CivilDailyCauseListFileConverterTest {
             .hasSize(3)
             .extracting(Element::text)
             .containsExactly(
-                "Oxford Combined Court Centre, Oxford Combined",
+                "This is a court house name",
                 "Address Line 1",
-                "PR1 2LL"
+                "AAA AAB"
             );
     }
 
@@ -121,9 +129,8 @@ class CivilDailyCauseListFileConverterTest {
             .hasSize(NUMBER_OF_TABLES)
             .extracting(Element::text)
             .containsExactly(
-                "Courtroom 1: Doctor, SSCS",
-                "Courtroom 4",
-                "Courtroom 5");
+                "Courtroom 1: This is the known as",
+                "Courtroom 2");
 
         Elements tableElements = document.getElementsByClass("govuk-table");
         assertThat(tableElements)
@@ -132,7 +139,6 @@ class CivilDailyCauseListFileConverterTest {
 
         Element firstTableElement = tableElements.get(0);
         Element secondTableElement = tableElements.get(1);
-        Element thirdTableElement = tableElements.get(2);
 
         // Assert the table columns are expected
         assertThat(getTableHeaders(firstTableElement))
@@ -151,13 +157,10 @@ class CivilDailyCauseListFileConverterTest {
         // Assert number of rows for each table
         assertThat(getTableBodyRows(firstTableElement))
             .as("Incorrect table rows for the first table")
-            .hasSize(5);
+            .hasSize(4);
         assertThat(getTableBodyRows(secondTableElement))
             .as("Incorrect table rows for the second table")
-            .hasSize(5);
-        assertThat(getTableBodyRows(thirdTableElement))
-            .as("Incorrect table rows for the third table")
-            .hasSize(2);
+            .hasSize(1);
     }
 
     private void assertDataSource(Document document) {

@@ -6,7 +6,7 @@
   "listName": "Rhestr Achosion Dyddiol Sifil a Theuluolt gyfer ",
   "lastUpdated": "Diweddarwyd ddiwethaf ",
   "listFor": "Rhestr ar gyfer ",
-  "at": " yn ",
+  "at": " am ",
   "importantInfo": "Gwybodaeth Bwysig",
   "headerValuesWrap": [
     "Amser",
@@ -21,6 +21,7 @@
     "Ceisydd/Deisebydd",
     "Atebydd"
   ],
+  "beforeJudge": "Gerbron: ",
   "legalAdvisor": "Cynghorydd Cyfreithiol: ",
   "dataSource": "Ffynhonnell y Data: ",
   "thanks": "Diolch am ddarllen y ddogfen hon yn fanwl.",
