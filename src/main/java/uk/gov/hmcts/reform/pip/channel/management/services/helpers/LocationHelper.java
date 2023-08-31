@@ -18,6 +18,7 @@ public final class LocationHelper {
     private static final String COUNTY = "county";
     private static final String POSTCODE = "postCode";
     private static final String COURT_HOUSE = "courtHouse";
+    private static final String COURT_ROOM_NAME = "courtRoomName";
 
     private LocationHelper() {
         throw new UnsupportedOperationException();
@@ -115,11 +116,11 @@ public final class LocationHelper {
     }
 
     public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session, StringBuilder formattedJudiciary) {
-        if (courtRoom.has("courtRoomName")) {
+        if (courtRoom.has(COURT_ROOM_NAME)) {
             if (StringUtils.isBlank(formattedJudiciary.toString())) {
-                formattedJudiciary.append(courtRoom.get("courtRoomName").asText());
+                formattedJudiciary.append(courtRoom.get(COURT_ROOM_NAME).asText());
             } else {
-                formattedJudiciary.insert(0, courtRoom.get("courtRoomName").asText() + ": ");
+                formattedJudiciary.insert(0, courtRoom.get(COURT_ROOM_NAME).asText() + ": ");
             }
 
             ((ObjectNode)session).put("formattedSessionCourtRoom",
