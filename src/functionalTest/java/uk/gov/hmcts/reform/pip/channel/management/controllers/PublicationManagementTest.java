@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -22,8 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
+import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
-import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -33,10 +34,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 
 @SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,6 +48,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
+
+    @MockBean
+    private AzureBlobService azureBlobService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -84,6 +91,9 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
+    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE
+        = "3e281505-5f3a-42f9-af50-726e671c5cb5";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE = "055bea62-713b-45f0-b3d2-1f30430804d6";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
@@ -458,7 +468,7 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(
                 get(ROOT_URL + V2_URL + "/" + listArtefactId)
                     .header(SYSTEM_HEADER, "true")
-                    .header(FILE_TYPE_HEADER, FileType.PDF)
+                    .header(FILE_TYPE_HEADER, PDF)
                     .param("maxFileSize", "2048000"))
 
             .andExpect(status().isOk()).andReturn();
@@ -487,7 +497,7 @@ class PublicationManagementTest {
             get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
                 .header(SYSTEM_HEADER, "false")
-                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .header(FILE_TYPE_HEADER, PDF)
                 .param("maxFileSize", "2048000");
 
         MvcResult response = mockMvc.perform(request)
@@ -517,7 +527,7 @@ class PublicationManagementTest {
             get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
                 .header(SYSTEM_HEADER, "false")
-                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .header(FILE_TYPE_HEADER, PDF)
                 .param("maxFileSize", "10");
 
         MvcResult response = mockMvc.perform(request)
@@ -538,7 +548,7 @@ class PublicationManagementTest {
     @Test
     void testGetFileNotFound() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID_NOT_FOUND)
-                                                  .header(FILE_TYPE_HEADER, FileType.PDF))
+                                                  .header(FILE_TYPE_HEADER, PDF))
             .andExpect(status().isNotFound())
             .andReturn();
 
@@ -556,7 +566,7 @@ class PublicationManagementTest {
     @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGetFileUnauthorized() throws Exception {
         mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID)
-                            .header(FILE_TYPE_HEADER, FileType.PDF))
+                            .header(FILE_TYPE_HEADER, PDF))
             .andExpect(status().isForbidden());
     }
 
@@ -638,4 +648,31 @@ class PublicationManagementTest {
             .andExpect(status().isForbidden());
     }
 
+    @Test
+    void testDeleteFilesSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE))
+            .andExpect(status().isNoContent());
+        verify(azureBlobService)
+            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE + PDF.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesSjpSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE))
+            .andExpect(status().isNoContent());
+        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_DELETE + PDF.getExtension());
+    }
+
+    @Test
+    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    void testDeleteFilesUnauthorized() throws Exception {
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_DELETE))
+            .andExpect(status().isForbidden());
+    }
 }
