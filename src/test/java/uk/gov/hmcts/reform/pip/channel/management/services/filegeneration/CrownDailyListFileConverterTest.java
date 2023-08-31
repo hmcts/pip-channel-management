@@ -63,11 +63,13 @@ class CrownDailyListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Daily List");
+            .as(HEADER_TEXT).contains("Crown Daily List for ");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Draft: Version");
+
+        assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
     }
 
     @Test
@@ -97,15 +99,16 @@ class CrownDailyListFileConverterTest {
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Crown Rhestr Ddyddiol");
+            .isEqualTo("Rhestr Ddyddiol Llys y Goron");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Rhestr Ddyddiol");
+            .as(HEADER_TEXT).contains("Rhestr Ddyddiol Llys y Goron ar gyfer ");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Drafft:Fersiwn");
 
+        assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
     }
 }

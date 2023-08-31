@@ -37,7 +37,8 @@ class EtFortnightlyPressListHelperTest {
     Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
                                              PROVENANCE, PROVENANCE,
                                              "locationName", "location",
-                                             "language", "ENGLISH"
+                                             "language", "ENGLISH",
+                                             "listType", "ET_FORTNIGHTLY_PRESS_LIST"
     );
 
     @BeforeAll

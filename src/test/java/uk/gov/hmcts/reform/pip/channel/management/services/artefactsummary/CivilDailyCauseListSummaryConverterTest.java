@@ -29,7 +29,7 @@ class CivilDailyCauseListSummaryConverterTest {
 
         softly.assertThat(outputLines)
             .as("Output line count does not match")
-            .hasSize(82);
+            .hasSize(36);
 
         softly.assertThat(outputLines[2])
             .as("Court room name does not match")
@@ -37,7 +37,7 @@ class CivilDailyCauseListSummaryConverterTest {
 
         softly.assertThat(outputLines[3])
             .as("Judiciary does not match")
-            .isEqualTo("Judiciary:  Doctor, SSCS,  Judge Jones");
+            .isEqualTo("Judiciary:  This is the known as,  This is the other known as");
 
         softly.assertThat(outputLines[4])
             .as("Hearing number does not match")
@@ -45,23 +45,23 @@ class CivilDailyCauseListSummaryConverterTest {
 
         softly.assertThat(outputLines[5])
             .as("Case name does not match")
-            .isEqualTo("Case Name: Surname v Surname");
+            .isEqualTo("Case Name: This is case name 1");
 
         softly.assertThat(outputLines[6])
             .as("Case reference does not match")
-            .isEqualTo("Case Reference: OX21P00298");
+            .isEqualTo("Case Reference: This is case number 1");
 
         softly.assertThat(outputLines[7])
             .as("Hearing type does not match")
-            .isEqualTo("Hearing Type: FHDRA (First Hearing and Dispute Resolution Appointment)");
+            .isEqualTo("Hearing Type: This is hearing type 1");
 
         softly.assertThat(outputLines[8])
             .as("Start time does not match")
-            .isEqualTo("Start Time: 9:30am");
+            .isEqualTo("Start Time: 2:01am");
 
         softly.assertThat(outputLines[9])
             .as("Hearing channel does not match")
-            .isEqualTo("Hearing Channel: Remote, Teams");
+            .isEqualTo("Hearing Channel: Channel A, Channel B");
 
         softly.assertAll();
     }
