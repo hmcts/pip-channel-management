@@ -169,7 +169,6 @@
                   <table class="govuk-table">
                     <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                      <th th:text="${i18n.courtroom}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.startTime}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.duration}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.caseNumber}" scope="col" class="govuk-table__header"/>
@@ -184,7 +183,6 @@
                       <th:block th:each="hearings : ${sitting.get('hearing')}">
                         <th:block th:each="hearing : ${hearings}">
                           <tr class="govuk-table__row" th:each="case : ${hearing.get('case')}">
-                            <td class="govuk-table__cell" th:text="${hearing.get('courtRoom').asText()}" />
                             <td class="govuk-table__cell no-wrap" th:text="${sitting.get('time').asText()}" />
                             <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
                               <td class="govuk-table__cell"

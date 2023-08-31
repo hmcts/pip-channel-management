@@ -115,13 +115,15 @@ public final class LocationHelper {
     }
 
     public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session, StringBuilder formattedJudiciary) {
-        if (StringUtils.isBlank(formattedJudiciary.toString())) {
-            formattedJudiciary.append(courtRoom.get("courtRoomName").asText());
-        } else {
-            formattedJudiciary.insert(0, courtRoom.get("courtRoomName").asText() + ": ");
-        }
+        if (courtRoom.has("courtRoomName")) {
+            if (StringUtils.isBlank(formattedJudiciary.toString())) {
+                formattedJudiciary.append(courtRoom.get("courtRoomName").asText());
+            } else {
+                formattedJudiciary.insert(0, courtRoom.get("courtRoomName").asText() + ": ");
+            }
 
-        ((ObjectNode)session).put("formattedSessionCourtRoom",
-                                  GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()));
+            ((ObjectNode)session).put("formattedSessionCourtRoom",
+                                      GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()));
+        }
     }
 }
