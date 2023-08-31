@@ -23,8 +23,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest
 @ActiveProfiles("test")
 class MagistratesPublicListFileConverterTest {
@@ -33,6 +31,7 @@ class MagistratesPublicListFileConverterTest {
 
     private static final String HEADER_TEXT = "Incorrect header text";
     private static final String PROVENANCE = "provenance";
+    private static final String BODY_CLASS = "govuk-body";
 
     @Test
     void testMagistratesPublicListTemplate() throws IOException {
@@ -71,12 +70,12 @@ class MagistratesPublicListFileConverterTest {
             .as(HEADER_TEXT)
             .isEqualTo("Magistrates Public List for location");
 
-        softly.assertThat(document.getElementsByClass("govuk-body")
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(1).text())
             .as(HEADER_TEXT)
             .isEqualTo("Last updated 14 September 2020 at 12:30am");
 
-        softly.assertThat(document.getElementsByClass("govuk-body")
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(2).text())
             .as(HEADER_TEXT)
             .isEqualTo("Draft: Version");
@@ -145,12 +144,12 @@ class MagistratesPublicListFileConverterTest {
             .as(HEADER_TEXT)
             .isEqualTo("Rhestr Gyhoeddus y Llys Ynadon ar gyfer location");
 
-        softly.assertThat(document.getElementsByClass("govuk-body")
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(1).text())
             .as(HEADER_TEXT)
             .isEqualTo("Diweddarwyd diwethaf 14 September 2020 am 12:30am");
 
-        softly.assertThat(document.getElementsByClass("govuk-body")
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(2).text())
             .as(HEADER_TEXT)
             .isEqualTo("Drafft: Fersiwn");
