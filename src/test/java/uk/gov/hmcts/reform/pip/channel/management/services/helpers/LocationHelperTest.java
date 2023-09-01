@@ -27,6 +27,7 @@ class LocationHelperTest {
     private static final String VENUE_ADDRESS_ERROR = "Incorrect venue address";
     private static final String COURT_ADDRESS_ERROR = "Incorrect court house address";
     private static final String DELIMITER = "|";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static JsonNode inputJson;
 
@@ -161,8 +162,8 @@ class LocationHelperTest {
 
     @Test
     void testFormatCourtRoomNameWithNoJudiciary() {
-        ObjectNode courtRoom = new ObjectMapper().createObjectNode();
-        ObjectNode session = new ObjectMapper().createObjectNode();
+        ObjectNode courtRoom = OBJECT_MAPPER.createObjectNode();
+        ObjectNode session = OBJECT_MAPPER.createObjectNode();
         StringBuilder stringBuilder = new StringBuilder();
 
         courtRoom.put("courtRoomName", "This is a court room name");
@@ -180,8 +181,8 @@ class LocationHelperTest {
 
     @Test
     void testFormatCourtRoomNameWithJudiciary() {
-        ObjectNode courtRoom = new ObjectMapper().createObjectNode();
-        ObjectNode session = new ObjectMapper().createObjectNode();
+        ObjectNode courtRoom = OBJECT_MAPPER.createObjectNode();
+        ObjectNode session = OBJECT_MAPPER.createObjectNode();
         StringBuilder stringBuilder = new StringBuilder(20);
 
         courtRoom.put("courtRoomName", "This is a court room name");
@@ -200,14 +201,20 @@ class LocationHelperTest {
 
     @Test
     void testFormatCourtRoomNameWithNoName() {
-        ObjectNode courtRoom = new ObjectMapper().createObjectNode();
-        ObjectNode session = new ObjectMapper().createObjectNode();
-        StringBuilder stringBuilder = new StringBuilder();
+        ObjectNode courtRoom = OBJECT_MAPPER.createObjectNode();
+        ObjectNode session = OBJECT_MAPPER.createObjectNode();
+        StringBuilder stringBuilder = new StringBuilder(20);
+        stringBuilder.append("This is a judiciary");
+
 
         LocationHelper.formattedCourtRoomName(courtRoom, session,stringBuilder);
 
         assertThat(session.has(FORMATTED_SESSION_COURT_ROOM))
             .as("Court Room name shown when no court room")
-            .isFalse();
+            .isTrue();
+
+        assertThat(session.get(FORMATTED_SESSION_COURT_ROOM).asText())
+            .as("Formatted court room name does not match judiciary")
+            .isEqualTo("This is a judiciary");
     }
 }

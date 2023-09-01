@@ -122,9 +122,9 @@ public final class LocationHelper {
             } else {
                 formattedJudiciary.insert(0, courtRoom.get(COURT_ROOM_NAME).asText() + ": ");
             }
-
-            ((ObjectNode)session).put("formattedSessionCourtRoom",
-                                      GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()));
         }
+
+        ((ObjectNode)session).put("formattedSessionCourtRoom",
+                                  GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString()));
     }
 }
