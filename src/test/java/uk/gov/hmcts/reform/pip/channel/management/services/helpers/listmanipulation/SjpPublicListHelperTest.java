@@ -19,6 +19,8 @@ class SjpPublicListHelperTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static JsonNode topLevelNode;
 
+    private static JsonNode missingPostcodeTopLevelNode;
+
     @BeforeAll
     public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
@@ -27,6 +29,15 @@ class SjpPublicListHelperTest {
                      Charset.defaultCharset()
         );
         topLevelNode = OBJECT_MAPPER.readTree(writer.toString());
+
+        StringWriter missingPostcodeWriter = new StringWriter();
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/sjpPublicListMissingPostcode.json")),
+                     missingPostcodeWriter,
+                     Charset.defaultCharset()
+        );
+
+        missingPostcodeTopLevelNode = OBJECT_MAPPER.readTree(missingPostcodeWriter.toString());
+
     }
 
     @Test
@@ -40,8 +51,8 @@ class SjpPublicListHelperTest {
 
         SjpPublicList expectedSjpCase = new SjpPublicList(
             "This is a forename This is a surname",
-            "AA1 AA1",
-            "Offence A, Offence B",
+            "This is a postcode",
+            "This is an offence title, This is an offence title 2",
             "This is an organisation"
         );
 
@@ -52,11 +63,11 @@ class SjpPublicListHelperTest {
 
     @Test
     void testSjpCaseIsNotGeneratedWhenAttributeMissing() {
-        JsonNode hearingNode = topLevelNode.get("courtLists").get(0)
+        JsonNode hearingNode = missingPostcodeTopLevelNode.get("courtLists").get(0)
             .get("courtHouse")
             .get("courtRoom").get(0)
             .get("session").get(0)
-            .get("sittings").get(2)
+            .get("sittings").get(0)
             .get("hearing").get(0);
 
         assertThat(SjpPublicListHelper.constructSjpCase(hearingNode)).isEmpty();

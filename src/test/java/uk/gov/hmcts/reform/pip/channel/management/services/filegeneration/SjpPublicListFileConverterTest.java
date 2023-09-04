@@ -43,20 +43,16 @@ class SjpPublicListFileConverterTest {
 
         assertThat(doc.getElementsByTag("td"))
             .as("Incorrect table contents")
-            .hasSize(12)
+            .hasSize(8)
             .extracting(Element::text)
             .containsExactly("This is a forename This is a surname",
-                             "AA1 AA1",
-                             "Offence A, Offence B",
+                             "This is a postcode",
+                             "This is an offence title, This is an offence title 2",
                              "This is an organisation",
-                             "This is a forename2 This is a surname2",
-                             "AA2 AA2",
-                             "This is an offence title2",
-                             "This is an organisation2",
-                             "This is a forename4 This is a surname4",
-                             "AA1 AA1",
-                             "This is an offence title4",
-                             "This is an organisation4");
+                             "This is a forename 2 This is a surname 2",
+                             "This is a postcode 2",
+                             "This is an offence title 2",
+                             "This is an organisation 2");
     }
 
     @Test
@@ -71,10 +67,10 @@ class SjpPublicListFileConverterTest {
             .hasSize(4)
             .extracting(Element::text)
             .containsExactly(
-                "This is a forename2 This is a surname2",
-                "AA2 AA2",
-                "This is an offence title2",
-                "This is an organisation2"
+                "This is a forename 2 This is a surname 2",
+                "This is a postcode 2",
+                "This is an offence title 2",
+                "This is an organisation 2"
             );
     }
 
@@ -114,7 +110,7 @@ class SjpPublicListFileConverterTest {
             .extracting(Element::text)
             .containsExactly(
                 "List for 1 July 2022",
-                "Published: 14 September 2016 at 00:30"
+                "Published: 01 September 2023 at 11:00"
             );
 
         assertThat(doc.getElementsByTag("th"))

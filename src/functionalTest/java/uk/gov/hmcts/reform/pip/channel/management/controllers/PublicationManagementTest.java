@@ -80,6 +80,9 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "af7c6ba8-c391-458f-9246-40f419a98a12";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "e646650b-c7dc-4551-9163-f0f792b83e54";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
+
+    //TODO: The new test file needs uploading and the ID below changing, once the schema in DM has been merged
+    //(and before this PR is merged)
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST = "3d498688-bbad-4a53-b253-a16ddf8737a9";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
@@ -356,11 +359,11 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant: Z CDFake"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: BD17"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor: TV Licensing"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Defendant: This is a forename This is a surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: This is a postcode"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent
-                       .contains("Offence: Use / install a television set without a licence"), CONTENT_MISMATCH_ERROR);
+                       .contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
