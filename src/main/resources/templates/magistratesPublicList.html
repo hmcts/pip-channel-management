@@ -177,8 +177,8 @@
         <td th:text="${address}"/>
       </span>
     </p>
-    <p class="govuk-body govuk-!-margin-bottom-1" th:text="${i18n.email + artefact.get('venue').get('venueContact').get('venueEmail').asText()}"/>
-    <p class="govuk-body" th:text="${i18n.telephone + artefact.get('venue').get('venueContact').get('venueTelephone').asText()}"/>
+    <p class="govuk-body govuk-!-margin-bottom-1" th:text="${i18n.telephone + artefact.get('venue').get('venueContact').get('venueTelephone').asText()}"/>
+    <p class="govuk-body" th:text="${i18n.email + artefact.get('venue').get('venueContact').get('venueEmail').asText()}"/>
     <div class="govuk-grid restriction-list-section">
       <div class="govuk-body">
         <h3 th:text="${i18n.restrictionInformationHeading}" />

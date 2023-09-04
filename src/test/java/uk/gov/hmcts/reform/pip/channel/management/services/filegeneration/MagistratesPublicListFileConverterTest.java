@@ -83,12 +83,12 @@ class MagistratesPublicListFileConverterTest {
         softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(4).text())
             .as(HEADER_TEXT)
-            .isEqualTo("Email: court1@moj.gov.uk");
+            .isEqualTo("Telephone: 01772 844700");
 
         softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(5).text())
             .as(HEADER_TEXT)
-            .isEqualTo("Telephone: 01772 844700");
+            .isEqualTo("Email: court1@moj.gov.uk");
 
         softly.assertThat(outputHtml)
             .as("Before not shown")
@@ -167,12 +167,12 @@ class MagistratesPublicListFileConverterTest {
         softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(4).text())
             .as(HEADER_TEXT)
-            .isEqualTo("E-bost: court1@moj.gov.uk");
+            .isEqualTo("Rhif ffôn: 01772 844700");
 
         softly.assertThat(document.getElementsByClass(BODY_CLASS)
                               .get(5).text())
             .as(HEADER_TEXT)
-            .isEqualTo("Rhif ffôn: 01772 844700");
+            .isEqualTo("E-bost: court1@moj.gov.uk");
 
         softly.assertThat(outputHtml)
             .as("Before translation not shown")
