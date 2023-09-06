@@ -45,14 +45,15 @@ class SjpPublicListFileConverterTest {
             .as("Incorrect table contents")
             .hasSize(8)
             .extracting(Element::text)
-            .containsExactly("This is a forename This is a surname",
-                             "This is a postcode",
-                             "This is an offence title, This is an offence title 2",
-                             "This is an organisation",
-                             "This is a forename 2 This is a surname 2",
-                             "This is a postcode 2",
-                             "This is an offence title 2",
-                             "This is an organisation 2");
+            .containsExactly(
+                "This is a forename This is a surname",
+                "This is an individual postcode",
+                "This is an offence title, This is an offence title 2",
+                "This is a prosecutor organisation",
+                "This is an accused organisation name",
+                "This is an organisation postcode",
+                "This is an offence title 3",
+                "This is a prosecutor organisation 2");
     }
 
     @Test
@@ -122,7 +123,7 @@ class SjpPublicListFileConverterTest {
 
     @Test
     void testSuccessfulExcelConversion() throws IOException {
-        byte[] result = converter.convertToExcel(getInput("/mocks/sjpPublicList.json"), ListType.SJP_PRESS_LIST);
+        byte[] result = converter.convertToExcel(getInput("/mocks/sjpPublicList.json"), ListType.SJP_PUBLIC_LIST);
         ByteArrayInputStream file = new ByteArrayInputStream(result);
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
