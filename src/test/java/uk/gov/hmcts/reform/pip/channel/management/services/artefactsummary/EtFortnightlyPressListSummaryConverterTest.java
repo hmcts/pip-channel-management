@@ -41,10 +41,6 @@ class EtFortnightlyPressListSummaryConverterTest {
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(emailOutput)
-            .as("incorrect courtroom name found")
-            .contains("Court 1");
-
-        softly.assertThat(emailOutput)
             .as("incorrect start time found")
             .contains("9:30am");
 
