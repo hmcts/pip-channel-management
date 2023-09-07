@@ -36,11 +36,9 @@ public class EtDailyListSummaryConverter implements ArtefactSummaryConverter {
 
                                 GeneralHelper.appendToStringBuilder(output, "Claimant: ",
                                                                     hearing, "claimant");
-                                output.append(", Rep: ").append(hearing.get("claimantRepresentative").asText());
 
                                 GeneralHelper.appendToStringBuilder(output, "Respondent: ",
                                                                     hearing, "respondent");
-                                output.append(", Rep: ").append(hearing.get("respondentRepresentative").asText());
 
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Type: ",
                                                                     hearing, "hearingType");

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +23,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest
 @ActiveProfiles("test")
 class MagistratesPublicListFileConverterTest {
@@ -31,6 +31,7 @@ class MagistratesPublicListFileConverterTest {
 
     private static final String HEADER_TEXT = "Incorrect header text";
     private static final String PROVENANCE = "provenance";
+    private static final String BODY_CLASS = "govuk-body";
 
     @Test
     void testMagistratesPublicListTemplate() throws IOException {
@@ -56,20 +57,64 @@ class MagistratesPublicListFileConverterTest {
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
         String outputHtml = magistratesPublicListFileConverter.convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
-        assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(outputHtml).as("No html found").isNotEmpty();
+
+        softly.assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo("Magistrates Public List");
 
-        assertThat(document.getElementsByClass("govuk-heading-l")
-                       .get(0).text())
-            .as(HEADER_TEXT).contains("Public Court list for");
+        softly.assertThat(document.getElementsByClass("govuk-heading-l")
+                              .get(0).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Magistrates Public List for location");
 
-        assertThat(document.getElementsByClass("govuk-body")
-                       .get(2).text())
-            .as(HEADER_TEXT).contains("Draft: Version");
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(1).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Last updated 14 September 2020 at 12:30am");
 
-        assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(2).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Draft: Version");
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(4).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Telephone: 01772 844700");
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(5).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Email: court1@moj.gov.uk");
+
+        softly.assertThat(outputHtml)
+            .as("Before not shown")
+            .doesNotContain("Before");
+
+        softly.assertThat(document.getElementsByClass("govuk-table__head").get(0)
+                              .getElementsByTag("th"))
+            .as("Incorrect table headers")
+            .hasSize(6)
+            .extracting(Element::text)
+            .containsExactly(
+                "Sitting at",
+                "Case Reference",
+                "Defendant Name(s)",
+                "Hearing Type",
+                "Prosecuting Authority",
+                "Duration"
+            );
+
+        softly.assertThat(document.getElementsByClass("govuk-table__body").get(0)
+                              .getElementsByTag("td"))
+            .as("Incorrect 'Sitting at' time")
+            .extracting(Element::text)
+            .contains("10:40am", "8am");
+
+        softly.assertAll();
     }
 
     @Test
@@ -96,19 +141,57 @@ class MagistratesPublicListFileConverterTest {
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
         String outputHtml = magistratesPublicListFileConverter.convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
-        assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Rhestr Gyhoeddus y Llys ar gyfer");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.getElementsByClass("govuk-heading-l")
-                       .get(0).text())
-            .as(HEADER_TEXT).contains("Rhestr Gyhoeddus y Llys ar gyfer");
+        softly.assertThat(document.title())
+            .as("incorrect title found.")
+            .isEqualTo("Rhestr Gyhoeddus y Llys Ynadon");
 
-        assertThat(document.getElementsByClass("govuk-body")
-                       .get(2).text())
-            .as(HEADER_TEXT).contains("Drafft:Fersiwn");
+        softly.assertThat(document.getElementsByClass("govuk-heading-l")
+                              .get(0).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Rhestr Gyhoeddus y Llys Ynadon ar gyfer location");
 
-        assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(1).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Diweddarwyd diwethaf 14 September 2020 am 12:30am");
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(2).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Drafft: Fersiwn");
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(4).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("Rhif ffôn: 01772 844700");
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS)
+                              .get(5).text())
+            .as(HEADER_TEXT)
+            .isEqualTo("E-bost: court1@moj.gov.uk");
+
+        softly.assertThat(outputHtml)
+            .as("Before translation not shown")
+            .doesNotContain("Gerbron");
+
+        softly.assertThat(document.getElementsByClass("govuk-table__head").get(0)
+                              .getElementsByTag("th"))
+            .as("Incorrect Welsh table headers")
+            .hasSize(6)
+            .extracting(Element::text)
+            .containsExactly(
+                "Yn eistedd yn",
+                "Cyfeirnod yr Achos",
+                "Enw'r Diffynnydd(Diffynyddion)",
+                "Math o Wrandawiad",
+                "Yr Awdurdod sy'n Erlyn",
+                "Hyd"
+            );
+
+        softly.assertAll();
     }
 }
