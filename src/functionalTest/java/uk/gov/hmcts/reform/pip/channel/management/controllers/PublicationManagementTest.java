@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
 
 import java.nio.charset.StandardCharsets;
@@ -35,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -50,17 +50,13 @@ import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
-
-    @MockBean
-    private AzureBlobService azureBlobService;
-
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     BlobContainerClient blobContainerClient;
 
-    @Autowired
+    @MockBean
     BlobClient blobClient;
 
     @Value("${VERIFIED_USER_ID}")
@@ -661,13 +657,14 @@ class PublicationManagementTest {
 
         mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
             .andExpect(status().isNoContent());
-        verify(azureBlobService)
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
-        verify(azureBlobService)
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
-                                + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService, never())
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
     }
 
     @Test
@@ -677,13 +674,15 @@ class PublicationManagementTest {
 
         mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH))
             .andExpect(status().isNoContent());
-        verify(azureBlobService)
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
-        verify(azureBlobService, never())
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
-                                + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService, never())
-            .deleteBlobFile(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient).deleteIfExists();
     }
 
     @Test
@@ -693,10 +692,14 @@ class PublicationManagementTest {
 
         mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH))
             .andExpect(status().isNoContent());
-        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
-        verify(azureBlobService, never())
-            .deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH  + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
     }
 
     @Test
@@ -706,10 +709,14 @@ class PublicationManagementTest {
 
         mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH))
             .andExpect(status().isNoContent());
-        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
-        verify(azureBlobService, never())
-            .deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH  + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService).deleteBlobFile(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
     }
 
     @Test
