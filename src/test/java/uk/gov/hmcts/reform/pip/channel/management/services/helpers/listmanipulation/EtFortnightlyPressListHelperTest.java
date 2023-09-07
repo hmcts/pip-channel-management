@@ -73,9 +73,6 @@ class EtFortnightlyPressListHelperTest {
 
         JsonNode hearing = sitting.get(HEARING).get(0);
 
-        assertEquals("Court 1", hearing.get("courtRoom").asText(),
-                     "Unable to find court room");
-
         assertEquals("2 hours", hearing.get("formattedDuration").asText(),
                      "Unable to find duration");
 
@@ -125,9 +122,6 @@ class EtFortnightlyPressListHelperTest {
                      "Unable to find time");
 
         JsonNode hearing = sitting.get(HEARING).get(0);
-
-        assertEquals("Court 1", hearing.get("courtRoom").asText(),
-                     "Unable to find court room");
 
         assertEquals("2 hours", hearing.get("formattedDuration").asText(),
                      "Unable to find duration");

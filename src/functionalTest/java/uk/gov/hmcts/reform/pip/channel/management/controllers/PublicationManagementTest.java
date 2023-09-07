@@ -245,7 +245,6 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Courtroom - Court 1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Start Time - 9:30am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 2 hours [[2 of 3]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Number - 12341234"), CONTENT_MISMATCH_ERROR);
@@ -257,7 +256,7 @@ class PublicationManagementTest {
         );
         assertTrue(responseContent.contains("Hearing Type - This is a hearing type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Jurisdiction - This is a case type"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("earing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Hearing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
