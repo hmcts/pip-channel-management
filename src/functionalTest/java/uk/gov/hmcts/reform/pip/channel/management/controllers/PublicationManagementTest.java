@@ -72,7 +72,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "3f8ac854-7d82-42cd-8e33-c31ee5442d36";
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "cd93565d-a3ab-4da2-a0aa-37433227e7de";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "85871ab3-8e53-422a-a3e6-e164c66e1683";
-    private static final String ARTEFACT_ID_ET_DAILY_LIST = "10b40fa9-47b1-4a12-85e0-d8be67d8eaf5";
+    private static final String ARTEFACT_ID_ET_DAILY_LIST = "d5b3538d-5f38-476e-81fe-efa05e304d73";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "b9d5a447-29db-4025-8326-4413ec240e1a";
     private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "63c3d528-5e33-4067-ae54-eac2eee9f645";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "aa5e97d3-b82a-436a-9621-8b0fb2a987ca";
@@ -230,7 +230,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Case Number: 12341234"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Claimant: , Rep: Mr T Test Surname 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Claimant: Mr T Test Surname"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: This is a hearing type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Jurisdiction: This is a case type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Platform: This is a sitting channel"), CONTENT_MISMATCH_ERROR);
