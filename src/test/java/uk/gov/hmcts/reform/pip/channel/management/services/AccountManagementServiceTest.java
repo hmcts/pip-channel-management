@@ -107,8 +107,6 @@ class AccountManagementServiceTest {
             assertTrue(logCaptor.getErrorLogs().get(0)
                            .contains("Request to Account Management to get account e-mails failed with error"),
                        "Messages do not match");
-        } catch (Exception ex) {
-            throw new IOException(ex);
         }
     }
 
