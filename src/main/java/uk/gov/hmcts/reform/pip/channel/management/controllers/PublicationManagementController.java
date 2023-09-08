@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,8 @@ public class PublicationManagementController {
     private final PublicationManagementService publicationManagementService;
 
     private static final String OK_CODE = "200";
+    private static final String ACCEPTED_CODE = "202";
+    private static final String NO_CONTENT_CODE = "204";
     private static final String NOT_FOUND_CODE = "404";
     private static final String NO_AUTH_CODE = "403";
     private static final String PAYLOAD_TOO_LARGE_CODE = "413";
@@ -52,7 +55,7 @@ public class PublicationManagementController {
         return ResponseEntity.ok(publicationManagementService.generateArtefactSummary(artefactId));
     }
 
-    @ApiResponse(responseCode = "202", description = "Request to generate files accepted")
+    @ApiResponse(responseCode = ACCEPTED_CODE, description = "Request to generate files accepted")
     @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
     @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
@@ -74,9 +77,12 @@ public class PublicationManagementController {
         @RequestHeader(value = "x-user-id", required = false) String userId,
         @RequestHeader(value = "x-system", required = false) boolean system,
         @RequestHeader(name = "x-file-type") FileType fileType,
+        @RequestHeader(name = "x-additional-pdf", defaultValue = "false") boolean additionalPdf,
         @RequestParam(name = "maxFileSize", required = false) Integer maxFileSize) {
         return ResponseEntity.ok(
-            publicationManagementService.getStoredPublication(artefactId, fileType, maxFileSize, userId, system)
+            publicationManagementService.getStoredPublication(
+                artefactId, fileType, maxFileSize, userId, system, additionalPdf
+            )
         );
     }
 
@@ -91,7 +97,15 @@ public class PublicationManagementController {
         @PathVariable UUID artefactId,
         @RequestHeader(value = "x-user-id", required = false) String userId,
         @RequestHeader(value = "x-system", required = false) boolean system) {
-        return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId,
-                                                                                    userId, system));
+        return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId, userId, system));
+    }
+
+    @ApiResponse(responseCode = NO_CONTENT_CODE, description = "The files have been deleted")
+    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
+    @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
+    @DeleteMapping("/{artefactId}")
+    public ResponseEntity<Void> deleteFiles(@PathVariable UUID artefactId) {
+        publicationManagementService.deleteFiles(artefactId);
+        return ResponseEntity.noContent().build();
     }
 }

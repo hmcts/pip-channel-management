@@ -3,16 +3,20 @@ package uk.gov.hmcts.reform.pip.channel.management.database;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobStorageException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 
 import java.io.ByteArrayInputStream;
 
+import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
+
 /**
  * Class with handles the interaction with the Azure Blob Storage.
  */
 @Component
+@Slf4j
 @SuppressWarnings({"PMD.PreserveStackTrace"})
 public class AzureBlobService {
 
@@ -49,6 +53,18 @@ public class AzureBlobService {
             return blobClient.downloadContent().toBytes();
         } catch (BlobStorageException e) {
             throw new NotFoundException(String.format("Blob file with id %s not found", fileId));
+        }
+    }
+
+    /**
+     * Delete a blob file in the publications storage container.
+     *
+     * @param fileName The name of the file to delete.
+     */
+    public void deleteBlobFile(String fileName) {
+        BlobClient blobClient = blobContainerClient.getBlobClient(fileName);
+        if (!blobClient.deleteIfExists()) {
+            log.info(writeLog(String.format("Blob file with name %s not found", fileName)));
         }
     }
 }
