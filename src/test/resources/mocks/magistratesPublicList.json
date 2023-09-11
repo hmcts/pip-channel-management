@@ -7,11 +7,13 @@
     "venueName": "PRESTON",
     "venueContact": {
       "venueTelephone":"01772 844700",
-      "venueEmail": "court1@moj.gov.u"
+      "venueEmail": "court1@moj.gov.uk"
     },
     "venueAddress": {
       "line": [
-        "THE LAW COURTS"
+        "THE LAW COURTS",
+        "",
+        "Main Road"
       ],
       "postCode": "PR1 2LL"
     }
@@ -112,7 +114,7 @@
                     ]
                   },
                   {
-                    "sittingStart": "2022-01-27T08:05:00Z",
+                    "sittingStart": "2022-01-27T08:00:00Z",
                     "sittingEnd": "2022-01-27T10:45:00Z",
                     "hearing": [
                       {
