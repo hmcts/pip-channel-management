@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -23,7 +24,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
-import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -33,10 +33,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
+import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 
 @SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,14 +50,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
-
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     BlobContainerClient blobContainerClient;
 
-    @Autowired
+    @MockBean
     BlobClient blobClient;
 
     @Value("${VERIFIED_USER_ID}")
@@ -72,7 +77,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "3f8ac854-7d82-42cd-8e33-c31ee5442d36";
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "cd93565d-a3ab-4da2-a0aa-37433227e7de";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "85871ab3-8e53-422a-a3e6-e164c66e1683";
-    private static final String ARTEFACT_ID_ET_DAILY_LIST = "10b40fa9-47b1-4a12-85e0-d8be67d8eaf5";
+    private static final String ARTEFACT_ID_ET_DAILY_LIST = "d5b3538d-5f38-476e-81fe-efa05e304d73";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "b9d5a447-29db-4025-8326-4413ec240e1a";
     private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "63c3d528-5e33-4067-ae54-eac2eee9f645";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "aa5e97d3-b82a-436a-9621-8b0fb2a987ca";
@@ -80,15 +85,22 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "af7c6ba8-c391-458f-9246-40f419a98a12";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "e646650b-c7dc-4551-9163-f0f792b83e54";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
-    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST = "3d498688-bbad-4a53-b253-a16ddf8737a9";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST = "c18fa8f7-b040-40ae-8599-ca5081332f87";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
+    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
+        = "3e281505-5f3a-42f9-af50-726e671c5cb5";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
+    private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
+        = "23d03397-de93-4ad5-b168-0130cf27d1db";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "0bc246b8-ab6b-4f80-89e6-0fc8c2eb69c8";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
     private static final String UNAUTHORIZED_ROLE = "APPROLE_unknown.role";
     private static final String SYSTEM_HEADER = "x-system";
+    private static final String WELSH_PDF_SUFFIX = "_cy";
 
     private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
@@ -151,7 +163,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - FMPO"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1: Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -230,7 +242,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Case Number: 12341234"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Claimant: , Rep: Mr T Test Surname 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Claimant: Mr T Test Surname"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: This is a hearing type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Jurisdiction: This is a case type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Platform: This is a sitting channel"), CONTENT_MISMATCH_ERROR);
@@ -242,7 +254,6 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Courtroom - Court 1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Start Time - 9:30am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 2 hours [[2 of 3]]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Number - 12341234"), CONTENT_MISMATCH_ERROR);
@@ -254,7 +265,7 @@ class PublicationManagementTest {
         );
         assertTrue(responseContent.contains("Hearing Type - This is a hearing type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Jurisdiction - This is a case type"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("earing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Hearing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -269,7 +280,7 @@ class PublicationManagementTest {
             "Hearing Type - FHDRA1 (First Hearing and Dispute Resolution Appointment)"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1: Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -356,11 +367,11 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant: Z CDFake"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: BD17"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor: TV Licensing"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Defendant: This is a forename This is a surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: This is a postcode"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent
-                       .contains("Offence: Use / install a television set without a licence"), CONTENT_MISMATCH_ERROR);
+                       .contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -458,7 +469,7 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(
                 get(ROOT_URL + V2_URL + "/" + listArtefactId)
                     .header(SYSTEM_HEADER, "true")
-                    .header(FILE_TYPE_HEADER, FileType.PDF)
+                    .header(FILE_TYPE_HEADER, PDF)
                     .param("maxFileSize", "2048000"))
 
             .andExpect(status().isOk()).andReturn();
@@ -487,7 +498,7 @@ class PublicationManagementTest {
             get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
                 .header(SYSTEM_HEADER, "false")
-                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .header(FILE_TYPE_HEADER, PDF)
                 .param("maxFileSize", "2048000");
 
         MvcResult response = mockMvc.perform(request)
@@ -517,7 +528,7 @@ class PublicationManagementTest {
             get(ROOT_URL + V2_URL + "/" + listArtefactId)
                 .header("x-user-id", verifiedUserId)
                 .header(SYSTEM_HEADER, "false")
-                .header(FILE_TYPE_HEADER, FileType.PDF)
+                .header(FILE_TYPE_HEADER, PDF)
                 .param("maxFileSize", "10");
 
         MvcResult response = mockMvc.perform(request)
@@ -538,7 +549,7 @@ class PublicationManagementTest {
     @Test
     void testGetFileNotFound() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID_NOT_FOUND)
-                                                  .header(FILE_TYPE_HEADER, FileType.PDF))
+                                                  .header(FILE_TYPE_HEADER, PDF))
             .andExpect(status().isNotFound())
             .andReturn();
 
@@ -556,7 +567,7 @@ class PublicationManagementTest {
     @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGetFileUnauthorized() throws Exception {
         mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID)
-                            .header(FILE_TYPE_HEADER, FileType.PDF))
+                            .header(FILE_TYPE_HEADER, PDF))
             .andExpect(status().isForbidden());
     }
 
@@ -638,4 +649,79 @@ class PublicationManagementTest {
             .andExpect(status().isForbidden());
     }
 
+    @Test
+    void testDeleteFilesNonSjpWelshSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
+            .andExpect(status().isNoContent());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesNonSjpEnglishSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH))
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesSjpWelshSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH))
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesSjpEnglishSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH))
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    void testDeleteFilesUnauthorized() throws Exception {
+        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
+            .andExpect(status().isForbidden());
+    }
 }

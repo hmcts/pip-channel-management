@@ -21,6 +21,8 @@ class PartyRoleHelperTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String PARTY = "party";
 
+    private static final String PARTY_NAME_MESSAGE = "Party names do not match";
+
     private static JsonNode inputJson;
 
     @BeforeAll
@@ -174,4 +176,30 @@ class PartyRoleHelperTest {
             .as("Organisation details incorrect")
             .isEmpty();
     }
+
+    @Test
+    void testHandleDefendantParty() {
+        PartyRoleHelper.handleParties(inputJson);
+        assertThat(inputJson.get("defendant").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("SurnameA, ForenamesA, SurnameB, ForenamesB");
+    }
+
+    @Test
+    void testHandleDefendantRepresentativeParty() {
+        PartyRoleHelper.handleParties(inputJson);
+        assertThat(inputJson.get("defendantRepresentative").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("Defendant rep name");
+    }
+
+    @Test
+    void testHandleProsecutingAuthorityParty() {
+        PartyRoleHelper.handleParties(inputJson);
+        assertThat(inputJson.get("prosecutingAuthority").asText())
+            .as(PARTY_NAME_MESSAGE)
+            .isEqualTo("Prosecuting authority name");
+    }
+
+
 }

@@ -124,11 +124,11 @@ class CopCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
             .as(HEADER_TEXT)
-            .contains("Diweddarwyd ddiwethaf 14 February 2022 yn 10:30am");
+            .contains("Diweddarwyd ddiwethaf 14 February 2022 am 10:30am");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
             .as(HEADER_TEXT)
-            .contains("Room 1, Cyn Crown Judge");
+            .contains("Room 1, Gerbron Crown Judge");
     }
 }

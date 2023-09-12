@@ -32,8 +32,6 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                     hearings -> hearings.forEach(
                         hearing -> hearing.get("case").forEach(hearingCase -> {
                             output.append('\n');
-                            GeneralHelper.appendToStringBuilder(output, "Courtroom - ",
-                                                                hearing, "courtRoom");
                             GeneralHelper.appendToStringBuilder(output, "Start Time - ",
                                                                 sitting, "time");
                             output.append('\n');

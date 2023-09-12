@@ -4,6 +4,7 @@ import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobStorageException;
+import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFo
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -66,5 +68,34 @@ class AzureBlobServiceTest {
         assertThatThrownBy(() -> azureBlobService.getBlobFile(BLOB_NAME))
             .isInstanceOf(NotFoundException.class)
             .hasMessage(String.format("Blob file with id %s not found", BLOB_NAME));
+    }
+
+    @Test
+    void testDeleteBlobFileWhenFileExists() {
+        try (LogCaptor logCaptor = LogCaptor.forClass(AzureBlobService.class)) {
+            when(blobClient.deleteIfExists()).thenReturn(true);
+
+            azureBlobService.deleteBlobFile(BLOB_NAME);
+            assertThat(logCaptor.getInfoLogs())
+                .as("Info log should be empty")
+                .isEmpty();
+        }
+    }
+
+    @Test
+    void testDeleteBlobFileWhenFileDoesNotExist() {
+        try (LogCaptor logCaptor = LogCaptor.forClass(AzureBlobService.class)) {
+            when(blobClient.deleteIfExists()).thenReturn(false);
+
+            azureBlobService.deleteBlobFile(BLOB_NAME);
+
+            assertThat(logCaptor.getInfoLogs())
+                .as("Info log should not be empty")
+                .isNotEmpty();
+
+            assertThat(logCaptor.getInfoLogs().get(0))
+                .as("Log message does not match")
+                .contains("Blob file with name " + BLOB_NAME + " not found");
+        }
     }
 }

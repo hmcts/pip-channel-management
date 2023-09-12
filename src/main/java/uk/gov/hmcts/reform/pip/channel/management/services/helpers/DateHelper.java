@@ -44,7 +44,7 @@ public final class DateHelper {
         if (isTimeOnly) {
             return (zonedDateTime.getMinute() == 0) ? "ha" : "h:mma";
         } else if (isBothDateAndTime) {
-            return (language == Language.ENGLISH) ? dateFormat + " 'at' HH:mm" : dateFormat + " 'yn' HH:mm";
+            return (language == Language.ENGLISH) ? dateFormat + " 'at' HH:mm" : dateFormat + " 'am' HH:mm";
         }
         return dateFormat;
     }
