@@ -368,10 +368,12 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant: This is a forename This is a surname"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: This is a postcode"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent
-                       .contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: This is an individual postcode"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor: This is a prosecutor organisation"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
+
+        assertTrue(responseContent.contains("Defendant: This is an accused organisation name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: This is an organisation postcode"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
