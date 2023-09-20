@@ -45,21 +45,15 @@ class CrownWarnedListFileConverterTest {
         Document doc = Jsoup.parse(result);
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1"))
-            .as("Incorrect h1 element")
-            .hasSize(1)
-            .extracting(Element::text)
-            .containsExactly("Court and Tribunal Hearings Service");
-
         softly.assertThat(doc.getElementById("list-name"))
             .as("Incorrect list name")
             .extracting(Element::text)
-            .isEqualTo("Manchester Court: Warned List");
+            .isEqualTo("Crown Warned List for Manchester Court");
 
         softly.assertThat(doc.getElementById("publication-date"))
             .as("Incorrect publication date")
             .extracting(Element::text)
-            .isEqualTo("Last Updated 13 September 2022 at 12:30pm");
+            .isEqualTo("Last updated 13 September 2022 at 12:30pm");
 
         softly.assertThat(doc.getElementById("list-version"))
             .as("Incorrect version")
