@@ -44,7 +44,7 @@ public final class MagistratesStandardListHelper {
                     session.get("sittings").forEach(sitting -> {
                         SittingHelper.manipulatedSitting(courtRoom, session, sitting,
                                         "formattedSessionCourtRoom");
-                        DateHelper.formatStartTime(sitting, "h:mma", false);
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             if (hearing.has("party")) {
                                 hearing.get("party").forEach(party -> {

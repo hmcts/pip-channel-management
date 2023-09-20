@@ -110,7 +110,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
                 counter += 1;
             }
             JsonNode currentSitting = sittingIterator.next();
-            DateHelper.formatStartTime(currentSitting, "h:mma", true);
+            DateHelper.formatStartTime(currentSitting, "h:mma");
             outputString.append(processCivilDailyHearings(currentSitting))
                 .append("\nStart Time: ").append(currentSitting.get("time").asText())
                 .append(processCivilDailyChannels(sessionChannel, currentSitting.path("channel")));

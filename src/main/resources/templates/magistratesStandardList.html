@@ -208,6 +208,10 @@
       padding-left: 20px;
       border-left: 5px solid #b1b4b6;
     }
+
+    .govuk-\!-margin-bottom-1 {
+      margin-bottom: 5px;
+    }
   </style>
   <meta charset="UTF-8"/>
   <meta name="subject" content="Accessible PDF template"/>
@@ -217,7 +221,7 @@
 </head>
 <body>
 <div>
-  <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.headerPart1 + locationName}"/>
+  <h2 class="govuk-heading-l" id="page-heading" th:text="${i18n.heading + locationName}"/>
   <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1" th:text="${i18n.listDate + contentDate}"/>
   <p class="govuk-body" th:text="${i18n.listUpdated + publicationDate + i18n.at + publicationTime}"/>
   <p class="govuk-body" th:text="${i18n.draft + i18n.versionText + ' ' + version}"/>

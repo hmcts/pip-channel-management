@@ -30,6 +30,8 @@ class MagistratesStandardListFileConverterTest {
     MagistratesStandardListFileConverter magistratesStandardListFileConverter;
 
     private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String BODY_TEXT = "Incorrect body text";
+    private static final String BODY_CLASS = "govuk-body";
     private static final String PROVENANCE = "provenance";
 
     @Test
@@ -65,11 +67,16 @@ class MagistratesStandardListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Standard Court list");
+            .as(HEADER_TEXT).contains("Magistrates Standard List for location");
 
-        assertThat(document.getElementsByClass("govuk-body")
+        assertThat(document.getElementsByClass(BODY_CLASS)
+                       .get(1).text())
+            .as(BODY_TEXT)
+            .isEqualTo("Last updated: 14 September 2016 at 12:30am");
+
+        assertThat(document.getElementsByClass(BODY_CLASS)
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Draft: Version");
+            .as(BODY_TEXT).contains("Draft: Version");
     }
 
     @Test
@@ -100,15 +107,14 @@ class MagistratesStandardListFileConverterTest {
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Magistrates Rhestr Ddyddiol");
+            .isEqualTo("Rhestr Safonol y Llys Ynadon");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Rhestr Safonol y Llys ar gyfer");
+            .as(HEADER_TEXT).contains("Rhestr Safonol y Llys Ynadon ar gyfer location");
 
-        assertThat(document.getElementsByClass("govuk-body")
+        assertThat(document.getElementsByClass(BODY_CLASS)
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Drafft: Fersiwn");
-
+            .as(BODY_TEXT).contains("Drafft: Fersiwn");
     }
 }
