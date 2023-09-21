@@ -97,7 +97,7 @@ class CrownFirmListFileConverterTest {
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Crown Rhestr Derfynol");
+            .isEqualTo("Rhestr Cwmni Llys y Goron");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
