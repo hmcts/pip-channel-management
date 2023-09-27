@@ -133,11 +133,11 @@ public final class DateHelper {
         ((ObjectNode) sitting).put("formattedDuration", formattedDuration);
     }
 
-    public static void formatStartTime(JsonNode sitting, String format, boolean zeroMinFormat) {
+    public static void formatStartTime(JsonNode sitting, String format) {
         ZonedDateTime sittingStart = convertStringToBst(sitting.get("sittingStart").asText());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format).withLocale(Locale.UK);
 
-        if (zeroMinFormat && sittingStart.getMinute() == 0) {
+        if (sittingStart.getMinute() == 0) {
             dtf = DateTimeFormatter.ofPattern("ha").withLocale(Locale.UK);
         }
 

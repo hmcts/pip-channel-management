@@ -31,7 +31,7 @@ public final class FamilyMixedListHelper {
                                                JudiciaryHelper.findAndManipulateJudiciary(session));
                     session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, "h:mma", true);
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {

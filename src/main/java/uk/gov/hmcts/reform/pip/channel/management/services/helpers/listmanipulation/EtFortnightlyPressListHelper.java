@@ -66,7 +66,7 @@ public final class EtFortnightlyPressListHelper {
                             sitting.get(SITTING_START).asText(), Language.ENGLISH, false, false,
                             "EEEE dd MMMM yyyy");
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
-                        DateHelper.formatStartTime(sitting,"h:mma", true);
+                        DateHelper.formatStartTime(sitting,"h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             moveTableColumnValuesToHearing(courtRoom, sitting, (ObjectNode) hearing, language);
                             if (hearing.has("case")) {

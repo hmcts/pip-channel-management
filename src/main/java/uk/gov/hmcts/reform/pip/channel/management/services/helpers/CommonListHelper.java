@@ -77,7 +77,7 @@ public final class CommonListHelper {
                     formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT);
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get(HEARING).forEach(hearing -> {
