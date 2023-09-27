@@ -63,7 +63,7 @@ class CrownFirmListFileConverterTest {
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Firm List");
+            .as(HEADER_TEXT).contains("Crown Firm List for");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
@@ -97,11 +97,11 @@ class CrownFirmListFileConverterTest {
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
         assertThat(document.title()).as("incorrect title found.")
-            .isEqualTo("Crown Rhestr Derfynol");
+            .isEqualTo("Rhestr Cwmni Llys y Goron");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Rhestr Derfynol");
+            .as(HEADER_TEXT).contains("Rhestr Cwmni Llys y Goron ar gyfer");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
