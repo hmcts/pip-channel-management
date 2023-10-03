@@ -20,7 +20,7 @@ public final class EtDailyListHelper {
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting,"h:mma", true);
+                        DateHelper.formatStartTime(sitting,"h:mma");
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
                         sitting.get("hearing")
                             .forEach(hearing -> PartyRoleHelper.findAndManipulatePartyInformation(hearing, true));

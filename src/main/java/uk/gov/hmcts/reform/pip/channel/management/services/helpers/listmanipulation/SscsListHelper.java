@@ -78,7 +78,7 @@ public final class SscsListHelper {
     private static Sitting sittingBuilder(String sessionChannel, JsonNode node, String judiciary)
         throws JsonProcessingException {
         Sitting sitting = new Sitting();
-        DateHelper.formatStartTime(node, TIME_FORMAT, true);
+        DateHelper.formatStartTime(node, TIME_FORMAT);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
         if (node.has(CHANNEL)) {

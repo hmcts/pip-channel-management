@@ -69,7 +69,7 @@ class CrownDailyListHelperTest {
         assertEquals("10:40am", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals("1:00pm", inputJsonCrownDailyList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM)
+        assertEquals("1pm", inputJsonCrownDailyList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
         assertEquals("Defendant_SN, Defendant_FN", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)

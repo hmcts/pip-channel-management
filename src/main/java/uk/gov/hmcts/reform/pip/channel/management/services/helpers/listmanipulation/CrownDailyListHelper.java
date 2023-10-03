@@ -24,7 +24,7 @@ public final class CrownDailyListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(sitting -> {
-                        DateHelper.formatStartTime(sitting, "h:mma", false);
+                        DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.handleParties(hearing);
                             CrimeListHelper.formatCaseInformation(hearing);

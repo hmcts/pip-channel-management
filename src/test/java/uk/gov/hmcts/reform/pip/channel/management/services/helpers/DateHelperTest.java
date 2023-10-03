@@ -216,24 +216,22 @@ class DateHelperTest {
             .isEqualTo("2 hours 30 mins");
     }
 
+    private static Stream<Arguments> parameters() {
+        return Stream.of(
+            Arguments.of("2022-12-10T15:30:52.123Z", "3:30pm"),
+            Arguments.of("2022-12-10T15:00:52.123Z", "3pm")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("parameters")
-    void testFormatStartTime(String value, boolean zeroMinFormat, String expected) {
+    void testFormatStartTime(String value, String expected) {
         ObjectNode sittingNode = MAPPER.createObjectNode();
         sittingNode.put(SITTING_START, value);
 
-        DateHelper.formatStartTime(sittingNode, TIME_FORMAT, zeroMinFormat);
+        DateHelper.formatStartTime(sittingNode, TIME_FORMAT);
         assertThat(sittingNode.get("time").asText())
             .as(ERR_MSG)
             .isEqualTo(expected);
-    }
-
-    private static Stream<Arguments> parameters() {
-        return Stream.of(
-            Arguments.of("2022-12-10T15:30:52.123Z", false, "3:30pm"),
-            Arguments.of("2022-12-10T15:30:52.123Z", true, "3:30pm"),
-            Arguments.of("2022-12-10T15:00:52.123Z", false, "3:00pm"),
-            Arguments.of("2022-12-10T15:00:52.123Z", true, "3pm")
-        );
     }
 }

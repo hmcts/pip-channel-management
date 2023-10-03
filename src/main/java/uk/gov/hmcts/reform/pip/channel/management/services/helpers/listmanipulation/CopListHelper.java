@@ -35,7 +35,7 @@ public final class CopListHelper {
                     );
                     session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, TIME_FORMAT, true);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT);
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get(HEARING).forEach(
