@@ -2,9 +2,13 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Helper class for crime lists.
@@ -104,5 +108,21 @@ public final class CrimeListHelper {
                 }
             });
         }
+    }
+
+    public static String formatDefendantAddress(JsonNode addressNode) {
+        List<String> fullAddress = new ArrayList<>();
+
+        if (addressNode.has("line")) {
+            addressNode.get("line")
+                .forEach(line -> fullAddress.add(line.asText()));
+        }
+        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
+        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
+        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "postCode"));
+
+        return fullAddress.stream()
+            .filter(line -> !StringUtils.isBlank(line))
+            .collect(Collectors.joining(", "));
     }
 }

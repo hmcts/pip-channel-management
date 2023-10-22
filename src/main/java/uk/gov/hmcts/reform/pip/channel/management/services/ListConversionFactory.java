@@ -32,6 +32,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.FileCo
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.IacDailyListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.MagistratesPublicListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.MagistratesStandardListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.OpaPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.PrimaryHealthListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.SjpPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.SjpPublicListFileConverter;
@@ -53,6 +54,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CA
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.IAC_DAILY_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_PUBLIC_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_STANDARD_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.PRIMARY_HEALTH_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
@@ -101,7 +103,8 @@ public class ListConversionFactory {
         Map.entry(ET_DAILY_LIST, Pair.of(new EtDailyListFileConverter(),
                                          new EtDailyListSummaryConverter())),
         Map.entry(ET_FORTNIGHTLY_PRESS_LIST, Pair.of(new EtFortnightlyPressListFileConverter(),
-                                                     new EtFortnightlyPressListSummaryConverter()))
+                                                     new EtFortnightlyPressListSummaryConverter())),
+        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), null))
     );
 
     public FileConverter getFileConverter(ListType listType) {
