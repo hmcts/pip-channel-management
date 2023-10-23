@@ -119,11 +119,11 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(document.title())
             .as(TITLE_MESSAGE)
-            .isEqualTo("OPA Press List");
+            .isEqualTo("Rhestr y Wasg – OPA");
 
         softly.assertThat(document.getElementsByClass(HEADING_CLASS).get(0).text())
             .as(HEADING_MESSAGE)
-            .contains("Online Plea and Allocation Cases Press View for " + LOCATION_NAME);
+            .contains("Achosion Pledio Ar-lein a Dyrannu – Rhestr y Wasg ar gyfer " + LOCATION_NAME);
 
         Elements resultBody = document.getElementsByClass(BODY_CLASS);
         softly.assertThat(resultBody.get(0).text())
