@@ -69,6 +69,10 @@ class CrownDailyListFileConverterTest {
                        .get(2).text())
             .as(HEADER_TEXT).contains("Draft: Version");
 
+        assertThat(outputHtml.contains("Reporting Restriction: This is a reporting restriction detail, "
+                                           + "This is another reporting restriction detail"))
+            .as("Reporting restriction detail not shown").isFalse();
+
         assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
     }
 
@@ -108,6 +112,10 @@ class CrownDailyListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Drafft:Fersiwn");
+
+        assertThat(outputHtml.contains("Cyfyngiad adrodd: This is a reporting restriction detail, "
+                                           + "This is another reporting restriction detail"))
+            .as("Reporting restriction detail not shown").isFalse();
 
         assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
     }
