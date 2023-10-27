@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,6 +74,10 @@ class CrownDailyListFileConverterTest {
                                            + "This is another reporting restriction detail"))
             .as("Reporting restriction detail not shown").isFalse();
 
+        Pattern reportingRestrictionPattern = Pattern.compile("Reporting Restriction: ");
+        assertThat(reportingRestrictionPattern.matcher(outputHtml).results().count())
+            .as("Incorrect number of reporting restrictions shown").isEqualTo(2);
+
         assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
     }
 
@@ -116,6 +121,10 @@ class CrownDailyListFileConverterTest {
         assertThat(outputHtml.contains("Cyfyngiad adrodd: This is a reporting restriction detail, "
                                            + "This is another reporting restriction detail"))
             .as("Reporting restriction detail not shown").isFalse();
+
+        Pattern reportingRestrictionPattern = Pattern.compile("Cyfyngiad adrodd: ");
+        assertThat(reportingRestrictionPattern.matcher(outputHtml).results().count())
+            .as("Incorrect number of reporting restrictions shown").isEqualTo(2);
 
         assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
     }
