@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter {
     private static final String LISTING_NOTES = "listingNotes";
     private static final String LINKED_CASES = "linkedCases";
+    private static final String REPORTING_RESTRICTION_DETAIL = "combinedReportingRestriction";
 
     /**
      * Crown daily list parent method - iterates on courtHouse/courtList - if these need to be shown in further
@@ -72,6 +73,11 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
                                             hearing,"prosecutingAuthority");
 
+        if (!GeneralHelper.findAndReturnNodeText(hearingCase, REPORTING_RESTRICTION_DETAIL).isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Reporting Restriction - ",
+                                                hearingCase, REPORTING_RESTRICTION_DETAIL);
+        }
+
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
             GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, LINKED_CASES);
         }
@@ -79,5 +85,7 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
         if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
             GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", hearing, LISTING_NOTES);
         }
+
+
     }
 }
