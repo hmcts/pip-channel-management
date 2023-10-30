@@ -20,7 +20,6 @@
   <suppress>
     <notes>Already on latest version of thymeleaf</notes>
     <cve>CVE-2023-38286</cve>
-    <cve>CVE-2021-43466</cve>
   </suppress>
   <suppress>
     <notes>Suppression for netty. Pulled in by springboot on latest version</notes>
@@ -32,5 +31,10 @@
     <packageUrl regex="true">^pkg:maven/com\.azure/azure\-identity@.*$</packageUrl>
     <cve>CVE-2023-36414</cve>
     <cve>CVE-2023-36415</cve>
+  </suppress>
+  <suppress>
+    <notes>Tomcat vuln, exists on latest version of spring 3.0.x</notes>
+    <cve>CVE-2023-42795</cve>
+    <cve>CVE-2023-45648</cve>
   </suppress>
 </suppressions>
