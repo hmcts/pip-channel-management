@@ -26,9 +26,13 @@
       text-align: center;
     }
 
+    .pageSeperated {
+      page-break-after: always;
+    }
+
     .dateContainer {
       font-size: 12px;
-      margin-top: 0;
+      margin-top: 33px;
       padding: 0;
       line-height: 0.6;
     }
@@ -112,7 +116,7 @@
   <title th:text="${i18n.titleText + contentDate}"/>
 </head>
 <body>
-<div class="logoHeaderWrapper">
+<div class="logoHeaderWrapper pageSeperated">
   <div class="logoDatesContainer">
     <div class="dateContainer">
       <h4 th:text="${i18n.listFor + contentDate}"/>
