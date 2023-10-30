@@ -96,6 +96,14 @@
       text-align: left;
       font-size: 20px;
     }
+
+    .govuk-details {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.25;
+      margin-bottom: 45px;
+    }
+
   </style>
   <meta charset="UTF-8"/>
   <meta name="subject" content="Accessible PDF template"/>
@@ -111,9 +119,20 @@
       <h5 th:text="${i18n.published + publishedDate}"/>
     </div>
   </div>
+
   <div class="mainHeaderText">
     <h1 th:text="${i18n.titleText}"/>
     <h3 th:text="${i18n.subHeader}"/>
+    <details class="govuk-details">
+      <summary>
+        <b><p th:text="${i18n.importantInformationHeading}"/></b>
+      </summary>
+      <div>
+        <p>
+          <span th:text="${i18n.importantInformationPart1}"/><a th:href="${i18n.importantInformationPart2}" th:text="${i18n.importantInformationPart3}"/>
+        </p>
+      </div>
+    </details>
   </div>
 </div>
 
