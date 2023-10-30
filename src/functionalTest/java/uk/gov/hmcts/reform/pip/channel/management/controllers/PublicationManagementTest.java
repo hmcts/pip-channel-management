@@ -209,7 +209,8 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Listing Notes - Listing details text"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Sitting at - 10:40am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Reporting Restriction - This is a reporting restriction detail, "
-                                                + "This is another reporting restriction detail"), CONTENT_MISMATCH_ERROR);
+                                                + "This is another reporting restriction detail"),
+                   CONTENT_MISMATCH_ERROR);
     }
 
     @Test
