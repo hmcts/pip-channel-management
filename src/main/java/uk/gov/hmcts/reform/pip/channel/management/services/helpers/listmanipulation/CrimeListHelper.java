@@ -19,6 +19,8 @@ public final class CrimeListHelper {
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String LISTING_DETAILS = "listingDetails";
     private static final String LISTING_NOTES = "listingNotes";
+    private static final String REPORTING_RESTRICTION_DETAIL = "reportingRestrictionDetail";
+    private static final String COMBINED_REPORTING_RESTRICTION_DETAIL = "combinedReportingRestriction";
     private static final String LINKED_CASES = "linkedCases";
     private static final String COURT_ROOM_NAME = "courtRoomName";
 
@@ -75,6 +77,9 @@ public final class CrimeListHelper {
                 if (!hearingCase.has(CASE_SEQUENCE_INDICATOR)) {
                     caseObj.put(CASE_SEQUENCE_INDICATOR, "");
                 }
+
+                formatReportingRestrictedDetail(hearingCase, caseObj);
+
             });
         }
 
@@ -88,19 +93,44 @@ public final class CrimeListHelper {
         );
     }
 
+    private static void formatReportingRestrictedDetail(JsonNode hearingCase, ObjectNode caseObj) {
+        StringBuilder reportingRestrictionDetail = new StringBuilder();
+        if (hearingCase.has(REPORTING_RESTRICTION_DETAIL)) {
+
+
+            hearingCase.get(REPORTING_RESTRICTION_DETAIL).forEach(detail -> {
+                if (!reportingRestrictionDetail.isEmpty()) {
+                    reportingRestrictionDetail.append(", ");
+                }
+                reportingRestrictionDetail.append(detail.asText());
+            });
+
+        }
+
+        caseObj.put(COMBINED_REPORTING_RESTRICTION_DETAIL, reportingRestrictionDetail.toString());
+    }
+
     public static void formatCaseHtmlTable(JsonNode hearing) {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(hearingCase -> {
                 ObjectNode caseObj = (ObjectNode) hearingCase;
                 (caseObj).put("caseCellBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()
-                    || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
+                    || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()
+                    || !GeneralHelper.findAndReturnNodeText(
+                        hearingCase, COMBINED_REPORTING_RESTRICTION_DETAIL).isEmpty()) {
                     caseObj.put("caseCellBorder", NO_BORDER_BOTTOM);
                 }
 
                 caseObj.put("linkedCasesBorder", "");
-                if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
+                if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
                     caseObj.put("linkedCasesBorder", NO_BORDER_BOTTOM);
+                }
+
+                caseObj.put("reportingRestrictionDetailBorder", "");
+                if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()
+                    || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
+                    caseObj.put("reportingRestrictionDetailBorder", NO_BORDER_BOTTOM);
                 }
             });
         }

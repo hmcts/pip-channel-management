@@ -247,6 +247,15 @@
                           </th:block>
                           <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
                         </tr>
+                        <span th:if="${case.get('combinedReportingRestriction').asText() != ''}">
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell" th:classappend="${case.get('reportingRestrictionDetailBorder').asText()}" colspan="6">
+                              <span class="linked-cases-heading" th:text="${i18n.reportingRestriction}" />
+                              <span th:text="${case.get('combinedReportingRestriction').asText()}" />
+                            </td>
+                          </tr>
+                        </span>
+
                         <span th:if="${case.get('linkedCases').asText() != ''}">
                           <tr class="govuk-table__row">
                             <td class="govuk-table__cell no-wrap" th:classappend="${case.get('linkedCasesBorder').asText()}" colspan="6">

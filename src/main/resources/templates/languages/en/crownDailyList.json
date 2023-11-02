@@ -35,6 +35,7 @@
     "Duration",
     "Prosecuting Authority"
   ],
+  "reportingRestriction": "Reporting Restriction: ",
   "linkedCases": "Linked Cases: ",
   "listingNotes": "Listing Notes: ",
   "unallocatedCourtText": "The following cases may be taken in any court",
