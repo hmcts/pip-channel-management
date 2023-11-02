@@ -31,6 +31,11 @@ class CrownDailyListHelperTest {
     private static final String TIME = "time";
     private static final String LISTING_NOTES = "listingNotes";
     private static final String TIME_ERROR = "Unable to find correct case time";
+    private static final String NO_BORDER_BOTTOM = "no-border-bottom";
+    private static final String LINKED_CASES_BORDER = "linkedCasesBorder";
+    private static final String REPORTING_RESTRICTIONS_DETAILS_BORDER = "reportingRestrictionDetailBorder";
+    private static final String CASE_CELL_BORDER = "caseCellBorder";
+    private static final String INCORRECT_BORDER_TEXT = "Incorrect border text";
     private static JsonNode inputJsonCrownDailyList;
 
     @BeforeAll
@@ -69,39 +74,146 @@ class CrownDailyListHelperTest {
         assertEquals("10:40am", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
+
         assertEquals("1pm", inputJsonCrownDailyList.get(COURT_LISTS).get(2).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
+
         assertEquals("Defendant_SN, Defendant_FN", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("defendant").asText(),
                      "Unable to find information for defendant");
+
         assertEquals("Pro_Auth", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
+
         assertEquals("caseid111, caseid222", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get(CASE).get(0).get("linkedCases").asText(),
                      "Unable to find linked cases for a particular case");
+
         assertEquals("", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(1)
                          .get("linkedCases").asText(),
                      "able to find linked cases for a particular case");
+
+        assertEquals("This is a reporting restriction detail, This is another reporting restriction detail",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(0)
+                         .get("combinedReportingRestriction").asText(),
+                     "able to find reporting restriction detail for a case");
+
         assertEquals("Listing details text", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get(LISTING_NOTES).asText(),
                      "Unable to find listing notes for a particular hearing");
+
         assertEquals("", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
                          .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(LISTING_NOTES).asText(),
                      "Able to find listing notes for a particular hearing");
+
         assertEquals("no-border-bottom", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get(CASE).get(0).get("caseCellBorder").asText(),
                      "Unable to find linked cases css for a particular case");
+
         assertEquals("no-border-bottom", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
                          .get(CASE).get(0).get("linkedCasesBorder").asText(),
                      "Unable to find linked cases css for a particular case");
+    }
+
+    @Test
+    void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithAllInfo() {
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(0)
+                         .get(LINKED_CASES_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(0)
+                         .get(REPORTING_RESTRICTIONS_DETAILS_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0).get(CASE).get(0)
+                         .get(CASE_CELL_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+    }
+
+    @Test
+    void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithNoInfo() {
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(CASE).get(0)
+                         .get(LINKED_CASES_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(CASE).get(0)
+                         .get(REPORTING_RESTRICTIONS_DETAILS_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(1).get(CASE).get(0)
+                         .get(CASE_CELL_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+    }
+
+    @Test
+    void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithPartialInfo() {
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(0).get(CASE).get(0)
+                         .get(LINKED_CASES_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(0).get(CASE).get(0)
+                         .get(REPORTING_RESTRICTIONS_DETAILS_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(0).get(CASE).get(0)
+                         .get(CASE_CELL_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+    }
+
+    @Test
+    void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithOnlyReportingRestrictionDetail() {
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(1).get(CASE).get(0)
+                         .get(LINKED_CASES_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals("",
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(1).get(CASE).get(0)
+                         .get(REPORTING_RESTRICTIONS_DETAILS_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
+
+        assertEquals(NO_BORDER_BOTTOM,
+                     inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
+                         .get(SESSION).get(0).get(SITTINGS).get(1).get(HEARING).get(1).get(CASE).get(0)
+                         .get(CASE_CELL_BORDER).asText(),
+                     INCORRECT_BORDER_TEXT);
     }
 }
