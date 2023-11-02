@@ -89,6 +89,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
+    private static final String ARTEFACT_ID_OPA_PRESS_LIST = "f83de894-9245-4d2c-90ef-6e64f49cdabb";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
@@ -135,8 +136,9 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_PRIMARY_HEALTH_LIST), //Primary Health Tribunal Hearing List
             Arguments.of(ARTEFACT_ID_SJP_PRESS_LIST), //Single Justice Procedure Press List
             Arguments.of(ARTEFACT_ID_SJP_PUBLIC_LIST), //Single Justice Procedure Public List
-            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List,
-            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)  //SSCS Daily List - Additional Hearings
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS), //SSCS Daily List - Additional Hearings
+            Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST)  //OPA Press List
         );
     }
 
