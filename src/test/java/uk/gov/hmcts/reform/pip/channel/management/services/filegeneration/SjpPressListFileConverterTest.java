@@ -79,35 +79,106 @@ class SjpPressListFileConverterTest {
             .as("incorrect header text")
             .isEqualTo(expectedTitle);
 
+
+        softly.assertThat(document.getElementsByTag("summary").get(0).text())
+            .as("incorrect important information header text")
+            .isEqualTo("Important information");
+
+        softly.assertThat(document.getElementsByTag("details").get(0)
+                              .getElementsByTag("span").get(0).text())
+            .as("incorrect important information part 1 text")
+            .isEqualTo("In accordance with the media protocol, additional documents "
+                           + "from these cases are available to the members of the media "
+                           + "on request. The link below takes you to the full protocol and "
+                           + "further information in relation to what documentation can be "
+                           + "obtained");
+
+        softly.assertThat(document.getElementsByTag("details").get(0)
+                              .getElementsByTag("a").get(0).attr("href"))
+            .as("incorrect important information part 2 text")
+            .isEqualTo("https://www.gov.uk/government/publications/guidance-to-staff-on-supporting-media-"
+                          + "access-to-courts-and-tribunals/protocol-on-sharing-court-lists-registers-and-documents-"
+                          + "with-the-media-accessible-version");
+
+        softly.assertThat(document.getElementsByTag("details").get(0)
+                              .getElementsByTag("a").get(0).text())
+            .as("incorrect important information part 3 text")
+            .isEqualTo("Protocol on sharing court lists, registers and documents with the media");
+
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(2) > td").text())
             .as("Date of birth and age does not match")
-            .isEqualTo("25/07/1985 (36)");
+            .isEqualTo("01/01/1800 (50)");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(3) > td").text())
             .as("Address line 1 does not match")
-            .isEqualTo("72 Guild Street");
+            .isEqualTo("Address Line 1");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(4) > td").text())
             .as("Address line 2 does not match")
-            .isEqualTo("London");
+            .isEqualTo("Address Line 2");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(5) > td").text())
-            .as("Address line 3 does not match")
-            .isEqualTo("SE23 6FH");
+            .as("Town does not match")
+            .isEqualTo("Town A");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(6) > td").text())
+            .as("Postcode does not match")
+            .isEqualTo("AA1 AA1");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(7) > td").text())
+            .as("incorrect prosecutor found")
+            .isEqualTo("This is an organisation");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(8) > td").text())
+            .as("incorrect case reference found")
+            .isEqualTo("ABC12345");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(9) > td").text())
+            .as("incorrect offence title found")
+            .isEqualTo("This is an offence title");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(10) > td").text())
+            .as("incorrect offence wording found")
+            .isEqualTo("This is offence wording");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(11) > td").text())
+            .as("incorrect reporting restriction found")
+            .isEqualTo("Active");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(12) > td").text())
+            .as("incorrect offence title found")
+            .isEqualTo("This is another offence title");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(13) > td").text())
+            .as("incorrect offence wording found")
+            .isEqualTo("This is another offence wording");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(14) > td").text())
+            .as("incorrect reporting restriction found")
+            .isEqualTo("None");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(2) > table > tbody > tr:nth-child(3) > td").text())
             .as("Organisation address line 1 does not match")
-            .isEqualTo("2 Main Road");
+            .isEqualTo("Organisation Line 1");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(2) > table > tbody > tr:nth-child(4) > td").text())
             .as("Organisation address line 2 does not match")
-            .isEqualTo("London");
+            .isEqualTo("Organisation Line 2");
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(3) > table > tbody > tr:nth-child(3) > td").text())
@@ -119,21 +190,16 @@ class SjpPressListFileConverterTest {
             .as("Address line should be empty (for empty address field)")
             .isEmpty();
 
-        softly.assertThat(document.select(
-            "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(6) > td").text())
-            .as("incorrect prosecutor found")
-            .isEqualTo("Hampshire Police");
-
         Elements pages = document.getElementsByClass("pageSeparatedCase");
         softly.assertThat(pages)
             .as("Incorrect number of pages")
             .hasSize(4);
 
         List<String> expectedOffender = List.of(
-            "Mr. Forename Middle Surname",
+            "This is a title This is a forename This is a surname",
             "Accused's organisation",
-            "Mrs. Middle",
-            "Surname"
+            "This is a title This is a middlename",
+            "This is a title This is a forename This is a surname"
         );
 
         AtomicInteger count = new AtomicInteger();
