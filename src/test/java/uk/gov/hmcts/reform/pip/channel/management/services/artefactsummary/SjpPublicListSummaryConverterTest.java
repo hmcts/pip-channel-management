@@ -31,11 +31,11 @@ class SjpPublicListSummaryConverterTest {
 
         softly.assertThat(outputLines[0])
             .as("Accused (using individual details) does not match")
-            .isEqualTo("•Defendant: This is a forename This is a surname");
+            .isEqualTo("•Defendant: A This is a surname");
 
         softly.assertThat(outputLines[1])
             .as("Postcode (using individual details) does not match")
-            .isEqualTo("Postcode: This is an individual postcode");
+            .isEqualTo("Postcode: AA1");
 
         softly.assertThat(outputLines[2])
             .as("Prosecutor does not match")
@@ -51,7 +51,7 @@ class SjpPublicListSummaryConverterTest {
 
         softly.assertThat(outputLines[5])
             .as("Postcode (using organisation details) does not match")
-            .isEqualTo("Postcode: This is an organisation postcode");
+            .isEqualTo("Postcode: A99");
 
         softly.assertAll();
     }
