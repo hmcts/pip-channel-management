@@ -163,7 +163,8 @@ public final class MagistratesStandardListHelper {
                 formatDobAndAge(hearing, individualDetails, language);
 
                 hearing.put(DEFENDANT_HEADING, formatDefendantHeading(defendant, individualDetails));
-                hearing.put("defendantAddress", formatDefendantAddress(individualDetails));
+                hearing.put("defendantAddress", individualDetails.has("address")
+                    ? CrimeListHelper.formatDefendantAddress(individualDetails.get("address")) : "");
                 hearing.put(PLEA, GeneralHelper.findAndReturnNodeText(individualDetails, PLEA));
             }
         }
@@ -204,28 +205,5 @@ public final class MagistratesStandardListHelper {
         }
 
         hearing.put("defendantDateOfBirthAndAge",  dateOfBirthAndAge);
-    }
-
-    private static String formatDefendantAddress(JsonNode individualDetails) {
-        if (individualDetails.has("address")) {
-            JsonNode defendantAddress = individualDetails.get("address");
-            StringBuilder address = new StringBuilder();
-            for (JsonNode addressLine : defendantAddress.get("line")) {
-                if (!addressLine.asText().isBlank()) {
-                    String line = addressLine.asText() + ", ";
-                    address.append(line);
-                }
-            }
-            String town = GeneralHelper.findAndReturnNodeText(defendantAddress, "town");
-            String county = GeneralHelper.findAndReturnNodeText(defendantAddress, "county");
-            String postCode = GeneralHelper.findAndReturnNodeText(defendantAddress, "postCode");
-
-            address.append(town)
-                .append(county.length() > 0 ? ", " + county : county)
-                .append(postCode.length() > 0 ? ", " + postCode : postCode);
-
-            return address.toString();
-        }
-        return "";
     }
 }
