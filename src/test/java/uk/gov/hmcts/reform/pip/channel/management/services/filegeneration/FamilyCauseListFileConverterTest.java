@@ -148,7 +148,7 @@ class FamilyCauseListFileConverterTest {
             .hasSize(45);
 
         softly.assertThat(doc.getElementsByTag("td"))
-            .as("Incorrect table contents for hearing with multiple cases")
+            .as("Incorrect table contents for hearing with a single case")
             .extracting(Element::text)
             .containsSequence(
                 "10:30am",
@@ -158,23 +158,23 @@ class FamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "",
-                ""
+                "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
+                "Surname"
             );
 
         softly.assertThat(doc.getElementsByTag("td"))
-            .as("Incorrect table contents for hearing with a single case")
+            .as("Incorrect table contents for hearing with multiple cases")
             .extracting(Element::text)
             .containsSequence(
                 "10:30am",
-                "12341235",
-                "This is a case name 2",
+                "12341236",
+                "This is a case name 3",
                 "normal",
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "Applicant org name, Legal Advisor: Applicant rep org name",
-                "Respondent org name, Legal Advisor: Respondent rep org name"
+                "",
+                ""
             );
 
         softly.assertAll();
