@@ -19,7 +19,7 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "This is a forename",
+                              "individualForenames": "A",
                               "individualSurname": "This is a surname",
                               "address": {
                                 "postCode": ""
@@ -55,10 +55,10 @@
                           {
                             "partyRole": "ACCUSED",
                             "individualDetails": {
-                              "individualForenames": "This is a forename 2",
+                              "individualForenames": "A",
                               "individualSurname": "This is a surname 2",
                               "address": {
-                                "postCode": "This is a postcode 2"
+                                "postCode": "AA1"
                               }
                             }
                           },

@@ -46,12 +46,12 @@ class SjpPublicListFileConverterTest {
             .hasSize(8)
             .extracting(Element::text)
             .containsExactly(
-                "This is a forename This is a surname",
-                "This is an individual postcode",
+                "A This is a surname",
+                "AA1",
                 "This is an offence title, This is an offence title 2",
                 "This is a prosecutor organisation",
                 "This is an accused organisation name",
-                "This is an organisation postcode",
+                "A99",
                 "This is an offence title 3",
                 "This is a prosecutor organisation 2");
     }
@@ -68,8 +68,8 @@ class SjpPublicListFileConverterTest {
             .hasSize(4)
             .extracting(Element::text)
             .containsExactly(
-                "This is a forename 2 This is a surname 2",
-                "This is a postcode 2",
+                "A This is a surname 2",
+                "AA1",
                 "This is an offence title 2",
                 "This is an organisation 2"
             );
