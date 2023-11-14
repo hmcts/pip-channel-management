@@ -59,13 +59,6 @@
                             "caseName": "This is a case name",
                             "caseNumber": "12341234",
                             "caseType": "normal",
-                            "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "2 of 3"
-                          },
-                          {
-                            "caseName": "This is a case name",
-                            "caseNumber": "12341234",
-                            "caseJurisdictionET": "Family Law",
                             "caseSequenceIndicator": "2 of 3"
                           }
                         ],
@@ -104,8 +97,7 @@
                           {
                             "caseName": "This is a case name 2",
                             "caseNumber": "12341235",
-                            "caseType": "normal",
-                            "caseJurisdictionET": "Family Law"
+                            "caseType": "normal"
                           }
                         ],
                         "party": [
@@ -187,11 +179,14 @@
                         "hearingType": "Directions",
                         "case": [
                           {
-                            "caseName": "This is a case name",
-                            "caseNumber": "12341234",
-                            "caseType": "normal",
-                            "caseJurisdictionET": "Family Law",
-                            "caseSequenceIndicator": "2 of 3"
+                            "caseName": "This is a case name 3",
+                            "caseNumber": "12341236",
+                            "caseType": "normal"
+                          },
+                          {
+                            "caseName": "This is a case name 4",
+                            "caseNumber": "12341237",
+                            "caseType": "normal"
                           }
                         ]
                       }
@@ -254,7 +249,6 @@
                             "caseName": "This is a case name",
                             "caseNumber": "12341234",
                             "caseType": "normal",
-                            "caseJurisdictionET": "Family Law",
                             "caseSequenceIndicator": "2 of 3"
                           }
                         ],
