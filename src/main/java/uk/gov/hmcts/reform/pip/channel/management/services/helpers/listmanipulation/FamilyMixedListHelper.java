@@ -35,12 +35,12 @@ public final class FamilyMixedListHelper {
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get("hearing").forEach(hearing -> {
-                            if (hearing.has("party")) {
+                            if (hearing.has("party")
+                                && hearing.has("case")
+                                && hearing.get("case").size() == 1) {
                                 handleParties(hearing);
                             } else {
-                                ObjectNode hearingObj = (ObjectNode) hearing;
-                                hearingObj.put(APPLICANT, "");
-                                hearingObj.put(RESPONDENT, "");
+                                setEmptyParties(hearing);
                             }
                             hearing.get("case").forEach(
                                 hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
@@ -83,6 +83,14 @@ public final class FamilyMixedListHelper {
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
         hearingObj.put(RESPONDENT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
+    }
+
+    private static void setEmptyParties(JsonNode hearing) {
+        ObjectNode hearingObj = (ObjectNode) hearing;
+        hearingObj.put(APPLICANT, "");
+        hearingObj.put(APPLICANT_REPRESENTATIVE, "");
+        hearingObj.put(RESPONDENT, "");
+        hearingObj.put(RESPONDENT_REPRESENTATIVE, "");
     }
 
     private static String createPartyDetails(JsonNode party) {

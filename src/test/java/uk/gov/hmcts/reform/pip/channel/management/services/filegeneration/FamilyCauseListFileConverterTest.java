@@ -144,14 +144,37 @@ class FamilyCauseListFileConverterTest {
             );
 
         softly.assertThat(doc.getElementsByTag("td"))
-            .as("Incorrect table contents")
-            .hasSize(45)
+            .as("Incorrect table size")
+            .hasSize(45);
+
+        softly.assertThat(doc.getElementsByTag("td"))
+            .as("Incorrect table contents for hearing with a single case")
             .extracting(Element::text)
-            .contains(
+            .containsSequence(
+                "10:30am",
+                "12341234",
+                "This is a case name [2 of 3]",
+                "normal",
+                "Directions",
+                "Teams, Attended",
+                "1 hour 25 mins",
                 "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
-                "Surname",
-                "Applicant org name, Legal Advisor: Applicant rep org name",
-                "Respondent org name, Legal Advisor: Respondent rep org name"
+                "Surname"
+            );
+
+        softly.assertThat(doc.getElementsByTag("td"))
+            .as("Incorrect table contents for hearing with multiple cases")
+            .extracting(Element::text)
+            .containsSequence(
+                "10:30am",
+                "12341236",
+                "This is a case name 3",
+                "normal",
+                "Directions",
+                "Teams, Attended",
+                "1 hour 25 mins",
+                "",
+                ""
             );
 
         softly.assertAll();
