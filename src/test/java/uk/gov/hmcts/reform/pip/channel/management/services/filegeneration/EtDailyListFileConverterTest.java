@@ -92,7 +92,6 @@ class EtDailyListFileConverterTest {
                         "Mr T Test Surname",
                         "Capt. T Test Surname 2",
                         "This is a hearing type",
-                        "This is a case type",
                         "This is a sitting channel"
             );
 

@@ -53,10 +53,6 @@ class EtDailyListSummaryConverterTest {
             .contains("Hearing Type: This is a hearing type");
 
         softly.assertThat(output)
-            .as("Incorrect jurisdiction")
-            .contains("Jurisdiction: This is a case type");
-
-        softly.assertThat(output)
             .as("Incorrect hearing platform")
             .contains("Hearing Platform: This is a sitting channel");
 
