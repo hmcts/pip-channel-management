@@ -14,6 +14,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -59,6 +60,14 @@ class CrownDailyListSummaryConverterTest {
         softly.assertThat(emailOutput)
             .as("incorrect prosecuting authority found")
             .contains("Pro_Auth");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect reporting restriction detail found")
+            .contains("This is a reporting restriction detail, This is another reporting restriction detail");
+
+        softly.assertThat(Pattern.compile("Reporting Restriction - ").matcher(emailOutput).results().count())
+            .as("incorrect number of reporting restriction detail found")
+            .isEqualTo(2);
 
         softly.assertThat(emailOutput)
             .as("incorrect linked cases found")

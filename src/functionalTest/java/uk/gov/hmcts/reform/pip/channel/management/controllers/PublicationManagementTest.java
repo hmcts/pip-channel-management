@@ -85,10 +85,11 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "af7c6ba8-c391-458f-9246-40f419a98a12";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "e646650b-c7dc-4551-9163-f0f792b83e54";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
-    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST = "c18fa8f7-b040-40ae-8599-ca5081332f87";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST = "48732761-5ab5-482a-ad98-3aa91e4d5d5a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
+    private static final String ARTEFACT_ID_OPA_PRESS_LIST = "f83de894-9245-4d2c-90ef-6e64f49cdabb";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
@@ -135,8 +136,9 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_PRIMARY_HEALTH_LIST), //Primary Health Tribunal Hearing List
             Arguments.of(ARTEFACT_ID_SJP_PRESS_LIST), //Single Justice Procedure Press List
             Arguments.of(ARTEFACT_ID_SJP_PUBLIC_LIST), //Single Justice Procedure Public List
-            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List,
-            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS)  //SSCS Daily List - Additional Hearings
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS), //SSCS Daily List - Additional Hearings
+            Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST)  //OPA Press List
         );
     }
 
@@ -208,6 +210,9 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Prosecuting Authority - Pro_Auth"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Listing Notes - Listing details text"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Sitting at - 10:40am"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Reporting Restriction - This is a reporting restriction detail, "
+                                                + "This is another reporting restriction detail"),
+                   CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -367,13 +372,13 @@ class PublicationManagementTest {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant: This is a forename This is a surname"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: This is an individual postcode"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Defendant: A This is a surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: AA1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is a prosecutor organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
 
         assertTrue(responseContent.contains("Defendant: This is an accused organisation name"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: This is an organisation postcode"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A99"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
