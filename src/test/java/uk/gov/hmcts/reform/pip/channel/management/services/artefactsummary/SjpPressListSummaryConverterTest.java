@@ -30,39 +30,35 @@ class SjpPressListSummaryConverterTest {
 
         softly.assertThat(outputLines)
             .as("Output line count does not match")
-            .hasSize(17);
+            .hasSize(18);
 
         softly.assertThat(outputLines[0])
             .as("Accused (using individual details) does not match")
-            .isEqualTo("•Accused: Mr. Forename Middle Surname");
+            .isEqualTo("•Accused: This is a title This is a forename This is a surname");
 
         softly.assertThat(outputLines[1])
             .as("Postcode does not match")
-            .isEqualTo("Postcode: SE23 6FH");
+            .isEqualTo("Postcode: AA1 AA1");
 
         softly.assertThat(outputLines[2])
             .as("Prosecutor does not match")
-            .isEqualTo("Prosecutor: Hampshire Police");
+            .isEqualTo("Prosecutor: This is an organisation");
 
         softly.assertThat(outputLines[3])
             .as("Offence does not match")
-            .isEqualTo("Offence: Sedition (Reporting restriction)");
+            .isEqualTo("Offence 1: This is an offence title (Reporting restriction)");
 
         softly.assertThat(outputLines[4])
+            .as("Offence does not match")
+            .isEqualTo("Offence 2: This is another offence title");
+
+        softly.assertThat(outputLines[5])
             .as("Accused (using organisation details) does not match")
             .isEqualTo("•Accused: Accused's organisation");
 
-        softly.assertThat(outputLines[7])
-            .as("Multiple offence line 1 does not match")
-            .isEqualTo("Offence 1: Criminal Mischief (Reporting restriction)");
-
-        softly.assertThat(outputLines[8])
-            .as("Multiple offence line 2 does not match")
-            .isEqualTo("Offence 2: Swampy Jorts");
-
         softly.assertThat(outputLines[9])
             .as("Accused (missing individualForenames and individualSurname) does not match")
-            .isEqualTo("•Accused: Mrs. Middle");
+            .isEqualTo("•Accused: This is a title This is a middlename");
 
         softly.assertThat(outputLines[10])
             .as("Postcode (missing address field) does not match")
