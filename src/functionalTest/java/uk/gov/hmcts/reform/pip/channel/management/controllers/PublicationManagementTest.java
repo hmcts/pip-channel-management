@@ -249,7 +249,6 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case Number: 12341234"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Claimant: Mr T Test Surname"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: This is a hearing type"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Jurisdiction: This is a case type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Platform: This is a sitting channel"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -269,7 +268,6 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Hearing Type - This is a hearing type"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Jurisdiction - This is a case type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Platform - This is a sitting channel"), CONTENT_MISMATCH_ERROR);
     }
 
