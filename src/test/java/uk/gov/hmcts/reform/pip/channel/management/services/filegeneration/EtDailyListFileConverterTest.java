@@ -70,7 +70,7 @@ class EtDailyListFileConverterTest {
 
         softly.assertThat(doc.getElementsByTag("th"))
             .as("Incorrect table headers")
-            .hasSize(24)
+            .hasSize(21)
             .extracting(Element::text)
             .startsWith("Start Time",
                         "Duration",
@@ -83,7 +83,7 @@ class EtDailyListFileConverterTest {
 
         softly.assertThat(doc.getElementsByTag("td"))
             .as("Incorrect table contents")
-            .hasSize(40)
+            .hasSize(35)
             .extracting(Element::text)
             .startsWith("9:30am",
                         "2 hours [2 of 3]",
