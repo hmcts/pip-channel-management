@@ -14,6 +14,7 @@ public class OpaDefendantInfo {
     private String dob = "";
     private String age = "";
     private String address = "";
+    private String postcode = "";
     private String prosecutor = "";
     private List<Offence> offences;
 }

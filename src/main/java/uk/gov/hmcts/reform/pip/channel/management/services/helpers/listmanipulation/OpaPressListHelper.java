@@ -38,6 +38,7 @@ public final class OpaPressListHelper {
     private static final String DOB = "dateOfBirth";
     private static final String AGE = "age";
     private static final String ADDRESS = "address";
+    private static final String POSTCODE = "postCode";
     private static final String ORGANISATION_DETAILS = "organisationDetails";
     private static final String ORGANISATION_NAME = "organisationName";
     private static final String ORGANISATION_ADDRESS = "organisationAddress";
@@ -147,10 +148,14 @@ public final class OpaPressListHelper {
             String address = individualDetails.has(ADDRESS)
                 ? CrimeListHelper.formatDefendantAddress(individualDetails.get(ADDRESS)) : "";
 
+            String postcode = (individualDetails.has(ADDRESS) && individualDetails.get(ADDRESS).has(POSTCODE))
+                ? individualDetails.get(ADDRESS).get(POSTCODE).asText() : "";
+
             defendantInfo.setName(formatDefendantName(individualDetails));
             defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
             defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
             defendantInfo.setAddress(address);
+            defendantInfo.setPostcode(postcode);
             defendantInfo.setOffences(processOffences(individualDetails));
         } else if (party.has(ORGANISATION_DETAILS)) {
             JsonNode organisationDetails = party.get(ORGANISATION_DETAILS);
