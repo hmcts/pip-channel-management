@@ -26,7 +26,7 @@ class EtDailyListSummaryConverterTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(output.split(System.lineSeparator()))
             .as("Incorrect output lines")
-            .hasSize(40);
+            .hasSize(35);
 
         softly.assertThat(output)
             .as("Incorrect start time")
