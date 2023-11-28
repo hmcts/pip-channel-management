@@ -78,7 +78,6 @@ class EtDailyListFileConverterTest {
                         "Claimant",
                         "Respondent",
                         "Hearing Type",
-                        "Jurisdiction",
                         "Hearing Platform"
             );
 
