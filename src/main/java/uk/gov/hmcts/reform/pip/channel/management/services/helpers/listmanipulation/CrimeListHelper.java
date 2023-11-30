@@ -141,19 +141,13 @@ public final class CrimeListHelper {
     }
 
     public static String formatDefendantAddress(JsonNode addressNode) {
-        List<String> fullAddress = new ArrayList<>();
+        String address = formatDefendantAddressWithoutPostcode(addressNode);
+        String postCode = GeneralHelper.findAndReturnNodeText(addressNode, "postCode");
 
-        if (addressNode.has("line")) {
-            addressNode.get("line")
-                .forEach(line -> fullAddress.add(line.asText()));
+        if (!StringUtils.isBlank(postCode)) {
+            return  address + ", " + postCode;
         }
-        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
-        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
-        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "postCode"));
-
-        return fullAddress.stream()
-            .filter(line -> !StringUtils.isBlank(line))
-            .collect(Collectors.joining(", "));
+        return address;
     }
 
     public static String formatDefendantAddressWithoutPostcode(JsonNode addressNode) {
