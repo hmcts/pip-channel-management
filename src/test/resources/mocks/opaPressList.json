@@ -116,6 +116,61 @@
                                 }
                               ]
                             }
+                          },
+                          {
+                            "partyRole": "DEFENDANT",
+                            "individualDetails": {
+                              "individualForenames": "Forename2",
+                              "individualMiddleName": "MiddleName2",
+                              "individualSurname": "Surname2",
+                              "dateOfBirth": "01/01/1985",
+                              "age": 38,
+                              "youth": "Youth",
+                              "offence": [
+                                {
+                                  "offenceTitle": "Offence title 2",
+                                  "offenceSection": "Offence section 2",
+                                  "offenceWording": "Offence wording 2",
+                                  "plea": "NOT_GUILTY",
+                                  "pleaDate": "2023-09-22T09:00:00.123Z",
+                                  "reportingRestrictionDetail": [
+                                    "Offence reporting restriction detail 1"
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "partyRole": "DEFENDANT",
+                            "individualDetails": {
+                              "individualForenames": "Forename2",
+                              "individualMiddleName": "MiddleName2",
+                              "individualSurname": "Surname2",
+                              "dateOfBirth": "01/01/1985",
+                              "age": 38,
+                              "address": {
+                                "line": [
+                                  "Address Line 1",
+                                  "",
+                                  "Address Line 2"
+                                ],
+                                "town": "Town",
+                                "county": "County"
+                              },
+                              "youth": "Youth",
+                              "offence": [
+                                {
+                                  "offenceTitle": "Offence title 2",
+                                  "offenceSection": "Offence section 2",
+                                  "offenceWording": "Offence wording 2",
+                                  "plea": "NOT_GUILTY",
+                                  "pleaDate": "2023-09-22T09:00:00.123Z",
+                                  "reportingRestrictionDetail": [
+                                    "Offence reporting restriction detail 1"
+                                  ]
+                                }
+                              ]
+                            }
                           }
                         ]
                       },
@@ -173,6 +228,31 @@
                                 "town": "Town",
                                 "county": "County"
                               },
+                              "offence": [
+                                {
+                                  "offenceTitle": "Offence title 3",
+                                  "offenceSection": "Offence section 3",
+                                  "offenceWording": "Offence wording 3",
+                                  "plea": "NOT_GUILTY",
+                                  "pleaDate": "2023-09-21T09:00:00.123Z"
+                                },
+                                {
+                                  "offenceTitle": "Offence title 4",
+                                  "offenceSection": "Offence section 4",
+                                  "offenceWording": "Offence wording 4",
+                                  "plea": "NOT_GUILTY",
+                                  "pleaDate": "2023-09-21T09:00:00.123Z",
+                                  "reportingRestrictionDetail": [
+                                    "Offence reporting restriction detail 2"
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "partyRole": "DEFENDANT",
+                            "organisationDetails": {
+                              "organisationName": "Organisation name",
                               "offence": [
                                 {
                                   "offenceTitle": "Offence title 3",

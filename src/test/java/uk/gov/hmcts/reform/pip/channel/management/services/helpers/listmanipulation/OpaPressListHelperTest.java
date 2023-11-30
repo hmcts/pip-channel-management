@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapress
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("PMD.TooManyMethods")
 class OpaPressListHelperTest {
     private static final String PLEA_DATE_MESSAGE = "Plea dates do not match";
     private static final String DEFENDANT_NAME_MESSAGE = "Defendant name does not match";
@@ -30,6 +32,7 @@ class OpaPressListHelperTest {
     private static final String OFFENCE_INFO_MESSAGE = "Offence info does not match";
     private static final String CASE_INFO_MESSAGE = "Case info does not match";
     private static final String PROSECUTOR_MESSAGE = "Prosecutor does not match";
+    private static final String TEST_ADDRESS_LINE = "Address Line 1, Address Line 2, Town, County";
 
     private JsonNode rawListJson;
 
@@ -64,18 +67,17 @@ class OpaPressListHelperTest {
 
         softly.assertThat(values.get(0))
             .as(DEFENDANT_NAME_MESSAGE)
-            .hasSize(2)
+            .hasSize(6)
             .extracting(d -> d.getDefendantInfo().getName())
             .containsExactly(
-                "Surname2, Forename2 MiddleName2",
-                "Surname2, Forename2 MiddleName2"
+                Collections.nCopies(6, "Surname2, Forename2 MiddleName2").toArray(new String[0])
             );
 
         softly.assertThat(values.get(1))
             .as(DEFENDANT_NAME_MESSAGE)
-            .hasSize(2)
+            .hasSize(3)
             .extracting(d -> d.getDefendantInfo().getName())
-            .containsExactly("Organisation name", "Organisation name");
+            .containsExactly(Collections.nCopies(3, "Organisation name").toArray(new String[0]));
 
         softly.assertThat(values.get(2))
             .as(DEFENDANT_NAME_MESSAGE)
@@ -144,6 +146,68 @@ class OpaPressListHelperTest {
             .as(DEFENDANT_INFO_MESSAGE)
             .isEqualTo("Address Line 1, Address Line 2, Town, County, BB1 1BB");
 
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo("BB1 1BB");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testDefendantInfoUsingIndividualDetailsWhenNoAddress() {
+        OpaDefendantInfo defendantInfo = OpaPressListHelper.processRawListData(rawListJson)
+            .values()
+            .stream()
+            .toList()
+            .get(0)
+            .get(2)
+            .getDefendantInfo();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(defendantInfo.getAddress())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testDefendantInfoUsingIndividualDetailsWhenNoPostcode() {
+        OpaDefendantInfo defendantInfo = OpaPressListHelper.processRawListData(rawListJson)
+            .values()
+            .stream()
+            .toList()
+            .get(0)
+            .get(4)
+            .getDefendantInfo();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(defendantInfo.getAddress())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
         softly.assertAll();
     }
 
@@ -174,6 +238,68 @@ class OpaPressListHelperTest {
         softly.assertThat(defendantInfo.getAddress())
             .as(DEFENDANT_INFO_MESSAGE)
             .isEqualTo("Address Line 1, Address Line 2, Town, County, CC1 1CC");
+
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo("CC1 1CC");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testDefendantInfoUsingOrganisationDetailsWhenNoAddress() {
+        OpaDefendantInfo defendantInfo = OpaPressListHelper.processRawListData(rawListJson)
+            .values()
+            .stream()
+            .toList()
+            .get(1)
+            .get(2)
+            .getDefendantInfo();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(defendantInfo.getAddress())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testDefendantInfoUsingOrganisationDetailsWhenNoPostcode() {
+        OpaDefendantInfo defendantInfo = OpaPressListHelper.processRawListData(rawListJson)
+            .values()
+            .stream()
+            .toList()
+            .get(1)
+            .get(1)
+            .getDefendantInfo();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(defendantInfo.getAddress())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getAddressWithoutPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEqualTo(TEST_ADDRESS_LINE);
+
+        softly.assertThat(defendantInfo.getPostcode())
+            .as(DEFENDANT_INFO_MESSAGE)
+            .isEmpty();
 
         softly.assertAll();
     }
