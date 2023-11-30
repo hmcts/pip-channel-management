@@ -413,6 +413,26 @@ class PublicationManagementTest {
     }
 
     @Test
+    void testGenerateArtefactSummaryOpaPressList() throws Exception {
+        MvcResult response = mockMvc.perform(
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_OPA_PRESS_LIST))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(
+            responseContent.contains("Address - Address Line 1, Address Line 2, Town, County"), CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(responseContent.contains("Postcode - BB1 1BB"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("DOB - 01/01/1985"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Ref / URN - URN8888"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - Offence title 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Reporting Restriction - Offence reporting restriction detail 1"),
+            CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Reporting Restriction - Case reporting Restriction detail line 1, "
+                                                + "Case reporting restriction detail line 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor - Prosecuting authority ref"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
     void testGenerateArtefactSummaryNotFound() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_NOT_FOUND))
             .andExpect(status().isNotFound()).andReturn();
