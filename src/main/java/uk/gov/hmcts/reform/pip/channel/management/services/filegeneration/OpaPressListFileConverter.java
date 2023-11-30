@@ -95,7 +95,8 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
             int columnNumber = 7;
             for (int i = 1; i <= maxOffences.get(); i++) {
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Title", i), boldStyle);
-                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Reporting Restriction", i), boldStyle);
+                setCellValue(headingRow, columnNumber++,
+                             String.format("Offence[%s] - Reporting Restriction", i), boldStyle);
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Plea", i), boldStyle);
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Plea date", i), boldStyle);
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Detail", i), boldStyle);

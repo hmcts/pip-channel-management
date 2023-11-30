@@ -151,7 +151,7 @@ public final class OpaPressListHelper {
             String addressWithoutPostcode = individualDetails.has(ADDRESS)
                 ? CrimeListHelper.formatDefendantAddressWithoutPostcode(individualDetails.get(ADDRESS)) : "";
 
-            String postcode = (individualDetails.has(ADDRESS) && individualDetails.get(ADDRESS).has(POSTCODE))
+            String postcode = individualDetails.has(ADDRESS) && individualDetails.get(ADDRESS).has(POSTCODE)
                 ? individualDetails.get(ADDRESS).get(POSTCODE).asText() : "";
 
             defendantInfo.setName(formatDefendantName(individualDetails));

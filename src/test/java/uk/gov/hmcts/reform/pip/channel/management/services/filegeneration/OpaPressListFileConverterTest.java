@@ -219,7 +219,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(heading)
             .as(DEFENDANT_HEADING_MESSAGE)
-            .hasSize(5);
+            .hasSize(6);
 
         softly.assertThat(heading.get(0).text())
             .as(DEFENDANT_HEADING_MESSAGE)
@@ -235,9 +235,13 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(heading.get(3).text())
             .as(DEFENDANT_HEADING_MESSAGE)
+            .contains("Defendant Name: Organisation name");
+
+        softly.assertThat(heading.get(4).text())
+            .as(DEFENDANT_HEADING_MESSAGE)
             .contains("Defendant Name: Surname, Forename MiddleName");
 
-        softly.assertThat(heading.get(3).text())
+        softly.assertThat(heading.get(5).text())
             .as(DEFENDANT_HEADING_MESSAGE)
             .contains("Defendant Name: Surname, Forename MiddleName");
 

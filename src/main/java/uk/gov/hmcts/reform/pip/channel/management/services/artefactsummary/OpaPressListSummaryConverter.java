@@ -11,34 +11,29 @@ public class OpaPressListSummaryConverter implements ArtefactSummaryConverter {
 
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder(256);
 
         OpaPressListHelper.processRawListData(payload).forEach((pleaData, list) -> {
             list.forEach(item -> {
                 output
-                    .append("---\n")
-                    .append("•Address - ").append(item.getDefendantInfo().getAddressWithoutPostcode())
-                    .append("\n")
-                    .append("Postcode - ").append(item.getDefendantInfo().getPostcode())
-                    .append("\n")
-                    .append("DOB - ").append(item.getDefendantInfo().getDob())
-                    .append("\n")
-                    .append("Case Ref / URN - ").append(item.getCaseInfo().getUrn());
+                    .append("---\n•Address - ")
+                    .append(item.getDefendantInfo().getAddressWithoutPostcode())
+                    .append("\nPostcode - ").append(item.getDefendantInfo().getPostcode())
+                    .append("\nDOB - ").append(item.getDefendantInfo().getDob())
+                    .append("\nCase Ref / URN - ").append(item.getCaseInfo().getUrn());
 
                 for (int i = 1; i <= item.getDefendantInfo().getOffences().size(); i++) {
                     Offence offence = item.getDefendantInfo().getOffences().get(i - 1);
-                    output.append("\n")
-                        .append("Offence ").append(i).append(" Title - ").append(offence.getOffenceTitle())
-                        .append("\n")
-                        .append("Offence ").append(i).append(" Reporting Restriction - ")
+                    output
+                        .append("\nOffence ").append(i).append(" Title - ").append(offence.getOffenceTitle())
+                        .append("\nOffence ").append(i).append(" Reporting Restriction - ")
                         .append(offence.getOffenceReportingRestriction());
                 }
 
-                output.append("\n")
-                    .append("Reporting Restriction - ").append(item.getCaseInfo().getCaseReportingRestriction())
-                    .append("\n")
-                    .append("Prosecutor - ").append(item.getDefendantInfo().getProsecutor())
-                    .append("\n");
+                output
+                    .append("\nReporting Restriction - ").append(item.getCaseInfo().getCaseReportingRestriction())
+                    .append("\nProsecutor - ").append(item.getDefendantInfo().getProsecutor())
+                    .append('\n');
             });
         });
 

@@ -73,9 +73,9 @@ class OpaPressListHelperTest {
 
         softly.assertThat(values.get(1))
             .as(DEFENDANT_NAME_MESSAGE)
-            .hasSize(1)
+            .hasSize(2)
             .extracting(d -> d.getDefendantInfo().getName())
-            .containsExactly("Organisation name");
+            .containsExactly("Organisation name", "Organisation name");
 
         softly.assertThat(values.get(2))
             .as(DEFENDANT_NAME_MESSAGE)
