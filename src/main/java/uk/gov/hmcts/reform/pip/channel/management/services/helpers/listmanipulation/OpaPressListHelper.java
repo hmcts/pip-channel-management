@@ -148,6 +148,9 @@ public final class OpaPressListHelper {
             String address = individualDetails.has(ADDRESS)
                 ? CrimeListHelper.formatDefendantAddress(individualDetails.get(ADDRESS)) : "";
 
+            String addressWithoutPostcode = individualDetails.has(ADDRESS)
+                ? CrimeListHelper.formatDefendantAddressWithoutPostcode(individualDetails.get(ADDRESS)) : "";
+
             String postcode = (individualDetails.has(ADDRESS) && individualDetails.get(ADDRESS).has(POSTCODE))
                 ? individualDetails.get(ADDRESS).get(POSTCODE).asText() : "";
 
@@ -155,6 +158,7 @@ public final class OpaPressListHelper {
             defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
             defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
             defendantInfo.setAddress(address);
+            defendantInfo.setAddressWithoutPostcode(addressWithoutPostcode);
             defendantInfo.setPostcode(postcode);
             defendantInfo.setOffences(processOffences(individualDetails));
         } else if (party.has(ORGANISATION_DETAILS)) {

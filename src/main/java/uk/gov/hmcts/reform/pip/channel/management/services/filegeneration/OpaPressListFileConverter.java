@@ -61,8 +61,11 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
             setCellValue(headingRow, 3, "DOB", boldStyle);
             setCellValue(headingRow, 4, "Prosecution", boldStyle);
             setCellValue(headingRow, 5, "Scheduled first hearing", boldStyle);
+            setCellValue(headingRow, 6, "Case Reporting Restriction", boldStyle);
 
             AtomicInteger rowNumber = new AtomicInteger(1);
+            AtomicInteger maxOffences = new AtomicInteger(0);
+
             OpaPressListHelper.processRawListData(artefact).forEach((pleaData, list) -> {
                 list.forEach(item -> {
                     Row dataRow = sheet.createRow(rowNumber.get());
@@ -72,8 +75,10 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
                     setCellValue(dataRow, 3, item.getDefendantInfo().getDob());
                     setCellValue(dataRow, 4, item.getDefendantInfo().getProsecutor());
                     setCellValue(dataRow, 5, item.getCaseInfo().getScheduledHearingDate());
+                    setCellValue(dataRow, 6, item.getCaseInfo().getCaseReportingRestriction());
 
-                    AtomicInteger columnNumber = new AtomicInteger(6);
+                    AtomicInteger columnNumber = new AtomicInteger(7);
+                    maxOffences.set(Math.max(maxOffences.get(), item.getDefendantInfo().getOffences().size()));
                     item.getDefendantInfo().getOffences().forEach(offence -> {
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceTitle());
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceReportingRestriction());
@@ -82,12 +87,20 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceWording());
                     });
 
-                    //Where does offence section go
-                    //Where to put case reporting restriction
-
                     rowNumber.getAndIncrement();
                 });
             });
+
+            //Correct number of offence headings is added at the end, once the entire data set is processed
+            int columnNumber = 7;
+            for (int i = 1; i <= maxOffences.get(); i++) {
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Title", i), boldStyle);
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Reporting Restriction", i), boldStyle);
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Plea", i), boldStyle);
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Plea date", i), boldStyle);
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Detail", i), boldStyle);
+            }
+
             return convertToByteArray(workbook);
         }
     }

@@ -155,4 +155,19 @@ public final class CrimeListHelper {
             .filter(line -> !StringUtils.isBlank(line))
             .collect(Collectors.joining(", "));
     }
+
+    public static String formatDefendantAddressWithoutPostcode(JsonNode addressNode) {
+        List<String> fullAddress = new ArrayList<>();
+
+        if (addressNode.has("line")) {
+            addressNode.get("line")
+                .forEach(line -> fullAddress.add(line.asText()));
+        }
+        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
+        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
+
+        return fullAddress.stream()
+            .filter(line -> !StringUtils.isBlank(line))
+            .collect(Collectors.joining(", "));
+    }
 }
