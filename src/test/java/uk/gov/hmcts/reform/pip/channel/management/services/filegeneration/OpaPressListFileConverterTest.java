@@ -399,7 +399,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(sheet.getRow(0).getLastCellNum())
             .as("Incorrect column count")
-            .isEqualTo((short)17);
+            .isEqualTo((short)19);
 
         softly.assertAll();
     }
@@ -448,38 +448,46 @@ class OpaPressListFileConverterTest {
             .isEqualTo("Offence[1] - Title");
 
         softly.assertThat(row.getCell(8).getStringCellValue())
+            .as("Incorrect Offence [1] Section column")
+            .isEqualTo("Offence[1] - Section");
+
+        softly.assertThat(row.getCell(9).getStringCellValue())
             .as("Incorrect Offence [1] Reporting Restriction column")
             .isEqualTo("Offence[1] - Reporting Restriction");
 
-        softly.assertThat(row.getCell(9).getStringCellValue())
+        softly.assertThat(row.getCell(10).getStringCellValue())
             .as("Incorrect Offence [1] Plea column")
             .isEqualTo("Offence[1] - Plea");
 
-        softly.assertThat(row.getCell(10).getStringCellValue())
+        softly.assertThat(row.getCell(11).getStringCellValue())
             .as("Incorrect Offence [1] Plea Date column")
             .isEqualTo("Offence[1] - Plea date");
 
-        softly.assertThat(row.getCell(11).getStringCellValue())
+        softly.assertThat(row.getCell(12).getStringCellValue())
             .as("Incorrect Offence [1] Detail column")
             .isEqualTo("Offence[1] - Detail");
 
-        softly.assertThat(row.getCell(12).getStringCellValue())
+        softly.assertThat(row.getCell(13).getStringCellValue())
             .as("Incorrect Offence [2] Title column")
             .isEqualTo("Offence[2] - Title");
 
-        softly.assertThat(row.getCell(13).getStringCellValue())
+        softly.assertThat(row.getCell(14).getStringCellValue())
+            .as("Incorrect Offence [2] Section column")
+            .isEqualTo("Offence[2] - Section");
+
+        softly.assertThat(row.getCell(15).getStringCellValue())
             .as("Incorrect Offence [2] Reporting Restriction column")
             .isEqualTo("Offence[2] - Reporting Restriction");
 
-        softly.assertThat(row.getCell(14).getStringCellValue())
+        softly.assertThat(row.getCell(16).getStringCellValue())
             .as("Incorrect Offence [2] Plea column")
             .isEqualTo("Offence[2] - Plea");
 
-        softly.assertThat(row.getCell(15).getStringCellValue())
+        softly.assertThat(row.getCell(17).getStringCellValue())
             .as("Incorrect Offence [2] Plea date column")
             .isEqualTo("Offence[2] - Plea date");
 
-        softly.assertThat(row.getCell(16).getStringCellValue())
+        softly.assertThat(row.getCell(18).getStringCellValue())
             .as("Incorrect Offence [2] Detail column")
             .isEqualTo("Offence[2] - Detail");
 
@@ -530,40 +538,48 @@ class OpaPressListFileConverterTest {
             .isEqualTo("Offence title 2");
 
         softly.assertThat(row.getCell(8).getStringCellValue())
+            .as("Incorrect Offence [1] Section column")
+            .isEqualTo("Offence section 2");
+
+        softly.assertThat(row.getCell(9).getStringCellValue())
             .as("Incorrect Offence [1] Reporting Restriction column")
             .isEqualTo("Offence reporting restriction detail 1");
 
-        softly.assertThat(row.getCell(9).getStringCellValue())
+        softly.assertThat(row.getCell(10).getStringCellValue())
             .as("Incorrect Offence [1] Plea column")
             .isEqualTo("NOT_GUILTY");
 
-        softly.assertThat(row.getCell(10).getStringCellValue())
+        softly.assertThat(row.getCell(11).getStringCellValue())
             .as("Incorrect Offence [1] Plea Date column")
             .isEqualTo("22/09/2023");
 
-        softly.assertThat(row.getCell(11).getStringCellValue())
+        softly.assertThat(row.getCell(12).getStringCellValue())
             .as("Incorrect Offence [1] Detail column")
             .isEqualTo("Offence wording 2");
 
         Row rowWithSecondOffence = sheet.getRow(7);
 
-        softly.assertThat(rowWithSecondOffence.getCell(12).getStringCellValue())
+        softly.assertThat(rowWithSecondOffence.getCell(13).getStringCellValue())
             .as("Incorrect Offence [2] Title column")
             .isEqualTo("Offence title 4");
 
-        softly.assertThat(rowWithSecondOffence.getCell(13).getStringCellValue())
+        softly.assertThat(rowWithSecondOffence.getCell(14).getStringCellValue())
+            .as("Incorrect Offence [2] Section column")
+            .isEqualTo("Offence section 4");
+
+        softly.assertThat(rowWithSecondOffence.getCell(15).getStringCellValue())
             .as("Incorrect Offence [2] Reporting Restriction column")
             .isEqualTo("Offence reporting restriction detail 2");
 
-        softly.assertThat(rowWithSecondOffence.getCell(14).getStringCellValue())
+        softly.assertThat(rowWithSecondOffence.getCell(16).getStringCellValue())
             .as("Incorrect Offence [2] Plea column")
             .isEqualTo("NOT_GUILTY");
 
-        softly.assertThat(rowWithSecondOffence.getCell(15).getStringCellValue())
+        softly.assertThat(rowWithSecondOffence.getCell(17).getStringCellValue())
             .as("Incorrect Offence [2] Plea Date column")
             .isEqualTo("21/09/2023");
 
-        softly.assertThat(rowWithSecondOffence.getCell(16).getStringCellValue())
+        softly.assertThat(rowWithSecondOffence.getCell(18).getStringCellValue())
             .as("Incorrect Offence [2] Detail column")
             .isEqualTo("Offence wording 4");
 

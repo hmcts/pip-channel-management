@@ -81,6 +81,7 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
                     maxOffences.set(Math.max(maxOffences.get(), item.getDefendantInfo().getOffences().size()));
                     item.getDefendantInfo().getOffences().forEach(offence -> {
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceTitle());
+                        setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceSection());
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getOffenceReportingRestriction());
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getPlea());
                         setCellValue(dataRow, columnNumber.getAndIncrement(), offence.getPleaDate());
@@ -95,6 +96,7 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
             int columnNumber = 7;
             for (int i = 1; i <= maxOffences.get(); i++) {
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Title", i), boldStyle);
+                setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Section", i), boldStyle);
                 setCellValue(headingRow, columnNumber++,
                              String.format("Offence[%s] - Reporting Restriction", i), boldStyle);
                 setCellValue(headingRow, columnNumber++, String.format("Offence[%s] - Plea", i), boldStyle);
