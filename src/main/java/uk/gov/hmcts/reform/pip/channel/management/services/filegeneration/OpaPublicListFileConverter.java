@@ -21,7 +21,7 @@ public class OpaPublicListFileConverter implements FileConverter {
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("locationName", metadata.get("locationName"));
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
-        context.setVariable("cases", OpaPublicListHelper.formatOpaPublicList(artefact));
+        context.setVariable("listData", OpaPublicListHelper.formatOpaPublicList(artefact));
 
         return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
