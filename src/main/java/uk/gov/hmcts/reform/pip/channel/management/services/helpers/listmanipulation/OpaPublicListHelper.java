@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Offence;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Defendant;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Offence;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.OpaPublicList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class OpaPublicListHelper {
     private static final String COURT_LISTS = "courtLists";
@@ -40,6 +41,9 @@ public final class OpaPublicListHelper {
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String DELIMITER = ", ";
 
+    private OpaPublicListHelper() {
+    }
+
     public static List<OpaPublicList> formatOpaPublicList(JsonNode jsonData) {
         List<OpaPublicList> rows = new ArrayList<>();
 
@@ -49,12 +53,11 @@ public final class OpaPublicListHelper {
                     session -> session.get(SITTINGS).forEach(
                         sitting -> sitting.get(HEARING).forEach(hearing -> {
                             if (hearing.has(PARTY)) {
-                                processPartyRoles(hearing).forEach(defendant -> {
+                                processPartyRoles(hearing).forEach(defendant ->
                                     hearing.get(CASE).forEach(hearingCase -> {
                                         OpaCaseInfo caseInfo = buildHearingCase(hearingCase);
                                         rows.add(new OpaPublicList(caseInfo, defendant));
-                                    });
-                                });
+                                    }));
                             }
                         })
                     )
@@ -122,11 +125,11 @@ public final class OpaPublicListHelper {
         String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_MIDDLE_NAME);
         String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
-        String forenames = List.of(firstName, middleName).stream()
+        String forenames = Stream.of(firstName, middleName)
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(" "));
 
-        return List.of(surname, forenames).stream()
+        return Stream.of(surname, forenames)
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(DELIMITER));
     }
