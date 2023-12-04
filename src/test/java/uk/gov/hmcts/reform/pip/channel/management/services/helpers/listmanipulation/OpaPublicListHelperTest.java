@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Defendant;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Offence;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
 
 import java.io.IOException;
 import java.io.InputStream;

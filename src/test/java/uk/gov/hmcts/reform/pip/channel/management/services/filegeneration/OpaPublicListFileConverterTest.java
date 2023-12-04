@@ -189,8 +189,8 @@ class OpaPublicListFileConverterTest {
 
         softly.assertThat(data.get(2).text())
             .as(TABLE_DATA_MESSAGE)
-            .contains("Offence title - Offence section " +
-                          "Reporting Restriction - Offence Reporting Restriction detail");
+            .contains("Offence title - Offence section "
+                          + "Reporting Restriction - Offence Reporting Restriction detail");
 
         softly.assertThat(data.get(3).text())
             .as(TABLE_DATA_MESSAGE)
