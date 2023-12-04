@@ -137,27 +137,29 @@
     </div>
   </div>
 
-  <table>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
     <tr>
       <th:block th:each="heading: ${i18n.tableHeadings}">
         <th th:text="${heading}"/>
       </th:block>
     </tr>
-    <tr th:each="row : ${listData}">
-      <td th:text="${row.name}"/>
-      <td th:text="${row.caseUrn}"/>
-      <td th:text="${row.offence}"/>
-      <td th:text="${row.prosecutor}"/>
-      <td th:text="${row.scheduledHearingDate}"/>
-      <td th:text="${row.caseReportingRestriction}"/>
-    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr th:each="row : ${listData}" class="govuk-table__row">
+            <td th:text="${row.getDefendant().getName()}"></td>
+            <td th:text="${row.getCaseInfo().getUrn()}"></td>
+            <td th:each="offence : ${row.defendant.offences}" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection + ' Reporting Restriction - ' + offence.offenceReportingRestriction}"></td>
+            <td th:text="${row.getDefendant().getProsecutor()}"></td>
+            <td th:text="${row.getCaseInfo().getScheduledHearingDate()}"></td>
+            <td th:text="${row.getCaseInfo().getCaseReportingRestriction()}"></td>
+          </tr>
+    </tbody>
   </table>
-
   <section>
     <p class="govuk-body" th:text="${i18n.dataSource + provenance}" />
     <hr/>
     <p class="govuk-body" th:text="${i18n.thanks}" />
   </section>
-
 </body>
 </html>
