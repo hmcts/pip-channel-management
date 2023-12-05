@@ -64,7 +64,7 @@ class MagistratesStandardListHelperTest {
 
         JsonNode defendantInfo = defendant.get(DEFENDANT_INFO).get(0);
 
-        assertEquals("Surname1, John Smith1 (male)", defendant.get("defendantHeading").asText(),
+        assertEquals("Surname1, Forename1 (male)", defendant.get("defendantHeading").asText(),
                      "Unable to defendant heading");
 
         assertEquals("1", defendantInfo.get("sittingSequence").asText(),
@@ -116,10 +116,10 @@ class MagistratesStandardListHelperTest {
         assertEquals("NOT_GUILTY", defendantInfo.get("plea").asText(),
                      "Unable to find plea");
 
-        assertEquals("14/09/2016", defendantInfo.get("formattedConvictionDate").asText(),
+        assertEquals("13/12/2023", defendantInfo.get("formattedConvictionDate").asText(),
                      "Unable to find formatted conviction date");
 
-        assertEquals("14/09/2016", defendantInfo.get("formattedAdjournedDate").asText(),
+        assertEquals("13/12/2023", defendantInfo.get("formattedAdjournedDate").asText(),
                      "Unable to find formatted adjourned date");
     }
 }
