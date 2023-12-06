@@ -129,9 +129,9 @@ public final class OpaPublicListHelper {
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(" "));
 
-        return Stream.of(surname, forenames)
+        return Stream.of(forenames, surname)
             .filter(n -> !StringUtils.isBlank(n))
-            .collect(Collectors.joining(DELIMITER));
+            .collect(Collectors.joining(" "));
     }
 
     private static List<Offence> processOffences(JsonNode detailsNode) {
