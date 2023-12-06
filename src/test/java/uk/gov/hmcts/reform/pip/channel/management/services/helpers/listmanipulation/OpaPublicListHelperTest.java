@@ -87,7 +87,7 @@ class OpaPublicListHelperTest {
 
         assertThat(defendant.getName())
             .as(DEFENDANT_NAME_MESSAGE)
-            .isEqualTo("IndividualSurname, individualFirstName individualMiddleName");
+            .isEqualTo("individualFirstName individualMiddleName IndividualSurname");
     }
 
     @Test
@@ -95,7 +95,7 @@ class OpaPublicListHelperTest {
         Defendant defendant = OpaPublicListHelper.formatOpaPublicList(rawListJson)
             .stream()
             .toList()
-            .get(2)
+            .get(6)
             .getDefendant();
 
         assertThat(defendant.getName())

@@ -177,7 +177,7 @@ class OpaPublicListFileConverterTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(data)
             .as(TABLE_DATA_MESSAGE)
-            .hasSize(18);
+            .hasSize(54);
 
         softly.assertThat(data.get(0).text())
             .as(TABLE_DATA_MESSAGE)
