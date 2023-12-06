@@ -28,4 +28,20 @@
     <notes>Suppression for azure packages</notes>
     <cve>CVE-2023-36052</cve>
   </suppress>
+  <suppress>
+    <notes>Suppression for logback packages</notes>
+    <cve>CVE-2023-6378</cve>
+  </suppress>
+  <suppress>
+    <notes>Suppression for spring packages</notes>
+    <cve>CVE-2023-34053</cve>
+  </suppress>
+  <suppress>
+    <notes>Suppression for spring boot starter packages</notes>
+    <cve>CVE-2023-34055</cve>
+  </suppress>
+  <suppress>
+    <notes>Suppression for tomcat packages</notes>
+    <cve>CVE-2023-46589</cve>
+  </suppress>
 </suppressions>
