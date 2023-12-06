@@ -38,7 +38,7 @@ class MagistratesStandardListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect sitting at found")
-            .contains("2:30pm");
+            .contains("1:30pm");
 
         softly.assertThat(emailOutput)
             .as("incorrect case reference found")
@@ -46,7 +46,7 @@ class MagistratesStandardListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Surname1, John Smith1");
+            .contains("Surname1, Forename1");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
@@ -90,11 +90,11 @@ class MagistratesStandardListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect Convicted on found")
-            .contains("14/09/2016");
+            .contains("13/12/2023");
 
         softly.assertThat(emailOutput)
             .as("incorrect Adjourned from found")
-            .contains("14/09/2016 - For the trial");
+            .contains("13/12/2023 - For the trial");
 
         softly.assertThat(emailOutput)
             .as("incorrect offence details found")
