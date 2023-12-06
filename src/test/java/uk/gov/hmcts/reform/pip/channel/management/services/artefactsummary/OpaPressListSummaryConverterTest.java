@@ -34,7 +34,15 @@ class OpaPressListSummaryConverterTest {
 
         softly.assertThat(artefactSummary.split(System.lineSeparator()))
             .as("Incorrect output lines")
-                .hasSize(105);
+                .hasSize(116);
+
+        softly.assertThat(artefactSummary)
+            .as("incorrect name found")
+            .contains("Defendant - Surname, Forename MiddleName");
+
+        softly.assertThat(artefactSummary)
+            .as("incorrect organisation name found")
+            .contains("Defendant - Organisation name");
 
         softly.assertThat(artefactSummary)
             .as("incorrect address found")

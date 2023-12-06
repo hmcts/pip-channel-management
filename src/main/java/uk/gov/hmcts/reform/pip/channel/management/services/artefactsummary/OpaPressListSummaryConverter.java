@@ -16,8 +16,8 @@ public class OpaPressListSummaryConverter implements ArtefactSummaryConverter {
         OpaPressListHelper.processRawListData(payload).forEach((pleaData, list) -> {
             list.forEach(item -> {
                 output
-                    .append("---\n•Address - ")
-                    .append(item.getDefendantInfo().getAddressWithoutPostcode())
+                    .append("---\n•Defendant - ").append(item.getDefendantInfo().getName())
+                    .append("\nAddress - ").append(item.getDefendantInfo().getAddressWithoutPostcode())
                     .append("\nPostcode - ").append(item.getDefendantInfo().getPostcode())
                     .append("\nDOB - ").append(item.getDefendantInfo().getDob())
                     .append("\nCase Ref / URN - ").append(item.getCaseInfo().getUrn());

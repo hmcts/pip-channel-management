@@ -419,6 +419,12 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(
+            responseContent.contains("Defendant - Surname2, Forename2 MiddleName2"), CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(
+            responseContent.contains("Defendant - Organisation name"), CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(
             responseContent.contains("Address - Address Line 1, Address Line 2, Town, County"), CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Postcode - BB1 1BB"), CONTENT_MISMATCH_ERROR);
