@@ -72,7 +72,7 @@ class MagistratesStandardListFileConverterTest {
         assertThat(document.getElementsByClass(BODY_CLASS)
                        .get(1).text())
             .as(BODY_TEXT)
-            .isEqualTo("Last updated: 14 September 2016 at 12:30am");
+            .isEqualTo("Last updated: 01 December 2023 at 11:30pm");
 
         assertThat(document.getElementsByClass(BODY_CLASS)
                        .get(2).text())
