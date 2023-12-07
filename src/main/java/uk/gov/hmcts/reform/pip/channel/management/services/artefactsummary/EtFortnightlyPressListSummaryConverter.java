@@ -52,8 +52,6 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                             output.append(", ").append(hearing.get("respondentRepresentative").asText());
                             GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                 hearing,"hearingType");
-                            GeneralHelper.appendToStringBuilder(output, "Jurisdiction - ",
-                                                                hearingCase,"caseType");
                             GeneralHelper.appendToStringBuilder(output, "Hearing Platform - ",
                                                                 hearing,"caseHearingChannel");
                         })

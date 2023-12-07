@@ -215,14 +215,6 @@
                         <td class="govuk-table__cell" th:utext="${hearing.get('claimant').asText()}"/>
                         <td class="govuk-table__cell" th:utext="${hearing.get('respondent').asText()}"/>
                         <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
-
-                        <th:block th:if="${case.has('caseType')}">
-                          <td class="govuk-table__cell" th:text="${case.get('caseType').asText()}"/>
-                        </th:block>
-                        <th:block th:if="!${case.has('caseType')}">
-                          <td class="govuk-table__cell" th:text=""/>
-                        </th:block>
-
                         <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
                       </tr>
                     </th:block>
