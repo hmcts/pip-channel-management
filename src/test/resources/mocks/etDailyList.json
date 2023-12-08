@@ -21,8 +21,7 @@
             "hearing": [{
               "case": [{
                 "caseNumber": "12341234",
-                "caseSequenceIndicator": "2 of 3",
-                "caseType": "This is a case type"
+                "caseSequenceIndicator": "2 of 3"
               }],
               "party": [
                 {
@@ -81,8 +80,7 @@
               "sittingEnd": "2022-02-13T09:33:32.123Z",
               "hearing": [{
                 "case": [{
-                  "caseNumber": "12341234",
-                  "caseType": "This is a case type"
+                  "caseNumber": "12341234"
                 }],
                 "party": [
                   {
@@ -115,8 +113,7 @@
                 "sittingEnd": "2022-02-13T16:55:32.123Z",
                 "hearing": [{
                   "case": [{
-                    "caseNumber": "12341234",
-                    "caseType": "This is a case type"
+                    "caseNumber": "12341234"
                   }],
                   "party": [
                     {
@@ -154,8 +151,7 @@
                 "hearing": [{
                   "case": [{
                     "caseNumber": "12341234",
-                    "caseSequenceIndicator": "2 of 3",
-                    "caseType": "This is a case type"
+                    "caseSequenceIndicator": "2 of 3"
                   }],
                   "party": [
                     {
@@ -189,8 +185,7 @@
                   "hearing": [{
                     "case": [{
                       "caseNumber": "12341234",
-                      "caseSequenceIndicator": "2 of 3",
-                      "caseType": "This is a case type"
+                      "caseSequenceIndicator": "2 of 3"
                     }],
                     "party": [
                       {
