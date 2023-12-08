@@ -175,7 +175,6 @@
                       <th th:text="${i18n.claimant}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.respondent}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.hearingType}" scope="col" class="govuk-table__header"/>
-                      <th th:text="${i18n.jurisdiction}" scope="col" class="govuk-table__header"/>
                       <th th:text="${i18n.hearingPlatform}" scope="col" class="govuk-table__header"/>
                     </tr>
                     </thead>
@@ -196,7 +195,6 @@
                             <td class="govuk-table__cell" th:utext="${hearing.get('claimant').asText() + '<br/>' + hearing.get('claimantRepresentative').asText()}"/>
                             <td class="govuk-table__cell" th:utext="${hearing.get('respondent').asText() + '<br/>' + hearing.get('respondentRepresentative').asText()}"/>
                             <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}" />
-                            <td class="govuk-table__cell" th:text="${case.get('caseType').asText()}" />
                             <td class="govuk-table__cell" th:text="${hearing.get('caseHearingChannel').asText()}" />
                           </tr>
                         </th:block>
