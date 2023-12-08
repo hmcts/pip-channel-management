@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipula
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.CaseInfo;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Defendant;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Offence;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.OpaPublicList;
@@ -55,7 +55,7 @@ public final class OpaPublicListHelper {
                             if (hearing.has(PARTY)) {
                                 processPartyRoles(hearing).forEach(defendant ->
                                     hearing.get(CASE).forEach(hearingCase -> {
-                                        OpaCaseInfo caseInfo = buildHearingCase(hearingCase);
+                                        CaseInfo caseInfo = buildHearingCase(hearingCase);
                                         rows.add(new OpaPublicList(caseInfo, defendant));
                                     }));
                             }
@@ -67,12 +67,12 @@ public final class OpaPublicListHelper {
         return rows;
     }
 
-    private static OpaCaseInfo buildHearingCase(JsonNode hearingCase) {
+    private static CaseInfo buildHearingCase(JsonNode hearingCase) {
         String scheduledHearingDate = DateHelper.formatTimeStampToBst(
             GeneralHelper.findAndReturnNodeText(hearingCase, SCHEDULED_HEARING_DATE),
             Language.ENGLISH, false, false, DATE_FORMAT
         );
-        return new OpaCaseInfo(
+        return new CaseInfo(
             GeneralHelper.findAndReturnNodeText(hearingCase, CASE_URN),
             scheduledHearingDate,
             formatReportingRestriction(hearingCase)
@@ -125,11 +125,7 @@ public final class OpaPublicListHelper {
         String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_MIDDLE_NAME);
         String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
-        String forenames = Stream.of(firstName, middleName)
-            .filter(n -> !StringUtils.isBlank(n))
-            .collect(Collectors.joining(" "));
-
-        return Stream.of(forenames, surname)
+        return Stream.of(firstName, middleName, surname)
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(" "));
     }
