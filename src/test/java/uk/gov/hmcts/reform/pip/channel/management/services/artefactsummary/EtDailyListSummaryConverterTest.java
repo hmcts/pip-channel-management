@@ -26,7 +26,7 @@ class EtDailyListSummaryConverterTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(output.split(System.lineSeparator()))
             .as("Incorrect output lines")
-            .hasSize(40);
+            .hasSize(35);
 
         softly.assertThat(output)
             .as("Incorrect start time")
@@ -51,10 +51,6 @@ class EtDailyListSummaryConverterTest {
         softly.assertThat(output)
             .as("Incorrect hearing type")
             .contains("Hearing Type: This is a hearing type");
-
-        softly.assertThat(output)
-            .as("Incorrect jurisdiction")
-            .contains("Jurisdiction: This is a case type");
 
         softly.assertThat(output)
             .as("Incorrect hearing platform")
