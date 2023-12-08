@@ -14,8 +14,6 @@ import java.util.Map;
 public class OpaPublicListFileConverter implements FileConverter {
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
-        List<OpaPublicList> listData = OpaPublicListHelper.formatOpaPublicList(artefact);
-
         Context context = new Context();
         context.setVariable("i18n", languageResources);
         setPublishedDateTime(context, artefact.get("document").get("publicationDate").asText(),
@@ -24,6 +22,8 @@ public class OpaPublicListFileConverter implements FileConverter {
         context.setVariable("provenance", metadata.get("provenance"));
         context.setVariable("locationName", metadata.get("locationName"));
         context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
+
+        List<OpaPublicList> listData = OpaPublicListHelper.formatOpaPublicList(artefact);
         context.setVariable("listData", listData);
         context.setVariable("length", listData.toArray().length);
 
