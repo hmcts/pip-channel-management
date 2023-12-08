@@ -3,12 +3,11 @@ package uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubl
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpaPublicList {
-    private OpaCaseInfo caseInfo;
+    private CaseInfo caseInfo;
     private Defendant defendant;
 }
