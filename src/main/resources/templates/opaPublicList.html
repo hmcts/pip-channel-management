@@ -99,6 +99,40 @@
       border: 0 !important;
       white-space: nowrap !important;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .govuk-table {
+      table-layout: fixed;
+      font-family: "openSans";
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.25;
+      color: #0b0c0c;
+      width: 1050px;
+      margin-bottom: 20px;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
+    .no-wrap {
+      white-space: nowrap;
+    }
+
+    .govuk-table__header, .govuk-table__body {
+      padding: 10px 20px 10px 0;
+      border-bottom: 1px solid #b1b4b6;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .govuk-table__header {
+      font-weight: 700;
+    }
+
   </style>
 
   <meta charset="UTF-8"/>
@@ -137,8 +171,10 @@
     </div>
   </div>
 
+  <p class="govuk-body" th:text="${#strings.replace(i18n.listDetail, 'CASES_COUNT', length) + ' ' + publishedDate + ' ' + i18n.publishedAt + ' ' + publishedTime}"></p>
+
   <table class="govuk-table">
-    <thead class="govuk-table__head">
+    <thead class="govuk-table__header">
     <tr>
       <th:block th:each="heading: ${i18n.tableHeadings}">
         <th th:text="${heading}"/>
@@ -147,12 +183,12 @@
     </thead>
     <tbody class="govuk-table__body">
         <tr th:each="row : ${listData}" class="govuk-table__row">
-            <td th:text="${row.getDefendant().getName()}"></td>
-            <td th:text="${row.getCaseInfo().getUrn()}"></td>
-            <td th:each="offence : ${row.defendant.offences}" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection + ' Reporting Restriction - ' + offence.offenceReportingRestriction}"></td>
-            <td th:text="${row.getDefendant().getProsecutor()}"></td>
-            <td th:text="${row.getCaseInfo().getScheduledHearingDate()}"></td>
-            <td th:text="${row.getCaseInfo().getCaseReportingRestriction()}"></td>
+            <td class="govuk-table__cell" th:text="${row.getDefendant().getName()}" />
+            <td class="govuk-table__cell" th:text="${row.getCaseInfo().getUrn()}" />
+            <td class="govuk-table__cell" th:each="offence : ${row.defendant.offences}" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection + ' Reporting Restriction - ' + offence.offenceReportingRestriction}" />
+            <td class="govuk-table__cell" th:text="${row.getDefendant().getProsecutor()}" />
+            <td class="govuk-table__cell no-wrap" th:text="${row.getCaseInfo().getScheduledHearingDate()}" />
+            <td class="govuk-table__cell" th:text="${row.getCaseInfo().getCaseReportingRestriction()}" />
           </tr>
     </tbody>
   </table>
