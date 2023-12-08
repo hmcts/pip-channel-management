@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapresslist.OpaCaseInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.CaseInfo;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Defendant;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.opapubliclist.Offence;
 
@@ -41,7 +41,7 @@ class OpaPublicListHelperTest {
 
     @Test
     void testCaseInfo() {
-        OpaCaseInfo caseInfo = OpaPublicListHelper.formatOpaPublicList(rawListJson)
+        CaseInfo caseInfo = OpaPublicListHelper.formatOpaPublicList(rawListJson)
             .stream()
             .toList()
             .get(0)

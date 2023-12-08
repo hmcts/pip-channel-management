@@ -119,7 +119,7 @@ class OpaPublicListFileConverterTest {
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(document.getElementsByClass("restriction-list-section").get(0).getElementsByTag("h3"))
-            .as("reporting restriction title does not match")
+            .as("Reporting restriction title does not match")
             .extracting(Element::text)
             .contains("Restrictions on publishing or writing about these cases");
 
@@ -127,6 +127,19 @@ class OpaPublicListFileConverterTest {
             .as("Reporting restriction warning does not match")
             .contains("You'll be in contempt of court if you publish any information which is protected by a "
                           + "reporting restriction. You could get a fine, prison sentence or both.");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testCaseCountSummary() {
+        String result = converter.convert(inputJson, METADATA, englishLanguageResource);
+        Document document = Jsoup.parse(result);
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(document.getElementsByClass(BODY_CLASS).get(6).text())
+            .as("Case count summary does not match")
+            .isEqualTo("List containing 9 case(s) generated on 13 February 2022 at 9:30am");
 
         softly.assertAll();
     }
