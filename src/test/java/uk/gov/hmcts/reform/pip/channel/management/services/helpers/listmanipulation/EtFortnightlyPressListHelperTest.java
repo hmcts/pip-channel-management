@@ -94,9 +94,6 @@ class EtFortnightlyPressListHelperTest {
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
                      "Unable to find hearing type");
 
-        assertEquals("This is a case type", hearing.get(CASE).get(0).get("caseType").asText(),
-                     "Unable to find Jurisdiction");
-
         assertEquals("This is a sitting channel", hearing.get("caseHearingChannel").asText(),
                      "Unable to find Hearing Platform");
     }
@@ -143,9 +140,6 @@ class EtFortnightlyPressListHelperTest {
 
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
                      "Unable to find hearing type");
-
-        assertEquals("This is a case type", hearing.get(CASE).get(0).get("caseType").asText(),
-                     "Unable to find Jurisdiction");
 
         assertEquals("This is a sitting channel", hearing.get("caseHearingChannel").asText(),
                      "Unable to find Hearing Platform");

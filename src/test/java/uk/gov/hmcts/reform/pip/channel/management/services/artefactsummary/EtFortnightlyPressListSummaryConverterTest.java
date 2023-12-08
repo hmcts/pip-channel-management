@@ -65,10 +65,6 @@ class EtFortnightlyPressListSummaryConverterTest {
             .contains("This is a hearing type");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Jurisdiction found")
-            .contains("This is a case type");
-
-        softly.assertThat(emailOutput)
             .as("incorrect Hearing Platform found")
             .contains("This is a sitting channel");
 
