@@ -3,30 +3,38 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesStandardListHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
 @Service
 public class MagistratesStandardListFileConverter implements FileConverter {
     @Override
-    public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        return TemplateEngine.processTemplate(
-            metadata.get("listType"),
-            preprocessArtefactForThymeLeafConverter(artefact, metadata, language)
-        );
+    public String convert(JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
+        Context context = new Context();
+        Language language = Language.valueOf(metadata.get("language"));
+
+        setPublicationDateTime(context, artefact.get("document").get("publicationDate").asText(), language);
+        context.setVariable("i18n", languageResources);
+
+        context.setVariable("contentDate", metadata.get("contentDate"));
+        context.setVariable("provenance", metadata.get("provenance"));
+        context.setVariable("version", artefact.get("document").get("version").asText());
+
+        context.setVariable("locationName", metadata.get("locationName"));
+        context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
+        context.setVariable("cases", MagistratesStandardListHelper.processRawListData(artefact, language));
+
+        return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
-    private Context preprocessArtefactForThymeLeafConverter(
-        JsonNode artefact, Map<String, String> metadata, Map<String, Object> language) {
-        Context context = CommonListHelper.preprocessArtefactForThymeLeafConverter(
-            artefact, metadata, language, false
-        );
-        MagistratesStandardListHelper.manipulatedMagistratesStandardList(artefact, language);
-        context.setVariable("venueAddress", LocationHelper.formatFullVenueAddress(artefact));
-        context.setVariable("version", artefact.get("document").get("version").asText());
-        return context;
+    private void setPublicationDateTime(Context context, String publicationDate, Language language) {
+        context.setVariable("publicationDate", DateHelper.formatTimeStampToBst(publicationDate, language,
+                                                                               false, false));
+        context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
+                                                                               true, false));
     }
 }

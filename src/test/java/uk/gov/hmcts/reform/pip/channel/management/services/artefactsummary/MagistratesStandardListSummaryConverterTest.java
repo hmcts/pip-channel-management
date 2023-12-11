@@ -37,68 +37,64 @@ class MagistratesStandardListSummaryConverterTest {
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(emailOutput)
-            .as("incorrect sitting at found")
-            .contains("1:30pm");
-
-        softly.assertThat(emailOutput)
-            .as("incorrect case reference found")
-            .contains("45684548");
-
-        softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Surname1, Forename1");
+            .contains("Defendant Name - Surname1, Forename1 (male)");
 
         softly.assertThat(emailOutput)
-            .as("incorrect hearing type found")
-            .contains("mda");
+            .as("incorrect sitting at found")
+            .contains("Sitting at - 1:30pm for 2 hours 30 mins [2 of 3]");
 
         softly.assertThat(emailOutput)
-            .as("incorrect duration found")
-            .contains("2 hours 30 mins [2 of 3]");
-
-        softly.assertThat(emailOutput)
-            .as("incorrect date of birth found")
-            .contains("01/01/1983");
+            .as("incorrect date of birth and age found")
+            .contains("DOB and Age - 01/01/1983 Age: 39");
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant address found")
-            .contains("Address Line 1, Address Line 2, Month A, County A, AA1 AA1");
+            .contains("Defendant Address - Address Line 1, Address Line 2, Month A, County A, AA1 AA1");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Prosecuting Authority found")
-            .contains("Test1234");
+            .as("incorrect prosecuting authority found")
+            .contains("Prosecuting Authority - Test1234");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Hearing Number found")
-            .contains("12");
+            .as("incorrect hearing number found")
+            .contains("Hearing Number - 12");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Attendance Method found")
-            .contains("VIDEO HEARING");
+            .as("incorrect attendance method found")
+            .contains("Attendance Method - VIDEO HEARING");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Panel found")
-            .contains("ADULT");
+            .as("incorrect case reference found")
+            .contains("Case Ref - 45684548");
 
         softly.assertThat(emailOutput)
-            .as("incorrect offence found")
-            .contains("1. drink driving");
+            .as("incorrect hearing type found")
+            .contains("Hearing of Type - mda");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect panel found")
+            .contains("Panel - ADULT");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect offence title found")
+            .contains("Offence 1 Title - drink driving");
 
         softly.assertThat(emailOutput)
             .as("incorrect Plea")
-            .contains("NOT_GUILTY");
+            .contains("Offence 1 Plea - NOT_GUILTY");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Convicted on found")
-            .contains("13/12/2023");
+            .as("incorrect convicted on found")
+            .contains("Offence 1 Convicted on - 13/12/2023");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Adjourned from found")
-            .contains("13/12/2023 - For the trial");
+            .as("incorrect adjourned from found")
+            .contains("Offence 1 Adjourned from - 13/12/2023");
 
         softly.assertThat(emailOutput)
             .as("incorrect offence details found")
-            .contains("driving whilst under the influence of alcohol");
+            .contains("Offence 1 Details - driving whilst under the influence of alcohol");
 
         softly.assertAll();
     }

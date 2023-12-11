@@ -237,7 +237,7 @@ class OpaPressListFileConverterTest {
             .as(DEFENDANT_HEADING_MESSAGE)
             .contains("Defendant Name: Surname, Forename MiddleName");
 
-        softly.assertThat(heading.get(3).text())
+        softly.assertThat(heading.get(4).text())
             .as(DEFENDANT_HEADING_MESSAGE)
             .contains("Defendant Name: Surname, Forename MiddleName");
 
