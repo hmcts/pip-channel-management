@@ -67,7 +67,7 @@ public final class MagistratesStandardListHelper {
     }
 
     public static Map<String, List<MagistratesStandardList>> processRawListData(JsonNode jsonData, Language language) {
-        Map<String, List<MagistratesStandardList>> allCases = new LinkedHashMap<>();
+        Map<String, List<MagistratesStandardList>> listData = new LinkedHashMap<>();
 
         jsonData.get(COURT_LISTS).forEach(
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
@@ -83,13 +83,13 @@ public final class MagistratesStandardListHelper {
                                 }
                             })
                         );
-                        allCases.computeIfAbsent(session.get(FORMATTED_COURT_ROOM).asText(), x -> new ArrayList<>())
+                        listData.computeIfAbsent(session.get(FORMATTED_COURT_ROOM).asText(), x -> new ArrayList<>())
                             .addAll(cases);
                     })
                 )
             )
         );
-        return allCases;
+        return listData;
     }
 
     private static CaseSitting processSittingInfo(JsonNode courtRoom, JsonNode session, JsonNode sitting,
