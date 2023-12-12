@@ -73,12 +73,13 @@ public final class MagistratesStandardListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(
                     session -> session.get(SITTINGS).forEach(sitting -> {
+                        processSittingInfo(courtRoom, session, sitting, language);
                         List<MagistratesStandardList> cases = new ArrayList<>();
                         sitting.get(HEARING).forEach(hearing ->
                             hearing.get(CASE).forEach(hearingCase -> {
                                 if (hearingCase.has(PARTY)) {
-                                    CaseSitting caseSitting = processSittingInfo(courtRoom, session, sitting, language);
-                                    caseSitting.setCaseInfo(buildHearingCase(hearingCase, sitting, hearing));
+                                    CaseInfo caseInfo = buildHearingCase(hearingCase, sitting, hearing);
+                                    CaseSitting caseSitting = buildCaseSitting(sitting, caseInfo);
                                     hearingCase.get(PARTY).forEach(party -> processParty(party, caseSitting, cases));
                                 }
                             })
@@ -92,17 +93,12 @@ public final class MagistratesStandardListHelper {
         return listData;
     }
 
-    private static CaseSitting processSittingInfo(JsonNode courtRoom, JsonNode session, JsonNode sitting,
+    private static void processSittingInfo(JsonNode courtRoom, JsonNode session, JsonNode sitting,
                                                   Language language) {
         SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
         DateHelper.calculateDuration(sitting, language);
         DateHelper.formatStartTime(sitting, TIME_FORMAT);
-
-        CaseSitting caseSitting = new CaseSitting();
-        caseSitting.setSittingStartTime(GeneralHelper.findAndReturnNodeText(sitting, TIME));
-        caseSitting.setSittingDuration(GeneralHelper.findAndReturnNodeText(sitting, DURATION));
-        return caseSitting;
     }
 
     private static CaseInfo buildHearingCase(JsonNode hearingCase, JsonNode sitting, JsonNode hearing) {
@@ -133,6 +129,14 @@ public final class MagistratesStandardListHelper {
         return StringUtils.isBlank(dateStr)
             ? ""
             : DateHelper.formatTimeStampToBst(dateStr, Language.ENGLISH, false, false, DATE_FORMAT);
+    }
+
+    private static CaseSitting buildCaseSitting(JsonNode sitting, CaseInfo caseInfo) {
+        CaseSitting caseSitting = new CaseSitting();
+        caseSitting.setSittingStartTime(GeneralHelper.findAndReturnNodeText(sitting, TIME));
+        caseSitting.setSittingDuration(GeneralHelper.findAndReturnNodeText(sitting, DURATION));
+        caseSitting.setCaseInfo(caseInfo);
+        return caseSitting;
     }
 
     private static void processParty(JsonNode party, CaseSitting caseSitting, List<MagistratesStandardList> cases) {
