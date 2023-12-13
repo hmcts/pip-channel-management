@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CaseInfo {
-    private String prosecutionAuthorityCode;
+    private String prosecutingAuthorityCode;
     private String hearingNumber;
     private String attendanceMethod;
     private String caseNumber;

@@ -50,7 +50,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                             .append("\nDefendant Address - ")
                             .append(sitting.getDefendantInfo().getAddress())
                             .append("\nProsecuting Authority - ")
-                            .append(caseInfo.getProsecutionAuthorityCode())
+                            .append(caseInfo.getProsecutingAuthorityCode())
                             .append("\nHearing Number - ")
                             .append(caseInfo.getHearingNumber())
                             .append("\nAttendance Method - ")

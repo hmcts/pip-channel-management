@@ -105,7 +105,7 @@ public final class MagistratesStandardListHelper {
     private static CaseInfo buildHearingCase(JsonNode hearingCase, JsonNode sitting, JsonNode hearing) {
         CaseInfo caseInfo = new CaseInfo();
 
-        caseInfo.setProsecutionAuthorityCode(getProsecutingAuthorityCode(hearingCase));
+        caseInfo.setProsecutingAuthorityCode(getProsecutingAuthorityCode(hearingCase));
         caseInfo.setHearingNumber(GeneralHelper.findAndReturnNodeText(hearingCase, HEARING_NUMBER));
         caseInfo.setAttendanceMethod(GeneralHelper.findAndReturnNodeText(sitting, CASE_HEARING_CHANNEL));
         caseInfo.setCaseNumber(GeneralHelper.findAndReturnNodeText(hearingCase, CASE_NUMBER));
@@ -137,12 +137,13 @@ public final class MagistratesStandardListHelper {
         if (party.has(PARTY_ROLE)
             && party.has(INDIVIDUAL_DETAILS)
             && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
-            String defendantHeading = formatDefendantHeading(party.get(INDIVIDUAL_DETAILS),
-                                                             PartyRoleHelper.createIndividualDetails(party));
             CaseSitting caseSitting = buildCaseSitting(sitting);
             caseSitting.setDefendantInfo(buildDefendantInfo(party));
             caseSitting.setCaseInfo(caseInfo);
             caseSitting.setOffences(processOffences(party));
+
+            String defendantHeading = formatDefendantHeading(party.get(INDIVIDUAL_DETAILS),
+                                                             PartyRoleHelper.createIndividualDetails(party));
             addDefendantCase(cases, defendantHeading, caseSitting);
         }
     }

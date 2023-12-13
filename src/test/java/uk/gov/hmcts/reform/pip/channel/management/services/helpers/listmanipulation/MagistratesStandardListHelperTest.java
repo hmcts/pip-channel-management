@@ -139,7 +139,7 @@ class MagistratesStandardListHelperTest {
     }
 
     @Test
-    void testCaseInfoForCaseSitting() {
+    void testCaseInfo() {
         Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
             inputJson, Language.ENGLISH
         );
@@ -151,7 +151,7 @@ class MagistratesStandardListHelperTest {
 
         assertThat(caseInfo)
             .as(CASE_INFO_MESSAGE)
-            .extracting(CaseInfo::getProsecutionAuthorityCode,
+            .extracting(CaseInfo::getProsecutingAuthorityCode,
                         CaseInfo::getHearingNumber,
                         CaseInfo::getAttendanceMethod,
                         CaseInfo::getCaseNumber,
@@ -174,7 +174,7 @@ class MagistratesStandardListHelperTest {
     }
 
     @Test
-    void testOffencesForCaseSitting() {
+    void testOffences() {
         Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
             inputJson, Language.ENGLISH
         );
