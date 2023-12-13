@@ -31,8 +31,9 @@ class MagistratesStandardListHelperTest {
     private static final String COURT_ROOM2 = "Courtroom 2: joh known as 1";
 
     private static final String COURT_ROOM_MESSAGE = "Court room and judiciary does not match";
-    private static final String DEFENDANT_INFO_MESSAGE = "Defendant info does not match";
+    private static final String DEFENDANT_HEADING_MESSAGE = "Defendant heading does not match";
     private static final String CASE_SITTING_MESSAGE = "Case sitting does not match";
+    private static final String DEFENDANT_INFO_MESSAGE = "Defendant info does not match";
     private static final String CASE_INFO_MESSAGE = "Case info does not match";
     private static final String OFFENCE_MESSAGE = "Offence does not match";
 
@@ -63,29 +64,25 @@ class MagistratesStandardListHelperTest {
     }
 
     @Test
-    void testDefendantInfo() {
+    void testDefendantHeading() {
         Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
             inputJson, Language.ENGLISH
         );
 
-        DefendantInfo defendantInfo = result
-            .get(COURT_ROOM1).get(0)
-            .getDefendantInfo();
-
-        assertThat(defendantInfo)
-            .as(DEFENDANT_INFO_MESSAGE)
-            .extracting(DefendantInfo::getDefendantHeading,
-                        DefendantInfo::getDob,
-                        DefendantInfo::getAge,
-                        DefendantInfo::getAddress,
-                        DefendantInfo::getPlea,
-                        DefendantInfo::getPleaDate)
+        assertThat(result.get(COURT_ROOM1))
+            .hasSize(3)
+            .extracting(d -> d.getDefendantHeading())
             .containsExactly("Surname1, Forename1 (male)",
-                             "01/01/1983",
-                             "39",
-                             "Address Line 1, Address Line 2, Month A, County A, AA1 AA1",
-                             "NOT_GUILTY",
-                             "Need to confirm");
+                             "Surname2, Forename2 (male)*",
+                             "Surname3, Forename3 (male)*");
+
+        assertThat(result.get(COURT_ROOM2))
+            .hasSize(4)
+            .extracting(d -> d.getDefendantHeading())
+            .containsExactly("Surname4, Forename4 (male)*",
+                             "Surname5, Forename5 (male)*",
+                             "Surname6, Forename6 (male)*",
+                             "Surname5, Forename5");
     }
 
     @Test
@@ -114,6 +111,31 @@ class MagistratesStandardListHelperTest {
         assertThat(caseSittings2)
             .as(CASE_SITTING_MESSAGE)
             .hasSize(2);
+    }
+
+    @Test
+    void testDefendantInfo() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
+
+        DefendantInfo defendantInfo = result
+            .get(COURT_ROOM1).get(0)
+            .getCaseSittings().get(0)
+            .getDefendantInfo();
+
+        assertThat(defendantInfo)
+            .as(DEFENDANT_INFO_MESSAGE)
+            .extracting(DefendantInfo::getDob,
+                        DefendantInfo::getAge,
+                        DefendantInfo::getAddress,
+                        DefendantInfo::getPlea,
+                        DefendantInfo::getPleaDate)
+            .containsExactly("01/01/1983",
+                             "39",
+                             "Address Line 1, Address Line 2, Month A, County A, AA1 AA1",
+                             "NOT_GUILTY",
+                             "Need to confirm");
     }
 
     @Test

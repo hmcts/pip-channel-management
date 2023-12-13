@@ -258,7 +258,7 @@
       <h1 class="govuk-heading-l site-address border-bottom" tabindex="0" th:text="${entry.key}" />
       <th:block th:each="row: ${entry.value}">
         <div>
-          <h2 class="govuk-heading-m site-address" th:text="${i18n.defendantNameHeading + row.defendantInfo.defendantHeading}" />
+          <h2 class="govuk-heading-m site-address" th:text="${i18n.defendantNameHeading + row.defendantHeading}" />
         </div>
         <th:block th:each="sitting, iStat: ${row.caseSittings}">
           <div class="parent-box overflow-table">
@@ -271,21 +271,21 @@
                   <p class="govuk-body row-heading" th:text="${iStat.count + '. ' + i18n.sittingAt + sitting.sittingStartTime + i18n.sittingFor + sitting.sittingDuration}" />
                 </div>
                 <br />
-                <div th:if="${row.defendantInfo.age != ''}">
+                <div th:if="${sitting.defendantInfo.age != ''}">
                   <p class="govuk-body">
                     <span class="row-heading" th:text="${i18n.dobAndAge}" />
-                    <span th:text="${row.defendantInfo.dob + i18n.age + row.defendantInfo.age}" />
+                    <span th:text="${sitting.defendantInfo.dob + i18n.age + sitting.defendantInfo.age}" />
                   </p>
                 </div>
-                <div th:if="${row.defendantInfo.age == ''}">
+                <div th:if="${sitting.defendantInfo.age == ''}">
                   <p class="govuk-body">
                     <span class="row-heading" th:text="${i18n.dobAndAge}" />
-                    <span th:text="${row.defendantInfo.dob}" />
+                    <span th:text="${sitting.defendantInfo.dob}" />
                   </p>
                 </div>
                 <p class="govuk-body">
                   <span class="row-heading" th:text="${i18n.defendantAddress}" />
-                  <span th:text="${row.defendantInfo.address}" />
+                  <span th:text="${sitting.defendantInfo.address}" />
                 </p>
                 <p class="govuk-body">
                   <span class="row-heading" th:text="${i18n.prosecutingAuthority}" />
@@ -330,11 +330,11 @@
                       <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-border-bottom"><span class="row-heading" th:text="${i18n.plea}" /></td>
-                          <td class="govuk-table__cell no-border-bottom" th:text="${row.defendantInfo.plea}" />
+                          <td class="govuk-table__cell no-border-bottom" th:text="${sitting.defendantInfo.plea}" />
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-border-bottom"><span class="row-heading" th:text="${i18n.dateOfPlea}" /></td>
-                          <td class="govuk-table__cell no-border-bottom" th:text="${row.defendantInfo.pleaDate}" />
+                          <td class="govuk-table__cell no-border-bottom" th:text="${sitting.defendantInfo.pleaDate}" />
                         </tr>
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-border-bottom"><span class="row-heading" th:text="${i18n.convictedOn}" /></td>

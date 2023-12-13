@@ -79,8 +79,9 @@ public final class MagistratesStandardListHelper {
                             hearing.get(CASE).forEach(hearingCase -> {
                                 if (hearingCase.has(PARTY)) {
                                     CaseInfo caseInfo = buildHearingCase(hearingCase, sitting, hearing);
-                                    CaseSitting caseSitting = buildCaseSitting(sitting, caseInfo);
-                                    hearingCase.get(PARTY).forEach(party -> processParty(party, caseSitting, cases));
+                                    hearingCase.get(PARTY).forEach(
+                                        party -> processParty(party,sitting, caseInfo, cases)
+                                    );
                                 }
                             })
                         );
@@ -131,30 +132,31 @@ public final class MagistratesStandardListHelper {
             : DateHelper.formatTimeStampToBst(dateStr, Language.ENGLISH, false, false, DATE_FORMAT);
     }
 
-    private static CaseSitting buildCaseSitting(JsonNode sitting, CaseInfo caseInfo) {
-        CaseSitting caseSitting = new CaseSitting();
-        caseSitting.setSittingStartTime(GeneralHelper.findAndReturnNodeText(sitting, TIME));
-        caseSitting.setSittingDuration(GeneralHelper.findAndReturnNodeText(sitting, DURATION));
-        caseSitting.setCaseInfo(caseInfo);
-        return caseSitting;
-    }
-
-    private static void processParty(JsonNode party, CaseSitting caseSitting, List<MagistratesStandardList> cases) {
+    private static void processParty(JsonNode party, JsonNode sitting, CaseInfo caseInfo,
+                                     List<MagistratesStandardList> cases) {
         if (party.has(PARTY_ROLE)
             && party.has(INDIVIDUAL_DETAILS)
             && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
-            DefendantInfo defendantInfo = buildDefendantInfo(party);
+            String defendantHeading = formatDefendantHeading(party.get(INDIVIDUAL_DETAILS),
+                                                             PartyRoleHelper.createIndividualDetails(party));
+            CaseSitting caseSitting = buildCaseSitting(sitting);
+            caseSitting.setDefendantInfo(buildDefendantInfo(party));
+            caseSitting.setCaseInfo(caseInfo);
             caseSitting.setOffences(processOffences(party));
-            addDefendantCase(cases, defendantInfo, caseSitting);
+            addDefendantCase(cases, defendantHeading, caseSitting);
         }
+    }
+
+    private static CaseSitting buildCaseSitting(JsonNode sitting) {
+        CaseSitting caseSitting = new CaseSitting();
+        caseSitting.setSittingStartTime(GeneralHelper.findAndReturnNodeText(sitting, TIME));
+        caseSitting.setSittingDuration(GeneralHelper.findAndReturnNodeText(sitting, DURATION));
+        return caseSitting;
     }
 
     private static DefendantInfo buildDefendantInfo(JsonNode party) {
         DefendantInfo defendantInfo = new DefendantInfo();
         JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
-
-        defendantInfo.setDefendantHeading(formatDefendantHeading(individualDetails,
-                                                                 PartyRoleHelper.createIndividualDetails(party)));
         defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
         defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
         defendantInfo.setAddress(formatDefendantAddress(individualDetails));
@@ -194,25 +196,25 @@ public final class MagistratesStandardListHelper {
         return offences;
     }
 
-    private static void addDefendantCase(List<MagistratesStandardList> cases, DefendantInfo defendantInfo,
+    private static void addDefendantCase(List<MagistratesStandardList> cases, String defendantHeading,
                                          CaseSitting caseSitting) {
         // Check if a case with the same defendant info has already been stored. If so append the new case to it,
         // or else create a new case and add to the list of cases
-        Optional<MagistratesStandardList> commonCase = fetchCommonDefendantCase(cases, defendantInfo);
+        Optional<MagistratesStandardList> commonCase = fetchCommonDefendantCase(cases, defendantHeading);
 
         if (commonCase.isPresent()) {
             commonCase.get().getCaseSittings().add(caseSitting);
         } else {
             List<CaseSitting> caseSittings = new ArrayList<>();
             caseSittings.add(caseSitting);
-            cases.add(new MagistratesStandardList(defendantInfo, caseSittings));
+            cases.add(new MagistratesStandardList(defendantHeading, caseSittings));
         }
     }
 
     private static Optional<MagistratesStandardList> fetchCommonDefendantCase(List<MagistratesStandardList> cases,
-                                                                              DefendantInfo defendantInfo) {
+                                                                              String defendantHeading) {
         for (MagistratesStandardList c : cases) {
-            if (c.getDefendantInfo().getDefendantHeading().equals(defendantInfo.getDefendantHeading())) {
+            if (c.getDefendantHeading().equals(defendantHeading)) {
                 return Optional.of(c);
             }
         }

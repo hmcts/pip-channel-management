@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MagistratesStandardList {
-    private DefendantInfo defendantInfo;
+    private String defendantHeading;
     private List<CaseSitting> caseSittings;
 }

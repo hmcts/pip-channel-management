@@ -12,6 +12,7 @@ import java.util.List;
 public class CaseSitting {
     private String sittingStartTime;
     private String sittingDuration;
+    private DefendantInfo defendantInfo;
     private CaseInfo caseInfo;
     private List<Offence> offences;
 }

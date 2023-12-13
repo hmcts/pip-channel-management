@@ -38,7 +38,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                 (courtRoom, list) -> list.forEach(item -> {
                     output
                         .append("\t•Defendant Name - ")
-                        .append(item.getDefendantInfo().getDefendantHeading());
+                        .append(item.getDefendantHeading());
 
                     item.getCaseSittings().forEach(sitting -> {
                         CaseInfo caseInfo = sitting.getCaseInfo();
@@ -46,9 +46,9 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                             .append("\n\t\tSitting at - ")
                             .append(formatSittingHeading(sitting))
                             .append("\nDOB and Age - ")
-                            .append(formatDefendantDobAndAge(item.getDefendantInfo()))
+                            .append(formatDefendantDobAndAge(sitting.getDefendantInfo()))
                             .append("\nDefendant Address - ")
-                            .append(item.getDefendantInfo().getAddress())
+                            .append(sitting.getDefendantInfo().getAddress())
                             .append("\nProsecuting Authority - ")
                             .append(caseInfo.getProsecutionAuthorityCode())
                             .append("\nHearing Number - ")
@@ -70,9 +70,9 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                                 .append(formatOffenceType(offenceIndex, "Title"))
                                 .append(offence.getOffenceTitle())
                                 .append(formatOffenceType(offenceIndex, "Plea"))
-                                .append(item.getDefendantInfo().getPlea())
+                                .append(sitting.getDefendantInfo().getPlea())
                                 .append(formatOffenceType(offenceIndex, "Date of Plea"))
-                                .append(item.getDefendantInfo().getPleaDate())
+                                .append(sitting.getDefendantInfo().getPleaDate())
                                 .append(formatOffenceType(offenceIndex, "Convicted on"))
                                 .append(caseInfo.getConvictionDate())
                                 .append(formatOffenceType(offenceIndex, "Adjourned from"))
