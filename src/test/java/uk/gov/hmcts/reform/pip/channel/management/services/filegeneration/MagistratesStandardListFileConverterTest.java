@@ -211,7 +211,7 @@ class MagistratesStandardListFileConverterTest {
     }
 
     @Test
-    void testCaseContents() {
+    void testCaseInfoHeaders() {
         String result = converter.convert(inputJson, englishMetadata, englishLanguageResource);
         Document document = Jsoup.parse(result);
         Elements body = document.getElementsByClass(BODY_CLASS);
@@ -225,13 +225,51 @@ class MagistratesStandardListFileConverterTest {
             .as(CASE_INFO_MESSAGE)
             .contains("DOB and Age:");
 
-        softly.assertThat(body.get(10).text())
-            .as(CASE_INFO_MESSAGE)
-            .contains("01/01/1983 Age: 39");
-
         softly.assertThat(body.get(11).text())
             .as(CASE_INFO_MESSAGE)
             .contains("Defendant Address:");
+
+        softly.assertThat(body.get(12).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Prosecuting Authority:");
+
+        softly.assertThat(body.get(13).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Hearing Number:");
+
+        softly.assertThat(body.get(14).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Attendance Method:");
+
+        softly.assertThat(body.get(15).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Case Ref:");
+
+        softly.assertThat(body.get(16).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("ASN:");
+
+        softly.assertThat(body.get(17).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Hearing of Type:");
+
+        softly.assertThat(body.get(18).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("Panel:");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testCaseInfoValue() {
+        String result = converter.convert(inputJson, englishMetadata, englishLanguageResource);
+        Document document = Jsoup.parse(result);
+        Elements body = document.getElementsByClass(BODY_CLASS);
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(body.get(10).text())
+            .as(CASE_INFO_MESSAGE)
+            .contains("01/01/1983 Age: 39");
 
         softly.assertThat(body.get(11).text())
             .as(CASE_INFO_MESSAGE)
@@ -239,15 +277,7 @@ class MagistratesStandardListFileConverterTest {
 
         softly.assertThat(body.get(12).text())
             .as(CASE_INFO_MESSAGE)
-            .contains("Prosecuting Authority:");
-
-        softly.assertThat(body.get(12).text())
-            .as(CASE_INFO_MESSAGE)
             .contains("Test1234");
-
-        softly.assertThat(body.get(13).text())
-            .as(CASE_INFO_MESSAGE)
-            .contains("Hearing Number:");
 
         softly.assertThat(body.get(13).text())
             .as(CASE_INFO_MESSAGE)
@@ -255,15 +285,7 @@ class MagistratesStandardListFileConverterTest {
 
         softly.assertThat(body.get(14).text())
             .as(CASE_INFO_MESSAGE)
-            .contains("Attendance Method:");
-
-        softly.assertThat(body.get(14).text())
-            .as(CASE_INFO_MESSAGE)
             .contains("VIDEO HEARING");
-
-        softly.assertThat(body.get(15).text())
-            .as(CASE_INFO_MESSAGE)
-            .contains("Case Ref:");
 
         softly.assertThat(body.get(15).text())
             .as(CASE_INFO_MESSAGE)
@@ -271,23 +293,11 @@ class MagistratesStandardListFileConverterTest {
 
         softly.assertThat(body.get(16).text())
             .as(CASE_INFO_MESSAGE)
-            .contains("ASN:");
-
-        softly.assertThat(body.get(16).text())
-            .as(CASE_INFO_MESSAGE)
             .contains("Need to confirm");
 
         softly.assertThat(body.get(17).text())
             .as(CASE_INFO_MESSAGE)
-            .contains("Hearing of Type:");
-
-        softly.assertThat(body.get(17).text())
-            .as(CASE_INFO_MESSAGE)
             .contains("mda");
-
-        softly.assertThat(body.get(18).text())
-            .as(CASE_INFO_MESSAGE)
-            .contains("Panel:");
 
         softly.assertThat(body.get(18).text())
             .as(CASE_INFO_MESSAGE)

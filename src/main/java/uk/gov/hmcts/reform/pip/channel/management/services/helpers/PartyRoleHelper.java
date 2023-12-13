@@ -116,7 +116,7 @@ public final class PartyRoleHelper {
             String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
             return Stream.of(surname, forenames)
-                .filter(n -> StringUtils.isNotBlank(n))
+                .filter(StringUtils::isNotBlank)
                 .collect(Collectors.joining(", "));
         }
         return "";
