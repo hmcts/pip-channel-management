@@ -329,12 +329,12 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case Ref - 45684548"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing of Type - mda"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Panel - ADULT"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("1. drink driving"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("driving whilst under the influence of alcohol"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("2. Assault by beating"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Assault by beating"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - drink driving"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Details - driving whilst under the influence of alcohol"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Title - Assault by beating"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Details - Assault by beating"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
