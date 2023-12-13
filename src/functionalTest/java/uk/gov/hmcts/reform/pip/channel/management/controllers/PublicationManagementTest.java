@@ -331,7 +331,8 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Panel - ADULT"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 1 Title - drink driving"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 1 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Details - driving whilst under the influence of alcohol"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Details - driving whilst under the influence of alcohol"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 2 Title - Assault by beating"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 2 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 2 Details - Assault by beating"), CONTENT_MISMATCH_ERROR);
