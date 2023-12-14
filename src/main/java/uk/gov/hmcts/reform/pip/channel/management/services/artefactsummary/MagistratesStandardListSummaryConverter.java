@@ -27,13 +27,13 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
             .forEach(
                 (courtRoom, list) -> list.forEach(item -> {
                     output
-                        .append("\t•Defendant Name - ")
+                        .append("---\n•Defendant Name - ")
                         .append(item.getDefendantHeading());
 
                     item.getCaseSittings().forEach(sitting -> {
                         CaseInfo caseInfo = sitting.getCaseInfo();
                         output
-                            .append("\n\t\tSitting at - ")
+                            .append("\nSitting at - ")
                             .append(formatSittingHeading(sitting))
                             .append("\nDOB and Age - ")
                             .append(formatDefendantDobAndAge(sitting.getDefendantInfo()))
@@ -56,7 +56,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
 
                         appendOffences(output, sitting);
                     });
-                    output.append("\n\n");
+                    output.append("\n");
                 })
             );
         return output.toString();
