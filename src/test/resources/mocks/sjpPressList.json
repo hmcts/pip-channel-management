@@ -17,18 +17,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title",
-                                "offenceWording": "This is offence wording",
-                                "reportingRestriction": true
-                              },
-                              {
-                                "offenceTitle": "This is another offence title",
-                                "offenceWording": "This is another offence wording",
-                                "reportingRestriction": false
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "This is a forename",
@@ -62,6 +50,18 @@
                             }
                           }
                         ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title",
+                            "offenceWording": "This is offence wording",
+                            "reportingRestriction": true
+                          },
+                          {
+                            "offenceTitle": "This is another offence title",
+                            "offenceWording": "This is another offence wording",
+                            "reportingRestriction": false
+                          }
+                        ],
                         "case": [
                           {
                             "caseUrn": "ABC12345"
@@ -71,13 +71,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title",
-                                "offenceWording": "This is offence wording",
-                                "reportingRestriction": true
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "organisationDetails": {
                               "organisationName": "Accused's organisation",
@@ -99,6 +92,13 @@
                             }
                           }
                         ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title",
+                            "offenceWording": "This is offence wording",
+                            "reportingRestriction": true
+                          }
+                        ],
                         "case": [
                           {
                             "caseUrn": "ABC12345"
@@ -108,13 +108,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title",
-                                "offenceWording": "This is offence wording",
-                                "reportingRestriction": true
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualMiddleName": "This is a middlename",
@@ -139,6 +132,13 @@
                             }
                           }
                         ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title",
+                            "offenceWording": "This is offence wording",
+                            "reportingRestriction": true
+                          }
+                        ],
                         "case": [
                           {
                             "caseUrn": "ABC12345"
@@ -148,18 +148,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title",
-                                "offenceWording": "This is offence wording",
-                                "reportingRestriction": true
-                              },
-                              {
-                                "offenceTitle": "This is another offence title",
-                                "offenceWording": "This is another offence wording",
-                                "reportingRestriction": true
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "This is a forename",
@@ -185,6 +173,18 @@
                                 ]
                               }
                             }
+                          }
+                        ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title",
+                            "offenceWording": "This is offence wording",
+                            "reportingRestriction": true
+                          },
+                          {
+                            "offenceTitle": "This is another offence title",
+                            "offenceWording": "This is another offence wording",
+                            "reportingRestriction": true
                           }
                         ],
                         "case": [

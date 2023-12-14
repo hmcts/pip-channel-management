@@ -17,14 +17,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title"
-                              },
-                              {
-                                "offenceTitle": "This is an offence title 2"
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualForenames": "A",
@@ -40,6 +32,14 @@
                               "organisationName": "This is a prosecutor organisation"
                             }
                           }
+                        ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title"
+                          },
+                          {
+                            "offenceTitle": "This is an offence title 2"
+                          }
                         ]
                       }
                     ]
@@ -53,11 +53,6 @@
                       {
                         "party": [
                           {
-                            "offence": [
-                              {
-                                "offenceTitle": "This is an offence title 3"
-                              }
-                            ],
                             "partyRole": "ACCUSED",
                             "organisationDetails": {
                               "organisationName": "This is an accused organisation name",
@@ -71,6 +66,11 @@
                             "organisationDetails": {
                               "organisationName": "This is a prosecutor organisation 2"
                             }
+                          }
+                        ],
+                        "offence": [
+                          {
+                            "offenceTitle": "This is an offence title 3"
                           }
                         ]
                       }
