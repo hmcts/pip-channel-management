@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Famil
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
@@ -104,7 +105,7 @@ public class ListConversionFactory {
                                          new EtDailyListSummaryConverter())),
         Map.entry(ET_FORTNIGHTLY_PRESS_LIST, Pair.of(new EtFortnightlyPressListFileConverter(),
                                                      new EtFortnightlyPressListSummaryConverter())),
-        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), null))
+        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter()))
     );
 
     public FileConverter getFileConverter(ListType listType) {

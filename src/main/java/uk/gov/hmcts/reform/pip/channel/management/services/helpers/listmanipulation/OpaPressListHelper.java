@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public final class OpaPressListHelper {
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
@@ -38,6 +39,7 @@ public final class OpaPressListHelper {
     private static final String DOB = "dateOfBirth";
     private static final String AGE = "age";
     private static final String ADDRESS = "address";
+    private static final String POSTCODE = "postCode";
     private static final String ORGANISATION_DETAILS = "organisationDetails";
     private static final String ORGANISATION_NAME = "organisationName";
     private static final String ORGANISATION_ADDRESS = "organisationAddress";
@@ -143,26 +145,52 @@ public final class OpaPressListHelper {
 
     private static void processDefendant(JsonNode party, OpaDefendantInfo defendantInfo) {
         if (party.has(INDIVIDUAL_DETAILS)) {
-            JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
-            String address = individualDetails.has(ADDRESS)
-                ? CrimeListHelper.formatDefendantAddress(individualDetails.get(ADDRESS)) : "";
-
-            defendantInfo.setName(formatDefendantName(individualDetails));
-            defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
-            defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
-            defendantInfo.setAddress(address);
-            defendantInfo.setOffences(processOffences(individualDetails));
+            processIndividualDefendant(party, defendantInfo);
         } else if (party.has(ORGANISATION_DETAILS)) {
-            JsonNode organisationDetails = party.get(ORGANISATION_DETAILS);
-            String address = organisationDetails.has(ORGANISATION_ADDRESS)
-                ? CrimeListHelper.formatDefendantAddress(organisationDetails.get(ORGANISATION_ADDRESS)) : "";
-
-            defendantInfo.setName(
-                GeneralHelper.findAndReturnNodeText(organisationDetails, ORGANISATION_NAME)
-            );
-            defendantInfo.setAddress(address);
-            defendantInfo.setOffences(processOffences(organisationDetails));
+            processOrganisationDefendant(party, defendantInfo);
         }
+    }
+
+    private static void processIndividualDefendant(JsonNode party, OpaDefendantInfo defendantInfo) {
+        JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+        String address = individualDetails.has(ADDRESS)
+            ? CrimeListHelper.formatDefendantAddress(individualDetails.get(ADDRESS)) : "";
+
+        String addressWithoutPostcode = individualDetails.has(ADDRESS)
+            ? CrimeListHelper.formatDefendantAddressWithoutPostcode(individualDetails.get(ADDRESS)) : "";
+
+        String postcode = individualDetails.has(ADDRESS) && individualDetails.get(ADDRESS).has(POSTCODE)
+            ? individualDetails.get(ADDRESS).get(POSTCODE).asText() : "";
+
+        defendantInfo.setName(formatDefendantName(individualDetails));
+        defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
+        defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
+        defendantInfo.setAddress(address);
+        defendantInfo.setAddressWithoutPostcode(addressWithoutPostcode);
+        defendantInfo.setPostcode(postcode);
+        defendantInfo.setOffences(processOffences(individualDetails));
+    }
+
+    private static void processOrganisationDefendant(JsonNode party, OpaDefendantInfo defendantInfo) {
+        JsonNode organisationDetails = party.get(ORGANISATION_DETAILS);
+        String address = organisationDetails.has(ORGANISATION_ADDRESS)
+            ? CrimeListHelper.formatDefendantAddress(organisationDetails.get(ORGANISATION_ADDRESS)) : "";
+
+        String addressWithoutPostcode = organisationDetails.has(ORGANISATION_ADDRESS)
+            ? CrimeListHelper.formatDefendantAddressWithoutPostcode(
+            organisationDetails.get(ORGANISATION_ADDRESS)) : "";
+
+        String postcode = organisationDetails.has(ORGANISATION_ADDRESS)
+            && organisationDetails.get(ORGANISATION_ADDRESS).has(POSTCODE)
+            ? organisationDetails.get(ORGANISATION_ADDRESS).get(POSTCODE).asText() : "";
+
+        defendantInfo.setName(
+            GeneralHelper.findAndReturnNodeText(organisationDetails, ORGANISATION_NAME)
+        );
+        defendantInfo.setAddress(address);
+        defendantInfo.setAddressWithoutPostcode(addressWithoutPostcode);
+        defendantInfo.setPostcode(postcode);
+        defendantInfo.setOffences(processOffences(organisationDetails));
     }
 
     private static String formatDefendantName(JsonNode individualDetails) {
