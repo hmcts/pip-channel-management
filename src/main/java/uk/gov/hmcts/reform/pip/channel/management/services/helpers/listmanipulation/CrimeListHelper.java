@@ -141,6 +141,16 @@ public final class CrimeListHelper {
     }
 
     public static String formatDefendantAddress(JsonNode addressNode) {
+        String address = formatDefendantAddressWithoutPostcode(addressNode);
+        String postCode = GeneralHelper.findAndReturnNodeText(addressNode, "postCode");
+
+        if (!StringUtils.isBlank(postCode)) {
+            return  address + ", " + postCode;
+        }
+        return address;
+    }
+
+    public static String formatDefendantAddressWithoutPostcode(JsonNode addressNode) {
         List<String> fullAddress = new ArrayList<>();
 
         if (addressNode.has("line")) {
@@ -149,7 +159,6 @@ public final class CrimeListHelper {
         }
         fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
         fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
-        fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "postCode"));
 
         return fullAddress.stream()
             .filter(line -> !StringUtils.isBlank(line))
