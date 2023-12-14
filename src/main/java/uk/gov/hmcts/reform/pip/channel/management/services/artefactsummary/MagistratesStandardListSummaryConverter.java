@@ -12,18 +12,8 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
 public class MagistratesStandardListSummaryConverter implements ArtefactSummaryConverter {
-    private static String formatSittingHeading(CaseSitting sitting) {
-        String sittingDuration = sitting.getSittingDuration();
-        String caseSequenceIndicator = sitting.getCaseInfo().getCaseSequenceIndicator();
-
-        return sitting.getSittingStartTime()
-            + (sittingDuration.isEmpty() ? "" : " for " + sittingDuration)
-            + (caseSequenceIndicator.isEmpty() ? "" : " [" + caseSequenceIndicator + "]");
-    }
-
     /**
-     * Magistrates Standard List parent method - iterates on courtHouse/courtList - if these need to be shown in further
-     * iterations, do it here.
+     * Summary class for the Magistrates standard list that generates the summary in the email.
      *
      * @param payload - json body.
      * @return - string for output.
@@ -64,24 +54,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
                             .append("\nPanel - ")
                             .append(caseInfo.getPanel());
 
-                        int offenceIndex = 1;
-                        for (Offence offence : sitting.getOffences()) {
-                            output
-                                .append(formatOffenceType(offenceIndex, "Title"))
-                                .append(offence.getOffenceTitle())
-                                .append(formatOffenceType(offenceIndex, "Plea"))
-                                .append(sitting.getDefendantInfo().getPlea())
-                                .append(formatOffenceType(offenceIndex, "Date of Plea"))
-                                .append(sitting.getDefendantInfo().getPleaDate())
-                                .append(formatOffenceType(offenceIndex, "Convicted on"))
-                                .append(caseInfo.getConvictionDate())
-                                .append(formatOffenceType(offenceIndex, "Adjourned from"))
-                                .append(caseInfo.getAdjournedDate())
-                                .append(" - For the trial")
-                                .append(formatOffenceType(offenceIndex, "Details"))
-                                .append(offence.getOffenceWording());
-                            offenceIndex++;
-                        }
+                        appendOffences(output, sitting);
                     });
                     output.append("\n\n");
                 })
@@ -89,9 +62,39 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
         return output.toString();
     }
 
+    private String formatSittingHeading(CaseSitting sitting) {
+        String sittingDuration = sitting.getSittingDuration();
+        String caseSequenceIndicator = sitting.getCaseInfo().getCaseSequenceIndicator();
+
+        return sitting.getSittingStartTime()
+            + (sittingDuration.isEmpty() ? "" : " for " + sittingDuration)
+            + (caseSequenceIndicator.isEmpty() ? "" : " [" + caseSequenceIndicator + "]");
+    }
+
     private String formatDefendantDobAndAge(DefendantInfo defendantInfo) {
         return defendantInfo.getDob() + (defendantInfo.getAge().isEmpty()
             ? "" : " Age: " + defendantInfo.getAge());
+    }
+
+    private void appendOffences(StringBuilder output, CaseSitting sitting) {
+        int offenceIndex = 1;
+        for (Offence offence : sitting.getOffences()) {
+            output
+                .append(formatOffenceType(offenceIndex, "Title"))
+                .append(offence.getOffenceTitle())
+                .append(formatOffenceType(offenceIndex, "Plea"))
+                .append(sitting.getDefendantInfo().getPlea())
+                .append(formatOffenceType(offenceIndex, "Date of Plea"))
+                .append(sitting.getDefendantInfo().getPleaDate())
+                .append(formatOffenceType(offenceIndex, "Convicted on"))
+                .append(sitting.getCaseInfo().getConvictionDate())
+                .append(formatOffenceType(offenceIndex, "Adjourned from"))
+                .append(sitting.getCaseInfo().getAdjournedDate())
+                .append(" - For the trial")
+                .append(formatOffenceType(offenceIndex, "Details"))
+                .append(offence.getOffenceWording());
+            offenceIndex++;
+        }
     }
 
     private String formatOffenceType(int offenceIndex, String type) {

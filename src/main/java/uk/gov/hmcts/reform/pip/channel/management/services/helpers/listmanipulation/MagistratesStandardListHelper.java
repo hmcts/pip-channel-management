@@ -66,6 +66,11 @@ public final class MagistratesStandardListHelper {
     private MagistratesStandardListHelper() {
     }
 
+    /**
+     * Process raw JSON for Magistrates standard list to generate cases sorted by the plea date.
+     * @param jsonData JSON data for the list
+     * @return a map of court room/judiciary to Magistrates standard list cases
+     */
     public static Map<String, List<MagistratesStandardList>> processRawListData(JsonNode jsonData, Language language) {
         Map<String, List<MagistratesStandardList>> listData = new LinkedHashMap<>();
 
@@ -199,7 +204,7 @@ public final class MagistratesStandardListHelper {
 
     private static void addDefendantCase(List<MagistratesStandardList> cases, String defendantHeading,
                                          CaseSitting caseSitting) {
-        // Check if a case with the same defendant info has already been stored. If so append the new case to it,
+        // Check if a case with the same defendant heading has already been stored. If so append the new case to it,
         // or else create a new case and add to the list of cases
         Optional<MagistratesStandardList> commonCase = fetchCommonDefendantCase(cases, defendantHeading);
 
