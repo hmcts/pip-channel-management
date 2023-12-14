@@ -109,6 +109,7 @@ public class ListConversionFactory {
         Map.entry(ET_FORTNIGHTLY_PRESS_LIST, Pair.of(new EtFortnightlyPressListFileConverter(),
                                                      new EtFortnightlyPressListSummaryConverter())),
         Map.entry(OPA_PUBLIC_LIST, Pair.of(new OpaPublicListFileConverter(), new OpaPublicListSummaryConverter())),
+
         Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter()))
     );
 
