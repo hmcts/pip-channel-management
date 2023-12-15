@@ -88,6 +88,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
     private static final String ARTEFACT_ID_OPA_PRESS_LIST = "f83de894-9245-4d2c-90ef-6e64f49cdabb";
+    private static final String ARTEFACT_ID_OPA_PUBLIC_LIST = "23c57521-d3f3-4660-b88b-15245c106fbb";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
@@ -136,7 +137,8 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH), //Single Justice Procedure Public List
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS), //SSCS Daily List - Additional Hearings
-            Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST)  //OPA Press List
+            Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST), //OPA Press List
+            Arguments.of(ARTEFACT_ID_OPA_PUBLIC_LIST) //OPA Public List
         );
     }
 
@@ -433,6 +435,24 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Reporting Restriction - Case reporting Restriction detail line 1, "
                                                 + "Case reporting restriction detail line 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor - Prosecuting authority ref"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummaryOpaPublicList() throws Exception {
+        MvcResult response = mockMvc.perform(
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_OPA_PUBLIC_LIST))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(responseContent.contains("Defendant - individualFirstName individualMiddleName IndividualSurname"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Ref / URN - URN1234"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - Offence title"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Reporting Restriction - Offence Reporting Restriction detail"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Reporting Restriction - Case Reporting Restriction detail line 1, "
+                                                + "Case Reporting restriction detail line 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor - Prosecution Authority ref 1"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test

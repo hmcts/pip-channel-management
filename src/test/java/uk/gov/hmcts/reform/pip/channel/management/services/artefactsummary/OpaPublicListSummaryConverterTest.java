@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PUBLIC_LIST;
 
 @ActiveProfiles("test")
-public class OpaPublicListSummaryConverterTest {
+class OpaPublicListSummaryConverterTest {
 
     @Test
     void testOpaPublicListTemplate() throws IOException {
