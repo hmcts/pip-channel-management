@@ -56,7 +56,7 @@ public class MagistratesStandardListSummaryConverter implements ArtefactSummaryC
 
                         appendOffences(output, sitting);
                     });
-                    output.append("\n");
+                    output.append('\n');
                 })
             );
         return output.toString();
