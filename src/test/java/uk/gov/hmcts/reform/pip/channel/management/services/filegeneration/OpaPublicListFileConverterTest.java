@@ -139,7 +139,7 @@ class OpaPublicListFileConverterTest {
 
         softly.assertThat(document.getElementsByClass(BODY_CLASS).get(6).text())
             .as("Case count summary does not match")
-            .isEqualTo("List containing 9 case(s) generated on 13 February 2022 at 9:30am");
+            .isEqualTo("List containing 10 case(s) generated on 13 February 2022 at 9:30am");
 
         softly.assertAll();
     }
@@ -190,7 +190,7 @@ class OpaPublicListFileConverterTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(data)
             .as(TABLE_DATA_MESSAGE)
-            .hasSize(54);
+            .hasSize(63);
 
         softly.assertThat(data.get(0).text())
             .as(TABLE_DATA_MESSAGE)
