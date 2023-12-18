@@ -32,7 +32,19 @@
                                 ]
                               },
                               "title": "This is a title"
-                            }
+                            },
+                            "offence": [
+                              {
+                                "offenceTitle": "This is an offence title",
+                                "offenceWording": "This is offence wording",
+                                "reportingRestriction": true
+                              },
+                              {
+                                "offenceTitle": "This is another offence title",
+                                "offenceWording": "This is another offence wording",
+                                "reportingRestriction": false
+                              }
+                            ]
                           },
                           {
                             "partyRole": "PROSECUTOR",
@@ -48,18 +60,6 @@
                                 ]
                               }
                             }
-                          }
-                        ],
-                        "offence": [
-                          {
-                            "offenceTitle": "This is an offence title",
-                            "offenceWording": "This is offence wording",
-                            "reportingRestriction": true
-                          },
-                          {
-                            "offenceTitle": "This is another offence title",
-                            "offenceWording": "This is another offence wording",
-                            "reportingRestriction": false
                           }
                         ],
                         "case": [
@@ -83,20 +83,20 @@
                                   "Organisation Line 2"
                                 ]
                               }
-                            }
+                            },
+                            "offence": [
+                              {
+                                "offenceTitle": "This is an offence title",
+                                "offenceWording": "This is offence wording",
+                                "reportingRestriction": true
+                              }
+                            ]
                           },
                           {
                             "partyRole": "PROSECUTOR",
                             "organisationDetails": {
                               "organisationName": "This is an organisation"
                             }
-                          }
-                        ],
-                        "offence": [
-                          {
-                            "offenceTitle": "This is an offence title",
-                            "offenceWording": "This is offence wording",
-                            "reportingRestriction": true
                           }
                         ],
                         "case": [
@@ -114,7 +114,14 @@
                               "dateOfBirth": "01/01/1800",
                               "age": 50,
                               "title": "This is a title"
-                            }
+                            },
+                            "offence": [
+                              {
+                                "offenceTitle": "This is an offence title",
+                                "offenceWording": "This is offence wording",
+                                "reportingRestriction": true
+                              }
+                            ]
                           },
                           {
                             "partyRole": "PROSECUTOR",
@@ -130,13 +137,6 @@
                                 ]
                               }
                             }
-                          }
-                        ],
-                        "offence": [
-                          {
-                            "offenceTitle": "This is an offence title",
-                            "offenceWording": "This is offence wording",
-                            "reportingRestriction": true
                           }
                         ],
                         "case": [
@@ -157,7 +157,19 @@
                               "address": {
                               },
                               "title": "This is a title"
-                            }
+                            },
+                            "offence": [
+                              {
+                                "offenceTitle": "This is an offence title",
+                                "offenceWording": "This is offence wording",
+                                "reportingRestriction": true
+                              },
+                              {
+                                "offenceTitle": "This is another offence title",
+                                "offenceWording": "This is another offence wording",
+                                "reportingRestriction": true
+                              }
+                            ]
                           },
                           {
                             "partyRole": "PROSECUTOR",
@@ -173,18 +185,6 @@
                                 ]
                               }
                             }
-                          }
-                        ],
-                        "offence": [
-                          {
-                            "offenceTitle": "This is an offence title",
-                            "offenceWording": "This is offence wording",
-                            "reportingRestriction": true
-                          },
-                          {
-                            "offenceTitle": "This is another offence title",
-                            "offenceWording": "This is another offence wording",
-                            "reportingRestriction": true
                           }
                         ],
                         "case": [
