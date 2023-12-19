@@ -184,11 +184,13 @@
             <td class="govuk-table__cell wrap" th:text="${row.getDefendant().getName()}" />
             <td class="govuk-table__cell" th:text="${row.getCaseInfo().getUrn()}" />
             <td class="govuk-table__cell">
-              <span th:each="offence : ${row.defendant.offences}">
-                <span th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
+              <span th:each="offence, iStat : ${row.defendant.offences}">
+                <span th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
                 <br th:if="${offence.offenceReportingRestriction.length() > 0 }" />
-                <p th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${'Reporting Restriction - ' + offence.offenceReportingRestriction}" />
-                <span th:unless="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
+                <br th:if="${offence.offenceReportingRestriction.length() > 0 }" />
+                <span th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${'Reporting Restriction - ' + offence.offenceReportingRestriction}" />
+                <br th:if="${iStat.count < iStat.size }" />
+                <br th:if="${iStat.count < iStat.size }" />
               </span>
             </td>
             <td class="govuk-table__cell" th:text="${row.getDefendant().getProsecutor()}" />
