@@ -183,10 +183,13 @@
         <tr th:each="row : ${listData}" class="govuk-table__row">
             <td class="govuk-table__cell wrap" th:text="${row.getDefendant().getName()}" />
             <td class="govuk-table__cell" th:text="${row.getCaseInfo().getUrn()}" />
-<!--            <td class="govuk-table__cell" th:each="offence : ${row.defendant.offences}" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection + ' Reporting Restriction - ' + offence.offenceReportingRestriction}" />-->
-            <td class="govuk-table__cell" th:each="offence : ${row.defendant.offences}">
-              <span th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection + ' Reporting Restriction - ' + offence.offenceReportingRestriction}" />
-              <span th:unless="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
+            <td class="govuk-table__cell">
+              <span th:each="offence : ${row.defendant.offences}">
+                <span th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
+                <br th:if="${offence.offenceReportingRestriction.length() > 0 }" />
+                <p th:if="${offence.offenceReportingRestriction.length() > 0 }" th:text="${'Reporting Restriction - ' + offence.offenceReportingRestriction}" />
+                <span th:unless="${offence.offenceReportingRestriction.length() > 0 }" th:text="${offence.offenceTitle + ' - ' + offence.offenceSection}" />
+              </span>
             </td>
             <td class="govuk-table__cell" th:text="${row.getDefendant().getProsecutor()}" />
             <td class="govuk-table__cell no-wrap" th:text="${row.getCaseInfo().getScheduledHearingDate()}" />
