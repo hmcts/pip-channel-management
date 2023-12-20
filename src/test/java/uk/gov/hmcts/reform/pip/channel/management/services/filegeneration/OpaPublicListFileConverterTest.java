@@ -219,4 +219,31 @@ class OpaPublicListFileConverterTest {
 
         softly.assertAll();
     }
+
+    @Test
+    void testOffenceData() {
+        String result = converter.convert(inputJson, METADATA, englishLanguageResource);
+        Document document = Jsoup.parse(result);
+        Elements data = document.getElementsByTag("td");
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(data.get(8).text())
+            .as(TABLE_DATA_MESSAGE)
+            .contains("Offence title - Offence section "
+                          + "Reporting Restriction - Offence Reporting Restriction detail");
+
+        softly.assertThat(data.get(20).text())
+            .as(TABLE_DATA_MESSAGE)
+            .contains("Offence title 2 - Offence section 2");
+
+        softly.assertThat(data.get(38).text())
+            .as(TABLE_DATA_MESSAGE)
+            .contains("Organisation Offence Title - Organisation Offence Section "
+                          + "Reporting Restriction - Offence Reporting Restriction detail "
+                          + "Organisation Offence Title 2 - Organisation Offence Section 2 "
+                          + "Organisation Offence Title 3 - Organisation Offence Section 3 "
+                          + "Reporting Restriction - Offence Reporting Restriction detail 3");
+
+        softly.assertAll();
+    }
 }
