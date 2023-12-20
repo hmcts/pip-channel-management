@@ -24,21 +24,21 @@
                               "address": {
                                 "postCode": ""
                               }
-                            }
+                            },
+                            "offence": [
+                              {
+                                "offenceTitle": "This is an offence title"
+                              },
+                              {
+                                "offenceTitle": "This is an offence title 2"
+                              }
+                            ]
                           },
                           {
                             "partyRole": "PROSECUTOR",
                             "organisationDetails": {
                               "organisationName": "This is an organisation"
                             }
-                          }
-                        ],
-                        "offence": [
-                          {
-                            "offenceTitle": "This is an offence title"
-                          },
-                          {
-                            "offenceTitle": "This is an offence title 2"
                           }
                         ]
                       }
