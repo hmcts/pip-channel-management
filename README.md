@@ -124,20 +124,22 @@ Python scripts to quickly grab all environment variables (subject to Azure permi
 
 Below is a table of currently used environment variables for starting the service, along with a descriptor of their purpose and whether they are optional or required.
 
-| Variable                  | Description                                                                                                                                                                                                                                                            |Required?|
-|:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--|
-| SPRING_PROFILES_ACTIVE    | If set equal to `dev`, the application will run in insecure mode (i.e. no bearer token authentication required for incoming requests.) *Note - if you wish to communicate with other services, you will need to set them all to run in insecure mode in the same way.* |No|
-| APP_URI                   | Uniform Resource Identifier - the location where the application expects to receive bearer tokens after a successful authentication process. The application then validates received bearer tokens using the AUD parameter in the token                                |No|
-| CLIENT_ID                 | Unique ID for the application within Azure AD. Used to identify the application during authentication.                                                                                                                                                                 |No|
-| TENANT_ID                 | Directory unique ID assigned to our Azure AD tenant. Represents the organisation that owns and manages the Azure AD instance.                                                                                                                                          |No|
-| CLIENT_SECRET             | Secret key for authentication requests to the service.                                                                                                                                                                                                                 |No|
-| CONNECTION_STRING         | Connection string for connecting to the Azure Blob Storage service. Only required when running the application locally via Azurite.                                                                                                                                    |Yes|
-| STORAGE_ACCOUNT_NAME      | Azure storage account name used to construct the storage account endpoint. Not required when running the application locally.                                                                                                                                          |No|
-| ACCOUNT_MANAGEMENT_URL    | URL used for connecting to the pip-account-management service. Defaults to staging if not provided.                                                                                                                                                                    |No|
-| DATA_MANAGEMENT_URL       | URL used for connecting to the pip-data-management service. Defaults to staging if not provided.                                                                                                                                                                       |No|
-| ACCOUNT_MANAGEMENT_AZ_API | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-account management service                                                                                                            |No|
-| DATA_MANAGEMENT_AZ_API    | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-data-management service                                                                                                               |No|
-| COURTEL_API               | API value for third party                                                                                                                                                                                                                                              |No|
+| Variable                  | Description                                                                                                                                                                                                                                                            | Required? |
+|:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| SPRING_PROFILES_ACTIVE    | If set equal to `dev`, the application will run in insecure mode (i.e. no bearer token authentication required for incoming requests.) *Note - if you wish to communicate with other services, you will need to set them all to run in insecure mode in the same way.  | No        |
+| APP_URI                   | Uniform Resource Identifier - the location where the application expects to receive bearer tokens after a successful authentication process. The application then validates received bearer tokens using the AUD parameter in the token                                | No        |
+| CLIENT_ID                 | Unique ID for the application within Azure AD. Used to identify the application during authentication.                                                                                                                                                                 | No        |
+| TENANT_ID                 | Directory unique ID assigned to our Azure AD tenant. Represents the organisation that owns and manages the Azure AD instance.                                                                                                                                          | No        |
+| CLIENT_SECRET             | Secret key for authentication requests to the service.                                                                                                                                                                                                                 | No        |
+| CONNECTION_STRING         | Connection string for connecting to the Azure Blob Storage service. Only required when running the application locally via Azurite.                                                                                                                                    | Yes       |
+| STORAGE_ACCOUNT_NAME      | Azure storage account name used to construct the storage account endpoint. Not required when running the application locally.                                                                                                                                          | No        |
+| ACCOUNT_MANAGEMENT_URL    | URL used for connecting to the pip-account-management service. Defaults to staging if not provided.                                                                                                                                                                    | No        |
+| DATA_MANAGEMENT_URL       | URL used for connecting to the pip-data-management service. Defaults to staging if not provided.                                                                                                                                                                       | No        |
+| ACCOUNT_MANAGEMENT_AZ_API | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-account management service                                                                                                            | No        |
+| DATA_MANAGEMENT_AZ_API    | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-data-management service                                                                                                               | No        |
+| COURTEL_API               | API value for third party                                                                                                                                                                                                                                              | No        |
+
+
 
 ##### Additional Test secrets
 
@@ -193,6 +195,14 @@ curl --request POST \
   --header 'Authorization: Bearer {BEARER_TOKEN_HERE}' \
 ```
 
+## Azure Blob Storage
+
+This service uses Azure Blob storage to store the raw artefact data. This is configured in [AzureBlobConfiguration](./src/main/java/uk/gov/hmcts/reform/pip/channel/management/config/AzureBlobConfiguration.java).
+
+The Workload Identity is used by default to authenticate with Azure Blob Storage which is present in the Azure environments. If the workload identity is not present (such as in a local environment), a connection string can be used instead by setting the CONNECTION_STRING environment variable.
+
+For the local environment, Azurite docker images can be used to provide a local instance of Blob Storage.
+
 ## Deployment
 We use [Jenkins](https://www.jenkins.io/) as our CI/CD system. The deployment of this can be controlled within our application logic using the various `Jenkinsfile`-prepended files within the root directory of the repository.
 
@@ -215,7 +225,9 @@ The client at runtime is attached as a javaagent, which allows it to send the lo
 To connect to app insights a connection string is used. This is configured to read from the KV Secret mounted inside the pod.
 
 It is possible to connect to app insights locally, although somewhat tricky. The easiest way is to get the connection string from azure, set it as an environment variable (APPLICATIONINSIGHTS_CONNECTION_STRING), and add in the javaagent as VM argument. You will also need to remove / comment out the connection string line the config.
+
 ## Security & Quality Considerations
+
 We use a few automated tools to ensure quality and security within the service. A few examples can be found below:
 
 - SonarCloud - provides automated code analysis, finding vulnerabilities, bugs and code smells. Quality gates ensure that test coverage, code style and security are maintained where possible.
