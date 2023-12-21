@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.SjpPubli
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,7 +37,7 @@ public final class SjpPublicListHelper {
 
     public static Optional<SjpPublicList> constructSjpCase(JsonNode hearing) {
         Triple<String, String, String> parties = getCaseParties(hearing.get(PARTY));
-        String offenceTitle = getOffenceTitle(hearing.get(OFFENCE));
+        String offenceTitle = getOffenceTitle(hearing.get(PARTY));
 
         if (StringUtils.isNotBlank(parties.getLeft())
             && StringUtils.isNotBlank(parties.getMiddle())
@@ -93,21 +92,29 @@ public final class SjpPublicListHelper {
             );
         } else if (party.has(ORGANISATION_DETAILS)
             && party.get(ORGANISATION_DETAILS).has(ORGANISATION_ADDRESS)) {
-            return GeneralHelper.findAndReturnNodeText(party.get(ORGANISATION_DETAILS).get(ORGANISATION_ADDRESS),
-                                                       POSTCODE);
+            return GeneralHelper.findAndReturnNodeText(
+                party.get(ORGANISATION_DETAILS).get(ORGANISATION_ADDRESS),
+                POSTCODE
+            );
         }
         return "";
     }
 
-    private static String getOffenceTitle(JsonNode offence) {
+    private static String getOffenceTitle(JsonNode partiesNode) {
         StringBuilder output = new StringBuilder();
-        Iterator<JsonNode> offenceIterator = offence.elements();
-        while (offenceIterator.hasNext()) {
-            JsonNode currentOffence = offenceIterator.next();
-            if (output.length() == 0) {
-                output.append(currentOffence.get(OFFENCE_TITLE).asText());
-            } else {
-                output.append(", ").append(currentOffence.get(OFFENCE_TITLE).asText());
+
+        for (JsonNode party : partiesNode) {
+            String role = party.get(PARTY_ROLE).asText();
+            if (ACCUSED.equals(role)) {
+
+                party.get("offence").elements().forEachRemaining(offence -> {
+
+                    if (output.length() == 0) {
+                        output.append(offence.get(OFFENCE_TITLE).asText());
+                    } else {
+                        output.append(", ").append(offence.get(OFFENCE_TITLE).asText());
+                    }
+                });
             }
         }
         return output.toString();
