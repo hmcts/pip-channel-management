@@ -211,7 +211,7 @@ class OpaPublicListFileConverterTest {
 
         softly.assertThat(data.get(4).text())
             .as(TABLE_DATA_MESSAGE)
-            .contains("14/09/2016");
+            .contains("14/09/16");
 
         softly.assertThat(data.get(5).text())
             .as(TABLE_DATA_MESSAGE)
