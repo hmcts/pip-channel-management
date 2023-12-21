@@ -198,7 +198,7 @@ curl --request POST \
 
 ## Azure Blob Storage
 
-This service uses Azure Blob storage to store the raw artefact data. This is configured in [AzureBlobConfiguration](./src/main/java/uk/gov/hmcts/reform/pip/channel/management/config/AzureBlobConfiguration.java).
+This service uses Azure Blob storage to store the generated PDFs and Excel files. This is configured in [AzureBlobConfiguration](./src/main/java/uk/gov/hmcts/reform/pip/channel/management/config/AzureBlobConfiguration.java).
 
 The Workload Identity is used by default to authenticate with Azure Blob Storage which is present in the Azure environments. If the workload identity is not present (such as in a local environment), a connection string can be used instead by setting the CONNECTION_STRING environment variable.
 
