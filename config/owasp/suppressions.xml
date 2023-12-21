@@ -51,7 +51,6 @@
   </suppress>
   <suppress>
     <notes>Suppression for azure packages</notes>
-    <packageUrl regex="true">^pkg:maven/com\.azure/azure\-core@.*$</packageUrl>
     <cve>CVE-2023-36052</cve>
   </suppress>
 </suppressions>
