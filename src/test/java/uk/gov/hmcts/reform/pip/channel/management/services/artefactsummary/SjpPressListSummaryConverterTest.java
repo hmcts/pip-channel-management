@@ -30,7 +30,7 @@ class SjpPressListSummaryConverterTest {
 
         softly.assertThat(outputLines)
             .as("Output line count does not match")
-            .hasSize(18);
+            .hasSize(22);
 
         softly.assertThat(outputLines[0])
             .as("Accused (using individual details) does not match")
@@ -45,26 +45,34 @@ class SjpPressListSummaryConverterTest {
             .isEqualTo("Prosecutor: This is an organisation");
 
         softly.assertThat(outputLines[3])
-            .as("Offence does not match")
-            .isEqualTo("Offence 1: This is an offence title (Reporting restriction)");
+            .as("Case URN does not match")
+            .isEqualTo("Case URN: ABC12345");
 
         softly.assertThat(outputLines[4])
             .as("Offence does not match")
-            .isEqualTo("Offence 2: This is another offence title");
+            .isEqualTo("Offence 1: This is an offence title (Reporting restriction)");
 
         softly.assertThat(outputLines[5])
+            .as("Offence does not match")
+            .isEqualTo("Offence 2: This is another offence title");
+
+        softly.assertThat(outputLines[6])
             .as("Accused (using organisation details) does not match")
             .isEqualTo("•Accused: Accused's organisation");
 
         softly.assertThat(outputLines[9])
+            .as("Case URNs (Multiple cases) does not match")
+            .isEqualTo("Case URN: ABC12346, ABC12347, ABC12348");
+
+        softly.assertThat(outputLines[11])
             .as("Accused (missing individualForenames and individualSurname) does not match")
             .isEqualTo("•Accused: This is a title This is a middlename");
 
-        softly.assertThat(outputLines[10])
+        softly.assertThat(outputLines[12])
             .as("Postcode (missing address field) does not match")
             .isEqualTo("Postcode: ");
 
-        softly.assertThat(outputLines[14])
+        softly.assertThat(outputLines[17])
             .as("Postcode (empty address field) does not match")
             .isEqualTo("Postcode: ");
 
