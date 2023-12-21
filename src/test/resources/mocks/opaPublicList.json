@@ -125,6 +125,20 @@
                             }
                           },
                           {
+                            "partyRole": "DEFENDANT",
+                            "organisationDetails": {
+                              "organisationName": "organisationName noOffence",
+                              "organisationAddress": {
+                                "line": [
+                                  "ORGANISATION ADDRESS"
+                                ],
+                                "town": "town name",
+                                "county": "",
+                                "postCode": ""
+                              }
+                            }
+                          },
+                          {
                             "partyRole": "PROSECUTING_AUTHORITY",
                             "friendlyRoleName": "Prosecuting Authority",
                             "organisationDetails": {
