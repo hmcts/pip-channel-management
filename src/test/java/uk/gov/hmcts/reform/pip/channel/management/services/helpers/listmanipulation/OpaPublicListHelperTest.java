@@ -55,7 +55,7 @@ class OpaPublicListHelperTest {
 
         softly.assertThat(caseInfo.getScheduledHearingDate())
             .as(HEARING_MESSAGE)
-            .isEqualTo("14/09/2016");
+            .isEqualTo("14/09/16");
 
         softly.assertThat(caseInfo.getCaseReportingRestriction())
             .as(RESTRICTION_MESSAGE)
