@@ -137,8 +137,6 @@ sonarqube {
     property "sonar.projectName", "PIP Channel Management"
     property "sonar.projectKey", "pip-channel-management"
     property "sonar.exclusions", sonarExclusions.join(', ')
-    property "sonar.login", "admin"
-    property "sonar.password", "Qenigman122"
   }
 }
 
