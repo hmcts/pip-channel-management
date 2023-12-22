@@ -59,26 +59,33 @@ class CrownDailyListFileConverterTest {
         Document document = Jsoup.parse(outputHtml);
         assertThat(outputHtml).as("No html found").isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
+        assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo("Crown Daily List");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Crown Daily List for ");
+            .as(HEADER_TEXT)
+            .contains("Crown Daily List for ");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Draft: Version");
+            .as(HEADER_TEXT)
+            .contains("Draft: Version");
 
-        assertThat(outputHtml.contains("Reporting Restriction: This is a reporting restriction detail, "
-                                           + "This is another reporting restriction detail"))
-            .as("Reporting restriction detail not shown").isFalse();
+        assertThat(outputHtml)
+            .as("Reporting restriction detail not shown")
+            .doesNotContain("Reporting Restriction: This is a reporting restriction detail, "
+                                + "This is another reporting restriction detail");
 
         Pattern reportingRestrictionPattern = Pattern.compile("Reporting Restriction: ");
         assertThat(reportingRestrictionPattern.matcher(outputHtml).results().count())
-            .as("Incorrect number of reporting restrictions shown").isEqualTo(2);
+            .as("Incorrect number of reporting restrictions shown")
+            .isEqualTo(2);
 
-        assertThat(outputHtml.contains("Before")).as("Before not shown").isFalse();
+        assertThat(outputHtml)
+            .as("Before not shown")
+            .doesNotContain("Before");
     }
 
     @Test
@@ -105,27 +112,36 @@ class CrownDailyListFileConverterTest {
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
         String outputHtml = crownDailyListConverter.convert(inputJson, metadataMap, language);
         Document document = Jsoup.parse(outputHtml);
-        assertThat(outputHtml).as("No html found").isNotEmpty();
+        assertThat(outputHtml)
+            .as("No html found")
+            .isNotEmpty();
 
-        assertThat(document.title()).as("incorrect title found.")
+        assertThat(document.title())
+            .as("incorrect title found.")
             .isEqualTo("Rhestr Ddyddiol Llys y Goron");
 
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
-            .as(HEADER_TEXT).contains("Rhestr Ddyddiol Llys y Goron ar gyfer ");
+            .as(HEADER_TEXT)
+            .contains("Rhestr Ddyddiol Llys y Goron ar gyfer ");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
-            .as(HEADER_TEXT).contains("Drafft:Fersiwn");
+            .as(HEADER_TEXT)
+            .contains("Drafft:Fersiwn");
 
-        assertThat(outputHtml.contains("Cyfyngiad adrodd: This is a reporting restriction detail, "
-                                           + "This is another reporting restriction detail"))
-            .as("Reporting restriction detail not shown").isFalse();
+        assertThat(outputHtml)
+            .as("Reporting restriction detail not shown")
+            .doesNotContain("Cyfyngiad adrodd: This is a reporting restriction detail, "
+                                + "This is another reporting restriction detail");
 
         Pattern reportingRestrictionPattern = Pattern.compile("Cyfyngiad adrodd: ");
         assertThat(reportingRestrictionPattern.matcher(outputHtml).results().count())
-            .as("Incorrect number of reporting restrictions shown").isEqualTo(2);
+            .as("Incorrect number of reporting restrictions shown")
+            .isEqualTo(2);
 
-        assertThat(outputHtml.contains("Gerbron")).as("Before translation not shown").isFalse();
+        assertThat(outputHtml)
+            .as("Before translation not shown")
+            .doesNotContain("Gerbron");
     }
 }

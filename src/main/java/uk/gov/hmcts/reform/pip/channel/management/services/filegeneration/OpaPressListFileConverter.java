@@ -66,7 +66,7 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
             AtomicInteger rowNumber = new AtomicInteger(1);
             AtomicInteger maxOffences = new AtomicInteger(0);
 
-            OpaPressListHelper.processRawListData(artefact).forEach((pleaData, list) -> {
+            OpaPressListHelper.processRawListData(artefact).forEach((pleaData, list) ->
                 list.forEach(item -> {
                     Row dataRow = sheet.createRow(rowNumber.get());
                     setCellValue(dataRow, 0, item.getCaseInfo().getUrn());
@@ -89,8 +89,8 @@ public class OpaPressListFileConverter extends ExcelAbstractList implements File
                     });
 
                     rowNumber.getAndIncrement();
-                });
-            });
+                })
+            );
 
             //Correct number of offence headings is added at the end, once the entire data set is processed
             int columnNumber = 7;

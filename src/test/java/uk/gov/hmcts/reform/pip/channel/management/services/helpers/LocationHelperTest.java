@@ -1,11 +1,16 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
@@ -14,6 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,93 +68,55 @@ class LocationHelperTest {
             .containsExactly("Address Line 1", "Venue Town", "Venue County", "AA1 AA1");
     }
 
-    @Test
-    void testFormatCourtAddress() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
+    private static Stream<Arguments> parameterForFormatCourtAddress() {
+        return Stream.of(
+            Arguments.of(DELIMITER, false),
+            Arguments.of("\n", false),
+            Arguments.of(DELIMITER, true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("parameterForFormatCourtAddress")
+    void testFormatCourtAddress(String delimiter, boolean addCourtHouseAddress) {
+        LocationHelper.formatCourtAddress(inputJson, delimiter, addCourtHouseAddress);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
             .as(COURT_ADDRESS_ERROR)
             .isTrue();
 
-        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
-            .as(COURT_ADDRESS_ERROR)
-            .isEqualTo("Address Line 1|Venue Town|Venue County|AA1 AA1");
-    }
-
-    @Test
-    void testFormatCourtAddressWithNewLineDelimiter() {
-        LocationHelper.formatCourtAddress(inputJson, "\n", false);
-        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE);
-
-        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
-            .as(COURT_ADDRESS_ERROR)
-            .isTrue();
+        String expectedResult = (addCourtHouseAddress ? "This is the site name" + delimiter : "")
+            + "Address Line 1" + delimiter
+            + "Venue Town" + delimiter
+            + "Venue County" + delimiter
+            + "AA1 AA1";
 
         assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
             .as(COURT_ADDRESS_ERROR)
-            .isEqualTo("Address Line 1\nVenue Town\nVenue County\nAA1 AA1");
+            .isEqualTo(expectedResult);
     }
 
-    @Test
-    void testFormatCourtAddressIncludingCourtHouseName() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, true);
-        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(0).get(COURT_HOUSE);
-
-        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
-            .as(COURT_ADDRESS_ERROR)
-            .isTrue();
-
-        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
-            .as(COURT_ADDRESS_ERROR)
-            .isEqualTo("This is the site name|Address Line 1|Venue Town|Venue County|AA1 AA1");
-    }
-
-    @Test
-    void testFormatWithNoCourtAddress() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testFormatWithNoCourtAddress(boolean addCourtHouseName) {
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, addCourtHouseName);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(1).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
             .as(COURT_ADDRESS_ERROR)
             .isTrue();
 
+        String expectedResult = addCourtHouseName ? "This is the site name" : "";
         assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
             .as(COURT_ADDRESS_ERROR)
-            .isEmpty();
+            .isEqualTo(expectedResult);
     }
 
-    @Test
-    void testFormatWithCourtHouseNameOnly() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, true);
-        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(1).get(COURT_HOUSE);
-
-        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
-            .as(COURT_ADDRESS_ERROR)
-            .isTrue();
-
-        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
-            .as(COURT_ADDRESS_ERROR)
-            .isEqualTo("This is the site name");
-    }
-
-    @Test
-    void testFormatWithNoCourtNameAndAddressLine() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, false);
-        JsonNode courtHouse = inputJson.get(COURT_LISTS).get(2).get(COURT_HOUSE);
-
-        assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
-            .as(COURT_ADDRESS_ERROR)
-            .isTrue();
-
-        assertThat(courtHouse.get(FORMATTED_COURT_HOUSE_ADDRESS).asText())
-            .as(COURT_ADDRESS_ERROR)
-            .isEqualTo("Address Line 1|Address Line 2|AA1 AA1");
-    }
-
-    @Test
-    void testFormatWithBlankCourtNameAndAddressLine() {
-        LocationHelper.formatCourtAddress(inputJson, DELIMITER, true);
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testFormatWithNoCourtHouseName(boolean addCourtHouseName) {
+        LocationHelper.formatCourtAddress(inputJson, DELIMITER, addCourtHouseName);
         JsonNode courtHouse = inputJson.get(COURT_LISTS).get(2).get(COURT_HOUSE);
 
         assertThat(courtHouse.has(FORMATTED_COURT_HOUSE_ADDRESS))
