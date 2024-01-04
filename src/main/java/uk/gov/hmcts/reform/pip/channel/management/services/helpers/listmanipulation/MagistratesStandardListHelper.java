@@ -1,209 +1,229 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.CaseInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.CaseSitting;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.DefendantInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.MagistratesStandardList;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.Offence;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleMapper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Optional;
 
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseConcurrentHashMap"})
 public final class MagistratesStandardListHelper {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    private static final String COURT_LIST = "courtLists";
+    private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
+    private static final String SESSION = "session";
+    private static final String SITTINGS = "sittings";
+    private static final String HEARING = "hearing";
+
     private static final String CASE = "case";
-    private static final String INDIVIDUAL_DETAILS = "individualDetails";
-    private static final String AGE = "age";
-    private static final String IN_CUSTODY = "inCustody";
-    private static final String DEFENDANT_HEADING = "defendantHeading";
-    private static final String PLEA = "plea";
+    private static final String INFORMANT = "informant";
+    private static final String PROSECUTING_AUTHORITY_CODE = "prosecutionAuthorityCode";
+    private static final String HEARING_NUMBER = "hearingNumber";
+    private static final String CASE_HEARING_CHANNEL = "caseHearingChannel";
+    private static final String CASE_NUMBER = "caseNumber";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
-    private static final String FORMATTED_ADJOURNED_DATE = "formattedAdjournedDate";
-    private static final String FORMATTED_CONVICTION_DATE = "formattedConvictionDate";
+    private static final String HEARING_TYPE = "hearingType";
+    private static final String PANEL = "panel";
+    private static final String CONVICTION_DATE = "convictionDate";
+    private static final String ADJOURNED_DATE = "adjournedDate";
+
+    private static final String PARTY = "party";
+    private static final String PARTY_ROLE = "partyRole";
+    private static final String INDIVIDUAL_DETAILS = "individualDetails";
+    private static final String GENDER = "gender";
+    private static final String DOB = "dateOfBirth";
+    private static final String AGE = "age";
+    private static final String ADDRESS = "address";
+    private static final String IN_CUSTODY = "inCustody";
+    private static final String PLEA = "plea";
+
+    private static final String OFFENCE = "offence";
+    private static final String OFFENCE_TITLE = "offenceTitle";
+    private static final String OFFENCE_WORDING = "offenceWording";
+
+    private static final String FORMATTED_COURT_ROOM = "formattedSessionCourtRoom";
+    private static final String TIME = "time";
+    private static final String DURATION = "formattedDuration";
+    private static final String DEFENDANT = "DEFENDANT";
+
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String TIME_FORMAT = "h:mma";
+    private static final String NEED_TO_CONFIRM = "Need to confirm";
 
     private MagistratesStandardListHelper() {
     }
 
-    public static void manipulatedMagistratesStandardList(JsonNode artefact, Map<String, Object> language) {
-        artefact.get(COURT_LIST).forEach(
+    /**
+     * Process raw JSON for Magistrates standard list to generate cases sorted by the plea date.
+     * @param jsonData JSON data for the list
+     * @return a map of court room/judiciary to Magistrates standard list cases
+     */
+    public static Map<String, List<MagistratesStandardList>> processRawListData(JsonNode jsonData, Language language) {
+        Map<String, List<MagistratesStandardList>> listData = new LinkedHashMap<>();
+
+        jsonData.get(COURT_LISTS).forEach(
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get("session").forEach(session -> {
-                    ArrayNode allDefendants = MAPPER.createArrayNode();
-                    session.get("sittings").forEach(sitting -> {
-                        SittingHelper.manipulatedSitting(courtRoom, session, sitting,
-                                        "formattedSessionCourtRoom");
-                        DateHelper.formatStartTime(sitting, "h:mma");
-                        sitting.get("hearing").forEach(hearing -> {
-                            if (hearing.has("party")) {
-                                hearing.get("party").forEach(party -> {
-                                    JsonNode cloneHearing =
-                                        manipulateHearingParty(sitting, hearing, party, language);
-                                    allDefendants.add(cloneHearing);
-                                });
-                            }
-                        });
-                    });
-                    ((ObjectNode) session).set("defendants", combineDefendantSittings(allDefendants));
-                })
+                courtRoom -> courtRoom.get(SESSION).forEach(
+                    session -> session.get(SITTINGS).forEach(sitting -> {
+                        processSittingInfo(courtRoom, session, sitting, language);
+                        List<MagistratesStandardList> cases = new ArrayList<>();
+                        sitting.get(HEARING).forEach(hearing ->
+                            hearing.get(CASE).forEach(hearingCase -> {
+                                if (hearingCase.has(PARTY)) {
+                                    CaseInfo caseInfo = buildHearingCase(hearingCase, sitting, hearing);
+                                    hearingCase.get(PARTY).forEach(
+                                        party -> processParty(party,sitting, caseInfo, cases)
+                                    );
+                                }
+                            })
+                        );
+                        listData.computeIfAbsent(session.get(FORMATTED_COURT_ROOM).asText(), x -> new ArrayList<>())
+                            .addAll(cases);
+                    })
+                )
             )
         );
+        return listData;
     }
 
-    private static ArrayNode combineDefendantSittings(ArrayNode allDefendants) {
-        AtomicReference<ObjectNode> defendantNode = new AtomicReference<>();
-        List<String> uniqueDefendantNames = new ArrayList<>();
-        ArrayNode defendantsPerSessions = MAPPER.createArrayNode();
-        AtomicReference<ArrayNode> defendantInfo = new AtomicReference<>();
-        allDefendants.forEach(df -> {
-            if (!uniqueDefendantNames.contains(df.get(DEFENDANT_HEADING).asText())) {
-                uniqueDefendantNames.add(df.get(DEFENDANT_HEADING).asText());
+    private static void processSittingInfo(JsonNode courtRoom, JsonNode session, JsonNode sitting,
+                                                  Language language) {
+        SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
+        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
+        DateHelper.calculateDuration(sitting, language);
+        DateHelper.formatStartTime(sitting, TIME_FORMAT);
+    }
+
+    private static CaseInfo buildHearingCase(JsonNode hearingCase, JsonNode sitting, JsonNode hearing) {
+        CaseInfo caseInfo = new CaseInfo();
+
+        caseInfo.setProsecutingAuthorityCode(getProsecutingAuthorityCode(hearingCase));
+        caseInfo.setHearingNumber(GeneralHelper.findAndReturnNodeText(hearingCase, HEARING_NUMBER));
+        caseInfo.setAttendanceMethod(GeneralHelper.findAndReturnNodeText(sitting, CASE_HEARING_CHANNEL));
+        caseInfo.setCaseNumber(GeneralHelper.findAndReturnNodeText(hearingCase, CASE_NUMBER));
+        caseInfo.setCaseSequenceIndicator(GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR));
+        caseInfo.setAsn(NEED_TO_CONFIRM);
+        caseInfo.setHearingType(GeneralHelper.findAndReturnNodeText(hearing, HEARING_TYPE));
+        caseInfo.setPanel(GeneralHelper.findAndReturnNodeText(hearingCase, PANEL));
+        caseInfo.setConvictionDate(formatDate(GeneralHelper.findAndReturnNodeText(hearingCase, CONVICTION_DATE)));
+        caseInfo.setAdjournedDate(formatDate(GeneralHelper.findAndReturnNodeText(hearingCase, ADJOURNED_DATE)));
+
+        return caseInfo;
+    }
+
+    private static String getProsecutingAuthorityCode(JsonNode hearingCase) {
+        if (hearingCase.has(INFORMANT)) {
+            return GeneralHelper.findAndReturnNodeText(hearingCase.get(INFORMANT), PROSECUTING_AUTHORITY_CODE);
+        }
+        return "";
+    }
+
+    private static String formatDate(String dateStr) {
+        return StringUtils.isBlank(dateStr)
+            ? ""
+            : DateHelper.formatTimeStampToBst(dateStr, Language.ENGLISH, false, false, DATE_FORMAT);
+    }
+
+    private static void processParty(JsonNode party, JsonNode sitting, CaseInfo caseInfo,
+                                     List<MagistratesStandardList> cases) {
+        if (party.has(PARTY_ROLE)
+            && party.has(INDIVIDUAL_DETAILS)
+            && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
+            CaseSitting caseSitting = buildCaseSitting(sitting);
+            caseSitting.setDefendantInfo(buildDefendantInfo(party));
+            caseSitting.setCaseInfo(caseInfo);
+            caseSitting.setOffences(processOffences(party));
+
+            String defendantHeading = formatDefendantHeading(party.get(INDIVIDUAL_DETAILS),
+                                                             PartyRoleHelper.createIndividualDetails(party));
+            addDefendantCase(cases, defendantHeading, caseSitting);
+        }
+    }
+
+    private static CaseSitting buildCaseSitting(JsonNode sitting) {
+        CaseSitting caseSitting = new CaseSitting();
+        caseSitting.setSittingStartTime(GeneralHelper.findAndReturnNodeText(sitting, TIME));
+        caseSitting.setSittingDuration(GeneralHelper.findAndReturnNodeText(sitting, DURATION));
+        return caseSitting;
+    }
+
+    private static DefendantInfo buildDefendantInfo(JsonNode party) {
+        DefendantInfo defendantInfo = new DefendantInfo();
+        JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+        defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
+        defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));
+        defendantInfo.setAddress(formatDefendantAddress(individualDetails));
+        defendantInfo.setPlea(GeneralHelper.findAndReturnNodeText(individualDetails, PLEA));
+        defendantInfo.setPleaDate(NEED_TO_CONFIRM);
+        return defendantInfo;
+    }
+
+    private static String formatDefendantHeading(JsonNode individualDetails, String formattedName) {
+        String gender = GeneralHelper.findAndReturnNodeText(individualDetails,GENDER);
+        return formattedName
+            + (gender.isEmpty() ? "" : " (" + gender + ")")
+            + (isInCustody(individualDetails) ? "*" : "");
+
+    }
+
+    private static String formatDefendantAddress(JsonNode individualDetails) {
+        return individualDetails.has(ADDRESS)
+            ? CrimeListHelper.formatDefendantAddress(individualDetails.get(ADDRESS))
+            : "";
+    }
+
+    private static boolean isInCustody(JsonNode individualDetails) {
+        return individualDetails.has(IN_CUSTODY) && individualDetails.get(IN_CUSTODY).asBoolean();
+    }
+
+    private static List<Offence> processOffences(JsonNode party) {
+        List<Offence> offences = new ArrayList<>();
+        if (party.has(OFFENCE)) {
+            party.get(OFFENCE).forEach(o -> {
+                Offence offence = new Offence();
+                offence.setOffenceTitle(GeneralHelper.findAndReturnNodeText(o, OFFENCE_TITLE));
+                offence.setOffenceWording(GeneralHelper.findAndReturnNodeText(o, OFFENCE_WORDING));
+                offences.add(offence);
+            });
+        }
+        return offences;
+    }
+
+    private static void addDefendantCase(List<MagistratesStandardList> cases, String defendantHeading,
+                                         CaseSitting caseSitting) {
+        // Check if a case with the same defendant heading has already been stored. If so append the new case to it,
+        // or else create a new case and add to the list of cases
+        Optional<MagistratesStandardList> commonCase = fetchCommonDefendantCase(cases, defendantHeading);
+
+        if (commonCase.isPresent()) {
+            commonCase.get().getCaseSittings().add(caseSitting);
+        } else {
+            List<CaseSitting> caseSittings = new ArrayList<>();
+            caseSittings.add(caseSitting);
+            cases.add(new MagistratesStandardList(defendantHeading, caseSittings));
+        }
+    }
+
+    private static Optional<MagistratesStandardList> fetchCommonDefendantCase(List<MagistratesStandardList> cases,
+                                                                              String defendantHeading) {
+        for (MagistratesStandardList c : cases) {
+            if (c.getDefendantHeading().equals(defendantHeading)) {
+                return Optional.of(c);
             }
-        });
-
-        uniqueDefendantNames.forEach(uniqueName -> {
-            defendantNode.set(MAPPER.createObjectNode());
-            defendantInfo.set(MAPPER.createArrayNode());
-            int sittingSequence = 1;
-            for (JsonNode defendant : allDefendants) {
-                if (uniqueName.equals(defendant.get(DEFENDANT_HEADING).asText())) {
-                    ((ObjectNode) defendant).put("sittingSequence", sittingSequence);
-                    sittingSequence++;
-                    defendantInfo.get().add(defendant);
-                }
-            }
-            defendantNode.get().put(DEFENDANT_HEADING, uniqueName);
-            defendantNode.get().set("defendantInfo", defendantInfo.get());
-            defendantsPerSessions.add(defendantNode.get());
-        });
-
-        return defendantsPerSessions;
-    }
-
-    private static JsonNode manipulateHearingParty(JsonNode sitting, JsonNode hearing, JsonNode party,
-                                                    Map<String, Object> language) {
-        ObjectNode cloneHearing = hearing.deepCopy();
-        formatPartyInformation(cloneHearing, party, language);
-        cloneHearing.get(CASE).forEach(thisCase -> manipulatedCase(sitting, cloneHearing, thisCase));
-        cloneHearing.put("time", GeneralHelper.findAndReturnNodeText(sitting, "time"));
-        cloneHearing.put("formattedDuration",
-                         GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
-        findOffences(cloneHearing);
-
-        return cloneHearing;
-    }
-
-    private static void findOffences(ObjectNode hearing) {
-        ArrayNode allOffences = MAPPER.createArrayNode();
-        hearing.get("offence").forEach(offence -> {
-            ObjectNode offenceNode = MAPPER.createObjectNode();
-            offenceNode.put("offenceTitle",
-                GeneralHelper.findAndReturnNodeText(offence, "offenceTitle"));
-            offenceNode.put(PLEA, GeneralHelper.findAndReturnNodeText(hearing, PLEA));
-            offenceNode.put("dateOfPlea", "Need to confirm");
-            offenceNode.put(FORMATTED_CONVICTION_DATE,
-                GeneralHelper.findAndReturnNodeText(hearing, FORMATTED_CONVICTION_DATE));
-            offenceNode.put(FORMATTED_ADJOURNED_DATE,
-                GeneralHelper.findAndReturnNodeText(hearing, FORMATTED_ADJOURNED_DATE));
-            offenceNode.put("offenceWording",
-                GeneralHelper.findAndReturnNodeText(offence, "offenceWording"));
-            allOffences.add(offenceNode);
-        });
-        hearing.set("allOffences", allOffences);
-    }
-
-    private static void manipulatedCase(JsonNode sitting, ObjectNode hearing, JsonNode thisCase) {
-        hearing.put(FORMATTED_CONVICTION_DATE,
-                    DateHelper.formatTimeStampToBst(GeneralHelper.findAndReturnNodeText(thisCase, "convictionDate"),
-                                                    Language.ENGLISH, false, false, "dd/MM/yyyy"));
-        hearing.put(FORMATTED_ADJOURNED_DATE,
-                    DateHelper.formatTimeStampToBst(GeneralHelper.findAndReturnNodeText(thisCase, "adjournedDate"),
-                                                    Language.ENGLISH, false, false, "dd/MM/yyyy"));
-        hearing.put("prosecutionAuthorityCode",
-                    GeneralHelper.findAndReturnNodeText(thisCase.get("informant"), "prosecutionAuthorityCode"));
-        hearing.put("hearingNumber",
-                    GeneralHelper.findAndReturnNodeText(thisCase, "hearingNumber"));
-        hearing.put("caseHearingChannel",
-                    GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
-        hearing.put("caseNumber",
-                    GeneralHelper.findAndReturnNodeText(thisCase, "caseNumber"));
-        hearing.put("asn", "Need to confirm");
-        hearing.put("panel", GeneralHelper.findAndReturnNodeText(thisCase, "panel"));
-
-        hearing.put(CASE_SEQUENCE_INDICATOR, "");
-        if (thisCase.has(CASE_SEQUENCE_INDICATOR)) {
-            hearing.set(CASE_SEQUENCE_INDICATOR, thisCase.get(CASE_SEQUENCE_INDICATOR));
         }
-    }
-
-    private static void formatPartyInformation(ObjectNode hearing, JsonNode party, Map<String, Object> language) {
-        if ("DEFENDANT".equals(PartyRoleMapper.convertPartyRole(party.get("partyRole").asText()))) {
-            String defendant = PartyRoleHelper.createIndividualDetails(party);
-            hearing.put(DEFENDANT_HEADING, defendant);
-            hearing.put("defendantDateOfBirth", "");
-            hearing.put("defendantAddress", "");
-            hearing.put(AGE, "");
-            hearing.put("gender", "");
-            hearing.put(PLEA, "");
-            hearing.put(IN_CUSTODY, "");
-
-            if (party.has(INDIVIDUAL_DETAILS)) {
-                JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
-                formatDobAndAge(hearing, individualDetails, language);
-
-                hearing.put(DEFENDANT_HEADING, formatDefendantHeading(defendant, individualDetails));
-                hearing.put("defendantAddress", individualDetails.has("address")
-                    ? CrimeListHelper.formatDefendantAddress(individualDetails.get("address")) : "");
-                hearing.put(PLEA, GeneralHelper.findAndReturnNodeText(individualDetails, PLEA));
-            }
-        }
-    }
-
-    private static String formatDefendantHeading(String name, JsonNode individualDetails) {
-        StringBuilder defendantName = new StringBuilder();
-        defendantName.append(name);
-        String gender = GeneralHelper.findAndReturnNodeText(individualDetails,"gender");
-        String inCustody = "";
-
-        if (!gender.isBlank()) {
-            gender = " (" + gender + ")";
-        }
-
-        if (individualDetails.has(IN_CUSTODY)
-            && individualDetails.get(IN_CUSTODY).asBoolean()) {
-            inCustody = "*";
-        }
-
-        defendantName.append(gender).append(inCustody);
-        return defendantName.toString();
-    }
-
-    private static void formatDobAndAge(ObjectNode hearing, JsonNode individualDetails,
-                                        Map<String, Object> language) {
-        String dateOfBirth = GeneralHelper.findAndReturnNodeText(individualDetails,
-                                                                 "dateOfBirth");
-        String age = GeneralHelper.findAndReturnNodeText(individualDetails,
-                                                         AGE);
-        String dateOfBirthAndAge = "";
-        if (!dateOfBirth.isBlank() && age.isBlank()) {
-            dateOfBirthAndAge = dateOfBirth;
-        } else if (dateOfBirth.isBlank() && !age.isBlank()) {
-            dateOfBirthAndAge = language.get(AGE) + age;
-        } else if (!dateOfBirth.isBlank() && !age.isBlank()) {
-            dateOfBirthAndAge = dateOfBirth + " " + language.get(AGE) + age;
-        }
-
-        hearing.put("defendantDateOfBirthAndAge",  dateOfBirthAndAge);
+        return Optional.empty();
     }
 }

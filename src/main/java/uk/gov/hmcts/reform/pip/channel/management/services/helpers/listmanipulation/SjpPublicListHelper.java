@@ -89,7 +89,7 @@ public final class SjpPublicListHelper {
         if (party.has(INDIVIDUAL_DETAILS) && party.get(INDIVIDUAL_DETAILS).has(ADDRESS)) {
             return GeneralHelper.findAndReturnNodeText(
                 party.get(INDIVIDUAL_DETAILS).get(ADDRESS),
-                "postCode"
+                POSTCODE
             );
         } else if (party.has(ORGANISATION_DETAILS)
             && party.get(ORGANISATION_DETAILS).has(ORGANISATION_ADDRESS)) {
