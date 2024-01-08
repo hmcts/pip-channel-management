@@ -6,42 +6,41 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.CaseInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.CaseSitting;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.DefendantInfo;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.MagistratesStandardList;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.magistratesstandardlist.Offence;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Instant;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
+@SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
 class MagistratesStandardListHelperTest {
+    private static final String COURT_ROOM1 = "Courtroom 1: DJ Steve 1";
+    private static final String COURT_ROOM2 = "Courtroom 2: joh known as 1";
+
+    private static final String COURT_ROOM_MESSAGE = "Court room and judiciary does not match";
+    private static final String DEFENDANT_HEADING_MESSAGE = "Defendant heading does not match";
+    private static final String CASE_SITTING_MESSAGE = "Case sitting does not match";
+    private static final String DEFENDANT_INFO_MESSAGE = "Defendant info does not match";
+    private static final String CASE_INFO_MESSAGE = "Case info does not match";
+    private static final String OFFENCE_MESSAGE = "Offence does not match";
+
     private static JsonNode inputJson;
 
-    private static final String COURT_LISTS = "courtLists";
-    private static final String COURT_HOUSE = "courtHouse";
-    private static final String COURT_ROOM = "courtRoom";
-    private static final String SESSION = "session";
-    private static final String DEFENDANTS = "defendants";
-    private static final String DEFENDANT_INFO = "defendantInfo";
-    private static final String PROVENANCE = "provenance";
-
-    Map<String, Object> language =
-        Map.of("age", "Age: ");
-
-    Map<String, String> metadataMap = Map.of("contentDate", Instant.now().toString(),
-                                             PROVENANCE, PROVENANCE,
-                                             "locationName", "location",
-                                             "language", "ENGLISH",
-                                             "listType", "MAGISTRATES_STANDARD_LIST"
-    );
-
     @BeforeAll
-    public static void setup()  throws IOException {
+    static void setup()  throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
             "src/test/resources/mocks/magistratesStandardList.json")), writer,
@@ -52,74 +51,155 @@ class MagistratesStandardListHelperTest {
     }
 
     @Test
-    void testManipulatedMagistratesStandardListMethod() {
-        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
-        MagistratesStandardListHelper.manipulatedMagistratesStandardList(inputJson, language);
+    void testCourtRoomAndJudiciary() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
 
-        JsonNode defendant = inputJson.get(COURT_LISTS).get(0)
-            .get(COURT_HOUSE)
-            .get(COURT_ROOM).get(0)
-            .get(SESSION).get(0)
-            .get(DEFENDANTS).get(0);
-
-        JsonNode defendantInfo = defendant.get(DEFENDANT_INFO).get(0);
-
-        assertEquals("Surname1, Forename1 (male)", defendant.get("defendantHeading").asText(),
-                     "Unable to defendant heading");
-
-        assertEquals("1", defendantInfo.get("sittingSequence").asText(),
-                     "Unable to find sitting sequence");
-
-        assertEquals("2 hours 30 mins", defendantInfo.get("formattedDuration").asText(),
-                     "Unable to find formatted duration");
-
-        assertEquals("01/01/1983 Age: 39", defendantInfo.get("defendantDateOfBirthAndAge").asText(),
-                     "Unable to find date of birth and age");
-
-        assertEquals("Address Line 1, Address Line 2, Month A, County A, AA1 AA1",
-                     defendantInfo.get("defendantAddress").asText(),
-                     "Unable to find address");
-
-        assertEquals("Test1234", defendantInfo.get("prosecutionAuthorityCode").asText(),
-                     "Unable to find prosecution authority code");
-
-        assertEquals("12", defendantInfo.get("hearingNumber").asText(),
-                     "Unable to find hearing number");
-
-        assertEquals("VIDEO HEARING", defendantInfo.get("caseHearingChannel").asText(),
-                     "Unable to find case hearing channel");
-
-        assertEquals("45684548", defendantInfo.get("caseNumber").asText(),
-                     "Unable to find case number");
-
-        assertEquals("mda", defendantInfo.get("hearingType").asText(),
-                     "Unable to find hearing type");
-
-        assertEquals("ADULT", defendantInfo.get("panel").asText(),
-                     "Unable to find panel");
+        assertThat(result)
+            .as(COURT_ROOM_MESSAGE)
+            .hasSize(2)
+            .extracting(r -> r.keySet())
+            .isEqualTo(Set.of(COURT_ROOM1, COURT_ROOM2));
     }
 
     @Test
-    void testOffenceMagistratesStandardListMethod() {
-        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
-        MagistratesStandardListHelper.manipulatedMagistratesStandardList(inputJson, language);
+    void testDefendantHeading() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
 
-        JsonNode defendantInfo = inputJson.get(COURT_LISTS).get(0)
-            .get(COURT_HOUSE)
-            .get(COURT_ROOM).get(0)
-            .get(SESSION).get(0)
-            .get(DEFENDANTS).get(0).get(DEFENDANT_INFO).get(0);
+        assertThat(result.get(COURT_ROOM1))
+            .hasSize(3)
+            .extracting(d -> d.getDefendantHeading())
+            .containsExactly("Surname1, Forename1 (male)",
+                             "Surname2, Forename2 (male)*",
+                             "Surname3, Forename3 (male)*");
 
-        assertEquals("1. drink driving", defendantInfo.get("offence").get(0).get("offenceTitle").asText(),
-                     "Unable to find offence title");
+        assertThat(result.get(COURT_ROOM2))
+            .hasSize(4)
+            .extracting(d -> d.getDefendantHeading())
+            .containsExactly("Surname4, Forename4 (male)*",
+                             "Surname5, Forename5 (male)*",
+                             "Surname6, Forename6 (male)*",
+                             "Surname5, Forename5");
+    }
 
-        assertEquals("NOT_GUILTY", defendantInfo.get("plea").asText(),
-                     "Unable to find plea");
+    @Test
+    void testCaseSittings() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
 
-        assertEquals("13/12/2023", defendantInfo.get("formattedConvictionDate").asText(),
-                     "Unable to find formatted conviction date");
+        List<CaseSitting> caseSittings1 = result
+            .get(COURT_ROOM1).get(0)
+            .getCaseSittings();
 
-        assertEquals("13/12/2023", defendantInfo.get("formattedAdjournedDate").asText(),
-                     "Unable to find formatted adjourned date");
+        assertThat(caseSittings1)
+            .as(CASE_SITTING_MESSAGE)
+            .hasSize(1)
+            .first()
+            .extracting(CaseSitting::getSittingStartTime,
+                        CaseSitting::getSittingDuration)
+            .containsExactly("1:30pm",
+                             "2 hours 30 mins");
+
+        List<CaseSitting> caseSittings2 = result
+            .get(COURT_ROOM2).get(0)
+            .getCaseSittings();
+
+        assertThat(caseSittings2)
+            .as(CASE_SITTING_MESSAGE)
+            .hasSize(2);
+    }
+
+    @Test
+    void testDefendantInfo() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
+
+        DefendantInfo defendantInfo = result
+            .get(COURT_ROOM1).get(0)
+            .getCaseSittings().get(0)
+            .getDefendantInfo();
+
+        assertThat(defendantInfo)
+            .as(DEFENDANT_INFO_MESSAGE)
+            .extracting(DefendantInfo::getDob,
+                        DefendantInfo::getAge,
+                        DefendantInfo::getAddress,
+                        DefendantInfo::getPlea,
+                        DefendantInfo::getPleaDate)
+            .containsExactly("01/01/1983",
+                             "39",
+                             "Address Line 1, Address Line 2, Month A, County A, AA1 AA1",
+                             "NOT_GUILTY",
+                             "Need to confirm");
+    }
+
+    @Test
+    void testCaseInfo() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
+
+        CaseInfo caseInfo = result
+            .get(COURT_ROOM1).get(0)
+            .getCaseSittings().get(0)
+            .getCaseInfo();
+
+        assertThat(caseInfo)
+            .as(CASE_INFO_MESSAGE)
+            .extracting(CaseInfo::getProsecutingAuthorityCode,
+                        CaseInfo::getHearingNumber,
+                        CaseInfo::getAttendanceMethod,
+                        CaseInfo::getCaseNumber,
+                        CaseInfo::getCaseSequenceIndicator,
+                        CaseInfo::getAsn,
+                        CaseInfo::getHearingType,
+                        CaseInfo::getPanel,
+                        CaseInfo::getConvictionDate,
+                        CaseInfo::getAdjournedDate)
+            .containsExactly("Test1234",
+                             "12",
+                             "VIDEO HEARING",
+                             "45684548",
+                             "2 of 3",
+                             "Need to confirm",
+                             "mda",
+                             "ADULT",
+                             "13/12/2023",
+                             "13/12/2023");
+    }
+
+    @Test
+    void testOffences() {
+        Map<String, List<MagistratesStandardList>> result = MagistratesStandardListHelper.processRawListData(
+            inputJson, Language.ENGLISH
+        );
+
+        List<Offence> offences = result
+            .get(COURT_ROOM1).get(0)
+            .getCaseSittings().get(0)
+            .getOffences();
+
+        assertThat(offences)
+            .as(OFFENCE_MESSAGE)
+            .hasSize(2);
+
+        assertThat(offences.get(0))
+            .as(OFFENCE_MESSAGE)
+            .extracting(Offence::getOffenceTitle,
+                        Offence::getOffenceWording)
+            .containsExactly("drink driving",
+                             "driving whilst under the influence of alcohol");
+
+        assertThat(offences.get(1))
+            .as(OFFENCE_MESSAGE)
+            .extracting(Offence::getOffenceTitle,
+                        Offence::getOffenceWording)
+            .containsExactly("Assault by beating",
+                             "Assault by beating");
     }
 }

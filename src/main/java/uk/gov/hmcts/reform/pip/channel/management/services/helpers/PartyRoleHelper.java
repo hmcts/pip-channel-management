@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.micrometer.common.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,8 +115,9 @@ public final class PartyRoleHelper {
             String forenames = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_FORENAMES);
             String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
-            return surname + (surname.isEmpty() || forenames.isEmpty() ? "" : ", ")
-                + forenames;
+            return Stream.of(surname, forenames)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining(", "));
         }
         return "";
     }
