@@ -81,7 +81,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "0e9872de-11f1-4217-b037-7b2342cc705b";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "eae53af8-f870-4d9d-a232-4ddcf6b91270";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "b872b7e1-4a59-495e-a306-50c47f92e08f";
-    private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "2707465d-0d5d-4b70-bc06-b5259ee7c8e0";
+    private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "295179be-2437-45a7-9e3f-691b964f9f65";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
@@ -331,12 +331,13 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Case Ref - 45684548"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing of Type - mda"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Panel - ADULT"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("1. drink driving"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("driving whilst under the influence of alcohol"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("2. Assault by beating"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Assault by beating"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - drink driving"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Details - driving whilst under the influence of alcohol"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Title - Assault by beating"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Plea - NOT_GUILTY"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 2 Details - Assault by beating"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -362,6 +363,7 @@ class PublicationManagementTest {
                    CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Postcode: AA1 AA1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is an organisation"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case URN: ABC12345"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent
                        .contains("Offence: This is an offence title (Reporting restriction)"), CONTENT_MISMATCH_ERROR);
     }
