@@ -39,6 +39,7 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
                                 .append('•')
                                 .append(processRolesSjpPress(hearing))
                                 .append(processReportingRestrictionSjpPress(hearing.get("offence")))
+                                .append('\n')
                         )
                     )
                 )
