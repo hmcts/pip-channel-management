@@ -38,7 +38,7 @@ public final class OpaPublicListHelper {
     private static final String OFFENCE_SECTION = "offenceSection";
     private static final String REPORTING_RESTRICTION_DETAIL = "reportingRestrictionDetail";
     private static final String DEFENDANT = "DEFENDANT";
-    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String DATE_FORMAT = "dd/MM/yy";
     private static final String DELIMITER = ", ";
 
     private OpaPublicListHelper() {
