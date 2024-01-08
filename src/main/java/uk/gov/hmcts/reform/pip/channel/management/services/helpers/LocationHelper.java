@@ -69,7 +69,7 @@ public final class LocationHelper {
             }
 
             String formattedCourtAddress = courtAddress.stream()
-                .filter(line -> StringUtils.isNotBlank(line))
+                .filter(StringUtils::isNotBlank)
                 .collect(Collectors.joining(delimiter));
             ((ObjectNode)courtHouse).put("formattedCourtHouseAddress", formattedCourtAddress);
         });

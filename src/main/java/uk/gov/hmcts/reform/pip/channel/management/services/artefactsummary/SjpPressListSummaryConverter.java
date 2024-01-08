@@ -2,11 +2,15 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
@@ -38,7 +42,10 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
                             hearing -> output
                                 .append('•')
                                 .append(processRolesSjpPress(hearing))
-                                .append(this.processReportingRestrictionSjpPress(hearing.get("offence")))
+                                .append(processReportingRestrictionSjpPress(hearing.get("offence")))
+                                .append(processCaseUrns(hearing))
+                                .append(processOffencesSjpPress(hearing.get("offence")))
+                                .append('\n')
                         )
                     )
                 )
@@ -84,6 +91,24 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      */
     private String processReportingRestrictionSjpPress(JsonNode node) {
         return node.get("reportingRestriction").asBoolean() ? " (Reporting restriction)" : "";
+    }
+
+    /**
+     * Concatenate case URNs for a hearing.
+     *
+     * @param hearing - hearing node.
+     * @return Case URNs.
+     */
+    private String processCaseUrns(JsonNode hearing) {
+        List<String> caseUrns = new ArrayList<>();
+        hearing.get("case").forEach(hearingCase -> {
+            if (hearingCase.has("caseUrn")) {
+                caseUrns.add(hearingCase.get("caseUrn").asText());
+            }
+        });
+        return "\nCase URN: " + caseUrns.stream()
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.joining(", "));
     }
 
     /**
