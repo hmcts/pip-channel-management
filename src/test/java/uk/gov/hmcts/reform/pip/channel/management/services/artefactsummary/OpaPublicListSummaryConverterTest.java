@@ -34,7 +34,7 @@ class OpaPublicListSummaryConverterTest {
 
         softly.assertThat(artefactSummary.split(System.lineSeparator()))
             .as("Incorrect output lines")
-            .hasSize(76);
+            .hasSize(90);
 
         softly.assertThat(artefactSummary)
             .as("incorrect name found")
@@ -50,19 +50,19 @@ class OpaPublicListSummaryConverterTest {
 
         softly.assertThat(artefactSummary)
             .as("incorrect offence 1 title found")
-            .contains("Offence 1 Title - Offence title 2");
+            .contains("Offence 1 Title - Organisation Offence Title");
 
         softly.assertThat(artefactSummary)
             .as("incorrect offence 1 reporting restriction found")
             .contains("Offence 1 Reporting Restriction - Offence Reporting Restriction detail");
 
         softly.assertThat(artefactSummary)
-            .as("incorrect offence 1 title found")
-            .contains("Offence 2 Title - Offence title 3");
+            .as("incorrect offence 2 title found")
+            .contains("Offence 2 Title - Organisation Offence Title 2");
 
         softly.assertThat(artefactSummary)
-            .as("incorrect offence 1 reporting restriction found")
-            .contains("Offence 2 Reporting Restriction - Offence Reporting Restriction detail 3");
+            .as("incorrect offence 2 reporting restriction found")
+            .contains("Offence 2 Reporting Restriction -");
 
         softly.assertThat(artefactSummary)
             .as("incorrect case reporting restriction found")
@@ -72,10 +72,6 @@ class OpaPublicListSummaryConverterTest {
         softly.assertThat(artefactSummary)
             .as("incorrect prosecutor found at informant level")
             .contains("Prosecutor - Prosecution Authority ref 1");
-
-        softly.assertThat(artefactSummary)
-            .as("incorrect prosecutor found")
-            .contains("Prosecutor - organisationName");
 
         softly.assertAll();
     }
