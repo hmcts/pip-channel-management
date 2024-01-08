@@ -15,6 +15,8 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     private static final String ORGANISATION_ADDRESS = "organisationAddress";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
+    private static final String OFFENCE_TITLE = "offenceTitle";
+    private static final String ACCUSED = "ACCUSED";
 
     /**
      * sjp press parent method - iterates over session data. Routes to specific methods which handle offences and
@@ -36,8 +38,9 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
                             hearing -> output
                                 .append('•')
                                 .append(processRolesSjpPress(hearing))
-                                .append(processOffencesSjpPress(hearing.get("offence")))
-                                .append('\n')
+                                //.append(this.processOffencesSjpPress(hearing.get("offence")))
+                                .append(this.processReportingRestrictionSjpPress(hearing.get("offence")))
+                                //.append('\n')
                         )
                     )
                 )
@@ -50,33 +53,30 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     /**
      * offences iterator method - handles logic of accused of single or multiple offences and returns output string.
      *
-     * @param offencesNode - iterator on offences.
+     * @param partiesNode - iterator on offences.
      * @return string with offence data.
      */
-    private String processOffencesSjpPress(JsonNode offencesNode) {
-        StringBuilder outputString = new StringBuilder();
-        boolean offencesNodeSizeBool = offencesNode.size() > 1;
-        if (offencesNodeSizeBool) {
-            Iterator<JsonNode> offences = offencesNode.elements();
-            int counter = 1;
-            while (offences.hasNext()) {
-                JsonNode thisOffence = offences.next();
-                outputString
-                    .append("\nOffence ")
-                    .append(counter)
-                    .append(": ")
-                    .append(thisOffence.get("offenceTitle").asText())
-                    .append(processReportingRestrictionSjpPress(thisOffence));
-                counter += 1;
+        private String getOffenceTitle(JsonNode partiesNode) {
+            StringBuilder output = new StringBuilder();
+
+            for (JsonNode party : partiesNode) {
+                String role = party.get(PARTY_ROLE).asText();
+                if (ACCUSED.equals(role)) {
+
+                    party.get("offence").elements().forEachRemaining(offence -> {
+
+                        if (output.length() == 0) {
+                            output.append(offence.get(OFFENCE_TITLE).asText());
+                            output.append(this.processReportingRestrictionSjpPress(offence));
+                        } else {
+                            output.append(", ").append(offence.get(OFFENCE_TITLE).asText());
+                            output.append(this.processReportingRestrictionSjpPress((partiesNode.get(0))));
+                        }
+                    });
+                }
             }
-        } else {
-            outputString
-                .append("\nOffence: ")
-                .append(offencesNode.get(0).get("offenceTitle").asText())
-                .append(processReportingRestrictionSjpPress(offencesNode.get(0)));
+            return output.toString();
         }
-        return outputString.toString();
-    }
 
     /**
      * handles reporting restrictions for sjp press.
