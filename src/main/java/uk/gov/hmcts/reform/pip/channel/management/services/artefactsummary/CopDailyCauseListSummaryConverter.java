@@ -37,7 +37,7 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
                     session -> session.get("sittings").forEach(
                         sitting -> sitting.get("hearing").forEach(
                             hearing -> hearing.get("case").forEach(
-                                hearingCase -> {
+                                hearingCase ->
                                     output
                                         .append("\n\nName of Party(ies) - ")
                                         .append(GeneralHelper.findAndReturnNodeText(hearingCase, "caseSuppressionName"))
@@ -53,8 +53,7 @@ public class CopDailyCauseListSummaryConverter implements ArtefactSummaryConvert
                                             GeneralHelper.findAndReturnNodeText(hearingCase, "caseIndicator")
                                         ))
                                         .append("\nBefore - ")
-                                        .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"));
-                                }
+                                        .append(GeneralHelper.findAndReturnNodeText(session, "formattedSessionJoh"))
                             )
                         )
                     )
