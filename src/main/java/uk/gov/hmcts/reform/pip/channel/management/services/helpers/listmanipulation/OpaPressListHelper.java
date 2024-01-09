@@ -207,7 +207,7 @@ public final class OpaPressListHelper {
             .collect(Collectors.joining(DELIMITER));
     }
 
-    private static String processProsecutor(JsonNode hearing) {
+    public static String processProsecutor(JsonNode hearing) {
         String prosecutor = getPartyInformant(hearing);
         if (prosecutor.isEmpty()) {
             prosecutor = getPartyProsecutor(hearing);
