@@ -13,7 +13,7 @@ public class OpaPressListSummaryConverter implements ArtefactSummaryConverter {
     public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder(256);
 
-        OpaPressListHelper.processRawListData(payload).forEach((pleaData, list) -> {
+        OpaPressListHelper.processRawListData(payload).forEach((pleaData, list) ->
             list.forEach(item -> {
                 output
                     .append("---\n•Defendant - ").append(item.getDefendantInfo().getName())
@@ -34,8 +34,8 @@ public class OpaPressListSummaryConverter implements ArtefactSummaryConverter {
                     .append("\nReporting Restriction - ").append(item.getCaseInfo().getCaseReportingRestriction())
                     .append("\nProsecutor - ").append(item.getDefendantInfo().getProsecutor())
                     .append('\n');
-            });
-        });
+            })
+        );
 
         return output.toString();
     }

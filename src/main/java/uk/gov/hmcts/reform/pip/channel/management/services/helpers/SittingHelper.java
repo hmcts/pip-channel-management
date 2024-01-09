@@ -59,7 +59,6 @@ public final class SittingHelper {
 
         if (judiciary.isBlank()) {
             judiciary = JudiciaryHelper.findAndManipulateJudiciary(session);
-
         }
 
         judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
