@@ -87,10 +87,7 @@ public final class SjpPublicListHelper {
 
     private static String getAccusedPostcode(JsonNode party) {
         if (party.has(INDIVIDUAL_DETAILS) && party.get(INDIVIDUAL_DETAILS).has(ADDRESS)) {
-            return GeneralHelper.findAndReturnNodeText(
-                party.get(INDIVIDUAL_DETAILS).get(ADDRESS),
-                POSTCODE
-            );
+            return GeneralHelper.findAndReturnNodeText(party.get(INDIVIDUAL_DETAILS).get(ADDRESS), POSTCODE);
         } else if (party.has(ORGANISATION_DETAILS)
             && party.get(ORGANISATION_DETAILS).has(ORGANISATION_ADDRESS)) {
             return GeneralHelper.findAndReturnNodeText(party.get(ORGANISATION_DETAILS).get(ORGANISATION_ADDRESS),
