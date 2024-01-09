@@ -35,11 +35,13 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
                 courtRoom -> courtRoom.get("session").forEach(
                     session -> session.get("sittings").forEach(
                         sitting -> sitting.get("hearing").forEach(
-                            hearing -> output
-                                .append('•')
-                                .append(processRolesSjpPress(hearing))
-                                .append(processReportingRestrictionSjpPress(hearing.get("offence")))
-                                .append('\n')
+                            cases -> cases.get("case").forEach(
+                                cases2 -> output
+                                    .append('•')
+                                    .append(processRolesSjpPress(hearing))
+                                    .append(getOffenceTitle(cases2.get("parties")))
+                                    .append('\n')
+                            )
                         )
                     )
                 )
@@ -65,8 +67,16 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
                 party.get("offence").elements().forEachRemaining(offence -> {
 
                     if (output.length() == 0) {
+
+                        int counter = 1;
+                        output.append("\nOffence ");
+                        output.append(counter);
+                        output.append(": ");
                         output.append(offence.get(OFFENCE_TITLE).asText());
                         output.append(this.processReportingRestrictionSjpPress(offence));
+
+                        counter += 1;
+
                     } else {
                         output.append(", ").append(offence.get(OFFENCE_TITLE).asText());
                         output.append(this.processReportingRestrictionSjpPress((partiesNode.get(0))));
