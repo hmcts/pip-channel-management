@@ -55,27 +55,27 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
      * @param partiesNode - iterator on offences.
      * @return string with offence data.
      */
-        private String getOffenceTitle(JsonNode partiesNode) {
-            StringBuilder output = new StringBuilder();
+    private String getOffenceTitle(JsonNode partiesNode) {
+        StringBuilder output = new StringBuilder();
 
-            for (JsonNode party : partiesNode) {
-                String role = party.get(PARTY_ROLE).asText();
-                if (ACCUSED.equals(role)) {
+        for (JsonNode party : partiesNode) {
+            String role = party.get(PARTY_ROLE).asText();
+            if (ACCUSED.equals(role)) {
 
-                    party.get("offence").elements().forEachRemaining(offence -> {
+                party.get("offence").elements().forEachRemaining(offence -> {
 
-                        if (output.length() == 0) {
-                            output.append(offence.get(OFFENCE_TITLE).asText());
-                            output.append(this.processReportingRestrictionSjpPress(offence));
-                        } else {
-                            output.append(", ").append(offence.get(OFFENCE_TITLE).asText());
-                            output.append(this.processReportingRestrictionSjpPress((partiesNode.get(0))));
-                        }
-                    });
-                }
+                    if (output.length() == 0) {
+                        output.append(offence.get(OFFENCE_TITLE).asText());
+                        output.append(this.processReportingRestrictionSjpPress(offence));
+                    } else {
+                        output.append(", ").append(offence.get(OFFENCE_TITLE).asText());
+                        output.append(this.processReportingRestrictionSjpPress((partiesNode.get(0))));
+                    }
+                });
             }
-            return output.toString();
         }
+        return output.toString();
+    }
 
     /**
      * handles reporting restrictions for sjp press.
