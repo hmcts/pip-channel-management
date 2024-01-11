@@ -33,6 +33,7 @@ class OpaResultsFileConverterTest {
     private static final String DEFENDANT_HEADING_CLASS = "govuk-heading-m";
     private static final String CASE_URN_CLASS = "case-ref";
     private static final String OFFENCE_HEADING_CLASS = "govuk-details__summary-text";
+    private static final String OFFENCE_TABLE_HEADER_CLASS = "govuk-table__header";
     private static final String OFFENCE_TABLE_CELL_CLASS = "govuk-table__cell";
     private static final String BODY_CLASS = "govuk-body";
 
@@ -88,11 +89,11 @@ class OpaResultsFileConverterTest {
 
         softly.assertThat(document.title())
             .as(TITLE_MESSAGE)
-            .isEqualTo("Online Plea and Allocation Cases Results");
+            .isEqualTo("Online Plea and Allocation Results");
 
         softly.assertThat(document.getElementsByClass(HEADING_CLASS).get(0).text())
             .as(HEADING_MESSAGE)
-            .contains("Online Plea and Allocation Cases Results - " + LOCATION_NAME);
+            .contains("Online Plea and Allocation Results - " + LOCATION_NAME);
 
         Elements resultBody = document.getElementsByClass(BODY_CLASS);
         softly.assertThat(resultBody.get(0).text())
@@ -260,10 +261,10 @@ class OpaResultsFileConverterTest {
     }
 
     @Test
-    void testCaseOffenceContents() {
+    void testCaseOffenceTableHeaders() {
         String result = converter.convert(inputJson, METADATA, englishLanguageResource);
         Document document = Jsoup.parse(result);
-        Elements offenceCell = document.getElementsByClass(OFFENCE_TABLE_CELL_CLASS);
+        Elements offenceCell = document.getElementsByClass(OFFENCE_TABLE_HEADER_CLASS);
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -273,45 +274,56 @@ class OpaResultsFileConverterTest {
 
         softly.assertThat(offenceCell.get(1).text())
             .as(OFFENCE_MESSAGE)
-            .isEqualTo("07 January 2024");
+            .isEqualTo("Allocation decision");
 
         softly.assertThat(offenceCell.get(2).text())
             .as(OFFENCE_MESSAGE)
-            .isEqualTo("Allocation decision");
+            .isEqualTo("Bail status");
 
         softly.assertThat(offenceCell.get(3).text())
             .as(OFFENCE_MESSAGE)
-            .isEqualTo("Decision detail 2A");
+            .isEqualTo("Next hearing date");
 
         softly.assertThat(offenceCell.get(4).text())
             .as(OFFENCE_MESSAGE)
-            .isEqualTo("Bail status");
+            .isEqualTo("Next hearing location");
 
         softly.assertThat(offenceCell.get(5).text())
             .as(OFFENCE_MESSAGE)
+            .isEqualTo("Reporting restrictions");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testCaseOffenceContents() {
+        String result = converter.convert(inputJson, METADATA, englishLanguageResource);
+        Document document = Jsoup.parse(result);
+        Elements offenceCell = document.getElementsByClass(OFFENCE_TABLE_CELL_CLASS);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(offenceCell.get(0).text())
+            .as(OFFENCE_MESSAGE)
+            .isEqualTo("07 January 2024");
+
+        softly.assertThat(offenceCell.get(1).text())
+            .as(OFFENCE_MESSAGE)
+            .isEqualTo("Decision detail 2A");
+
+        softly.assertThat(offenceCell.get(2).text())
+            .as(OFFENCE_MESSAGE)
             .isEqualTo("Unconditional bail");
 
-        softly.assertThat(offenceCell.get(6).text())
-            .as(OFFENCE_MESSAGE)
-            .isEqualTo("Next hearing date");
-
-        softly.assertThat(offenceCell.get(7).text())
+        softly.assertThat(offenceCell.get(3).text())
             .as(OFFENCE_MESSAGE)
             .isEqualTo("10 February 2024");
 
-        softly.assertThat(offenceCell.get(8).text())
-            .as(OFFENCE_MESSAGE)
-            .isEqualTo("Next hearing location");
-
-        softly.assertThat(offenceCell.get(9).text())
+        softly.assertThat(offenceCell.get(4).text())
             .as(OFFENCE_MESSAGE)
             .isEqualTo("Hearing location 2");
 
-        softly.assertThat(offenceCell.get(10).text())
-            .as(OFFENCE_MESSAGE)
-            .isEqualTo("Reporting restrictions");
-
-        softly.assertThat(offenceCell.get(11).text())
+        softly.assertThat(offenceCell.get(5).text())
             .as(OFFENCE_MESSAGE)
             .isEqualTo("Reporting restriction detail 2, Reporting restriction detail 3");
 
