@@ -138,19 +138,14 @@ public final class OpaResultsHelper {
         offence.setOffenceTitle(GeneralHelper.findAndReturnNodeText(offenceNode, OFFENCE_TITLE));
         offence.setOffenceSection(GeneralHelper.findAndReturnNodeText(offenceNode, OFFENCE_SECTION));
 
-        JsonNode decision = offenceNode.get(DECISION);
-        String decisionDate = DateHelper.formatTimeStampToBst(
-            GeneralHelper.findAndReturnNodeText(decision, DECISION_DATE),
-            Language.ENGLISH, false, false, DATE_FORMAT
-        );
-        offence.setDecisionDate(decisionDate);
-        offence.setDecisionDetail(GeneralHelper.findAndReturnNodeText(decision, DECISION_DETAIL));
+        buildOffenceDecision(offenceNode, offence);
         offence.setBailStatus(GeneralHelper.findAndReturnNodeText(offenceNode, BAIL_STATUS));
 
-        String nextHearingDate = DateHelper.formatTimeStampToBst(
-            GeneralHelper.findAndReturnNodeText(offenceNode, NEXT_HEARING_DATE),
-            Language.ENGLISH, false, false, DATE_FORMAT
-        );
+        String nextHearingDate = "";
+        if (offenceNode.has(NEXT_HEARING_DATE)) {
+            nextHearingDate = DateHelper.formatTimeStampToBst(offenceNode.get(NEXT_HEARING_DATE).asText(),
+                                                              Language.ENGLISH, false, false, DATE_FORMAT);
+        }
         offence.setNextHearingDate(nextHearingDate);
         offence.setNextHearingLocation(GeneralHelper.findAndReturnNodeText(offenceNode, NEXT_HEARING_LOCATION));
         offence.setReportingRestrictions(
@@ -158,5 +153,21 @@ public final class OpaResultsHelper {
         );
 
         return offence;
+    }
+
+    private static void buildOffenceDecision(JsonNode offenceNode, Offence offence) {
+        if (offenceNode.has(DECISION)) {
+            JsonNode decision = offenceNode.get(DECISION);
+            String decisionDate = "";
+            if (decision.has(DECISION_DATE)) {
+                decisionDate = DateHelper.formatTimeStampToBst(decision.get(DECISION_DATE).asText(), Language.ENGLISH,
+                                                               false, false, DATE_FORMAT);
+            }
+            offence.setDecisionDate(decisionDate);
+            offence.setDecisionDetail(GeneralHelper.findAndReturnNodeText(decision, DECISION_DETAIL));
+        } else {
+            offence.setDecisionDate("");
+            offence.setDecisionDetail("");
+        }
     }
 }
