@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Artef
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.util.Base64;
@@ -166,6 +167,19 @@ public class PublicationManagementService {
 
         if (artefact.getListType().hasExcel()) {
             azureBlobService.deleteBlobFile(artefact.getArtefactId() + EXCEL.getExtension());
+        }
+    }
+
+    public void deleteFiles(UUID artefactId, ListType listType, Language language) {
+        azureBlobService.deleteBlobFile(artefactId + PDF.getExtension());
+
+        if (listType.hasAdditionalPdf() && language != Language.ENGLISH) {
+            azureBlobService.deleteBlobFile(artefactId + ADDITIONAL_PDF_SUFFIX
+                                                + PDF.getExtension());
+        }
+
+        if (listType.hasExcel()) {
+            azureBlobService.deleteBlobFile(artefactId + EXCEL.getExtension());
         }
     }
 

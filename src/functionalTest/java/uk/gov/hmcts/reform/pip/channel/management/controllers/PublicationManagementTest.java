@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -43,6 +45,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
+import static uk.gov.hmcts.reform.pip.model.subscription.SearchType.LIST_TYPE;
 
 @SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,6 +53,9 @@ import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
+    private static final String LIST_TYPE_HEADER = "x-list-type";
+    private static final String LANGUAGE_HEADER = "x-language";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -774,6 +780,108 @@ class PublicationManagementTest {
     @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
     void testDeleteFilesUnauthorized() throws Exception {
         mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpWelshSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+
+        MockHttpServletRequestBuilder requestBuilder = delete(ROOT_URL + V2_URL + "/" +
+                                                                  ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH)
+            .header(LIST_TYPE_HEADER, ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST)
+            .header(LANGUAGE_HEADER, Language.WELSH);
+
+        mockMvc.perform(requestBuilder)
+            .andExpect(status().isNoContent());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpEnglishSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        MockHttpServletRequestBuilder requestBuilder = delete(ROOT_URL + V2_URL + "/" +
+                                                                  ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH)
+            .header(LIST_TYPE_HEADER, ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST)
+            .header(LANGUAGE_HEADER, Language.ENGLISH);
+
+        mockMvc.perform(requestBuilder)
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + WELSH_PDF_SUFFIX
+                               + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesV2SjpWelshSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        MockHttpServletRequestBuilder requestBuilder = delete(ROOT_URL + V2_URL + "/" +
+                                                                  ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH)
+            .header(LIST_TYPE_HEADER, ListType.SJP_PUBLIC_LIST)
+            .header(LANGUAGE_HEADER, Language.WELSH);
+
+        mockMvc.perform(requestBuilder)
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    void testDeleteFilesV2SjpEnglishSuccess() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.deleteIfExists()).thenReturn(true);
+
+        MockHttpServletRequestBuilder requestBuilder = delete(ROOT_URL + V2_URL + "/" +
+                                                                  ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH)
+            .header(LIST_TYPE_HEADER, ListType.SJP_PUBLIC_LIST)
+            .header(LANGUAGE_HEADER, Language.ENGLISH);
+
+        mockMvc.perform(requestBuilder)
+            .andExpect(status().isNoContent());
+
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
+        verify(blobContainerClient, never())
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(blobContainerClient)
+            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
+        verify(blobClient, times(2)).deleteIfExists();
+    }
+
+    @Test
+    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
+    void testDeleteFilesV2Unauthorized() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete(ROOT_URL + V2_URL + "/" +
+                                                                  ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH)
+            .header(LIST_TYPE_HEADER, ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST)
+            .header(LANGUAGE_HEADER, Language.WELSH);
+
+        mockMvc.perform(requestBuilder)
             .andExpect(status().isForbidden());
     }
 }
