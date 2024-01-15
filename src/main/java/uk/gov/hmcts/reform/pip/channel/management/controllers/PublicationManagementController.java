@@ -86,20 +86,6 @@ public class PublicationManagementController {
         );
     }
 
-    @ApiResponse(responseCode = OK_CODE, description = "Map<FileType, byte[]> returned for each file for an artefact")
-    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
-    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
-    @ApiResponse(responseCode = "401", description = "User not authorised to access requested data.")
-    @Operation(summary = "Takes in an artefact ID and returns a map of stored files")
-    @GetMapping("/{artefactId}")
-    @Deprecated
-    public ResponseEntity<Map<FileType, byte[]>> getFiles(
-        @PathVariable UUID artefactId,
-        @RequestHeader(value = "x-user-id", required = false) String userId,
-        @RequestHeader(value = "x-system", required = false) boolean system) {
-        return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId, userId, system));
-    }
-
     @ApiResponse(responseCode = NO_CONTENT_CODE, description = "The files have been deleted")
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
     @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
