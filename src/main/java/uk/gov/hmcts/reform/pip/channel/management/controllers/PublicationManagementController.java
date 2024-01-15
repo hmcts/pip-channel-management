@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagement
 import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
