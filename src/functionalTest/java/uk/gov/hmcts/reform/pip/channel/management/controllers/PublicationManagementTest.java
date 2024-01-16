@@ -609,7 +609,7 @@ class PublicationManagementTest {
 
         assertTrue(
             response.getResponse().getContentAsString().contains("File with type PDF for artefact with id "
-                                                                     + listArtefactId + " has size over the limit of 10 bytes"),
+                   + listArtefactId + " has size over the limit of 10 bytes"),
             "Response does not contain expected result"
         );
     }
