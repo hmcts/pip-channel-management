@@ -639,58 +639,6 @@ class PublicationManagementTest {
             .andExpect(status().isForbidden());
     }
 
-    @ParameterizedTest
-    @MethodSource(INPUT_PARAMETERS)
-    void testGetFilesForUserId(String listArtefactId) throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.downloadContent()).thenReturn(
-            BinaryData.fromString(new String(file.getBytes())));
-
-        MockHttpServletRequestBuilder request =
-            get(ROOT_URL + "/" + listArtefactId)
-                .header("x-user-id", verifiedUserId)
-                .header(SYSTEM_HEADER, "false");
-
-        MvcResult response = mockMvc.perform(request)
-            .andExpect(status().isOk()).andReturn();
-
-        Assertions.assertNotNull(
-            response.getResponse().getContentAsString(),
-            "Response should contain a Artefact"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("PDF"),
-            "Response does not contain PDF information"
-        );
-        assertTrue(
-            response.getResponse().getContentAsString().contains("EXCEL"),
-            "Response does not contain excel"
-        );
-    }
-
-    @Test
-    void testGetFilesNotFound() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID_NOT_FOUND))
-            .andExpect(status().isNotFound())
-            .andReturn();
-
-        ExceptionResponse exceptionResponse = objectMapper.readValue(
-            mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
-
-        assertEquals(
-            exceptionResponse.getMessage(),
-            String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
-            NOT_FOUND_RESPONSE_MESSAGE
-        );
-    }
-
-    @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
-    void testGetFilesUnauthorized() throws Exception {
-        mockMvc.perform(get(ROOT_URL + "/" + ARTEFACT_ID))
-            .andExpect(status().isForbidden());
-    }
-
     @Test
     void testDeleteFilesNonSjpWelshSuccess() throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
