@@ -106,6 +106,7 @@ public class PublicationManagementController {
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
     @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
     @DeleteMapping("/{artefactId}")
+    @Deprecated
     public ResponseEntity<Void> deleteFiles(@PathVariable UUID artefactId) {
         publicationManagementService.deleteFiles(artefactId);
         return ResponseEntity.noContent().build();

@@ -156,6 +156,7 @@ public class PublicationManagementService {
      *
      * @param artefactId The artefact ID to delete the files for.
      */
+    @Deprecated
     public void deleteFiles(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         azureBlobService.deleteBlobFile(artefact.getArtefactId() + PDF.getExtension());
@@ -170,6 +171,13 @@ public class PublicationManagementService {
         }
     }
 
+    /**
+     * Delete all publication files for a given artefact.
+     *
+     * @param artefactId The artefact ID to delete the files for.
+     * @param listType The list type of the publication.
+     * @param language The language of the publication.
+     */
     public void deleteFiles(UUID artefactId, ListType listType, Language language) {
         azureBlobService.deleteBlobFile(artefactId + PDF.getExtension());
 
