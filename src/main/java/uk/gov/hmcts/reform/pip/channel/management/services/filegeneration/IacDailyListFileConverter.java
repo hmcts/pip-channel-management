@@ -58,7 +58,7 @@ public class IacDailyListFileConverter implements FileConverter {
 
             courtList.get("courtHouse").get("courtRoom").forEach(
                 courtRoom -> courtRoom.get("session").forEach(session -> {
-                    String formattedJoh = JudiciaryHelper.findAndManipulateJudiciaryForIac(session);
+                    String formattedJoh = JudiciaryHelper.findAndManipulateJudiciary(session);
                     ((ObjectNode) session).put("formattedJudiciary", formattedJoh);
 
                     session.get("sittings").forEach(sitting -> {
