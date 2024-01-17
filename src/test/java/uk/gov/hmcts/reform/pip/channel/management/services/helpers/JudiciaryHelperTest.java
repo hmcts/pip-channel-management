@@ -48,6 +48,13 @@ class JudiciaryHelperTest {
     void testJudiciaryManipulationWithAPresidingJudge() {
         assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(2)))
             .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Crown Judge, Judge 1, Judge 2");
+    }
+
+    @Test
+    void testJudiciaryManipulationWithOnlyPresidingJudge() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(3)))
+            .as(JUDICIARY_MESSAGE)
             .isEqualTo("Crown Judge");
     }
 
