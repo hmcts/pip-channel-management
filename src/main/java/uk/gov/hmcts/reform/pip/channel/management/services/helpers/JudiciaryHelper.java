@@ -30,7 +30,8 @@ public final class JudiciaryHelper {
         }
 
         if (foundPresiding.get() && foundNonPresidingJudges.get()) {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(presidingJudiciary.get().append(nonPresidingJudiciary.get()).toString());
+            return GeneralHelper.trimAnyCharacterFromStringEnd(
+                presidingJudiciary.get().append(nonPresidingJudiciary.get()).toString());
         } else if (foundPresiding.get()) {
             return GeneralHelper.trimAnyCharacterFromStringEnd(presidingJudiciary.toString());
         } else {
