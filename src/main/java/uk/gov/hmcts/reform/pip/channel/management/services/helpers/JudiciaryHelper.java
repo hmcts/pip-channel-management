@@ -12,49 +12,36 @@ public final class JudiciaryHelper {
     }
 
     public static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
-        AtomicReference<StringBuilder> formattedJudiciary = new AtomicReference<>(new StringBuilder());
+        AtomicReference<StringBuilder> nonPresidingJudiciary = new AtomicReference<>(new StringBuilder());
+        AtomicReference<StringBuilder> presidingJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
+        AtomicReference<Boolean> foundNonPresidingJudges = new AtomicReference<>(false);
 
         if (judiciaryNode.has(JUDICIARY)) {
             judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
-                    formattedJudiciary.set(new StringBuilder());
-                    formattedJudiciary.get().append(GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs"));
+                    appendJohKnownAs(judiciary, presidingJudiciary.get());
                     foundPresiding.set(true);
-                } else if (Boolean.FALSE.equals(foundPresiding.get())) {
-                    appendJohKnownAs(judiciary, formattedJudiciary.get());
+                } else {
+                    appendJohKnownAs(judiciary, nonPresidingJudiciary.get());
+                    foundNonPresidingJudges.set(true);
                 }
             });
         }
 
-        return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
-    }
-
-    public static String findAndManipulateJudiciaryForIac(JsonNode session) {
-        StringBuilder formattedJudiciary = new StringBuilder();
-
-        try {
-            session.get(JUDICIARY).forEach(judiciary -> {
-                if (formattedJudiciary.length() != 0) {
-                    formattedJudiciary.append(", ");
-                }
-
-                formattedJudiciary.append(GeneralHelper.findAndReturnNodeText(judiciary, "johTitle"));
-                formattedJudiciary.append(' ');
-                formattedJudiciary.append(GeneralHelper.findAndReturnNodeText(judiciary, "johNameSurname"));
-            });
-
-        } catch (Exception ignored) {
-            //No catch required, this is a valid scenario and makes the code cleaner than many if statements
+        if (foundPresiding.get() && foundNonPresidingJudges.get()) {
+            return GeneralHelper.trimAnyCharacterFromStringEnd(presidingJudiciary.get().append(nonPresidingJudiciary.get()).toString());
+        } else if (foundPresiding.get()) {
+            return GeneralHelper.trimAnyCharacterFromStringEnd(presidingJudiciary.toString());
+        } else {
+            return GeneralHelper.trimAnyCharacterFromStringEnd(nonPresidingJudiciary.toString());
         }
-
-        return GeneralHelper.trimAnyCharacterFromStringEnd(formattedJudiciary.toString());
     }
 
-    private static void appendJohKnownAs(JsonNode judiciary, StringBuilder formattedJudiciary) {
+    private static void appendJohKnownAs(JsonNode judiciary, StringBuilder judiciaryKnownAs) {
         String johKnownAs = GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs");
         if (StringUtils.isNotBlank(johKnownAs)) {
-            formattedJudiciary
+            judiciaryKnownAs
                 .append(johKnownAs)
                 .append(", ");
         }
