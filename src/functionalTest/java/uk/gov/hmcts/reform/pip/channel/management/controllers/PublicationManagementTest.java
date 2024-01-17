@@ -175,7 +175,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Courtroom: 1"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judiciary: Mr , Mr"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judiciary: Judge KnownAs Presiding, Judge KnownAs 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Name: A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Reference: 12345678"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: FMPO"), CONTENT_MISMATCH_ERROR);
@@ -393,7 +393,7 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge KnownAs, Judge KnownAs 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -409,7 +409,7 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge KnownAs, Judge KnownAs 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
