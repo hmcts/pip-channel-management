@@ -29,17 +29,11 @@
               {
                 "judiciary": [
                   {
-                    "johTitle": "DJ",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
-                    "johKnownAs": "DJ Steve 1",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace",
+                    "johKnownAs": "Judge KnownAs",
                     "isPresiding": false
                   }
                 ],
@@ -460,17 +454,11 @@
                     ],
                     "judiciary": [
                       {
-                        "johTitle": "DJ",
-                        "johNameSurname": "joh name 1",
-                        "role": "JUDGE",
-                        "johKnownAs": "joh known as 1",
+                        "johKnownAs": "Judge KnownAs Presiding 2",
                         "isPresiding": true
                       },
                       {
-                        "johTitle": "Magistrate",
-                        "johNameSurname": "joh name 2",
-                        "role": "MAGISTRATE",
-                        "johKnownAs": "joh known as 2",
+                        "johKnownAs": "Judge KnownAs",
                         "isPresiding": false
                       }
                     ],
