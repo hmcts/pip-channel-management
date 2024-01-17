@@ -131,26 +131,6 @@ public class PublicationManagementService {
     }
 
     /**
-     * Get the sorted files for an artefact.
-     *
-     * @param artefactId The artefact Id to get the files for.
-     * @return A map of the filetype to file byte array
-     */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
-        Artefact artefact = dataManagementService.getArtefact(artefactId);
-        if (isAuthorised(artefact, userId, system)) {
-            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-            publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
-            publicationFilesMap.put(EXCEL, artefact.getListType().hasExcel()
-                ? azureBlobService.getBlobFile(artefactId + ".xlsx") : new byte[0]);
-            return publicationFilesMap;
-        } else {
-            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
-                                                              + " %s", userId, artefactId));
-        }
-    }
-
-    /**
      * Delete all publication files for a given artefact.
      *
      * @param artefactId The artefact ID to delete the files for.
