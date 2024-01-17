@@ -43,5 +43,13 @@
         "isPresiding": true
       }
     ]
+  },
+  {
+    "judiciary": [
+      {
+        "johKnownAs": "Crown Judge",
+        "isPresiding": true
+      }
+    ]
   }
 ]
