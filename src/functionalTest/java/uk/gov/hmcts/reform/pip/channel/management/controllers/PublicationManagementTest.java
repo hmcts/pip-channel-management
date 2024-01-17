@@ -165,7 +165,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Hearing Type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Judge KnownAs 1"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -175,8 +175,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Courtroom: 1"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judiciary: Judge KnownAs Presiding, "
-                                                + "Judge KnownAs 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judiciary: Judge KnownAs Presiding"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Name: A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Reference: 12345678"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: FMPO"), CONTENT_MISMATCH_ERROR);
@@ -195,7 +194,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Criminal"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, In-Person"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour [1 of 2]"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Before - Crown Judge"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Before - Judge KnownAs Presiding"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -283,7 +282,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - This is the court room name, Before: First known as"),
+        assertTrue(responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs"),
                    CONTENT_MISMATCH_ERROR);
     }
 
