@@ -66,15 +66,12 @@ public final class SittingHelper {
     }
 
     public static void findAndConcatenateHearingPlatform(JsonNode sitting, JsonNode session) {
-        StringBuilder formattedHearingPlatform = new StringBuilder();
-
+        String channel = "";
         if (sitting.has(CHANNEL)) {
-            GeneralHelper.loopAndFormatString(sitting, CHANNEL, formattedHearingPlatform, ", ");
+            channel = GeneralHelper.formatNodeArray(sitting, CHANNEL, ", ");
         } else if (session.has(SESSION_CHANNEL)) {
-            GeneralHelper.loopAndFormatString(session, SESSION_CHANNEL, formattedHearingPlatform, ", ");
+            channel = GeneralHelper.formatNodeArray(session, SESSION_CHANNEL, ", ");
         }
-
-        ((ObjectNode) sitting).put("caseHearingChannel", GeneralHelper.trimAnyCharacterFromStringEnd(
-            formattedHearingPlatform.toString().trim()));
+        ((ObjectNode) sitting).put("caseHearingChannel", channel);
     }
 }
