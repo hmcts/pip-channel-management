@@ -466,18 +466,18 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant Name - Organisation name"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Defendant Name – Surname, Forename MiddleName"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case Ref / URN – URN5678"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Title – Offence title 2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Section – Offence section 2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Decision Date – 06 January 2024"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Allocation Decision – Decision detail 2"),
+        assertTrue(responseContent.contains("Defendant Name - Surname, Forename MiddleName"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Ref / URN - URN5678"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - Offence title 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Section - Offence section 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Decision Date - 06 January 2024"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Allocation Decision - Decision detail 2"),
                    CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Bail Status – Unconditional bail"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Next Hearing Date – 10 February 2024"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Next Hearing Location – Hearing location 2"),
+        assertTrue(responseContent.contains("Offence 1 Bail Status - Unconditional bail"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Next Hearing Date - 10 February 2024"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Next Hearing Location - Hearing location 2"),
                    CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Reporting Restrictions – Reporting restriction detail "
+        assertTrue(responseContent.contains("Offence 1 Reporting Restrictions - Reporting restriction detail "
                                                 + "2, Reporting restriction detail 3"),
                    CONTENT_MISMATCH_ERROR);
     }
