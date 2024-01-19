@@ -88,6 +88,7 @@ class PublicationManagementTest {
         = "c21bf262-d0b5-475e-b0e3-12aa34495469";
     private static final String ARTEFACT_ID_OPA_PRESS_LIST = "f83de894-9245-4d2c-90ef-6e64f49cdabb";
     private static final String ARTEFACT_ID_OPA_PUBLIC_LIST = "23c57521-d3f3-4660-b88b-15245c106fbb";
+    private static final String ARTEFACT_ID_OPA_RESULTS = "6f76cb9b-3270-477c-a937-2122b2e599b3";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
@@ -137,7 +138,8 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS), //SSCS Daily List - Additional Hearings
             Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST), //OPA Press List
-            Arguments.of(ARTEFACT_ID_OPA_PUBLIC_LIST) //OPA Public List
+            Arguments.of(ARTEFACT_ID_OPA_PUBLIC_LIST), //OPA Public List
+            Arguments.of(ARTEFACT_ID_OPA_RESULTS) //OPA Results
         );
     }
 
@@ -470,6 +472,29 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Prosecutor - Prosecution Authority ref 1"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummaryOpaResults() throws Exception {
+        MvcResult response = mockMvc.perform(
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_OPA_RESULTS))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(responseContent.contains("Defendant Name - Organisation name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Defendant Name - Surname, Forename MiddleName"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Ref / URN - URN5678"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Title - Offence title 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Section - Offence section 2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Decision Date - 06 January 2024"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Allocation Decision - Decision detail 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Bail Status - Unconditional bail"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Next Hearing Date - 10 February 2024"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Next Hearing Location - Hearing location 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence 1 Reporting Restrictions - Reporting restriction detail "
+                                                + "2, Reporting restriction detail 3"),
+                   CONTENT_MISMATCH_ERROR);
     }
 
     @Test

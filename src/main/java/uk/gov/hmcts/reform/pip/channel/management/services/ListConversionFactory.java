@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Magis
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPublicListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaResultsSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
@@ -36,6 +37,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.Magist
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.MagistratesStandardListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.OpaPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.OpaPublicListFileConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.OpaResultsFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.PrimaryHealthListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.SjpPressListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.SjpPublicListFileConverter;
@@ -59,6 +61,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_PUB
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_STANDARD_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PUBLIC_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_RESULTS;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.PRIMARY_HEALTH_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
@@ -110,7 +113,8 @@ public class ListConversionFactory {
                                                      new EtFortnightlyPressListSummaryConverter())),
         Map.entry(OPA_PUBLIC_LIST, Pair.of(new OpaPublicListFileConverter(), new OpaPublicListSummaryConverter())),
 
-        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter()))
+        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter())),
+        Map.entry(OPA_RESULTS, Pair.of(new OpaResultsFileConverter(), new OpaResultsSummaryConverter()))
     );
 
     public FileConverter getFileConverter(ListType listType) {
