@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Artef
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.util.Base64;
@@ -133,6 +134,7 @@ public class PublicationManagementService {
      *
      * @param artefactId The artefact ID to delete the files for.
      */
+    @Deprecated
     public void deleteFiles(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         azureBlobService.deleteBlobFile(artefact.getArtefactId() + PDF.getExtension());
@@ -144,6 +146,26 @@ public class PublicationManagementService {
 
         if (artefact.getListType().hasExcel()) {
             azureBlobService.deleteBlobFile(artefact.getArtefactId() + EXCEL.getExtension());
+        }
+    }
+
+    /**
+     * Delete all publication files for a given artefact.
+     *
+     * @param artefactId The artefact ID to delete the files for.
+     * @param listType The list type of the publication.
+     * @param language The language of the publication.
+     */
+    public void deleteFiles(UUID artefactId, ListType listType, Language language) {
+        azureBlobService.deleteBlobFile(artefactId + PDF.getExtension());
+
+        if (listType.hasAdditionalPdf() && language != Language.ENGLISH) {
+            azureBlobService.deleteBlobFile(artefactId + ADDITIONAL_PDF_SUFFIX
+                                                + PDF.getExtension());
+        }
+
+        if (listType.hasExcel()) {
+            azureBlobService.deleteBlobFile(artefactId + EXCEL.getExtension());
         }
     }
 

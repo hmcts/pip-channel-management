@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.util.UUID;
 
@@ -89,8 +91,22 @@ public class PublicationManagementController {
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
     @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
     @DeleteMapping("/{artefactId}")
+    @Deprecated
     public ResponseEntity<Void> deleteFiles(@PathVariable UUID artefactId) {
         publicationManagementService.deleteFiles(artefactId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponse(responseCode = NO_CONTENT_CODE, description = "The files have been deleted")
+    @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
+    @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
+    @DeleteMapping("/v2/{artefactId}")
+    public ResponseEntity<Void> deleteFiles(
+        @PathVariable UUID artefactId,
+        @RequestHeader(name = "x-list-type") ListType listType,
+        @RequestHeader(name = "x-language") Language language
+    ) {
+        publicationManagementService.deleteFiles(artefactId, listType, language);
         return ResponseEntity.noContent().build();
     }
 }

@@ -412,6 +412,42 @@ class PublicationManagementServiceTest {
         verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
     }
 
+    @Test
+    void testDeleteFilesV2SjpEnglish() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.SJP_PUBLIC_LIST, Language.ENGLISH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2SjpWelsh() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.SJP_PUBLIC_LIST, Language.WELSH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpEnglish() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.CIVIL_DAILY_CAUSE_LIST, Language.ENGLISH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpWelsh() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.CIVIL_DAILY_CAUSE_LIST, Language.WELSH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
     private static Stream<Arguments> sjpParameters() throws JsonProcessingException {
         Artefact sjpPublicArtefact = ARTEFACT;
         sjpPublicArtefact.setListType(ListType.SJP_PUBLIC_LIST);

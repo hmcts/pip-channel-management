@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.util.UUID;
 
@@ -23,6 +25,9 @@ class PublicationManagementControllerTest {
     private static final String FILE = "123";
     private static final String USER_ID = "test";
     private static final UUID ARTEFACT_ID = UUID.randomUUID();
+    private static final ListType LIST_TYPE = ListType.SJP_PUBLIC_LIST;
+    private static final Language LANGUAGE = Language.ENGLISH;
+
     private static final String STATUS_MESSAGE = "Status did not match";
     private static final String RESPONSE_BODY_MESSAGE = "Body did not match";
 
@@ -69,6 +74,14 @@ class PublicationManagementControllerTest {
         doNothing().when(publicationManagementService).deleteFiles(ARTEFACT_ID);
 
         ResponseEntity<Void> response = publicationManagementController.deleteFiles(ARTEFACT_ID);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), STATUS_MESSAGE);
+    }
+
+    @Test
+    void testDeleteFilesV2() {
+        doNothing().when(publicationManagementService).deleteFiles(ARTEFACT_ID, LIST_TYPE, LANGUAGE);
+
+        ResponseEntity<Void> response = publicationManagementController.deleteFiles(ARTEFACT_ID, LIST_TYPE, LANGUAGE);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), STATUS_MESSAGE);
     }
 }
