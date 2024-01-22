@@ -12,6 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 class OpaPressListSorterTest {
+    private static final String MESSAGE = "Keys not sorted correctly";
+
     @Test
     void testSortingOfDatesInDescendingOrder() {
         Map<String, List<OpaPressList>> input = new ConcurrentHashMap<>();
@@ -25,7 +27,7 @@ class OpaPressListSorterTest {
         ));
 
         assertThat(OpaPressListSorter.sort(input))
-            .as("")
+            .as(MESSAGE)
             .isEqualTo(Map.of(
                 "08/01/2021", List.of(new OpaPressList()),
                 "09/02/2020", List.of(new OpaPressList()),

@@ -13,12 +13,11 @@ import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.Artef
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.util.Base64;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
@@ -131,30 +130,11 @@ public class PublicationManagementService {
     }
 
     /**
-     * Get the sorted files for an artefact.
-     *
-     * @param artefactId The artefact Id to get the files for.
-     * @return A map of the filetype to file byte array
-     */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
-        Artefact artefact = dataManagementService.getArtefact(artefactId);
-        if (isAuthorised(artefact, userId, system)) {
-            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-            publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
-            publicationFilesMap.put(EXCEL, artefact.getListType().hasExcel()
-                ? azureBlobService.getBlobFile(artefactId + ".xlsx") : new byte[0]);
-            return publicationFilesMap;
-        } else {
-            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
-                                                              + " %s", userId, artefactId));
-        }
-    }
-
-    /**
      * Delete all publication files for a given artefact.
      *
      * @param artefactId The artefact ID to delete the files for.
      */
+    @Deprecated
     public void deleteFiles(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         azureBlobService.deleteBlobFile(artefact.getArtefactId() + PDF.getExtension());
@@ -166,6 +146,26 @@ public class PublicationManagementService {
 
         if (artefact.getListType().hasExcel()) {
             azureBlobService.deleteBlobFile(artefact.getArtefactId() + EXCEL.getExtension());
+        }
+    }
+
+    /**
+     * Delete all publication files for a given artefact.
+     *
+     * @param artefactId The artefact ID to delete the files for.
+     * @param listType The list type of the publication.
+     * @param language The language of the publication.
+     */
+    public void deleteFiles(UUID artefactId, ListType listType, Language language) {
+        azureBlobService.deleteBlobFile(artefactId + PDF.getExtension());
+
+        if (listType.hasAdditionalPdf() && language != Language.ENGLISH) {
+            azureBlobService.deleteBlobFile(artefactId + ADDITIONAL_PDF_SUFFIX
+                                                + PDF.getExtension());
+        }
+
+        if (listType.hasExcel()) {
+            azureBlobService.deleteBlobFile(artefactId + EXCEL.getExtension());
         }
     }
 

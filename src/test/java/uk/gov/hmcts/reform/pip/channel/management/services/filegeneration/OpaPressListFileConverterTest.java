@@ -391,7 +391,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(sheet.getSheetName())
             .as("Incorrect sheet name")
-            .isEqualTo("Opa Press List");
+            .isEqualTo("OPA Press List");
 
         softly.assertThat(sheet.getLastRowNum())
             .as("Incorrect row count")

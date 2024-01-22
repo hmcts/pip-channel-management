@@ -52,15 +52,17 @@ public final class GeneralHelper {
             .append(GeneralHelper.findAndReturnNodeText(node, nodeName));
     }
 
-    public static void loopAndFormatString(JsonNode nodes, String nodeName,
-                                           StringBuilder builder, String delimiter) {
-        nodes.get(nodeName).forEach(node -> {
-            if (!node.asText().isEmpty()) {
-                builder
-                    .append(node.asText())
-                    .append(delimiter);
-            }
-        });
+    public static String formatNodeArray(JsonNode node, String nodeName, String delimiter) {
+        if (node.has(nodeName)) {
+            List<String> values = new ArrayList<>();
+            node.get(nodeName)
+                .forEach(n -> values.add(n.asText()));
+
+            return values.stream()
+                .filter(r -> !StringUtils.isBlank(r))
+                .collect(Collectors.joining(delimiter));
+        }
+        return "";
     }
 
     public static String safeGet(String jsonPath, JsonNode node) {
