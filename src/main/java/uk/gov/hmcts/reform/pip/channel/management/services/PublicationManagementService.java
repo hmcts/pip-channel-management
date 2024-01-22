@@ -17,9 +17,7 @@ import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.util.Base64;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
@@ -129,26 +127,6 @@ public class PublicationManagementService {
             );
         }
         return Base64.getEncoder().encodeToString(file);
-    }
-
-    /**
-     * Get the sorted files for an artefact.
-     *
-     * @param artefactId The artefact Id to get the files for.
-     * @return A map of the filetype to file byte array
-     */
-    public Map<FileType, byte[]> getStoredPublications(UUID artefactId, String userId, boolean system) {
-        Artefact artefact = dataManagementService.getArtefact(artefactId);
-        if (isAuthorised(artefact, userId, system)) {
-            Map<FileType, byte[]> publicationFilesMap = new ConcurrentHashMap<>();
-            publicationFilesMap.put(PDF, azureBlobService.getBlobFile(artefactId + ".pdf"));
-            publicationFilesMap.put(EXCEL, artefact.getListType().hasExcel()
-                ? azureBlobService.getBlobFile(artefactId + ".xlsx") : new byte[0]);
-            return publicationFilesMap;
-        } else {
-            throw new UnauthorisedException(String.format("User with id %s is not authorised to access artefact with id"
-                                                              + " %s", userId, artefactId));
-        }
     }
 
     /**

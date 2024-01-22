@@ -12,9 +12,7 @@ import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +58,8 @@ class PublicationManagementControllerTest {
     @Test
     void testGetFile() {
         when(publicationManagementService.getStoredPublication(any(), any(), any(), eq(USER_ID), eq(true),
-                                                               eq(false))).thenReturn(FILE);
+                                                               eq(false)
+        )).thenReturn(FILE);
 
         ResponseEntity<String> response = publicationManagementController.getFile(
             UUID.randomUUID(), USER_ID, true, FileType.PDF, false, null
@@ -68,20 +67,6 @@ class PublicationManagementControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
         assertEquals(FILE, response.getBody(), RESPONSE_BODY_MESSAGE);
-    }
-
-    @Test
-    void testGetFiles() {
-        Map<FileType, byte[]> testMap = new ConcurrentHashMap<>();
-        testMap.put(FileType.PDF, new byte[100]);
-        testMap.put(FileType.EXCEL, new byte[0]);
-        when(publicationManagementService.getStoredPublications(any(), eq(USER_ID), eq(true))).thenReturn(testMap);
-
-        ResponseEntity<Map<FileType, byte[]>> response = publicationManagementController
-            .getFiles(UUID.randomUUID(), USER_ID, true);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
-        assertEquals(testMap, response.getBody(), RESPONSE_BODY_MESSAGE);
     }
 
     @Test
