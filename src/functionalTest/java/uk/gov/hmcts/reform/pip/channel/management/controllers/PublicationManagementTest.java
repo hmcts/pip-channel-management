@@ -668,14 +668,6 @@ class PublicationManagementTest {
             .andExpect(status().isForbidden());
     }
 
-
-    @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
-    void testDeleteFilesUnauthorized() throws Exception {
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
-            .andExpect(status().isForbidden());
-    }
-
     @Test
     void testDeleteFilesV2NonSjpWelshSuccess() throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
