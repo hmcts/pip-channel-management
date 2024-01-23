@@ -365,54 +365,6 @@ class PublicationManagementServiceTest {
     }
 
     @Test
-    void testDeleteFilesSjpEnglish() {
-        ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
-        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(ARTEFACT);
-
-        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
-
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
-        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
-    }
-
-    @Test
-    void testDeleteFilesSjpWelsh() {
-        WELSH_ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
-        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
-
-        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
-
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
-        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
-    }
-
-    @Test
-    void testDeleteFilesNonSjpEnglish() {
-        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(ARTEFACT);
-
-        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
-
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
-        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
-    }
-
-    @Test
-    void testDeleteFilesNonSjpWelsh() {
-        WELSH_ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
-
-        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
-
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
-        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
-    }
-
-    @Test
     void testDeleteFilesV2SjpEnglish() {
         publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.SJP_PUBLIC_LIST, Language.ENGLISH);
 
