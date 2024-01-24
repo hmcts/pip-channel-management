@@ -9,7 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 @ActiveProfiles("test")
 class SittingHelperTest {
 
@@ -34,7 +33,6 @@ class SittingHelperTest {
           ]
         }
         """;
-
     private static String courtRoom = """
         {
           "courtRoomName": "This is a court room name"
@@ -47,6 +45,7 @@ class SittingHelperTest {
     private JsonNode nodeWithoutJudiciaryJson;
 
     private static final String DESTINATION_NODE_NAME = "This is a destination node name";
+    private static final String COURT_ROOM_NAME_ERROR = "Correct court room name not shown";
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
@@ -64,7 +63,7 @@ class SittingHelperTest {
 
         assertEquals("This is a court room name: This is a known as",
                      nodeWithoutJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
-                     "Correct court room name not shown");
+                     COURT_ROOM_NAME_ERROR);
     }
 
     @Test
@@ -75,7 +74,7 @@ class SittingHelperTest {
 
         assertEquals("This is a court room name: This is a known as",
                      nodeWithJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
-                     "Correct court room name not shown");
+                     COURT_ROOM_NAME_ERROR);
     }
 
     @Test
@@ -86,7 +85,7 @@ class SittingHelperTest {
 
         assertEquals("This is a court room name: Judge Test Name",
                      nodeWithoutJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
-                     "Correct court room name not shown");
+                     COURT_ROOM_NAME_ERROR);
     }
 
     @Test
@@ -97,7 +96,7 @@ class SittingHelperTest {
 
         assertEquals("This is a court room name: Judge Test Name",
                      nodeWithCrimeJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
-                     "Correct court room name not shown");
+                     COURT_ROOM_NAME_ERROR);
     }
 }
 
