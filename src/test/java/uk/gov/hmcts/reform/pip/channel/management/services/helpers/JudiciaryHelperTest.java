@@ -58,4 +58,46 @@ class JudiciaryHelperTest {
             .isEqualTo("Crown Judge");
     }
 
+    @Test
+    void testJudiciaryManipulationWithMissingValues() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciary(inputJson.get(4)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Judge 2, Judge 4");
+    }
+
+    @Test
+    void testCrimeListJudiciaryManipulationWithNoPresidingJudge() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciaryForCrime(inputJson.get(5)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Judge Test Name, Judge Test Name 2, Judge Test Name 3");
+    }
+
+    @Test
+    void testCrimeListJudiciaryManipulationWithMissingPresidingJudge() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciaryForCrime(inputJson.get(6)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Judge Test Name, Judge Test Name 2, Judge Test Name 3");
+    }
+
+    @Test
+    void testCrimeListJudiciaryManipulationWithAPresidingJudge() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciaryForCrime(inputJson.get(7)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Crown Judge Test Name, Judge Test Name, Judge Test Name 2");
+    }
+
+    @Test
+    void testCrimeListJudiciaryManipulationWithOnlyPresidingJudge() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciaryForCrime(inputJson.get(8)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Crown Judge Test Name");
+    }
+
+    @Test
+    void testCrimeListJudiciaryManipulationWithMissingValues() {
+        assertThat(JudiciaryHelper.findAndManipulateJudiciaryForCrime(inputJson.get(9)))
+            .as(JUDICIARY_MESSAGE)
+            .isEqualTo("Judge Test Name 2, Judge Test Name 4");
+    }
+
 }
