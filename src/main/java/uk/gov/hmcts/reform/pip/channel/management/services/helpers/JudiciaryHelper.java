@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class JudiciaryHelper {
     private static final String JUDICIARY = "judiciary";
@@ -28,11 +30,10 @@ public final class JudiciaryHelper {
             });
         }
 
-        if (StringUtils.isNotBlank(presidingJudiciary.get())) {
-            judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
-        }
-
-        return String.join(", ", judiciaries);
+        judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
+        return judiciaries.stream()
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.joining(", "));
     }
 
     public static String findAndManipulateJudiciaryForCrime(JsonNode judiciaryNode) {
@@ -43,7 +44,9 @@ public final class JudiciaryHelper {
             judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 String johTitle = GeneralHelper.findAndReturnNodeText(judiciary, "johTitle");
                 String johNameSurname = GeneralHelper.findAndReturnNodeText(judiciary, "johNameSurname");
-                String judgeName = johTitle + " " + johNameSurname;
+                String judgeName = Stream.of(johTitle, johNameSurname)
+                    .filter(StringUtils::isNotBlank)
+                    .collect(Collectors.joining(" "));
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
                     presidingJudiciary.set(new StringBuilder(judgeName));
                 } else {
@@ -52,10 +55,9 @@ public final class JudiciaryHelper {
             });
         }
 
-        if (StringUtils.isNotBlank(presidingJudiciary.get())) {
-            judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
-        }
-
-        return String.join(", ", judiciaries);
+        judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
+        return judiciaries.stream()
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.joining(", "));
     }
 }
