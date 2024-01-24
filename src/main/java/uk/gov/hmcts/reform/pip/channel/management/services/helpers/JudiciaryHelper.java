@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class JudiciaryHelper {
@@ -12,39 +14,47 @@ public final class JudiciaryHelper {
     }
 
     public static String findAndManipulateJudiciary(JsonNode judiciaryNode) {
-        AtomicReference<StringBuilder> nonPresidingJudiciary = new AtomicReference<>(new StringBuilder());
         AtomicReference<StringBuilder> presidingJudiciary = new AtomicReference<>(new StringBuilder());
-        AtomicReference<Boolean> foundPresiding = new AtomicReference<>(false);
-        AtomicReference<Boolean> foundNonPresidingJudges = new AtomicReference<>(false);
+        List<String> judiciaries = new ArrayList<>();
 
         if (judiciaryNode.has(JUDICIARY)) {
             judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
+                String johKnownAs = GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs");
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
-                    appendJohKnownAs(judiciary, presidingJudiciary.get());
-                    foundPresiding.set(true);
+                    presidingJudiciary.set(new StringBuilder(johKnownAs));
                 } else {
-                    appendJohKnownAs(judiciary, nonPresidingJudiciary.get());
-                    foundNonPresidingJudges.set(true);
+                    judiciaries.add(johKnownAs);
                 }
             });
         }
 
-        if (foundPresiding.get() && foundNonPresidingJudges.get()) {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(
-                presidingJudiciary.get().append(nonPresidingJudiciary.get()).toString());
-        } else if (foundPresiding.get()) {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(presidingJudiciary.toString());
-        } else {
-            return GeneralHelper.trimAnyCharacterFromStringEnd(nonPresidingJudiciary.toString());
+        if (StringUtils.isNotBlank(presidingJudiciary.get())) {
+            judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
         }
+
+        return String.join(", ", judiciaries);
     }
 
-    private static void appendJohKnownAs(JsonNode judiciary, StringBuilder judiciaryKnownAs) {
-        String johKnownAs = GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs");
-        if (StringUtils.isNotBlank(johKnownAs)) {
-            judiciaryKnownAs
-                .append(johKnownAs)
-                .append(", ");
+    public static String findAndManipulateJudiciaryForCrime(JsonNode judiciaryNode) {
+        AtomicReference<StringBuilder> presidingJudiciary = new AtomicReference<>(new StringBuilder());
+        List<String> judiciaries = new ArrayList<>();
+
+        if (judiciaryNode.has(JUDICIARY)) {
+            judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
+                String johTitle = GeneralHelper.findAndReturnNodeText(judiciary, "johTitle");
+                String johNameSurname = GeneralHelper.findAndReturnNodeText(judiciary, "johNameSurname");
+                if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
+                    presidingJudiciary.set(new StringBuilder(johTitle + ' ' + johNameSurname));
+                } else {
+                    judiciaries.add(johTitle + ' ' + johNameSurname);
+                }
+            });
         }
+
+        if (StringUtils.isNotBlank(presidingJudiciary.get())) {
+            judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
+        }
+
+        return String.join(", ", judiciaries);
     }
 }
