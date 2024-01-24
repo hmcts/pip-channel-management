@@ -43,10 +43,11 @@ public final class JudiciaryHelper {
             judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 String johTitle = GeneralHelper.findAndReturnNodeText(judiciary, "johTitle");
                 String johNameSurname = GeneralHelper.findAndReturnNodeText(judiciary, "johNameSurname");
+                String judgeName = johTitle + " " + johNameSurname;
                 if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
-                    presidingJudiciary.set(new StringBuilder(johTitle + ' ' + johNameSurname));
+                    presidingJudiciary.set(new StringBuilder(judgeName));
                 } else {
-                    judiciaries.add(johTitle + ' ' + johNameSurname);
+                    judiciaries.add(judgeName);
                 }
             });
         }
