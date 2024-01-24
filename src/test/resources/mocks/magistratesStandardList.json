@@ -29,11 +29,15 @@
               {
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs Presiding",
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
+                    "role": "JUDGE",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs",
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
+                    "role": "MAGISTRATE",
                     "isPresiding": false
                   }
                 ],
@@ -454,11 +458,15 @@
                     ],
                     "judiciary": [
                       {
-                        "johKnownAs": "Judge KnownAs Presiding 2",
+                        "johTitle": "Judge",
+                        "johNameSurname": "Test Name 2",
+                        "role": "JUDGE",
                         "isPresiding": true
                       },
                       {
-                        "johKnownAs": "Judge KnownAs",
+                        "johTitle": "Magistrate",
+                        "johNameSurname": "Test Name 2",
+                        "role": "MAGISTRATE",
                         "isPresiding": false
                       }
                     ],

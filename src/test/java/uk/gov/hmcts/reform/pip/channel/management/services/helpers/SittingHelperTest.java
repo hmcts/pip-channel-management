@@ -24,6 +24,16 @@ class SittingHelperTest {
           ]
         }
         """;
+    private static String nodeWithCrimeJudiciary = """
+        {
+          "judiciary": [
+            {
+              "johTitle": "Judge",
+              "johNameSurname": "Test Name"
+            }
+          ]
+        }
+        """;
 
     private static String courtRoom = """
         {
@@ -32,8 +42,8 @@ class SittingHelperTest {
         """;
 
     private JsonNode nodeWithJudiciaryJson;
+    private JsonNode nodeWithCrimeJudiciaryJson;
     private JsonNode courtRoomJson;
-
     private JsonNode nodeWithoutJudiciaryJson;
 
     private static final String DESTINATION_NODE_NAME = "This is a destination node name";
@@ -41,6 +51,7 @@ class SittingHelperTest {
     @BeforeEach
     public void setup() throws JsonProcessingException {
         nodeWithJudiciaryJson = objectMapper.readTree(nodeWithJudiciary);
+        nodeWithCrimeJudiciaryJson = objectMapper.readTree(nodeWithCrimeJudiciary);
         courtRoomJson = objectMapper.readTree(courtRoom);
         nodeWithoutJudiciaryJson = objectMapper.createObjectNode();
     }
@@ -67,8 +78,26 @@ class SittingHelperTest {
                      "Correct court room name not shown");
     }
 
+    @Test
+    void testManipulatedSittingWithSittingForCrime() {
+        SittingHelper.manipulatedSittingForCrime(courtRoomJson, nodeWithoutJudiciaryJson,
+                                         nodeWithCrimeJudiciaryJson, DESTINATION_NODE_NAME
+        );
 
+        assertEquals("This is a court room name: Judge Test Name",
+                     nodeWithoutJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
+                     "Correct court room name not shown");
+    }
 
+    @Test
+    void testManipulatedSittingWithSessionForCrime() {
+        SittingHelper.manipulatedSittingForCrime(courtRoomJson, nodeWithCrimeJudiciaryJson,
+                                         nodeWithoutJudiciaryJson, DESTINATION_NODE_NAME
+        );
 
+        assertEquals("This is a court room name: Judge Test Name",
+                     nodeWithCrimeJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
+                     "Correct court room name not shown");
+    }
 }
 

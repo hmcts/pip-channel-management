@@ -27,8 +27,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
 class MagistratesStandardListHelperTest {
-    private static final String COURT_ROOM1 = "Courtroom 1: Judge KnownAs Presiding, Judge KnownAs";
-    private static final String COURT_ROOM2 = "Courtroom 2: Judge KnownAs Presiding 2, Judge KnownAs";
+    private static final String COURT_ROOM1 = "Courtroom 1: Judge Test Name, Magistrate Test Name";
+    private static final String COURT_ROOM2 = "Courtroom 2: Judge Test Name 2, Magistrate Test Name 2";
 
     private static final String COURT_ROOM_MESSAGE = "Court room and judiciary does not match";
     private static final String CASE_SITTING_MESSAGE = "Case sitting does not match";

@@ -20,11 +20,13 @@
               {
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs Presiding",
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs",
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
                     "isPresiding": false
                   }
                 ],
@@ -92,11 +94,13 @@
               {
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs Presiding",
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 2",
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
                     "isPresiding": false
                   }
                 ],
@@ -176,11 +180,13 @@
               {
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs Presiding",
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 3",
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
                     "isPresiding": false
                   }
                 ],
@@ -287,11 +293,13 @@
               {
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs Presiding",
+                    "johTitle": "Judge",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 4",
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Test Name",
                     "isPresiding": false
                   }
                 ],

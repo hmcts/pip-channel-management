@@ -81,7 +81,7 @@ class IacDailyListFileConverterTest {
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
-            .isEqualTo("Court Room A, Before Judge KnownAs Presiding, Judge KnownAs");
+            .isEqualTo("Court Room A, Before Judge Test Name, Magistrate Test Name");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__head").get(0).getElementsByTag("th"))
             .as("Incorrect table headers")
