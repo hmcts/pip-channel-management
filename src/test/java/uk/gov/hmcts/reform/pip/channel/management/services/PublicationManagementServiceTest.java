@@ -21,7 +21,6 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFo
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
-import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
@@ -33,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -366,79 +364,6 @@ class PublicationManagementServiceTest {
                    EXCEPTION_NOT_MATCH);
     }
 
-    @ParameterizedTest
-    @MethodSource("sjpParameters")
-    void testGetStoredPublicationsSjp(Artefact artefact) {
-        when(dataManagementService.getArtefact(any())).thenReturn(artefact);
-        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
-
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
-
-        assertEquals(TEST_BYTE, response.get(PDF), BYTES_NO_MATCH);
-        assertEquals(TEST_BYTE, response.get(EXCEL), BYTES_NO_MATCH);
-    }
-
-    @Test
-    void testGetStoredPublicationsNonSjp() {
-        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
-        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
-
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, true);
-
-        assertEquals(TEST_BYTE, response.get(PDF), BYTES_NO_MATCH);
-        assertEquals(0, response.get(EXCEL).length, BYTES_NO_MATCH);
-    }
-
-    @Test
-    void testGetStoredPublicationsAuthorisedPublic() {
-        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        ARTEFACT.setSensitivity(Sensitivity.PUBLIC);
-        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
-        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
-
-        Map<FileType, byte[]> response = publicationManagementService
-            .getStoredPublications(TEST_ARTEFACT_ID, TEST, false);
-
-        assertEquals(TEST_BYTE, response.get(PDF), BYTES_NO_MATCH);
-        assertEquals(0, response.get(EXCEL).length, BYTES_NO_MATCH);
-    }
-
-    @Test
-    void testGetStoredPublicationsAuthorisedUserIdNull() {
-        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
-        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
-        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
-
-        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
-                                                    publicationManagementService
-                                                        .getStoredPublications(TEST_ARTEFACT_ID, null, false),
-                                                "Expected exception to be thrown");
-
-        assertTrue(ex.getMessage().contains("User with id null is not authorised to access artefact with id"),
-                   "Message should contain expected");
-    }
-
-    @Test
-    void testGetStoredPublicationsAuthorisedFalse() {
-        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        ARTEFACT.setSensitivity(Sensitivity.CLASSIFIED);
-        when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
-        when(azureBlobService.getBlobFile(any())).thenReturn(TEST_BYTE);
-        when(accountManagementService.getIsAuthorised(any(), any(), any())).thenReturn(false);
-
-        UnauthorisedException ex = assertThrows(UnauthorisedException.class, () ->
-                                                    publicationManagementService
-                                                        .getStoredPublications(TEST_ARTEFACT_ID, TEST_USER_ID, false),
-                                                "Expected exception to be thrown");
-
-        assertTrue(ex.getMessage().contains("is not authorised to access artefact with id"),
-                   "Message should contain expected");
-    }
-
     @Test
     void testDeleteFilesSjpEnglish() {
         ARTEFACT.setListType(ListType.SJP_PUBLIC_LIST);
@@ -481,6 +406,42 @@ class PublicationManagementServiceTest {
         when(dataManagementService.getArtefact(TEST_ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
 
         publicationManagementService.deleteFiles(TEST_ARTEFACT_ID);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2SjpEnglish() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.SJP_PUBLIC_LIST, Language.ENGLISH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2SjpWelsh() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.SJP_PUBLIC_LIST, Language.WELSH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpEnglish() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.CIVIL_DAILY_CAUSE_LIST, Language.ENGLISH);
+
+        verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
+        verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testDeleteFilesV2NonSjpWelsh() {
+        publicationManagementService.deleteFiles(TEST_ARTEFACT_ID, ListType.CIVIL_DAILY_CAUSE_LIST, Language.WELSH);
 
         verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
         verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
