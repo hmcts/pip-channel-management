@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -86,26 +87,26 @@ public class PublicationManagementController {
         );
     }
 
-    @ApiResponse(responseCode = OK_CODE, description = "Map<FileType, byte[]> returned for each file for an artefact")
-    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = NO_CONTENT_CODE, description = "The files have been deleted")
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
-    @ApiResponse(responseCode = "401", description = "User not authorised to access requested data.")
-    @Operation(summary = "Takes in an artefact ID and returns a map of stored files")
-    @GetMapping("/{artefactId}")
+    @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
+    @DeleteMapping("/{artefactId}")
     @Deprecated
-    public ResponseEntity<Map<FileType, byte[]>> getFiles(
-        @PathVariable UUID artefactId,
-        @RequestHeader(value = "x-user-id", required = false) String userId,
-        @RequestHeader(value = "x-system", required = false) boolean system) {
-        return ResponseEntity.ok(publicationManagementService.getStoredPublications(artefactId, userId, system));
+    public ResponseEntity<Void> deleteFiles(@PathVariable UUID artefactId) {
+        publicationManagementService.deleteFiles(artefactId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiResponse(responseCode = NO_CONTENT_CODE, description = "The files have been deleted")
     @ApiResponse(responseCode = NO_AUTH_CODE, description = UNAUTHORIZED_DESCRIPTION)
     @Operation(summary = "Takes in an artefact ID and delete all publication files associated with the artefact")
-    @DeleteMapping("/{artefactId}")
-    public ResponseEntity<Void> deleteFiles(@PathVariable UUID artefactId) {
-        publicationManagementService.deleteFiles(artefactId);
+    @DeleteMapping("/v2/{artefactId}")
+    public ResponseEntity<Void> deleteFiles(
+        @PathVariable UUID artefactId,
+        @RequestHeader(name = "x-list-type") ListType listType,
+        @RequestHeader(name = "x-language") Language language
+    ) {
+        publicationManagementService.deleteFiles(artefactId, listType, language);
         return ResponseEntity.noContent().build();
     }
 }
