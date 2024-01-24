@@ -61,9 +61,10 @@ public final class OpaPressListHelper {
     }
 
     /**
-     * Process raw JSON for OPA press list to generate cases sorted by the plea date.
+     * Process raw JSON for OPA press list to generate hearingCase sorted by the plea date.
+     *
      * @param jsonData JSON data for the list
-     * @return a sorted map of plea date to OPA press list cases
+     * @return a sorted map of plea date to OPA press list hearingCase
      */
     public static Map<String, List<OpaPressList>> processRawListData(JsonNode jsonData) {
         Map<String, List<OpaPressList>> result = new ConcurrentHashMap<>();
@@ -72,25 +73,22 @@ public final class OpaPressListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(
                     session -> session.get(SITTINGS).forEach(
-                        sitting -> sitting.get(HEARING).forEach(hearing -> {
-                            if (hearing.has(PARTY)) {
-                                // Each case can have multiple defendants. They will be shown as separate entry on the
-                                // list as each can have its own plea date
-                                processPartyRoles(hearing).forEach(defendant -> {
-                                    List<OpaPressList> rows = new ArrayList<>();
+                        sitting -> sitting.get(HEARING).forEach(
+                            hearing -> hearing.get(CASE).forEach(hearingCase -> {
+                                if (hearingCase.has("party")) {
 
-                                    hearing.get(CASE).forEach(hearingCase -> {
+                                    processPartyRoles(hearingCase).forEach(defendant -> {
+
                                         OpaCaseInfo caseInfo = buildHearingCase(hearingCase);
-                                        rows.add(new OpaPressList(defendant, caseInfo));
-                                    });
 
-                                    // All the offences under the same defendant have the same plea date
-                                    String pleaDate = defendant.getOffences().get(0).getPleaDate();
-                                    result.computeIfAbsent(pleaDate, x -> new ArrayList<>())
-                                        .addAll(rows);
-                                });
-                            }
-                        })
+                                        // All the offences under the same defendant have the same plea date
+                                        String pleaDate = defendant.getOffences().get(0).getPleaDate();
+                                        result.computeIfAbsent(pleaDate, x -> new ArrayList<>())
+                                            .add(new OpaPressList(defendant, caseInfo));
+                                    });
+                                }
+                            })
+                        )
                     )
                 )
             )
@@ -123,14 +121,14 @@ public final class OpaPressListHelper {
         return "";
     }
 
-    private static List<OpaDefendantInfo> processPartyRoles(JsonNode hearing) {
+    private static List<OpaDefendantInfo> processPartyRoles(JsonNode hearingCase) {
         List<OpaDefendantInfo> defendantInfo = new ArrayList<>();
-        hearing.get(PARTY).forEach(party -> {
+        hearingCase.get(PARTY).forEach(party -> {
             if (party.has(PARTY_ROLE) && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
                 OpaDefendantInfo defendant = new OpaDefendantInfo();
                 processDefendant(party, defendant);
 
-                // The offence's plea date is used to group and sort the cases for the defendant. If plea date is
+                // The offence's plea date is used to group and sort the hearingCase for the defendant. If plea date is
                 // missing the entry will be dropped
                 if (!defendant.getName().isEmpty()
                     && !defendant.getOffences().isEmpty()
@@ -139,7 +137,7 @@ public final class OpaPressListHelper {
                 }
             }
         });
-        defendantInfo.forEach(d -> d.setProsecutor(processProsecutor(hearing)));
+        defendantInfo.forEach(d -> d.setProsecutor(processProsecutor(hearingCase)));
         return defendantInfo;
     }
 
@@ -207,38 +205,34 @@ public final class OpaPressListHelper {
             .collect(Collectors.joining(DELIMITER));
     }
 
-    public static String processProsecutor(JsonNode hearing) {
-        String prosecutor = getPartyInformant(hearing);
+    public static String processProsecutor(JsonNode hearingCase) {
+        String prosecutor = getPartyInformant(hearingCase);
         if (prosecutor.isEmpty()) {
-            prosecutor = getPartyProsecutor(hearing);
+            prosecutor = getPartyProsecutor(hearingCase);
         }
         return prosecutor;
 
     }
 
-    private static String getPartyInformant(JsonNode hearing) {
-        List<String> informants = new ArrayList<>();
-        hearing.get("case").forEach(hearingCase -> {
-            if (hearingCase.has(INFORMANT)) {
-                JsonNode informantNode = hearingCase.get(INFORMANT);
-                informants.add(GeneralHelper.findAndReturnNodeText(informantNode, PROSECUTING_AUTHORITY_REF));
-            }
-        });
-        return informants.stream()
-            .distinct()
-            .filter(n -> !StringUtils.isBlank(n))
-            .collect(Collectors.joining(DELIMITER));
+    private static String getPartyInformant(JsonNode hearingCase) {
+        if (hearingCase.has(INFORMANT)) {
+            JsonNode informantNode = hearingCase.get(INFORMANT);
+            return GeneralHelper.findAndReturnNodeText(informantNode, PROSECUTING_AUTHORITY_REF);
+        }
+        return "";
     }
 
-    private static String getPartyProsecutor(JsonNode hearing) {
+    private static String getPartyProsecutor(JsonNode hearingCase) {
         List<String> prosecutors = new ArrayList<>();
-        if (hearing.has(PARTY)) {
-            hearing.get(PARTY).forEach(party -> {
+        if (hearingCase.has(PARTY)) {
+            hearingCase.get(PARTY).forEach(party -> {
                 if (party.has(PARTY_ROLE)
                     && PROSECUTING_AUTHORITY.equals(party.get(PARTY_ROLE).asText())
                     && party.has(ORGANISATION_DETAILS)) {
-                    prosecutors.add(GeneralHelper.findAndReturnNodeText(party.get(ORGANISATION_DETAILS),
-                                                                        ORGANISATION_NAME));
+                    prosecutors.add(GeneralHelper.findAndReturnNodeText(
+                        party.get(ORGANISATION_DETAILS),
+                        ORGANISATION_NAME
+                    ));
                 }
             });
         }
