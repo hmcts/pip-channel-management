@@ -22,6 +22,14 @@ class GeneralHelperTest {
     private static final String TEST = "test";
 
     private static final String DOCUMENT = "document";
+    private static final String COURT_LISTS = "courtLists";
+    private static final String COURT_HOUSE = "courtHouse";
+    private static final String COURT_ROOM = "courtRoom";
+    private static final String SESSION = "session";
+    private static final String SITTINGS = "sittings";
+    private static final String CHANNEL = "channel";
+    private static final String SESSION_CHANNEL = "sessionChannel";
+
     private static JsonNode inputJson;
 
     @BeforeAll
@@ -106,13 +114,30 @@ class GeneralHelperTest {
     }
 
     @Test
-    void testLoopAndFormatString() {
-        StringBuilder builder = new StringBuilder();
-        JsonNode node = inputJson.get("venue").get("venueAddress");
-        GeneralHelper.loopAndFormatString(node, "line", builder, ",");
-        assertThat(builder)
+    void testFormatNodeArrayWithSingleValue() {
+        JsonNode session = inputJson.get(COURT_LISTS).get(0)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0)
+            .get(SESSION).get(0);
+
+        assertThat(GeneralHelper.formatNodeArray(session, SESSION_CHANNEL, ", "))
             .as(ERR_MSG)
-            .hasToString("Address Line 1,");
+            .isEqualTo("VIDEO HEARING");
+
+    }
+
+    @Test
+    void testFormatNodeArrayWithMultipleValues() {
+        JsonNode sitting = inputJson.get(COURT_LISTS).get(0)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0)
+            .get(SESSION).get(0)
+            .get(SITTINGS).get(0);
+
+        assertThat(GeneralHelper.formatNodeArray(sitting, CHANNEL, ", "))
+            .as(ERR_MSG)
+            .isEqualTo("Teams, Attended");
+
     }
 
     @Test

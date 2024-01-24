@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
