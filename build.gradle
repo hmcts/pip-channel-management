@@ -205,7 +205,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
-  testImplementation group: 'org.jsoup', name: 'jsoup', version: '1.17.1'
+  testImplementation group: 'org.jsoup', name: 'jsoup', version: '1.17.2'
   testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
   testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
 }
