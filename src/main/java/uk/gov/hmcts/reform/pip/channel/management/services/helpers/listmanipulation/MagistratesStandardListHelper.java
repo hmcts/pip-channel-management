@@ -85,7 +85,7 @@ public final class MagistratesStandardListHelper {
                                 if (hearingCase.has(PARTY)) {
                                     CaseInfo caseInfo = buildHearingCase(hearingCase, sitting, hearing);
                                     hearingCase.get(PARTY).forEach(
-                                        party -> processParty(party,sitting, caseInfo, cases)
+                                        party -> processParty(party, sitting, caseInfo, cases)
                                     );
                                 }
                             })

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownFirmListSummaryConverter;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -17,48 +18,56 @@ import java.nio.file.Paths;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MagistratesPublicListSummaryConverterTest {
+class CrownFirmListSummaryConverterTest {
     @Autowired
-    MagistratesPublicListSummaryConverter magistratesPublicList;
+    CrownFirmListSummaryConverter crownFirmList;
 
     @Test
-    void testMagistratesPublicListTemplate() throws IOException {
+    void testCrownDailyListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
-            "src/test/resources/mocks/",
-            "magistratesPublicList.json"
+                         "src/test/resources/mocks/hearingparty/",
+                         "crownFirmList.json"
                      )), writer,
                      Charset.defaultCharset()
         );
 
         JsonNode payload = new ObjectMapper().readTree(writer.toString());
-        String emailOutput = magistratesPublicList.convert(payload);
+        String emailOutput = crownFirmList.convert(payload);
 
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(emailOutput)
             .as("incorrect sitting at found")
-            .contains("10:40am");
+            .contains("9am");
 
         softly.assertThat(emailOutput)
             .as("incorrect case reference found")
-            .contains("12345678");
+            .contains("I4Y416QE");
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Surname 1, Forename 1");
+            .contains("Cora, Mckinley");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
-            .contains("FHDRA1 (First Hearing and Dispute Resolution Appointment)");
+            .contains("Directions");
 
         softly.assertThat(emailOutput)
             .as("incorrect duration found")
-            .contains("1 hour 5 mins [2 of 3]");
+            .contains("8 hours [4 of 5]");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect representative found")
+            .contains("Breakfast Daniel");
 
         softly.assertThat(emailOutput)
             .as("incorrect prosecuting authority found")
-            .contains("Pro_Auth");
+            .contains("Queen");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect linked cases found")
+            .contains("YRYCTRR3");
 
         softly.assertThat(emailOutput)
             .as("incorrect listing notes found")

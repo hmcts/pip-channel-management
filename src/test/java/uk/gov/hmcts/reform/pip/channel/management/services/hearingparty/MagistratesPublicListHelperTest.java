@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesPublicListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -25,7 +26,6 @@ class MagistratesPublicListHelperTest {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
-    private static final String CASE = "case";
     private static final String FORMATTED_SESSION_COURT_ROOM = "formattedSessionCourtRoom";
     private static final String TIME = "time";
     private static final String LISTING_NOTES = "listingNotes";
@@ -35,17 +35,17 @@ class MagistratesPublicListHelperTest {
     @BeforeAll
     public static void setup()  throws IOException {
         StringWriter magistratesPublicWriter = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/magistratesPublicList.json")),
-                     magistratesPublicWriter, Charset.defaultCharset()
-        );
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/",
+                                                    "magistratesPublicList.json")),
+                     magistratesPublicWriter, Charset.defaultCharset());
 
         inputJsonMagistratesPublicList = OBJECT_MAPPER.readTree(magistratesPublicWriter.toString());
     }
 
     @Test
     void testManipulatedMagistratesPublicListDataMethod() {
-        MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList,
-                                                                         Language.ENGLISH);
+        MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(inputJsonMagistratesPublicList,
+                                                                           Language.ENGLISH);
 
         assertEquals("10:40am", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
@@ -53,13 +53,13 @@ class MagistratesPublicListHelperTest {
         assertEquals("1pm", inputJsonMagistratesPublicList.get(COURT_LISTS).get(2).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
-        assertEquals("Surname 1, Forename 1", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
-                         .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0)
-                         .get(HEARING).get(0).get(CASE).get(0).get("defendant").asText(),
+        assertEquals("Defendant_SN, Defendant_FN", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
+                         .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
+                         .get(0).get("defendant").asText(),
                      "Unable to find information for defendant");
         assertEquals("Pro_Auth", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("prosecutingAuthority").asText(),
+                         .get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
         assertEquals("Listing details text", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
                          .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
@@ -74,8 +74,8 @@ class MagistratesPublicListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethodMagistratesPublicList() {
-        MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList,
-                                                                         Language.ENGLISH);
+        MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(inputJsonMagistratesPublicList,
+                                                                           Language.ENGLISH);
 
         assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonMagistratesPublicList
                          .get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)

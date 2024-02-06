@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ class CrownDailyListHelperTest {
     @BeforeAll
     public static void setup()  throws IOException {
         StringWriter crownDailyWriter = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/crownDailyList.json")),
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/crownDailyList.json")),
                      crownDailyWriter, Charset.defaultCharset()
         );
 
@@ -70,7 +71,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testManipulatedCrownDailyListDataMethod() {
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals("10:40am", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
@@ -80,14 +81,14 @@ class CrownDailyListHelperTest {
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(TIME).asText(),
                      TIME_ERROR);
 
-        assertEquals("Surname 1, Forename 1", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
+        assertEquals("Defendant_SN, Defendant_FN", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("defendant").asText(),
+                         .get("defendant").asText(),
                      "Unable to find information for defendant");
 
         assertEquals("Pro_Auth", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM)
                          .get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get(CASE).get(0).get("prosecutingAuthority").asText(),
+                         .get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
 
         assertEquals("caseid111, caseid222", inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
@@ -128,7 +129,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithAllInfo() {
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals(NO_BORDER_BOTTOM,
                      inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
@@ -151,7 +152,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithNoInfo() {
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals("",
                      inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
@@ -174,7 +175,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithPartialInfo() {
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals("",
                      inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)
@@ -197,7 +198,7 @@ class CrownDailyListHelperTest {
 
     @Test
     void testManipulatedCrownDailyListBordersAreCalculatedCorrectlyForACaseWithOnlyReportingRestrictionDetail() {
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
 
         assertEquals("",
                      inputJsonCrownDailyList.get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0)

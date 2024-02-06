@@ -46,7 +46,7 @@ class CrownFirmListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Cora, Mckinley");
+            .contains("Surname 1, Forename 1");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
@@ -58,7 +58,7 @@ class CrownFirmListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect representative found")
-            .contains("Breakfast Daniel");
+            .contains("Defendant rep 1");
 
         softly.assertThat(emailOutput)
             .as("incorrect prosecuting authority found")

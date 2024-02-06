@@ -45,42 +45,26 @@
                         "case": [
                           {
                             "caseNumber": "12345678",
-                            "caseSequenceIndicator": "2 of 3",
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "Pro_Auth"
-                                }
-                              },
-
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualForenames":"Forename 1",
-                                  "individualSurname":"Surname 1"
-                                }
-                              }
-                            ]
+                            "caseSequenceIndicator": "2 of 3"
                           },
                           {
-                            "caseNumber": "112233445",
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "Pro_Auth"
-                                }
-                              },
+                            "caseNumber": "112233445"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "PROSECUTING_AUTHORITY",
+                            "organisationDetails": {
+                              "organisationName": "Pro_Auth"
+                            }
+                          },
 
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualForenames":"Forename 2",
-                                  "individualSurname":"Surname 2"
-                                }
-                              }
-                            ]
+                          {
+                            "partyRole":"DEFENDANT",
+                            "individualDetails":{
+                              "individualForenames":"Defendant_FN",
+                              "individualSurname":"Defendant_SN"
+                            }
                           }
                         ],
                         "listingDetails": {
@@ -149,38 +133,24 @@
                         "case": [
                           {
                             "caseNumber": "12345678",
-                            "caseSequenceIndicator": "2 of 3",
-                            "party":[
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "PROSECUTING_AUTHORITY"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualSurname":"Surname 3"
-                                }
-                              }
-                            ]
+                            "caseSequenceIndicator": "2 of 3"
                           },
                           {
-                            "caseNumber": "112233445",
-                            "party":[
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "PROSECUTING_AUTHORITY"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualSurname":"Surname 4"
-                                }
-                              }
-                            ]
+                            "caseNumber": "112233445"
+                          }
+                        ],
+                        "party":[
+                          {
+                            "partyRole": "PROSECUTING_AUTHORITY",
+                            "organisationDetails": {
+                              "organisationName": "PROSECUTING_AUTHORITY"
+                            }
+                          },
+                          {
+                            "partyRole":"DEFENDANT",
+                            "individualDetails":{
+                              "individualSurname":"DEFENDANT"
+                            }
                           }
                         ],
                         "listingDetails": {
