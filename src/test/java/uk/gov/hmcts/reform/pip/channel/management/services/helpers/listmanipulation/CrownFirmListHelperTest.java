@@ -126,7 +126,7 @@ class CrownFirmListHelperTest {
                          .get("courtSittingDate").asText(),
                      "Unable to find court sitting date");
 
-        assertEquals("Courtroom 2: Thomas Athorne, Reginald Cork",
+        assertEquals("Courtroom 2: Judge KnownAs, Judge KnownAs 2",
                      inputJson
                          .get("courtListsByDate").get(0).get(0)
                          .get("courtRooms").get(0)

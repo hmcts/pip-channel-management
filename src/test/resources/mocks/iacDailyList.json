@@ -95,12 +95,12 @@
                 "judiciary": [
                   {
                     "johTitle": "Judge",
-                    "johNameSurname": "Test Name2",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
                   },
                   {
                     "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name2",
+                    "johNameSurname": "Test Name",
                     "isPresiding": false
                   }
                 ],

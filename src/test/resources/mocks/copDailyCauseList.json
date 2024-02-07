@@ -6,9 +6,7 @@
     "region": {
       "regionalJOH": [
         {
-          "johNameSurname": "Firstname Surname",
-          "johTitle": "Mr",
-          "johKnownAs": "Judge"
+          "johKnownAs": "Judge KnownAs Regional"
         }
       ],
       "name": "Regional COP Court"
@@ -65,11 +63,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Another Judge",
+                    "johKnownAs": "Judge KnownAs 2",
                     "isPresiding": false
                   }
                 ]
@@ -99,7 +97,7 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   }
                 ]
@@ -151,11 +149,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge 1",
+                    "johKnownAs": "Judge KnownAs 1",
                     "isPresiding": false
                   },
                   {
-                    "johKnownAs": "Judge 2",
+                    "johKnownAs": "Judge KnownAs 2",
                     "isPresiding": false
                   }
                 ]

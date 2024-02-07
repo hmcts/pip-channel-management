@@ -52,7 +52,7 @@ class CrimeListHelperTest {
         CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
         CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
 
-        assertEquals("1: Judge 1, Judge 2", inputJsonCrownDailyList.get(COURT_LISTS)
+        assertEquals("1: Judge KnownAs, Judge KnownAs 2", inputJsonCrownDailyList.get(COURT_LISTS)
                          .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name");
