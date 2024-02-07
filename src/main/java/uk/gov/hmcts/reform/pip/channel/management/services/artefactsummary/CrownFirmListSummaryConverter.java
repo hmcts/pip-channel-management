@@ -11,16 +11,6 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 @Service
 public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter {
-    private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode node) {
-        if (!GeneralHelper.findAndReturnNodeText(node, "linkedCases").isEmpty()) {
-            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", node, "linkedCases");
-        }
-
-        if (!GeneralHelper.findAndReturnNodeText(node, "listingNotes").isEmpty()) {
-            GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", node, "listingNotes");
-        }
-    }
-
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
         CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
@@ -105,5 +95,15 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
             )
         );
         return output.toString();
+    }
+
+    private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode node) {
+        if (!GeneralHelper.findAndReturnNodeText(node, "linkedCases").isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", node, "linkedCases");
+        }
+
+        if (!GeneralHelper.findAndReturnNodeText(node, "listingNotes").isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", node, "listingNotes");
+        }
     }
 }
