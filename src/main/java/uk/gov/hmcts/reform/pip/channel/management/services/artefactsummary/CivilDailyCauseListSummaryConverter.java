@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 
 import java.util.Iterator;
 import java.util.List;
@@ -63,7 +64,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
     }
 
     /**
-     * Judiciary iteration - gets title and known as fields from judiciary node.
+     * Judiciary iteration - gets known as field from judiciary node.
      *
      * @param node - node of judiciary.
      * @return judiciary string
@@ -73,19 +74,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
         if (judiciaryNode.isEmpty()) {
             return "";
         }
-        Iterator<JsonNode> johNode = judiciaryNode.elements();
-        StringBuilder johName = new StringBuilder("\nJudiciary: ");
-        while (johNode.hasNext()) {
-            JsonNode currentJoh = johNode.next();
-            String title = currentJoh.path("johTitle").asText();
-            String knownAs = currentJoh.path("johKnownAs").asText();
-            johName.append(title).append(' ');
-            johName.append(knownAs);
-            if (johNode.hasNext()) {
-                johName.append(", ");
-            }
-        }
-        return johName.toString();
+        return "\nJudiciary: " + JudiciaryHelper.findAndManipulateJudiciary(node.get(SESSION).get(0));
     }
 
     /**

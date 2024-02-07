@@ -64,7 +64,7 @@ class CopListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionJoh").asText())
             .as("Unable to get session Joh")
-            .contains("Crown Judge")
+            .contains("Judge KnownAs Presiding, Judge KnownAs 2")
             .doesNotContain("Before");
 
         assertThat(inputJson.get(COURT_LISTS).get(1)
@@ -73,7 +73,7 @@ class CopListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionJoh").asText())
             .as("Unable to get session Joh")
-            .contains("Judge 1, Judge 2")
+            .contains("Judge KnownAs 1, Judge KnownAs 2")
             .doesNotContain("Before");
     }
 
@@ -100,7 +100,7 @@ class CopListHelperTest {
 
         assertThat(inputJson.get("regionalJoh").asText())
             .as("Unable to get regional Joh")
-            .contains("Judge Firstname Surname");
+            .contains("Judge KnownAs Regional");
     }
 
     @Test

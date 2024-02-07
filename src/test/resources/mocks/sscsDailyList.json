@@ -88,16 +88,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Judy",
-                    "role": "JUDGE",
-                    "johKnownAs": "Judge"
+                    "johKnownAs": "Judge KnownAs"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Statham",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace"
+                    "johKnownAs": "Judge KnownAs 2"
                   }
                 ]
               }
@@ -232,16 +226,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
-                    "johKnownAs": "Judge"
+                    "johKnownAs": "Test KnownAs 3"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Rusedski",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace"
+                    "johKnownAs": "Test KnownAs 4"
                   }
                 ]
               }
@@ -331,16 +319,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
-                    "johKnownAs": "Judge"
+                    "johKnownAs": "Test KnownAs"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace"
+                    "johKnownAs": "Test KnownAs 2"
                   }
                 ]
               }
@@ -414,16 +396,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Tom Smith",
-                    "role": "JUDGE",
-                    "johKnownAs": "Judge"
+                    "johKnownAs": "Test KnownAs 3"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Lewis Hamilton",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace"
+                    "johKnownAs": "Test KnownAs 4"
                   }
                 ]
               },
@@ -492,16 +468,10 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "James Smith",
-                    "role": "JUDGE",
-                    "johKnownAs": "Judge"
+                    "johKnownAs": "Test KnownAs 5"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Max Verstappen",
-                    "role": "MAGISTRATE",
-                    "johKnownAs": "Justice of the peace"
+                    "johKnownAs": "Test KnownAs 6"
                   }
                 ]
               }
