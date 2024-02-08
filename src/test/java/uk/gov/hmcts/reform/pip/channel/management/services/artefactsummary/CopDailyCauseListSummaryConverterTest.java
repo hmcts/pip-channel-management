@@ -55,7 +55,7 @@ class CopDailyCauseListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect judge found")
-            .contains("Crown Judge");
+            .contains("Judge KnownAs Presiding, Judge KnownAs 2");
 
         softly.assertAll();
     }

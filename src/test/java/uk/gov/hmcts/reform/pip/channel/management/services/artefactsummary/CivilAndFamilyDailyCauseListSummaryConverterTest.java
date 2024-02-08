@@ -56,7 +56,7 @@ class CivilAndFamilyDailyCauseListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect court room + judge found")
-            .contains("This is the court room name, Before: This is a known as");
+            .contains("This is the court room name, Before: Judge KnownAs Presiding, Judge KnownAs 2");
 
         softly.assertAll();
     }

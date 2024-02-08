@@ -103,10 +103,7 @@ public final class LocationHelper {
                 if (formattedJoh.length() != 0) {
                     formattedJoh.append(", ");
                 }
-
                 formattedJoh.append(GeneralHelper.findAndReturnNodeText(joh, "johKnownAs"));
-                formattedJoh.append(' ');
-                formattedJoh.append(GeneralHelper.findAndReturnNodeText(joh, "johNameSurname"));
             });
 
             artefact.put("regionalJoh", formattedJoh.toString());

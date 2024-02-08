@@ -77,7 +77,7 @@ class MagistratesPublicListHelperTest {
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList);
         CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
 
-        assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonMagistratesPublicList
+        assertEquals("1: Judge KnownAs, Judge KnownAs 2", inputJsonMagistratesPublicList
                          .get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name");

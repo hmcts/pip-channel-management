@@ -74,8 +74,9 @@ class FamilyCauseListFileConverterTest {
             .as("Incorrect table titles")
             .extracting(Element::text)
             .containsAll(List.of(
-                "This is the court room name, Before: First known as",
-                "This is the court room name"));
+                "This is the court room name, Before: Judge KnownAs Presiding, Judge KnownAs",
+                "This is the court room name, Before: Judge KnownAs 1, Judge KnownAs 2",
+                "This is the court room name, Before: Judge KnownAs 1, Judge KnownAs 2"));
     }
 
 
@@ -109,8 +110,9 @@ class FamilyCauseListFileConverterTest {
             .as("Incorrect table titles")
             .extracting(Element::text)
             .containsAll(List.of(
-                "This is the court room name, Gerbron: First known as",
-                "This is the court room name"));
+                "This is the court room name, Gerbron: Judge KnownAs Presiding, Judge KnownAs",
+                "This is the court room name, Gerbron: Judge KnownAs 1, Judge KnownAs 2",
+                "This is the court room name, Gerbron: Judge KnownAs 1, Judge KnownAs 2"));
     }
 
     @Test
