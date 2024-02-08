@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,29 +19,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
-import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionResponse;
-import uk.gov.hmcts.reform.pip.model.publication.Language;
-import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.pip.model.publication.FileType.EXCEL;
 import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 
 @SuppressWarnings({"PMD.JUnitTestsShouldIncludeAssert", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
@@ -51,8 +39,6 @@ import static uk.gov.hmcts.reform.pip.model.publication.FileType.PDF;
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = {"APPROLE_api.request.admin"})
 class PublicationManagementTest {
-    private static final String LIST_TYPE_HEADER = "x-list-type";
-    private static final String LANGUAGE_HEADER = "x-language";
     private static final String ROOT_URL = "/publication";
     private static final String V2_URL = "/v2";
     private static final String GET_ARTEFACT_SUMMARY = ROOT_URL + "/summary";
@@ -72,8 +58,6 @@ class PublicationManagementTest {
     BlobClient blobClient;
     @Autowired
     private MockMvc mockMvc;
-    @Value("${VERIFIED_USER_ID}")
-    private String verifiedUserId;
 
     @BeforeAll
     public static void setup() {
