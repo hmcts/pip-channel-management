@@ -22,7 +22,7 @@ class CrownFirmListSummaryConverterTest {
     CrownFirmListSummaryConverter crownFirmList;
 
     @Test
-    void testCrownDailyListTemplate() throws IOException {
+    void testCrownFirmListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
                          "src/test/resources/mocks/",
