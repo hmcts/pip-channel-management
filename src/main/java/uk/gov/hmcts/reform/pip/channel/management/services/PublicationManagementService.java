@@ -133,26 +133,6 @@ public class PublicationManagementService {
      * Delete all publication files for a given artefact.
      *
      * @param artefactId The artefact ID to delete the files for.
-     */
-    @Deprecated
-    public void deleteFiles(UUID artefactId) {
-        Artefact artefact = dataManagementService.getArtefact(artefactId);
-        azureBlobService.deleteBlobFile(artefact.getArtefactId() + PDF.getExtension());
-
-        if (artefact.getListType().hasAdditionalPdf() && artefact.getLanguage() != Language.ENGLISH) {
-            azureBlobService.deleteBlobFile(artefact.getArtefactId() + ADDITIONAL_PDF_SUFFIX
-                                                + PDF.getExtension());
-        }
-
-        if (artefact.getListType().hasExcel()) {
-            azureBlobService.deleteBlobFile(artefact.getArtefactId() + EXCEL.getExtension());
-        }
-    }
-
-    /**
-     * Delete all publication files for a given artefact.
-     *
-     * @param artefactId The artefact ID to delete the files for.
      * @param listType The list type of the publication.
      * @param language The language of the publication.
      */

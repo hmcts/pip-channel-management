@@ -88,7 +88,7 @@ class CivilDailyCauseListFileConverterTest {
             .hasSize(NUMBER_OF_TABLES)
             .extracting(Element::text)
             .containsExactly(
-                "Courtroom 1: This is the known as",
+                "Courtroom 1: Judge KnownAs Presiding, Judge KnownAs 2",
                 "Courtroom 2");
 
     }
@@ -129,7 +129,7 @@ class CivilDailyCauseListFileConverterTest {
             .hasSize(NUMBER_OF_TABLES)
             .extracting(Element::text)
             .containsExactly(
-                "Courtroom 1: This is the known as",
+                "Courtroom 1: Judge KnownAs Presiding, Judge KnownAs 2",
                 "Courtroom 2");
 
         Elements tableElements = document.getElementsByClass("govuk-table");

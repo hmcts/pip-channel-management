@@ -76,7 +76,7 @@ class CopCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
             .as(HEADER_TEXT)
-            .contains("Room 1, Before Crown Judge");
+            .contains("Room 1, Before Judge KnownAs Presiding, Judge KnownAs 2");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(3).text())
@@ -129,6 +129,6 @@ class CopCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-accordion__section-heading")
                        .get(0).text())
             .as(HEADER_TEXT)
-            .contains("Room 1, Gerbron Crown Judge");
+            .contains("Room 1, Gerbron Judge KnownAs Presiding, Judge KnownAs 2");
     }
 }

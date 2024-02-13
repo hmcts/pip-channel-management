@@ -70,14 +70,6 @@ class PublicationManagementControllerTest {
     }
 
     @Test
-    void testDeleteFiles() {
-        doNothing().when(publicationManagementService).deleteFiles(ARTEFACT_ID);
-
-        ResponseEntity<Void> response = publicationManagementController.deleteFiles(ARTEFACT_ID);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), STATUS_MESSAGE);
-    }
-
-    @Test
     void testDeleteFilesV2() {
         doNothing().when(publicationManagementService).deleteFiles(ARTEFACT_ID, LIST_TYPE, LANGUAGE);
 

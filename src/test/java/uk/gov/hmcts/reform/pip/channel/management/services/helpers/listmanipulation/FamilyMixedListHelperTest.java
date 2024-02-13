@@ -58,7 +58,7 @@ class FamilyMixedListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionJudiciary").asText())
             .as("Unable to get judiciary")
-            .isEqualTo("First known as");
+            .isEqualTo("Judge KnownAs Presiding, Judge KnownAs");
     }
 
     @Test
