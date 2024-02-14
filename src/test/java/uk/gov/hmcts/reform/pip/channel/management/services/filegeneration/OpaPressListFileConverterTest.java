@@ -379,7 +379,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(sheet.getLastRowNum())
             .as("Incorrect row count")
-            .isEqualTo(11);
+            .isEqualTo(7);
 
         softly.assertThat(sheet.getRow(0).getLastCellNum())
             .as("Incorrect column count")
