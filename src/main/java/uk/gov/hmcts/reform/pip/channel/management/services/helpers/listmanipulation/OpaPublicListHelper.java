@@ -78,7 +78,7 @@ public final class OpaPublicListHelper {
         return new CaseInfo(
             GeneralHelper.findAndReturnNodeText(hearingCase, CASE_URN),
             scheduledHearingDate,
-            formatReportingRestriction(hearingCase)
+            GeneralHelper.formatNodeArray(hearingCase, REPORTING_RESTRICTION_DETAIL, DELIMITER)
         );
     }
 
