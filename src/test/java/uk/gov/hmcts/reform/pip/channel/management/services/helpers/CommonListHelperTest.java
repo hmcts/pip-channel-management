@@ -50,7 +50,7 @@ class CommonListHelperTest {
                        .get(SESSION).get(0)
                        .get("formattedSessionCourtRoom").asText())
             .as("Unable to get courtroom name")
-            .isEqualTo("This is the court room name: First known as");
+            .isEqualTo("This is the court room name: Judge KnownAs Presiding, Judge KnownAs");
     }
 
     @Test

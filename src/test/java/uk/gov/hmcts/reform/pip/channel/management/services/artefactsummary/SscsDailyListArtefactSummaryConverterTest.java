@@ -52,8 +52,8 @@ class SscsDailyListArtefactSummaryConverterTest {
             .contains("Prosecutor: Prosecutor1, Prosecutor2");
 
         softly.assertThat(output)
-            .as("Penel does not match")
-            .contains("Panel: Judge Judy, Magistrate Statham");
+            .as("Panel does not match")
+            .contains("Panel: Judge KnownAs, Judge KnownAs 2");
 
         softly.assertThat(output)
             .as("Tribunal type does not match")

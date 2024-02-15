@@ -73,10 +73,9 @@ class CivilAndFamilyCauseListFileConverterTest {
             .as("Incorrect table titles")
             .extracting(Element::text)
             .containsAll(List.of(
-                "This is the court room name, Before: This is a known as",
-                "This is another court room name"));
-
-
+                "This is the court room name, Before: Judge KnownAs Presiding, Judge KnownAs 2",
+                "This is another court room name, Before: Judge KnownAs 3, Judge KnownAs 4",
+                "This is the court room name, Before: Judge KnownAs 1, Judge KnownAs 2"));
     }
 
     @Test
@@ -108,8 +107,9 @@ class CivilAndFamilyCauseListFileConverterTest {
             .as("Incorrect table titles")
             .extracting(Element::text)
             .containsAll(List.of(
-                "This is the court room name, Gerbron: This is a known as",
-                "This is another court room name"));
+                "This is the court room name, Gerbron: Judge KnownAs Presiding, Judge KnownAs 2",
+                "This is another court room name, Gerbron: Judge KnownAs 3, Judge KnownAs 4",
+                "This is the court room name, Gerbron: Judge KnownAs 1, Judge KnownAs 2"));
     }
 
     @Test

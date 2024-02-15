@@ -159,11 +159,11 @@ class MagistratesStandardListFileConverterTest {
 
         softly.assertThat(heading.get(1).text())
             .as(COURT_ROOM_HEADING_MESSAGE)
-            .contains("Courtroom 1: DJ Steve 1");
+            .contains("Courtroom 1: Judge Test Name, Magistrate Test Name");
 
         softly.assertThat(heading.get(2).text())
             .as(COURT_ROOM_HEADING_MESSAGE)
-            .contains("Courtroom 2: joh known as 1");
+            .contains("Courtroom 2: Judge Test Name 2, Magistrate Test Name 2");
 
         softly.assertAll();
     }

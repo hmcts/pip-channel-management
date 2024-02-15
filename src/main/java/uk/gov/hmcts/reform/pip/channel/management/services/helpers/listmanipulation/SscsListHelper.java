@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdail
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ public final class SscsListHelper {
     private static final String DELIMITER = ", ";
 
     private static final String CHANNEL = "channel";
-    private static final String JUDICIARY = "judiciary";
     private static final String APPLICANT = "applicant";
     private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
     private static final String COURT_ROOM = "courtRoom";
@@ -65,7 +65,7 @@ public final class SscsListHelper {
                 session.get(SESSION_CHANNEL).toString(),
                 typeReference
             );
-            String judiciary = formatJudiciary(session);
+            String judiciary = JudiciaryHelper.findAndManipulateJudiciary(session);
             String sessionChannelString = String.join(DELIMITER, sessionChannel);
             for (JsonNode sitting : session.get(SITTINGS)) {
                 sittingList.add(sittingBuilder(sessionChannelString, sitting, judiciary));
@@ -99,26 +99,6 @@ public final class SscsListHelper {
         }
         sitting.setListOfHearings(listOfHearings);
         return sitting;
-    }
-
-    /**
-     * Format the judiciary into a comma seperated string.
-     *
-     * @param session The session containing the judiciary.
-     * @return A string of the formatted judiciary.
-     */
-    private static String formatJudiciary(JsonNode session) {
-        StringBuilder formattedJudiciaryBuilder = new StringBuilder();
-        session.get(JUDICIARY).forEach(judiciary -> {
-            if (formattedJudiciaryBuilder.length() > 0) {
-                formattedJudiciaryBuilder.append(DELIMITER);
-            }
-            formattedJudiciaryBuilder
-                .append(GeneralHelper.safeGet("johTitle", judiciary))
-                .append(' ')
-                .append(GeneralHelper.safeGet("johNameSurname", judiciary));
-        });
-        return formattedJudiciaryBuilder.toString();
     }
 
     private static Hearing hearingBuilder(JsonNode hearingNode) {

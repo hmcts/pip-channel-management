@@ -37,7 +37,7 @@ class CivilDailyCauseListSummaryConverterTest {
 
         softly.assertThat(outputLines[3])
             .as("Judiciary does not match")
-            .isEqualTo("Judiciary:  This is the known as,  This is the other known as");
+            .isEqualTo("Judiciary: Judge KnownAs Presiding, Judge KnownAs 2");
 
         softly.assertThat(outputLines[4])
             .as("Hearing number does not match")
