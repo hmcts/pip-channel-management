@@ -26,8 +26,7 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                             sitting.get("sittingStart").asText(), Language.ENGLISH, false, false, "h:mma"
                         );
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
-                        sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
+                        sitting.get("hearing").forEach(hearing ->
                             hearing.get("case").forEach(hearingCase -> {
                                 GeneralHelper.appendToStringBuilder(output, "List Name - ",
                                                                     courtList, "courtListName");
@@ -39,16 +38,17 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                                         GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"),
                                         GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
                                     ));
+                                PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, false);
 
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Channel - ",
                                                                     sitting, "caseHearingChannel");
                                 GeneralHelper.appendToStringBuilder(output, "Appellant - ",
-                                                                    hearing, "claimant");
+                                                                    hearingCase, "claimant");
                                 GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
-                                                                    hearing, "prosecutingAuthority");
+                                                                    hearingCase, "prosecutingAuthority");
                                 output.append('\n');
-                            });
-                        });
+                            })
+                        );
                     })
                 )
             )

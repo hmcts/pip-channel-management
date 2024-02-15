@@ -15,7 +15,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
 
     private static void appendAdditionalListInfo(StringBuilder output, JsonNode sitting, JsonNode hearing,
                                                      JsonNode hearingCase) {
-        GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ", hearing, "prosecutingAuthority");
+        GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ", hearingCase, "prosecutingAuthority");
         output.append('\n');
 
         String formattedDuration = "Duration - " + CaseHelper.appendCaseSequenceIndicator(
@@ -38,7 +38,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
+        CommonListHelper.manipulatedListDataCaseParty(payload, Language.ENGLISH, false);
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(payload);
 
         return processMagistratesPublicList(payload);
@@ -58,7 +58,7 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
                                 GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
                                                                     hearingCase, "caseNumber");
                                 GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
-                                                                    hearing, "defendant");
+                                                                    hearingCase, "defendant");
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                     hearing, "hearingType");
 
