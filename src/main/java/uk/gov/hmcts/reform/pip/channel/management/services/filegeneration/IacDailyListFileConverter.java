@@ -70,10 +70,12 @@ public class IacDailyListFileConverter implements FileConverter {
 
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
-                        sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
-                            hearing.get("case").forEach(CaseHelper::formatLinkedCases);
-                        });
+                        sitting.get("hearing").forEach(hearing ->
+                            hearing.get("case").forEach(hearingCase -> {
+                                PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, false);
+                                CaseHelper.formatLinkedCases(hearingCase);
+                            })
+                        );
                     });
                 })
             );

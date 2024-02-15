@@ -68,14 +68,13 @@ public final class EtFortnightlyPressListHelper {
                         ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
                         DateHelper.formatStartTime(sitting,"h:mma");
                         sitting.get("hearing").forEach(hearing -> {
-                            moveTableColumnValuesToHearing(courtRoom, sitting, (ObjectNode) hearing, language);
-                            if (hearing.has("case")) {
-                                hearing.get("case").forEach(cases -> {
-                                    if (!cases.has("caseSequenceIndicator")) {
-                                        ((ObjectNode)cases).put("caseSequenceIndicator", "");
-                                    }
-                                });
-                            }
+                            moveTableColumnValuesToHearing(courtRoom, sitting, (ObjectNode) hearing);
+                            hearing.get("case").forEach(hearingCase -> {
+                                moveTablePartyValuesToCase((ObjectNode) hearingCase, language);
+                                if (!hearingCase.has("caseSequenceIndicator")) {
+                                    ((ObjectNode)hearingCase).put("caseSequenceIndicator", "");
+                                }
+                            });
                         });
                     })
                 )
@@ -84,21 +83,25 @@ public final class EtFortnightlyPressListHelper {
     }
 
     private static void moveTableColumnValuesToHearing(JsonNode courtRoom, JsonNode sitting,
-                                                       ObjectNode hearing,
-                                                       Map<String, Object> language) {
+                                                       ObjectNode hearing) {
         hearing.put(COURT_ROOM,
                     GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName"));
-        hearing.put("claimant",
-                    GeneralHelper.findAndReturnNodeText(hearing,"claimant"));
-        hearing.put("claimantRepresentative",
-                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearing, "claimantRepresentative"));
-        hearing.put("respondent",
-                    GeneralHelper.findAndReturnNodeText(hearing, "respondent"));
-        hearing.put("respondentRepresentative",
-                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearing, "respondentRepresentative"));
         hearing.put("formattedDuration",
                     GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"));
         hearing.put("caseHearingChannel",
                     GeneralHelper.findAndReturnNodeText(sitting, "caseHearingChannel"));
     }
+
+    public static void moveTablePartyValuesToCase(ObjectNode hearingCase, Map<String, Object> language) {
+        hearingCase.put("claimant",
+                    GeneralHelper.findAndReturnNodeText(hearingCase,"claimant"));
+        hearingCase.put("claimantRepresentative",
+                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearingCase, "claimantRepresentative"));
+        hearingCase.put("respondent",
+                    GeneralHelper.findAndReturnNodeText(hearingCase, "respondent"));
+        hearingCase.put("respondentRepresentative",
+                    language.get(REP) + GeneralHelper.findAndReturnNodeText(hearingCase, "respondentRepresentative"));
+    }
+
+
 }

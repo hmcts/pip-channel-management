@@ -26,7 +26,7 @@ public final class MagistratesPublicListHelper {
                     session -> session.get("sittings").forEach(sitting -> {
                         DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.handleParties(hearing);
+                            hearing.get("case").forEach(PartyRoleHelper::handleParties);
                             formatCaseInformation(hearing);
                             formatCaseHtmlTable(hearing);
                         });
