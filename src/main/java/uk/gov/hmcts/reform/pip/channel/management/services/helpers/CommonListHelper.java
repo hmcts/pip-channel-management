@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.ET_FORTNIGHTLY_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class CommonListHelper {
@@ -63,6 +64,8 @@ public final class CommonListHelper {
         if (FAMILY_DAILY_CAUSE_LIST.name().equals(listType)
             || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
             FamilyMixedListHelper.manipulatedlistData(artefact, language);
+        } else if (ET_FORTNIGHTLY_PRESS_LIST.name().equals(listType)) {
+            CommonListHelper.manipulatedListDataCaseParty(artefact, Language.ENGLISH, initialised);
         } else {
             manipulatedListData(artefact, language, initialised);
         }
@@ -92,6 +95,35 @@ public final class CommonListHelper {
                                 hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
                             );
                         });
+                    });
+                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
+                })
+            )
+        );
+    }
+
+    public static void manipulatedListDataCaseParty(JsonNode artefact, Language language, boolean initialised) {
+        artefact.get("courtLists").forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get(SESSION).forEach(session -> {
+                    StringBuilder formattedJudiciary = new StringBuilder();
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
+                    session.get(SITTINGS).forEach(sitting -> {
+                        DateHelper.calculateDuration(sitting, language);
+                        DateHelper.formatStartTime(sitting, TIME_FORMAT);
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
+                        sitting.get(HEARING).forEach(hearing ->
+                            hearing.get("case").forEach(hearingCase -> {
+                                if (hearingCase.has("party")) {
+                                    PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, initialised);
+                                } else {
+                                    ObjectNode hearingObj = (ObjectNode) hearing;
+                                    hearingObj.put(APPLICANT, "");
+                                    hearingObj.put(RESPONDENT, "");
+                                }
+                                CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase);
+                            })
+                        );
                     });
                     LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
                 })
