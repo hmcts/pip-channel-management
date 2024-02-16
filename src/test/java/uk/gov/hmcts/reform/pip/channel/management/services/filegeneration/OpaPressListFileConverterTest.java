@@ -541,7 +541,7 @@ class OpaPressListFileConverterTest {
             .as("Incorrect Offence [1] Detail column")
             .isEqualTo("Offence wording 2");
 
-        Row rowWithSecondOffence = sheet.getRow(7);
+        Row rowWithSecondOffence = sheet.getRow(5);
 
         softly.assertThat(rowWithSecondOffence.getCell(13).getStringCellValue())
             .as("Incorrect Offence [2] Title column")
