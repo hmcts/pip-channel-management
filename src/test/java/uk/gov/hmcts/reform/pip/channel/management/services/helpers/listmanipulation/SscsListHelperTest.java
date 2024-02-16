@@ -133,11 +133,11 @@ class SscsListHelperTest {
 
         softly.assertThat(hearing.getAppellant())
             .as("Appellant does not match")
-            .isEqualTo("Lovekesh");
+            .isEqualTo("CasePartyNamePetitioner");
 
         softly.assertThat(hearing.getAppellantRepresentative())
             .as("Appellant representative does not match")
-            .isEqualTo("Mr Sausage Alpha Foxtrot");
+            .isEqualTo("Mr Test A CasePartyNamePetitionerRep");
 
         softly.assertThat(hearing.getRespondent())
             .as("Respondent does not match")

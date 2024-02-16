@@ -91,7 +91,7 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
+            .contains("CasePartyNamePetitioner, Legal Advisor: Mr Test A CasePartyNamePetitionerRep");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")
@@ -141,7 +141,7 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Cynghorydd Cyfreithiol: Mr Sausage Alpha Foxtrot");
+            .contains("CasePartyNamePetitioner, Cynghorydd Cyfreithiol: Mr Test A CasePartyNamePetitionerRep");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")

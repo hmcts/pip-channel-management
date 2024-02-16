@@ -26,6 +26,7 @@ class MagistratesPublicListHelperTest {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
+    private static final String CASE = "case";
     private static final String FORMATTED_SESSION_COURT_ROOM = "formattedSessionCourtRoom";
     private static final String TIME = "time";
     private static final String LISTING_NOTES = "listingNotes";
@@ -54,11 +55,11 @@ class MagistratesPublicListHelperTest {
                      TIME_ERROR);
         assertEquals("Defendant_SN, Defendant_FN", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
                          .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
-                         .get(0).get("defendant").asText(),
+                         .get(0).get(CASE).get(0).get("defendant").asText(),
                      "Unable to find information for defendant");
         assertEquals("Pro_Auth", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING).get(0)
-                         .get("prosecutingAuthority").asText(),
+                         .get(CASE).get(0).get("prosecutingAuthority").asText(),
                      "Unable to find information for prosecution authority");
         assertEquals("Listing details text", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0)
                          .get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0).get(SITTINGS).get(0).get(HEARING)
@@ -77,8 +78,8 @@ class MagistratesPublicListHelperTest {
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(inputJsonMagistratesPublicList);
         CrimeListHelper.formattedCourtRoomName(inputJsonMagistratesPublicList);
 
-        assertEquals("1: Judge KnownAs, Judge KnownAs 2", inputJsonMagistratesPublicList
-                         .get(COURT_LISTS).get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
+        assertEquals("1: Firstname1 Surname1", inputJsonMagistratesPublicList
+                         .get(COURT_LISTS).get(1).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
                          .get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name");
 
@@ -86,7 +87,7 @@ class MagistratesPublicListHelperTest {
                          .get(COURT_ROOM).get(1).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find unallocated formatted courtroom name");
 
-        assertEquals("CourtRoom 1", inputJsonMagistratesPublicList.get(COURT_LISTS).get(1).get(COURT_HOUSE)
+        assertEquals("CourtRoom 1", inputJsonMagistratesPublicList.get(COURT_LISTS).get(0).get(COURT_HOUSE)
                          .get(COURT_ROOM).get(0).get(SESSION).get(0).get(FORMATTED_SESSION_COURT_ROOM).asText(),
                      "Unable to find formatted courtroom name without judge");
     }
