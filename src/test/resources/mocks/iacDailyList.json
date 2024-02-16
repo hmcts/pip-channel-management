@@ -1,6 +1,6 @@
 {
   "document": {
-    "publicationDate": "2022-10-20T20:00:00.001Z"
+    "publicationDate": "2022-08-31T10:00:00.001Z"
   },
   "venue": {
     "venueName": "This is the venue name",
@@ -11,11 +11,11 @@
   },
   "courtLists": [
     {
-      "courtListName": "Bail List",
+      "courtListName": "Bail list",
       "courtHouse": {
         "courtRoom": [
           {
-            "courtRoomName": "Court Room A",
+            "courtRoomName": "Room 1",
             "session": [
               {
                 "judiciary": [
@@ -23,7 +23,146 @@
                     "johTitle": "Judge",
                     "johNameSurname": "Test Name",
                     "isPresiding": true
-                  },
+                  }
+                ],
+                "sittings": [
+                  {
+                    "sittingStart": "2022-08-31T10:30:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
+                    "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "1 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "English",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 3",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "123",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "456",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "999",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": ["Teams", "Attended"]
+                  }
+                ]
+              },
+              {
+                "judiciary": [
                   {
                     "johTitle": "Magistrate",
                     "johNameSurname": "Test Name",
@@ -32,9 +171,81 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2020-10-20T20:00:00.001Z",
-                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "sittingStart": "2022-08-31T10:30:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
                     "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "1 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "English",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
                       {
                         "hearingType": "Directions",
                         "case": [
@@ -44,71 +255,140 @@
                             "caseType": "case type",
                             "caseLinked": [
                               {
-                                "caseId": "1234"
+                                "caseId": "123",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "456",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "999",
+                                "name": "A Vs B"
                               }
                             ],
-                            "language": "French"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Authority Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
                     ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
-                    ]
+                    "channel": ["Teams", "Attended"]
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "courtRoomName": "Room 2",
+            "session": [
               {
                 "judiciary": [
                   {
                     "johTitle": "Judge",
-                    "johNameSurname": "Test Name2",
+                    "johNameSurname": "Test Name",
                     "isPresiding": true
-                  },
-                  {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name2",
-                    "isPresiding": false
                   }
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2020-10-20T20:00:00.001Z",
-                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "sittingStart": "2022-08-31T10:30:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
                     "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "1 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "English",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
                       {
                         "hearingType": "Directions",
                         "case": [
@@ -118,50 +398,172 @@
                             "caseType": "case type",
                             "caseLinked": [
                               {
-                                "caseId": "1234"
+                                "caseId": "123",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "456",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "999",
+                                "name": "A Vs B"
                               }
                             ],
-                            "language": "French"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Authority Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
                     ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
-                    ]
+                    "channel": ["Teams", "Attended"]
+                  }
+                ]
+              },
+              {
+                "sittings": [
+                  {
+                    "sittingStart": "2022-08-31T10:30:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
+                    "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "1 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 2",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "English",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseNumber": "12341234",
+                            "caseSequenceIndicator": "2 of 3",
+                            "caseType": "case type",
+                            "caseLinked": [
+                              {
+                                "caseId": "123",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "456",
+                                "name": "A Vs B"
+                              },
+                              {
+                                "caseId": "999",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": ["Teams", "Attended"]
                   }
                 ]
               }
@@ -171,11 +573,11 @@
       }
     },
     {
-      "courtListName": "Non Bail List",
+      "courtListName": "Float list",
       "courtHouse": {
         "courtRoom": [
           {
-            "courtRoomName": "Court Room B",
+            "courtRoomName": "Room 3",
             "session": [
               {
                 "judiciary": [
@@ -188,12 +590,17 @@
                     "johTitle": "Magistrate",
                     "johNameSurname": "Test Name",
                     "isPresiding": false
+                  },
+                  {
+                    "johTitle": "Magistrate",
+                    "johNameSurname": "Another Test Name",
+                    "isPresiding": false
                   }
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2020-10-20T20:20:00.001Z",
-                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "sittingStart": "2022-08-31T20:00:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
                     "hearing": [
                       {
                         "hearingType": "Directions",
@@ -202,90 +609,66 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": []
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Authority Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
-                    ]
-                  },
-                  {
-                    "sittingStart": "2020-10-20T20:20:00.001Z",
-                    "sittingEnd": "2020-02-20T22:00:00.001Z",
-                    "hearing": [
-                      {
-                        "hearingType": "Directions",
-                        "case": [
-                          {
-                            "caseNumber": "12341234",
-                            "caseSequenceIndicator": "2 of 3",
-                            "caseType": "case type",
-                            "caseLinked": []
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Authority Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mrs"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
                     ]
                   }
                 ]
@@ -305,8 +688,8 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2020-10-20T20:20:00.001Z",
-                    "sittingEnd": "2020-02-20T22:00:00.001Z",
+                    "sittingStart": "2022-08-31T20:00:00.001Z",
+                    "sittingEnd": "2022-10-31T20:00:00.001Z",
                     "hearing": [
                       {
                         "hearingType": "Directions",
@@ -315,37 +698,54 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": []
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "CLAIMANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Authority Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
+                            "caseLinked": [
+                              {
+                                "caseId": "1234",
+                                "name": "A Vs B"
+                              }
+                            ],
+                            "language": "French",
+                            "party": [
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "Individual Middlename",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualForenames": "Individual Forenames",
+                                  "individualMiddleName": "",
+                                  "individualSurname": "Individual Surname",
+                                  "title": "Mrs"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              },
+                              {
+                                "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
+                                "individualDetails": {
+                                  "individualSurname": "Test Name"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
                     ]
                   }
                 ]

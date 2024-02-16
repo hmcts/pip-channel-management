@@ -1,12 +1,12 @@
 {
   "document": {
     "version": "",
-    "publicationDate":"2020-09-13T23:30:00Z"
+    "publicationDate": "2020-09-13T23:30:52.123Z"
   },
   "venue": {
     "venueName": "PRESTON",
     "venueContact": {
-      "venueTelephone":"01772 844700",
+      "venueTelephone": "01772 844700",
       "venueEmail": "court1@moj.gov.uk"
     },
     "venueAddress": {
@@ -37,38 +37,52 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2022-07-27T09:40:00Z",
-                    "sittingEnd": "2022-07-27T10:45:00Z",
+                    "sittingStart": "2022-07-27T09:40:17.496Z",
+                    "sittingEnd": "2022-07-27T10:45:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
                         "case": [
                           {
                             "caseNumber": "12345678",
-                            "caseSequenceIndicator": "2 of 3"
+                            "caseSequenceIndicator": "2 of 3",
+                            "party": [
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "organisationDetails": {
+                                  "organisationName": "Pro_Auth"
+                                }
+                              },
+                              {
+                                "partyRole": "DEFENDANT",
+                                "individualDetails": {
+                                  "individualForenames": "Defendant_FN",
+                                  "individualSurname": "Defendant_SN"
+                                }
+                              }
+                            ]
                           },
                           {
-                            "caseNumber": "112233445"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "PROSECUTING_AUTHORITY",
-                            "organisationDetails": {
-                              "organisationName": "Pro_Auth"
-                            }
-                          },
-
-                          {
-                            "partyRole":"DEFENDANT",
-                            "individualDetails":{
-                              "individualForenames":"Defendant_FN",
-                              "individualSurname":"Defendant_SN"
-                            }
+                            "caseNumber": "112233445",
+                            "party": [
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "organisationDetails": {
+                                  "organisationName": "Pro_Auth"
+                                }
+                              },
+                              {
+                                "partyRole": "DEFENDANT",
+                                "individualDetails": {
+                                  "individualForenames": "Defendant_FN",
+                                  "individualSurname": "Defendant_SN"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "listingDetails": {
-                          "listingRepDeadline":"Listing details text"
+                          "listingRepDeadline": "Listing details text"
                         }
                       },
                       {
@@ -80,14 +94,11 @@
                         ]
                       }
                     ],
-                    "channel": [
-                      "Remote",
-                      "Teams"
-                    ]
+                    "channel": ["Remote", "Teams"]
                   },
                   {
-                    "sittingStart": "2022-01-27T08:00:00Z",
-                    "sittingEnd": "2022-01-27T10:45:00Z",
+                    "sittingStart": "2022-01-27T08:00:17.496Z",
+                    "sittingEnd": "2022-01-27T10:45:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
@@ -126,55 +137,80 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2022-07-27T09:40:00Z",
-                    "sittingEnd": "2022-07-27T10:45:00Z",
+                    "sittingStart": "2022-07-27T09:40:17.496Z",
+                    "sittingEnd": "2022-07-27T10:45:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
                         "case": [
                           {
                             "caseNumber": "12345678",
-                            "caseSequenceIndicator": "2 of 3"
+                            "caseSequenceIndicator": "2 of 3",
+                            "party": [
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "organisationDetails": {
+                                  "organisationName": "PROSECUTING_AUTHORITY"
+                                }
+                              },
+                              {
+                                "partyRole": "DEFENDANT",
+                                "individualDetails": {
+                                  "individualSurname": "DEFENDANT"
+                                }
+                              }
+                            ]
                           },
                           {
-                            "caseNumber": "112233445"
-                          }
-                        ],
-                        "party":[
-                          {
-                            "partyRole": "PROSECUTING_AUTHORITY",
-                            "organisationDetails": {
-                              "organisationName": "PROSECUTING_AUTHORITY"
-                            }
-                          },
-                          {
-                            "partyRole":"DEFENDANT",
-                            "individualDetails":{
-                              "individualSurname":"DEFENDANT"
-                            }
+                            "caseNumber": "112233445",
+                            "party": [
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "organisationDetails": {
+                                  "organisationName": "PROSECUTING_AUTHORITY"
+                                }
+                              },
+                              {
+                                "partyRole": "DEFENDANT",
+                                "individualDetails": {
+                                  "individualSurname": "DEFENDANT"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "listingDetails": {
-                          "listingRepDeadline":"Listing details text"
+                          "listingRepDeadline": "Listing details text"
                         }
                       },
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
                         "case": [
                           {
-                            "caseNumber": "112233445"
+                            "caseNumber": "112233445",
+                            "party": [
+                              {
+                                "partyRole": "PROSECUTING_AUTHORITY",
+                                "organisationDetails": {
+                                  "organisationName": "PROSECUTING_AUTHORITY"
+                                }
+                              },
+                              {
+                                "partyRole": "DEFENDANT",
+                                "individualDetails": {
+                                  "individualSurname": "DEFENDANT"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
                     ],
-                    "channel": [
-                      "Remote",
-                      "Teams"
-                    ]
+                    "channel": ["Remote", "Teams"]
                   },
                   {
-                    "sittingStart": "2022-01-27T08:05:00Z",
-                    "sittingEnd": "2022-01-27T10:45:00Z",
+                    "sittingStart": "2022-01-27T08:05:17.496Z",
+                    "sittingEnd": "2022-01-27T10:45:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
@@ -207,13 +243,18 @@
         "courtHouseName": "Court B",
         "courtRoom": [
           {
-            "courtRoomName": "CourtRoom 1",
+            "courtRoomName": "1",
             "session": [
               {
+                "judiciary": [
+                  {
+                    "johKnownAs": "Firstname1 Surname1"
+                  }
+                ],
                 "sittings": [
                   {
-                    "sittingStart": "2022-01-27T09:00:00Z",
-                    "sittingEnd": "2022-01-27T10:30:00Z",
+                    "sittingStart": "2022-01-27T09:00:17.496Z",
+                    "sittingEnd": "2022-01-27T10:30:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
@@ -225,10 +266,7 @@
                         ]
                       }
                     ],
-                    "channel": [
-                      "Remote",
-                      "Teams"
-                    ]
+                    "channel": ["Remote", "Teams"]
                   }
                 ]
               }
@@ -253,8 +291,8 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2022-01-27T13:00:00Z",
-                    "sittingEnd": "2022-01-27T14:00:00Z",
+                    "sittingStart": "2022-01-27T13:00:17.496Z",
+                    "sittingEnd": "2022-01-27T14:00:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
@@ -266,10 +304,7 @@
                         ]
                       }
                     ],
-                    "channel": [
-                      "Remote",
-                      "Teams"
-                    ]
+                    "channel": ["Remote", "Teams"]
                   }
                 ]
               }
@@ -294,8 +329,8 @@
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2022-01-27T15:00:00Z",
-                    "sittingEnd": "2022-01-27T15:30:00Z",
+                    "sittingStart": "2022-01-27T15:00:17.496Z",
+                    "sittingEnd": "2022-01-27T15:30:17.496Z",
                     "hearing": [
                       {
                         "hearingType": "FHDRA1 (First Hearing and Dispute Resolution Appointment)",
@@ -307,10 +342,7 @@
                         ]
                       }
                     ],
-                    "channel": [
-                      "Remote",
-                      "Teams"
-                    ]
+                    "channel": ["Remote", "Teams"]
                   }
                 ]
               }
