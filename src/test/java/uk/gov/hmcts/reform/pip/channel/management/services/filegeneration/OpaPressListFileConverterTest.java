@@ -229,7 +229,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(heading)
             .as(DEFENDANT_HEADING_MESSAGE)
-            .hasSize(7);
+            .hasSize(8);
 
         softly.assertThat(heading.get(0).text())
             .as(DEFENDANT_HEADING_MESSAGE)

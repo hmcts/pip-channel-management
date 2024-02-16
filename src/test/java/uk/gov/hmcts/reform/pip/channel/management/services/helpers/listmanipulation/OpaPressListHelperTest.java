@@ -191,7 +191,7 @@ class OpaPressListHelperTest {
             .stream()
             .toList()
             .get(0)
-            .get(2)
+            .get(0)
             .getDefendantInfo();
 
         SoftAssertions softly = new SoftAssertions();
@@ -256,7 +256,7 @@ class OpaPressListHelperTest {
             .values()
             .stream()
             .toList()
-            .get(1)
+            .get(0)
             .get(2)
             .getDefendantInfo();
 
