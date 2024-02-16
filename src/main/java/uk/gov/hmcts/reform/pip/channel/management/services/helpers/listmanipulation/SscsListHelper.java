@@ -91,9 +91,9 @@ public final class SscsListHelper {
             sitting.setChannel(sessionChannel);
         }
         Iterator<JsonNode> nodeIterator = node.get(HEARING).elements();
+        Hearing currentHearing = new Hearing();
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
-            Hearing currentHearing = new Hearing();
             if (currentHearingNode.has(CASE)) {
                 Iterator<JsonNode> caseIterator = currentHearingNode.get(CASE).elements();
                 while (caseIterator.hasNext()) {

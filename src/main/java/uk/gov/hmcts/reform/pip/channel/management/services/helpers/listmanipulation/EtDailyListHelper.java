@@ -23,7 +23,8 @@ public final class EtDailyListHelper {
                         DateHelper.formatStartTime(sitting,"h:mma");
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
                         sitting.get("hearing").forEach(
-                            hearing -> hearing.get("case").forEach(hearingCase -> PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, true))
+                            hearing -> hearing.get("case").forEach(hearingCase ->
+                                       PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, true))
                         );
                     })
                 )
