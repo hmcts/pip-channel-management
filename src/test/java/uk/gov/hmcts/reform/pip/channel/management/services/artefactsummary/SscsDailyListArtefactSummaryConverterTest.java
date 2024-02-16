@@ -29,23 +29,23 @@ class SscsDailyListArtefactSummaryConverterTest {
 
         softly.assertThat(output.split(System.lineSeparator()))
             .as("Output line count does not match")
-            .hasSize(34);
+            .hasSize(12);
 
         softly.assertThat(output)
             .as("Court house does not match")
-            .contains("Reading Crown Court");
+            .contains("Test court house name");
 
         softly.assertThat(output)
             .as("Court room does not match")
-            .contains("Court room 1, Time: 12:30am");
+            .contains("1, Time: 12:30am");
 
         softly.assertThat(output)
             .as("Appellant does not match")
-            .contains("Appellant: Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
+            .contains("Appellant: CasePartyNamePetitioner, Legal Advisor: Mr Test A CasePartyNamePetitionerRep");
 
         softly.assertThat(output)
             .as("Informant does not match")
-            .contains("Prosecutor: NVQ, SQA");
+            .contains("Prosecutor: Prosecutor1, Prosecutor2");
 
         softly.assertThat(output)
             .as("Party prosecutor does not match")

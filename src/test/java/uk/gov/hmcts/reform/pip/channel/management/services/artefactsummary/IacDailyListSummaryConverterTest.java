@@ -38,7 +38,7 @@ class IacDailyListSummaryConverterTest {
 
         softly.assertThat(artefactSummary.split(System.lineSeparator()))
             .as("Incorrect output lines")
-                .hasSize(35);
+                .hasSize(98);
 
         softly.assertThat(artefactSummary)
             .as("incorrect start time found")
@@ -58,7 +58,7 @@ class IacDailyListSummaryConverterTest {
 
         softly.assertThat(artefactSummary)
             .as("incorrect prosecuting authority found")
-            .contains("Authority Surname");
+            .contains("Authority - Test Name");
 
         softly.assertAll();
     }
