@@ -24,17 +24,9 @@
         "courtHouseName": "Court A",
         "courtRoom": [
           {
-            "courtRoomName": "1",
+            "courtRoomName": "CourtRoom 1",
             "session": [
               {
-                "judiciary": [
-                  {
-                    "johKnownAs": "Judge KnownAs"
-                  },
-                  {
-                    "johKnownAs": "Judge KnownAs 2"
-                  }
-                ],
                 "sittings": [
                   {
                     "sittingStart": "2022-07-27T09:40:17.496Z",

@@ -23,15 +23,6 @@
                 "caseSequenceIndicator": "2 of 3",
                 "party": [
                   {
-                    "partyRole": "CLAIMANT_PETITIONER",
-                    "individualDetails": {
-                      "title": "Mr",
-                      "individualForenames": "Test forename 2",
-                      "individualMiddleName": "X",
-                      "individualSurname": "Test Surname 2"
-                    }
-                  },
-                  {
                     "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
                     "individualDetails": {
                       "title": "Mr",
@@ -46,7 +37,7 @@
                       "title": "Capt.",
                       "individualForenames": "Test forename 2",
                       "individualMiddleName": "A",
-                      "individualSurname": "Test Surname 2"
+                      "individualSurname": "Test Surname"
                     }
                   },
                   {
