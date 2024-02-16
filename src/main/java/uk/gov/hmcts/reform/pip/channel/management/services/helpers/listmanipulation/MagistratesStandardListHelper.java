@@ -101,7 +101,7 @@ public final class MagistratesStandardListHelper {
 
     private static void processSittingInfo(JsonNode courtRoom, JsonNode session, JsonNode sitting,
                                                   Language language) {
-        SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
+        SittingHelper.manipulatedSittingForCrime(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
         DateHelper.calculateDuration(sitting, language);
         DateHelper.formatStartTime(sitting, TIME_FORMAT);

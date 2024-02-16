@@ -89,7 +89,7 @@ class EtDailyListFileConverterTest {
                         "2 hours [2 of 3]",
                         "12341234",
                         "Mr T Test Surname",
-                        "Capt. T Test Surname 2",
+                        "Capt. T Test Surname",
                         "This is a hearing type",
                         "This is a sitting channel"
             );

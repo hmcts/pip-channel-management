@@ -65,6 +65,19 @@ public final class SittingHelper {
         ((ObjectNode) session).put(destinationNodeName, judiciary);
     }
 
+    public static void manipulatedSittingForCrime(JsonNode courtRoom, JsonNode session, JsonNode sitting,
+                                          String destinationNodeName) {
+        String judiciary = JudiciaryHelper.findAndManipulateJudiciaryForCrime(sitting);
+        String courtRoomName = GeneralHelper.findAndReturnNodeText(courtRoom, "courtRoomName");
+
+        if (judiciary.isBlank()) {
+            judiciary = JudiciaryHelper.findAndManipulateJudiciaryForCrime(session);
+        }
+
+        judiciary = courtRoomName.length() > 0 ? courtRoomName + ": " + judiciary : judiciary;
+        ((ObjectNode) session).put(destinationNodeName, judiciary);
+    }
+
     public static void findAndConcatenateHearingPlatform(JsonNode sitting, JsonNode session) {
         String channel = "";
         if (sitting.has(CHANNEL)) {

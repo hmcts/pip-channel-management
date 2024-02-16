@@ -14,8 +14,6 @@
       "town": "Venue Town",
       "county": "Venue County",
       "postCode": "AA1 AA1"
-
-
     },
     "venueContact": {
       "venueTelephone": "01234 123 123",
@@ -146,17 +144,12 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
                     "isPresiding": true,
-                    "johKnownAs": "This is a known as"
+                    "johKnownAs": "Judge KnownAs Presiding"
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name",
-                    "role": "MAGISTRATE",
-                    "isPresiding": false
+                    "isPresiding": false,
+                    "johKnownAs": "Judge KnownAs 2"
                   }
                 ]
               }
@@ -203,15 +196,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
+                    "johKnownAs": "Judge KnownAs 3",
                     "isPresiding": false
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name",
-                    "role": "MAGISTRATE",
+                    "johKnownAs": "Judge KnownAs 4",
                     "isPresiding": false
                   }
                 ]
@@ -298,15 +287,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johTitle": "Judge",
-                    "johNameSurname": "Test Name",
-                    "role": "JUDGE",
+                    "johKnownAs": "Judge KnownAs 1",
                     "isPresiding": false
                   },
                   {
-                    "johTitle": "Magistrate",
-                    "johNameSurname": "Test Name",
-                    "role": "MAGISTRATE",
+                    "johKnownAs": "Judge KnownAs 2",
                     "isPresiding": false
                   }
                 ]

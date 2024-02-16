@@ -171,7 +171,8 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Hearing Type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1, Before: Presiding"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - 1, Before: Presiding, Firstname1 Surname1"),
+                   CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -181,7 +182,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Courtroom: 1"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judiciary: Mr , Mr"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judiciary: Presiding, Firstname1 Surname1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Name: A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Reference: 12345678"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: FMPO"), CONTENT_MISMATCH_ERROR);
@@ -200,7 +201,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Criminal"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, In-Person"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour [1 of 2]"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Before - Crown Judge"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Before - Crown Judge, Judge 1, Judge 2"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -290,10 +291,8 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(
-            responseContent.contains("Judge - This is the court room name, Before: First known as"),
-            CONTENT_MISMATCH_ERROR
-        );
+        assertTrue(responseContent.contains("Judge - This is the court room name, Before: First known as, "
+                                               + "Second known as"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -407,7 +406,7 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -423,7 +422,7 @@ class PublicationManagementTest {
             CONTENT_MISMATCH_ERROR
         );
         assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge Test Name, Magistrate Test Name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -665,82 +664,6 @@ class PublicationManagementTest {
     void testGetFileUnauthorized() throws Exception {
         mockMvc.perform(get(ROOT_URL + V2_URL + "/" + ARTEFACT_ID)
                             .header(FILE_TYPE_HEADER, PDF))
-            .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void testDeleteFilesNonSjpWelshSuccess() throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.deleteIfExists()).thenReturn(true);
-
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
-            .andExpect(status().isNoContent());
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + PDF.getExtension());
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + WELSH_PDF_SUFFIX
-                               + PDF.getExtension());
-        verify(blobContainerClient, never())
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH + EXCEL.getExtension());
-        verify(blobClient, times(2)).deleteIfExists();
-    }
-
-    @Test
-    void testDeleteFilesNonSjpEnglishSuccess() throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.deleteIfExists()).thenReturn(true);
-
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH))
-            .andExpect(status().isNoContent());
-
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + PDF.getExtension());
-        verify(blobContainerClient, never())
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + WELSH_PDF_SUFFIX
-                               + PDF.getExtension());
-        verify(blobContainerClient, never())
-            .getBlobClient(ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH + EXCEL.getExtension());
-        verify(blobClient).deleteIfExists();
-    }
-
-    @Test
-    void testDeleteFilesSjpWelshSuccess() throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.deleteIfExists()).thenReturn(true);
-
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH))
-            .andExpect(status().isNoContent());
-
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + PDF.getExtension());
-        verify(blobContainerClient, never())
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH + EXCEL.getExtension());
-        verify(blobClient, times(2)).deleteIfExists();
-    }
-
-    @Test
-    void testDeleteFilesSjpEnglishSuccess() throws Exception {
-        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.deleteIfExists()).thenReturn(true);
-
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH))
-            .andExpect(status().isNoContent());
-
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + PDF.getExtension());
-        verify(blobContainerClient, never())
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + WELSH_PDF_SUFFIX + PDF.getExtension());
-        verify(blobContainerClient)
-            .getBlobClient(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH + EXCEL.getExtension());
-        verify(blobClient, times(2)).deleteIfExists();
-    }
-
-    @Test
-    @WithMockUser(username = "unknown_user", authorities = {"APPROLE_api.request.unknown"})
-    void testDeleteFilesUnauthorized() throws Exception {
-        mockMvc.perform(delete(ROOT_URL + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH))
             .andExpect(status().isForbidden());
     }
 

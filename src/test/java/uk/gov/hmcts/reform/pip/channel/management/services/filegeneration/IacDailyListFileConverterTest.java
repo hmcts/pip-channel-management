@@ -58,7 +58,7 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .contains(
                 "List for 02 October 2022",
-                "Last updated 20 October 2022 at 9pm"
+                "Last updated 31 August 2022 at 11am"
             );
 
         softly.assertThat(doc.getElementsByTag("section").get(0).getElementsByTag("p").get(0))
@@ -81,11 +81,11 @@ class IacDailyListFileConverterTest {
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
-            .isEqualTo("Court Room A, Before Judge Test Name, Magistrate Test Name");
+            .isEqualTo("Room 1, Before Judge Test Name");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__head").get(0).getElementsByTag("th"))
             .as("Incorrect table headers")
-            .hasSize(7)
+            .hasSize(21)
             .extracting(Element::text)
             .containsExactly("Start Time",
                              "Case Ref",
@@ -99,9 +99,9 @@ class IacDailyListFileConverterTest {
             .as("Incorrect table rows")
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:00pm",
+            .contains("11:30am",
                       "12341234 [2 of 3]",
-                      "Surname Rep: Mr Individual Forenames Individual Middlename Individual Surname",
+                      "Mr Individual Forenames Individual Middlename Individual Surname Rep: Test Name",
                       "Authority Surname",
                       "French",
                       "Teams, Attended",

@@ -6,8 +6,8 @@
     <cve>CVE-2023-36052</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.7.0.jar]]></notes>
-    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.7.0</packageUrl>
+    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.8.0.jar]]></notes>
+    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.8.0</packageUrl>
     <cve>CVE-2021-42306</cve>
   </suppress>
   <suppress>
@@ -16,12 +16,12 @@
     <cve>CVE-2023-35116</cve>
   </suppress>
   <suppress>
-    <notes>Already on latest version of thymeleaf</notes>
-    <cve>CVE-2023-38286</cve>
-  </suppress>
-  <suppress>
     <notes><![CDATA[file name: azure-identity-1.10.0.jar]]></notes>
     <packageUrl regex="true">^pkg:maven/com\.azure/azure\-identity@.*$</packageUrl>
     <cve>CVE-2023-36415</cve>
+  </suppress>
+  <suppress>
+    <notes>Vulnerability across multiple springframework dependencies</notes>
+    <cve>CVE-2024-22233</cve>
   </suppress>
 </suppressions>

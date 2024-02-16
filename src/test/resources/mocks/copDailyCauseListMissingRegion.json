@@ -6,9 +6,7 @@
     "region": {
       "regionalJOH": [
         {
-          "johNameSurname": "Firstname Surname",
-          "johTitle": "Mr",
-          "johKnownAs": "Judge"
+          "johKnownAs": "Judge KnownAs Regional"
         }
       ]
     },
@@ -64,7 +62,7 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   }
                 ]
@@ -94,7 +92,7 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   }
                 ]
@@ -146,11 +144,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs 2",
                     "isPresiding": false
                   }
                 ]
@@ -180,7 +178,7 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Crown Judge",
+                    "johKnownAs": "Judge KnownAs Presiding",
                     "isPresiding": true
                   }
                 ]
