@@ -29,6 +29,7 @@ public final class SscsListHelper {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
+    private static final String CASE = "case";
     private static final String SESSION_CHANNEL = "sessionChannel";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
@@ -92,7 +93,20 @@ public final class SscsListHelper {
         Iterator<JsonNode> nodeIterator = node.get(HEARING).elements();
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
-            Hearing currentHearing = hearingBuilder(currentHearingNode);
+            Hearing currentHearing = new Hearing();
+            if (currentHearingNode.has(CASE)) {
+                Iterator<JsonNode> caseIterator = currentHearingNode.get(CASE).elements();
+                while (caseIterator.hasNext()) {
+                    JsonNode currentCaseNode = caseIterator.next();
+                    if (currentCaseNode.has(PARTY)) {
+                        currentHearing = hearingBuilder(currentCaseNode);
+                    } else {
+                        currentHearing = hearingBuilder(currentHearingNode);
+                    }
+                    currentHearing.setRespondent(formatRespondent(currentHearingNode, currentCaseNode));
+                    currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", currentHearingNode));
+                }
+            }
             currentHearing.setHearingTime(node.get("time").asText());
             listOfHearings.add(currentHearing);
             currentHearing.setJudiciary(sitting.getJudiciary());
@@ -126,13 +140,14 @@ public final class SscsListHelper {
         PartyRoleHelper.findAndManipulatePartyInformation(hearingNode, false);
         currentHearing.setAppellant(hearingNode.get(APPLICANT).asText());
         currentHearing.setAppellantRepresentative(hearingNode.get(APPLICANT_REPRESENTATIVE).asText());
-        currentHearing.setRespondent(formatRespondent(hearingNode));
-        currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
     }
 
-    private static String formatRespondent(JsonNode hearingNode) {
+    private static String formatRespondent(JsonNode hearingNode, JsonNode caseNode) {
         String informants = dealWithInformants(hearingNode);
+        if (informants.isBlank()) {
+            informants = getPartyProsecutors(caseNode);
+        }
         if (informants.isBlank()) {
             return getPartyProsecutors(hearingNode);
         }
@@ -142,17 +157,20 @@ public final class SscsListHelper {
     private static String getPartyProsecutors(JsonNode hearingNode) {
         List<String> prosecutors = new ArrayList<>();
 
-        for (JsonNode party : hearingNode.get(PARTY)) {
-            String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
-            if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
-                String prosecutor = GeneralHelper.findAndReturnNodeText(
-                    party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
-                );
-                if (!prosecutor.isBlank()) {
-                    prosecutors.add(prosecutor);
+        if (hearingNode.has(PARTY)) {
+            for (JsonNode party : hearingNode.get(PARTY)) {
+                String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
+                if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
+                    String prosecutor = GeneralHelper.findAndReturnNodeText(
+                        party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
+                    );
+                    if (!prosecutor.isBlank()) {
+                        prosecutors.add(prosecutor);
+                    }
                 }
             }
         }
+
         return String.join(DELIMITER, prosecutors);
     }
 
