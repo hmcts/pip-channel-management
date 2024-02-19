@@ -122,13 +122,13 @@ public final class PartyRoleHelper {
         return "";
     }
 
-    public static void handleParties(JsonNode hearing) {
+    public static void handleParties(JsonNode node) {
         List<String> defendants = new ArrayList<>();
         List<String> defendantRepresentatives = new ArrayList<>();
         List<String> prosecutingAuthorities = new ArrayList<>();
 
-        if (hearing.has(PARTY)) {
-            hearing.get(PARTY).forEach(party -> {
+        if (node.has(PARTY)) {
+            node.get(PARTY).forEach(party -> {
                 if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                     switch (party.get(PARTY_ROLE).asText()) {
                         case "DEFENDANT" ->
@@ -143,10 +143,10 @@ public final class PartyRoleHelper {
             });
         }
 
-        ObjectNode hearingObj = (ObjectNode) hearing;
-        hearingObj.put(DEFENDANT, String.join(DELIMITER, defendants));
-        hearingObj.put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
-        hearingObj.put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
+        ObjectNode nodeObj = (ObjectNode) node;
+        nodeObj.put(DEFENDANT, String.join(DELIMITER, defendants));
+        nodeObj.put(DEFENDANT_REPRESENTATIVE, String.join(DELIMITER, defendantRepresentatives));
+        nodeObj.put(PROSECUTING_AUTHORITY, String.join(DELIMITER, prosecutingAuthorities));
     }
 
     public static String createOrganisationDetails(JsonNode party) {

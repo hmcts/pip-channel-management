@@ -78,7 +78,7 @@ public class ListConversionFactory {
         Map.entry(SJP_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
                                           new SjpPressListSummaryConverter())),
         Map.entry(SJP_DELTA_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
-                                          new SjpPressListSummaryConverter())),
+                                                new SjpPressListSummaryConverter())),
         Map.entry(CROWN_DAILY_LIST, Pair.of(new CrownDailyListFileConverter(),
                                             new CrownDailyListSummaryConverter())),
         Map.entry(CROWN_FIRM_LIST, Pair.of(new CrownFirmListFileConverter(),
@@ -112,7 +112,6 @@ public class ListConversionFactory {
         Map.entry(ET_FORTNIGHTLY_PRESS_LIST, Pair.of(new EtFortnightlyPressListFileConverter(),
                                                      new EtFortnightlyPressListSummaryConverter())),
         Map.entry(OPA_PUBLIC_LIST, Pair.of(new OpaPublicListFileConverter(), new OpaPublicListSummaryConverter())),
-
         Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter())),
         Map.entry(OPA_RESULTS, Pair.of(new OpaResultsFileConverter(), new OpaResultsSummaryConverter()))
     );

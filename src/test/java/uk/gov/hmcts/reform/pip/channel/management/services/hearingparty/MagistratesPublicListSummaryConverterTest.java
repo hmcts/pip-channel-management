@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryConverter;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -25,7 +26,7 @@ class MagistratesPublicListSummaryConverterTest {
     void testMagistratesPublicListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
-            "src/test/resources/mocks/",
+            "src/test/resources/mocks/hearingparty/",
             "magistratesPublicList.json"
                      )), writer,
                      Charset.defaultCharset()
@@ -46,7 +47,7 @@ class MagistratesPublicListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Surname 1, Forename 1");
+            .contains("Defendant_SN, Defendant_FN");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")

@@ -45,6 +45,44 @@ public final class CrownWarnedListHelper {
                                                                              "dd/MM/yyyy");
                         sitting.get("hearing").forEach(hearing -> {
                             String listNote = GeneralHelper.findAndReturnNodeText(hearing, "listNote");
+                            List<CrownWarnedList> rows = new ArrayList<>();
+                            hearing.get("case").forEach(hearingCase -> {
+                                PartyRoleHelper.handleParties(hearingCase);
+                                CaseHelper.formatLinkedCases(hearingCase);
+                                rows.add(new CrownWarnedList(
+                                    hearingCase.get("caseNumber").asText(),
+                                    hearingCase.get(DEFENDANT).asText(),
+                                    hearingDate,
+                                    hearingCase.get(DEFENDANT_REPRESENTATIVE).asText(),
+                                    hearingCase.get(PROSECUTING_AUTHORITY).asText(),
+                                    hearingCase.get("formattedLinkedCases").asText(),
+                                    listNote
+                                ));
+                            });
+                            result.computeIfAbsent(hearing.get("hearingType").asText(), x -> new ArrayList<>())
+                                .addAll(rows);
+                        });
+                    })
+                )
+            )
+        );
+
+        return sort(result);
+    }
+
+    @Deprecated
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
+    public static Map<String, List<CrownWarnedList>> processRawListDataV1(JsonNode data, Language language) {
+        Map<String, List<CrownWarnedList>> result = new LinkedHashMap<>();
+        data.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(sitting -> {
+                        String hearingDate = DateHelper.formatTimeStampToBst(sitting.get("sittingStart").asText(),
+                                                                             language, false, false,
+                                                                             "dd/MM/yyyy");
+                        sitting.get("hearing").forEach(hearing -> {
+                            String listNote = GeneralHelper.findAndReturnNodeText(hearing, "listNote");
                             PartyRoleHelper.handleParties(hearing);
                             List<CrownWarnedList> rows = new ArrayList<>();
                             hearing.get("case").forEach(hearingCase -> {

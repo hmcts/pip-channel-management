@@ -14,18 +14,61 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
         CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
-        CrownFirmListHelper.crownFirmListFormatted(payload);
+        if (GeneralHelper.hearingHasParty(payload)) {
+            CrownFirmListHelper.crownFirmListFormattedV1(payload, Language.ENGLISH);
+            CrownFirmListHelper.splitByCourtAndDateV1(payload);
+            return this.processCrownFirmListV1(payload);
+        }
+        CrownFirmListHelper.crownFirmListFormatted(payload, Language.ENGLISH);
         CrownFirmListHelper.splitByCourtAndDate(payload);
         return this.processCrownFirmList(payload);
     }
 
     private String processCrownFirmList(JsonNode node) {
         StringBuilder output = new StringBuilder();
-        node.get("courtListsByDate").forEach(courtLists ->
-            courtLists.forEach(courtList ->
-                courtList.get("courtRooms").forEach(courtRoom ->
-                    courtRoom.get("hearings").forEach(hearings ->
-                        hearings.forEach(hearing -> {
+        node.get("courtListsByDate").forEach(
+            courtLists -> courtLists.forEach(
+                courtList -> courtList.get("courtRooms").forEach(
+                    courtRoom -> courtRoom.get("hearings").forEach(
+                        hearings -> hearings.forEach(
+                            hearing -> hearing.get("case").forEach(hearingCase -> {
+                                output.append('\n');
+                                GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
+                                                                    hearingCase, "sittingAt");
+                                GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
+                                                                    hearingCase, "caseReference");
+                                GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
+                                                                    hearingCase, "defendant");
+                                GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
+                                                                    hearingCase, "hearingType");
+                                output.append("\nDuration - ")
+                                    .append(CaseHelper.appendCaseSequenceIndicator(
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, "formattedDuration"),
+                                        GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+                                    ));
+
+                                GeneralHelper.appendToStringBuilder(output, "Representative - ",
+                                                                    hearingCase, "defendantRepresentative");
+                                GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
+                                                                    hearingCase, "prosecutingAuthority");
+                                checkLinkedCasesAndListingNotes(output, hearingCase);
+                            })
+                        )
+                    )
+                )
+            )
+        );
+        return output.toString();
+    }
+
+    @Deprecated
+    private String processCrownFirmListV1(JsonNode node) {
+        StringBuilder output = new StringBuilder();
+        node.get("courtListsByDate").forEach(
+            courtLists -> courtLists.forEach(
+                courtList -> courtList.get("courtRooms").forEach(
+                    courtRoom -> courtRoom.get("hearings").forEach(
+                        hearings -> hearings.forEach(hearing -> {
                             output.append('\n');
                             GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
                                                                 hearing, "sittingAt");
@@ -47,22 +90,20 @@ public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter 
                                                                 hearing, "prosecutingAuthority");
                             checkLinkedCasesAndListingNotes(output, hearing);
                         })
-                     )
+                    )
                 )
             )
         );
         return output.toString();
     }
 
-    private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode hearingCase) {
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "linkedCases").isEmpty()) {
-            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, "linkedCases");
+    private static void checkLinkedCasesAndListingNotes(StringBuilder output, JsonNode node) {
+        if (!GeneralHelper.findAndReturnNodeText(node, "linkedCases").isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", node, "linkedCases");
         }
 
-        if (!GeneralHelper.findAndReturnNodeText(hearingCase, "listingNotes").isEmpty()) {
-            GeneralHelper.appendToStringBuilder(output, "Listing Notes - ",
-                                                hearingCase, "listingNotes"
-            );
+        if (!GeneralHelper.findAndReturnNodeText(node, "listingNotes").isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", node, "listingNotes");
         }
     }
 }

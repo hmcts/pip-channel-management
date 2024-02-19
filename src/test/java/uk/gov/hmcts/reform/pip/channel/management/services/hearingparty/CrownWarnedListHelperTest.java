@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWarnedList;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ class CrownWarnedListHelperTest {
     @BeforeAll
     void setup() throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream(
-            "/mocks/crownWarnedList.json")) {
+            "/mocks/hearingparty/crownWarnedList.json")) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             rawListJson = new ObjectMapper().readTree(inputRaw);
         }
@@ -52,7 +53,7 @@ class CrownWarnedListHelperTest {
             )
         );
 
-        assertThat(CrownWarnedListHelper.processRawListData(rawListJson, Language.ENGLISH))
+        assertThat(CrownWarnedListHelper.processRawListDataV1(rawListJson, Language.ENGLISH))
             .as(HEARING_TYPE_MESSAGE)
             .hasSize(6)
             .extracting(r -> r.keySet())
@@ -61,8 +62,7 @@ class CrownWarnedListHelperTest {
 
     @Test
     void testTableRowCountForEachHearingType() {
-        List<List<CrownWarnedList>> values = CrownWarnedListHelper
-            .processRawListData(rawListJson, Language.ENGLISH)
+        List<List<CrownWarnedList>> values = CrownWarnedListHelper.processRawListDataV1(rawListJson, Language.ENGLISH)
             .values()
             .stream()
             .toList();
@@ -98,7 +98,7 @@ class CrownWarnedListHelperTest {
 
     @Test
     void testTableRowValuesForFirstHearingType() {
-        List<CrownWarnedList> rows = CrownWarnedListHelper.processRawListData(rawListJson, Language.ENGLISH)
+        List<CrownWarnedList> rows = CrownWarnedListHelper.processRawListDataV1(rawListJson, Language.ENGLISH)
             .values()
             .stream()
             .toList()
@@ -114,7 +114,7 @@ class CrownWarnedListHelperTest {
                         CrownWarnedList::getLinkedCases,
                         CrownWarnedList::getListingNotes)
             .containsExactly("12345678",
-                             "Surname 1, Forename 1",
+                             "Kelly, Smith",
                              "27/07/2022",
                              "Defendant rep 1",
                              "Prosecutor",

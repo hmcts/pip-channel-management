@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 public final class MagistratesPublicListHelper {
     private static final String COURT_LIST = "courtLists";
@@ -19,19 +22,49 @@ public final class MagistratesPublicListHelper {
     private MagistratesPublicListHelper() {
     }
 
-    public static void manipulatedMagistratesPublicListData(JsonNode artefact) {
+    public static void manipulatedMagistratesPublicListData(JsonNode artefact, Language language) {
         artefact.get(COURT_LIST).forEach(
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get("session").forEach(
-                    session -> session.get("sittings").forEach(sitting -> {
+                courtRoom -> courtRoom.get("session").forEach(session -> {
+                    StringBuilder formattedJudiciary = new StringBuilder();
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
+                    session.get("sittings").forEach(sitting -> {
+                        DateHelper.calculateDuration(sitting, language);
+                        DateHelper.formatStartTime(sitting, "h:mma");
+                        sitting.get("hearing").forEach(hearing -> {
+                            formatCaseInformation(hearing);
+                            formatCaseHtmlTable(hearing);
+                            hearing.get("case").forEach(
+                                hearingCase -> PartyRoleHelper.handleParties(hearingCase)
+                            );
+                        });
+                    });
+                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
+                    CrimeListHelper.formattedCourtRoomName(courtRoom, session);
+                })
+            )
+        );
+    }
+
+    @Deprecated
+    public static void manipulatedMagistratesPublicListDataV1(JsonNode artefact, Language language) {
+        artefact.get(COURT_LIST).forEach(
+            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
+                courtRoom -> courtRoom.get("session").forEach(session -> {
+                    StringBuilder formattedJudiciary = new StringBuilder();
+                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
+                    session.get("sittings").forEach(sitting -> {
+                        DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma");
                         sitting.get("hearing").forEach(hearing -> {
                             PartyRoleHelper.handleParties(hearing);
                             formatCaseInformation(hearing);
                             formatCaseHtmlTable(hearing);
                         });
-                    })
-                )
+                    });
+                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
+                    CrimeListHelper.formattedCourtRoomName(courtRoom, session);
+                })
             )
         );
     }

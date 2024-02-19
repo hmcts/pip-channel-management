@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -50,10 +49,8 @@ class CrimeListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethod() {
-        CommonListHelper.manipulatedListData(inputJsonCrownDailyList, Language.ENGLISH, false);
-        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList);
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
         CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
-        CrimeListHelper.formattedCourtRoomName(inputJsonCrownDailyList);
 
         assertEquals("1: Judge KnownAs, Judge KnownAs 2", inputJsonCrownDailyList.get(COURT_LISTS)
                          .get(0).get(COURT_HOUSE).get(COURT_ROOM).get(0).get(SESSION).get(0)
