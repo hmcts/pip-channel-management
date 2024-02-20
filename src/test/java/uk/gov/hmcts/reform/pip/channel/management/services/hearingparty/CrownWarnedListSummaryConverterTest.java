@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ class CrownWarnedListSummaryConverterTest {
     void testCrownWarnedListSummary() throws IOException {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream("mocks/crownWarnedList.json")) {
+            .getResourceAsStream("mocks/hearingparty/crownWarnedList.json")) {
             JsonNode payload = new ObjectMapper().readTree(new String(mockFile.readAllBytes()));
             output = new ListConversionFactory().getArtefactSummaryConverter(ListType.CROWN_WARNED_LIST)
                 .convert(payload);
@@ -35,7 +35,7 @@ class CrownWarnedListSummaryConverterTest {
 
         softly.assertThat(output)
             .as("Defendant does not match")
-            .contains("Defendant Name(s): Surname 1, Forename 1");
+            .contains("Defendant Name(s): Kelly, Smith");
 
         softly.assertThat(output)
             .as("Hearing date does not match")

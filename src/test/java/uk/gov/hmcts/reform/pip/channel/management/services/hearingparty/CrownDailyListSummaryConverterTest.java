@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,31 +8,33 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryConverter;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MagistratesPublicListSummaryConverterTest {
+class CrownDailyListSummaryConverterTest {
     @Autowired
-    MagistratesPublicListSummaryConverter magistratesPublicList;
+    CrownDailyListSummaryConverter crownDailyList;
 
     @Test
-    void testMagistratesPublicListTemplate() throws IOException {
+    void testCrownDailyListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
-            "src/test/resources/mocks/",
-            "magistratesPublicList.json"
+            "src/test/resources/mocks/hearingparty/",
+            "crownDailyList.json"
                      )), writer,
                      Charset.defaultCharset()
         );
 
         JsonNode payload = new ObjectMapper().readTree(writer.toString());
-        String emailOutput = magistratesPublicList.convert(payload);
+        String emailOutput = crownDailyList.convert(payload);
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -46,7 +48,7 @@ class MagistratesPublicListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Surname 1, Forename 1");
+            .contains("Defendant_SN, Defendant_FN");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
@@ -59,6 +61,18 @@ class MagistratesPublicListSummaryConverterTest {
         softly.assertThat(emailOutput)
             .as("incorrect prosecuting authority found")
             .contains("Pro_Auth");
+
+        softly.assertThat(emailOutput)
+            .as("incorrect reporting restriction detail found")
+            .contains("This is a reporting restriction detail, This is another reporting restriction detail");
+
+        softly.assertThat(Pattern.compile("Reporting Restriction - ").matcher(emailOutput).results().count())
+            .as("incorrect number of reporting restriction detail found")
+            .isEqualTo(2);
+
+        softly.assertThat(emailOutput)
+            .as("incorrect linked cases found")
+            .contains("caseid111, caseid222");
 
         softly.assertThat(emailOutput)
             .as("incorrect listing notes found")

@@ -22,7 +22,7 @@ class CrownFirmListSummaryConverterTest {
     CrownFirmListSummaryConverter crownFirmList;
 
     @Test
-    void testCrownDailyListTemplate() throws IOException {
+    void testCrownFirmListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
                          "src/test/resources/mocks/",
@@ -46,7 +46,7 @@ class CrownFirmListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Cora, Mckinley");
+            .contains("Surname 1, Forename 1");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
@@ -58,7 +58,7 @@ class CrownFirmListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect representative found")
-            .contains("Breakfast Daniel");
+            .contains("Defendant rep 1");
 
         softly.assertThat(emailOutput)
             .as("incorrect prosecuting authority found")

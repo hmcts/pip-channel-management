@@ -195,8 +195,7 @@
     </div>
   </div>
   <div aria-label="Court Lists" class="landscape">
-    <div class="site-header" aria-label="Court Details"
-           th:each="courtList : ${artefact.get('courtLists')}">
+    <div aria-label="Court Details" class="site-header" th:each="courtList : ${artefact.get('courtLists')}">
       <div th:if="${courtList.get('unallocatedCases').asText() == 'false'}">
         <h1 class="govuk-heading-l site-address" tabindex="0"
             th:text="${courtList.get('courtHouse').get('courtHouseName').asText()}"/>
@@ -234,7 +233,12 @@
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${sitting.get('time').asText()}"/>
                           <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('caseNumber').asText()}"/>
-                          <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
+                          <th:block th:if="${partyAtHearingLevel}">
+                            <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('defendant').asText()}"/>
+                          </th:block>
+                          <th:block th:if="${!partyAtHearingLevel}">
+                            <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
+                          </th:block>
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
                           <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
                             <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
@@ -244,7 +248,12 @@
                             <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
                               th:text="${sitting.get('formattedDuration').asText()}"/>
                           </th:block>
-                          <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
+                          <th:block th:if="${partyAtHearingLevel}">
+                            <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
+                          </th:block>
+                          <th:block th:if="${!partyAtHearingLevel}">
+                            <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
+                          </th:block>
                         </tr>
                         <span th:if="${case.get('combinedReportingRestriction').asText() != ''}">
                           <tr class="govuk-table__row">
@@ -283,12 +292,12 @@
       </div>
       </div>
     <section>
-      <p class="govuk-body govuk-font-14" th:text="${i18n.dataSource + metadata.provenance}"/>
+      <p class="govuk-body" th:text="${i18n.dataSource + metadata.provenance}" />
       <hr/>
-      <p th:text="${i18n.bottomLegal1}" style="font-family: 'openSans'; font-size: 24px;"/>
-      <p th:text="${i18n.bottomLegal2}" style="font-family: 'openSans'; font-size: 24px;"/>
+      <p class="govuk-body" th:text="${i18n.bottomLegal1}" />
+      <p class="govuk-body" th:text="${i18n.bottomLegal2}" />
       <hr/>
-      <p th:text="${i18n.thanks}" style="text-align: center;"/>
+      <p class="govuk-body" th:text="${i18n.thanks}" />
     </section>
   </div>
 </body>

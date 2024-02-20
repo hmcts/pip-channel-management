@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CrownWarnedListFileConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ class CrownWarnedListFileConverterTest {
     @BeforeAll
     void setup() throws IOException {
         language = handleLanguage();
-        try (InputStream inputStream = getClass().getResourceAsStream("/mocks/crownWarnedList.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/mocks/hearingparty/crownWarnedList.json")) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             inputJson = new ObjectMapper().readTree(inputRaw);
         }
@@ -111,7 +112,7 @@ class CrownWarnedListFileConverterTest {
             .hasSize(74)
             .extracting(Element::text)
             .startsWith("12345678",
-                        "Surname 1, Forename 1",
+                        "Kelly, Smith",
                         "27/07/2022",
                         "Defendant rep 1",
                         "Prosecutor",
