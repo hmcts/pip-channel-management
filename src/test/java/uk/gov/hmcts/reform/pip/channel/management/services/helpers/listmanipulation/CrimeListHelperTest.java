@@ -109,7 +109,7 @@ class CrimeListHelperTest {
             .get(SITTINGS).get(0)
             .get(HEARING).get(1)
             .get(CASE).get(0)
-            .get(PARTY).get(0)
+            .get(PARTY).get(1)
             .get(ORGANISATION_DETAILS)
             .get(ORGANISATION_ADDRESS);
 

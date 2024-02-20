@@ -52,7 +52,8 @@ class OpaPressListFileConverterTest {
     private static final Map<String, String> METADATA = Map.of("contentDate", CONTENT_DATE,
                                                                "locationName", LOCATION_NAME,
                                                                "language", ENGLISH,
-                                                               "listType", LIST_TYPE);
+                                                               "listType", LIST_TYPE
+    );
 
     private final OpaPressListFileConverter converter = new OpaPressListFileConverter();
 
@@ -229,7 +230,8 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(heading)
             .as(DEFENDANT_HEADING_MESSAGE)
-            .hasSize(8);
+            .hasSize(11);
+
 
         softly.assertThat(heading.get(0).text())
             .as(DEFENDANT_HEADING_MESSAGE)
@@ -249,13 +251,29 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(heading.get(4).text())
             .as(DEFENDANT_HEADING_MESSAGE)
-            .contains(organisationName);
+            .contains(defendantName);
 
         softly.assertThat(heading.get(5).text())
             .as(DEFENDANT_HEADING_MESSAGE)
-            .contains("Defendant Name: Surname, Forename MiddleName");
+            .contains(defendantName);
 
         softly.assertThat(heading.get(6).text())
+            .as(DEFENDANT_HEADING_MESSAGE)
+            .contains(organisationName);
+
+        softly.assertThat(heading.get(7).text())
+            .as(DEFENDANT_HEADING_MESSAGE)
+            .contains(organisationName);
+
+        softly.assertThat(heading.get(8).text())
+            .as(DEFENDANT_HEADING_MESSAGE)
+            .contains(organisationName);
+
+        softly.assertThat(heading.get(9).text())
+            .as(DEFENDANT_HEADING_MESSAGE)
+            .contains("Defendant Name: Surname, Forename MiddleName");
+
+        softly.assertThat(heading.get(10).text())
             .as(DEFENDANT_HEADING_MESSAGE)
             .contains("Defendant Name: Surname, Forename MiddleName");
 
@@ -379,11 +397,11 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(sheet.getLastRowNum())
             .as("Incorrect row count")
-            .isEqualTo(7);
+            .isEqualTo(11);
 
         softly.assertThat(sheet.getRow(0).getLastCellNum())
             .as("Incorrect column count")
-            .isEqualTo((short)19);
+            .isEqualTo((short) 19);
 
         softly.assertAll();
     }
@@ -541,7 +559,7 @@ class OpaPressListFileConverterTest {
             .as("Incorrect Offence [1] Detail column")
             .isEqualTo("Offence wording 2");
 
-        Row rowWithSecondOffence = sheet.getRow(5);
+        Row rowWithSecondOffence = sheet.getRow(7);
 
         softly.assertThat(rowWithSecondOffence.getCell(13).getStringCellValue())
             .as("Incorrect Offence [2] Title column")
