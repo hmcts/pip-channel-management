@@ -47,7 +47,7 @@ class CrownDailyListSummaryConverterTest {
 
         softly.assertThat(emailOutput)
             .as("incorrect defendant found")
-            .contains("Defendant_SN, Defendant_FN");
+            .contains("Surname 1, Forename 1");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")

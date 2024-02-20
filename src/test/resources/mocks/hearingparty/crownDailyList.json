@@ -41,10 +41,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs"
+                    "johTitle": "Mr",
+                    "johKnownAs": "Firstname1 Surname1"
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 2"
+                    "johKnownAs": "Firstname2 Surname2"
                   }
                 ],
                 "sittings": [
@@ -72,41 +73,26 @@
                             "reportingRestrictionDetail": [
                               "This is a reporting restriction detail",
                               "This is another reporting restriction detail"
-                            ],
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "Pro_Auth"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualForenames":"Forename 1",
-                                  "individualSurname":"Surname 1"
-                                }
-                              }
                             ]
                           },
                           {
                             "caseName": "A2 Vs B2",
-                            "caseNumber": "112233445",
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "Pro_Auth"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualForenames":"Forename 2",
-                                  "individualSurname":"Surname 2"
-                                }
-                              }
-                            ]
+                            "caseNumber": "112233445"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "PROSECUTING_AUTHORITY",
+                            "organisationDetails": {
+                              "organisationName": "Pro_Auth"
+                            }
+                          },
+                          {
+                            "partyRole":"DEFENDANT",
+                            "individualDetails":{
+                              "individualForenames":"Defendant_FN",
+                              "individualSurname":"Defendant_SN"
+                            }
                           }
                         ],
                         "listingDetails": {
@@ -180,10 +166,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs"
+                    "johTitle": "Mr",
+                    "johKnownAs": "Firstname1 Surname1"
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 2"
+                    "johKnownAs": "Firstname2 Surname2"
                   }
                 ],
                 "sittings": [
@@ -207,39 +194,25 @@
                                 "caseId": "caseid222",
                                 "name": "casename333"
                               }
-                            ],
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "PROSECUTING_AUTHORITY"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualSurname":"Surname 3"
-                                }
-                              }
                             ]
                           },
                           {
                             "caseName": "A2 Vs B2",
-                            "caseNumber": "112233445",
-                            "party": [
-                              {
-                                "partyRole": "PROSECUTING_AUTHORITY",
-                                "organisationDetails": {
-                                  "organisationName": "PROSECUTING_AUTHORITY"
-                                }
-                              },
-                              {
-                                "partyRole":"DEFENDANT",
-                                "individualDetails":{
-                                  "individualSurname":"Surname 4"
-                                }
-                              }
-                            ]
+                            "caseNumber": "112233445"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "PROSECUTING_AUTHORITY",
+                            "organisationDetails": {
+                              "organisationName": "PROSECUTING_AUTHORITY"
+                            }
+                          },
+                          {
+                            "partyRole":"DEFENDANT",
+                            "individualDetails":{
+                              "individualSurname":"DEFENDANT"
+                            }
                           }
                         ],
                         "listingDetails": {
@@ -368,7 +341,8 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs"
+                    "johTitle": "Mr",
+                    "johKnownAs": "Firstname1 Surname1"
                   }
                 ],
                 "sittings": [
@@ -422,7 +396,8 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs 2"
+                    "johTitle": "Mr",
+                    "johKnownAs": "Firstname1 Surname1"
                   }
                 ],
                 "sittings": [

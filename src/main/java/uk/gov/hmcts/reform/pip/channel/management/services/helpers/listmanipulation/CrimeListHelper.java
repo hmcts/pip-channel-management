@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -16,10 +17,7 @@ import java.util.stream.Collectors;
  *  Magistrates Public List.
  */
 public final class CrimeListHelper {
-    private static final String COURT_LIST = "courtLists";
     private static final String CASE = "case";
-    private static final String COURT_HOUSE = "courtHouse";
-    private static final String COURT_ROOM = "courtRoom";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String LISTING_DETAILS = "listingDetails";
     private static final String LISTING_NOTES = "listingNotes";
@@ -34,27 +32,21 @@ public final class CrimeListHelper {
     private CrimeListHelper() {
     }
 
-    public static void formattedCourtRoomName(JsonNode artefact) {
-        artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get("session").forEach(
-                    session -> {
-                        ObjectNode sessionObj = (ObjectNode) session;
-                        if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
-                            .contains("to be allocated")) {
-                            sessionObj.put(
-                                SESSION_COURT_ROOM,
-                                GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
-                            );
-                        } else {
-                            sessionObj.put(
-                                SESSION_COURT_ROOM,
-                                GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
-                            );
-                        }
-                    })
-            )
-        );
+    public static void formattedCourtRoomName(JsonNode courtRoom, JsonNode session) {
+        ObjectNode sessionObj = (ObjectNode) session;
+        if (GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
+            .toLowerCase(Locale.ENGLISH)
+            .contains("to be allocated")) {
+            sessionObj.put(
+                SESSION_COURT_ROOM,
+                GeneralHelper.findAndReturnNodeText(courtRoom, COURT_ROOM_NAME)
+            );
+        } else {
+            sessionObj.put(
+                SESSION_COURT_ROOM,
+                GeneralHelper.findAndReturnNodeText(session, SESSION_COURT_ROOM)
+            );
+        }
     }
 
     public static void formatCaseInformation(JsonNode hearing) {

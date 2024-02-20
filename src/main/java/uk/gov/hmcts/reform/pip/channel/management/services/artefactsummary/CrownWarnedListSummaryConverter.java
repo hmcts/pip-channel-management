@@ -3,18 +3,26 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWarnedList;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class CrownWarnedListSummaryConverter implements ArtefactSummaryConverter {
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
         StringBuilder output = new StringBuilder(140);
-        CrownWarnedListHelper.processRawListData(payload, Language.ENGLISH)
-            .values()
+
+        Map<String, List<CrownWarnedList>> cases = GeneralHelper.hearingHasParty(payload)
+            ? CrownWarnedListHelper.processRawListDataV1(payload, Language.ENGLISH)
+            : CrownWarnedListHelper.processRawListData(payload, Language.ENGLISH);
+
+        cases.values()
             .stream()
             .flatMap(Collection::stream)
             .forEach(
