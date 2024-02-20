@@ -30,7 +30,7 @@ import java.util.UUID;
 @ApiResponse(responseCode = "401", description = "Invalid access credential")
 @ApiResponse(responseCode = "403", description = "User has not been authorized")
 @IsAdmin
-@SecurityRequirement(name = "Bearer authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class PublicationManagementController {
 
     private static final String NOT_FOUND_DESCRIPTION = "No artefact found";

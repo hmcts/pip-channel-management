@@ -30,7 +30,7 @@ import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
 @ApiResponse(responseCode = "401", description = "Invalid access credential")
 @ApiResponse(responseCode = "403", description = "User has not been authorized")
 @IsAdmin
-@SecurityRequirement(name = "Bearer authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class ChannelManagementController {
 
     private final SubscriberListService subscriberListService;
