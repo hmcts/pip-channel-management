@@ -30,6 +30,7 @@ public final class SscsListHelper {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String SESSION_CHANNEL = "sessionChannel";
+    private static final String CASE = "case";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
     private static final String ORGANISATION_DETAILS = "organisationDetails";
@@ -90,9 +91,22 @@ public final class SscsListHelper {
             sitting.setChannel(sessionChannel);
         }
         Iterator<JsonNode> nodeIterator = node.get(HEARING).elements();
+        Hearing currentHearing = new Hearing();
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
-            Hearing currentHearing = hearingBuilder(currentHearingNode);
+            if (currentHearingNode.has(CASE)) {
+                Iterator<JsonNode> caseIterator = currentHearingNode.get(CASE).elements();
+                while (caseIterator.hasNext()) {
+                    JsonNode currentCaseNode = caseIterator.next();
+                    if (currentCaseNode.has(PARTY)) {
+                        currentHearing = hearingBuilder(currentCaseNode);
+                    } else {
+                        currentHearing = hearingBuilder(currentHearingNode);
+                    }
+                    currentHearing.setRespondent(formatRespondent(currentCaseNode, currentHearingNode));
+                    currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", currentHearingNode));
+                }
+            }
             currentHearing.setHearingTime(node.get("time").asText());
             listOfHearings.add(currentHearing);
             currentHearing.setJudiciary(sitting.getJudiciary());
@@ -106,13 +120,14 @@ public final class SscsListHelper {
         PartyRoleHelper.findAndManipulatePartyInformation(hearingNode, false);
         currentHearing.setAppellant(hearingNode.get(APPLICANT).asText());
         currentHearing.setAppellantRepresentative(hearingNode.get(APPLICANT_REPRESENTATIVE).asText());
-        currentHearing.setRespondent(formatRespondent(hearingNode));
-        currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
     }
 
-    private static String formatRespondent(JsonNode hearingNode) {
+    private static String formatRespondent(JsonNode caseNode, JsonNode hearingNode) {
         String informants = dealWithInformants(hearingNode);
+        if (informants.isBlank()) {
+            informants = getPartyProsecutors(caseNode);
+        }
         if (informants.isBlank()) {
             return getPartyProsecutors(hearingNode);
         }
@@ -122,14 +137,16 @@ public final class SscsListHelper {
     private static String getPartyProsecutors(JsonNode hearingNode) {
         List<String> prosecutors = new ArrayList<>();
 
-        for (JsonNode party : hearingNode.get(PARTY)) {
-            String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
-            if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
-                String prosecutor = GeneralHelper.findAndReturnNodeText(
-                    party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
-                );
-                if (!prosecutor.isBlank()) {
-                    prosecutors.add(prosecutor);
+        if (hearingNode.has(PARTY)) {
+            for (JsonNode party : hearingNode.get(PARTY)) {
+                String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
+                if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
+                    String prosecutor = GeneralHelper.findAndReturnNodeText(
+                        party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
+                    );
+                    if (!prosecutor.isBlank()) {
+                        prosecutors.add(prosecutor);
+                    }
                 }
             }
         }
