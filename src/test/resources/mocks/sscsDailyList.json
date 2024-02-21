@@ -33,7 +33,41 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "12341234"
+                            "caseNumber": "12341234",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Lovekesh"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Hall"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Sausage",
+                                  "individualMiddleName": "Alpha",
+                                  "individualSurname": "Foxtrot",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Superman",
+                                  "individualMiddleName": "X",
+                                  "individualSurname": "Holmes",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "informant": [
@@ -42,40 +76,6 @@
                               "NVQ",
                               "SQA"
                             ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Lovekesh"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Hall"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Sausage",
-                              "individualMiddleName": "Alpha",
-                              "individualSurname": "Foxtrot",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Superman",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Holmes",
-                              "title": "Mr"
-                            }
                           }
                         ]
                       }
@@ -123,41 +123,41 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "TEST-12345"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Kramer"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Smith"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Tom",
-                              "individualMiddleName": "W",
-                              "individualSurname": "Sawyer",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Alpha",
-                              "individualMiddleName": "D",
-                              "individualSurname": "Spaceman",
-                              "title": "Mr"
-                            }
+                            "caseNumber": "TEST-12345",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Kramer"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Smith"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Tom",
+                                  "individualMiddleName": "W",
+                                  "individualSurname": "Sawyer",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Alpha",
+                                  "individualMiddleName": "D",
+                                  "individualSurname": "Spaceman",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
@@ -173,7 +173,41 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "TEST-7658"
+                            "caseNumber": "TEST-7658",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Blackmoor"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Blackmoor2"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "George",
+                                  "individualMiddleName": "Paul",
+                                  "individualSurname": "Lennon",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Ralph",
+                                  "individualMiddleName": "X",
+                                  "individualSurname": "Cohen",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "informant": [
@@ -181,40 +215,6 @@
                             "prosecutionAuthorityRef": [
                               "Prosecuter"
                             ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor2"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "George",
-                              "individualMiddleName": "Paul",
-                              "individualSurname": "Lennon",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Ralph",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Cohen",
-                              "title": "Mr"
-                            }
                           }
                         ]
                       }
@@ -261,53 +261,53 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "TEST-98765"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Henman"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Page"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Troy",
-                              "individualMiddleName": "F",
-                              "individualSurname": "McClure",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Barrister",
-                              "individualMiddleName": "Bending",
-                              "individualSurname": "Rodriguez",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Prosecutor1"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Prosecutor2"
-                            }
+                            "caseNumber": "TEST-98765",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Henman"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Page"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Troy",
+                                  "individualMiddleName": "F",
+                                  "individualSurname": "McClure",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Barrister",
+                                  "individualMiddleName": "Bending",
+                                  "individualSurname": "Rodriguez",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTOR",
+                                "organisationDetails": {
+                                  "organisationName": "Prosecutor1"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTOR",
+                                "organisationDetails": {
+                                  "organisationName": "Prosecutor2"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
@@ -343,7 +343,41 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "TEST-5555"
+                            "caseNumber": "TEST-5555",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Wilson"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Reginald"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Mya",
+                                  "individualMiddleName": "Angelou",
+                                  "individualSurname": "Aguilera",
+                                  "title": "Lady"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Queen",
+                                  "individualMiddleName": "Z",
+                                  "individualSurname": "Latifah",
+                                  "title": "Ms"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "informant": [
@@ -351,40 +385,6 @@
                             "prosecutionAuthorityRef": [
                               "MoJ"
                             ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Wilson"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Reginald"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Mya",
-                              "individualMiddleName": "Angelou",
-                              "individualSurname": "Aguilera",
-                              "title": "Lady"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Queen",
-                              "individualMiddleName": "Z",
-                              "individualSurname": "Latifah",
-                              "title": "Ms"
-                            }
                           }
                         ]
                       }
@@ -415,7 +415,41 @@
                       {
                         "case": [
                           {
-                            "caseNumber": "TEST-33333"
+                            "caseNumber": "TEST-33333",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Breakfast"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Gordon"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rona",
+                                  "individualMiddleName": "Luther",
+                                  "individualSurname": "Wang",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Bruce",
+                                  "individualMiddleName": "L",
+                                  "individualSurname": "Banner",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ],
                         "informant": [
@@ -423,40 +457,6 @@
                             "prosecutionAuthorityRef": [
                               "HMCTS"
                             ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Breakfast"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Gordon"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Rona",
-                              "individualMiddleName": "Luther",
-                              "individualSurname": "Wang",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Bruce",
-                              "individualMiddleName": "L",
-                              "individualSurname": "Banner",
-                              "title": "Mr"
-                            }
                           }
                         ]
                       }
