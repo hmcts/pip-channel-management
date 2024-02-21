@@ -73,7 +73,6 @@
                                 "county": "County",
                                 "postCode": "BB1 1BB"
                               },
-                              "youth": "Youth",
                               "offence": [
                                 {
                                   "offenceTitle": "Offence title 1",
@@ -102,7 +101,6 @@
                                 "county": "County",
                                 "postCode": "BB1 1BB"
                               },
-                              "youth": "Youth",
                               "offence": [
                                 {
                                   "offenceTitle": "Offence title 2",
@@ -125,7 +123,6 @@
                               "individualSurname": "Surname2",
                               "dateOfBirth": "01/01/1985",
                               "age": 38,
-                              "youth": "Youth",
                               "offence": [
                                 {
                                   "offenceTitle": "Offence title 2",
@@ -157,7 +154,6 @@
                                 "town": "Town",
                                 "county": "County"
                               },
-                              "youth": "Youth",
                               "offence": [
                                 {
                                   "offenceTitle": "Offence title 2",
