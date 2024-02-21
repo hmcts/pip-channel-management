@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -25,10 +24,13 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, false);
-        CrownDailyListHelper.manipulatedCrownDailyListData(payload);
+        if (GeneralHelper.hearingHasParty(payload)) {
+            CrownDailyListHelper.manipulatedCrownDailyListDataV1(payload, Language.ENGLISH);
+            CrownDailyListHelper.findUnallocatedCases(payload);
+            return processCrownDailyListV1(payload);
+        }
+        CrownDailyListHelper.manipulatedCrownDailyListData(payload, Language.ENGLISH);
         CrownDailyListHelper.findUnallocatedCases(payload);
-
         return processCrownDailyList(payload);
     }
 
@@ -46,7 +48,7 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
                                 GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
                                                                     hearingCase, "caseNumber");
                                 GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
-                                                                    hearing, "defendant");
+                                                                    hearingCase, "defendant");
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                     hearing, "hearingType");
                                 appendAdditionalListInfo(output, sitting, hearing, hearingCase);
@@ -71,6 +73,63 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
         output.append(formattedDuration);
 
         GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
+                                            hearingCase,"prosecutingAuthority");
+
+        if (!GeneralHelper.findAndReturnNodeText(hearingCase, REPORTING_RESTRICTION_DETAIL).isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Reporting Restriction - ",
+                                                hearingCase, REPORTING_RESTRICTION_DETAIL);
+        }
+
+        if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Linked Cases - ", hearingCase, LINKED_CASES);
+        }
+
+        if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
+            GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", hearing, LISTING_NOTES);
+        }
+    }
+
+    @Deprecated
+    private String processCrownDailyListV1(JsonNode node) {
+        StringBuilder output = new StringBuilder();
+        node.get("courtLists").forEach(
+            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
+                courtRoom -> courtRoom.get("session").forEach(
+                    session -> session.get("sittings").forEach(
+                        sitting -> sitting.get("hearing").forEach(
+                            hearing -> hearing.get("case").forEach(hearingCase -> {
+                                output.append('\n');
+                                GeneralHelper.appendToStringBuilder(output, "Sitting at - ",
+                                                                    sitting, "time");
+                                GeneralHelper.appendToStringBuilder(output, "Case Reference - ",
+                                                                    hearingCase, "caseNumber");
+                                GeneralHelper.appendToStringBuilder(output, "Defendant Name(s) - ",
+                                                                    hearing, "defendant");
+                                GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
+                                                                    hearing, "hearingType");
+                                appendAdditionalListInfoV1(output, sitting, hearing, hearingCase);
+                            })
+                        )
+                    )
+                )
+            )
+        );
+        return output.toString();
+    }
+
+    @Deprecated
+    private void appendAdditionalListInfoV1(StringBuilder output, JsonNode sitting, JsonNode hearing,
+                                            JsonNode hearingCase) {
+        output.append('\n');
+
+        String formattedDuration = "Duration - "
+            + CaseHelper.appendCaseSequenceIndicator(
+            GeneralHelper.findAndReturnNodeText(sitting, "formattedDuration"),
+            GeneralHelper.findAndReturnNodeText(hearingCase, "caseSequenceIndicator")
+        );
+        output.append(formattedDuration);
+
+        GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
                                             hearing,"prosecutingAuthority");
 
         if (!GeneralHelper.findAndReturnNodeText(hearingCase, REPORTING_RESTRICTION_DETAIL).isEmpty()) {
@@ -85,7 +144,5 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
         if (!GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()) {
             GeneralHelper.appendToStringBuilder(output, "Listing Notes - ", hearing, LISTING_NOTES);
         }
-
-
     }
 }

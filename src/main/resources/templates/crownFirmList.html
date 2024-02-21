@@ -227,6 +227,7 @@
               <tbody class="govuk-table__body">
               <th:block th:each="hearings : ${courtRoom.get('hearings')}">
                 <th:block th:each="hearing : ${hearings}">
+                  <th:block th:if="${partyAtHearingLevel}">
                     <tr class="govuk-table__row">
                       <td class="govuk-table__cell no-wrap" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('sittingAt').asText()}"/>
                       <td class="govuk-table__cell" th:classappend="${hearing.get('caseCellBorder').asText()}" th:text="${hearing.get('caseReference').asText()}"/>
@@ -259,6 +260,43 @@
                         </td>
                       </tr>
                     </span>
+                  </th:block>
+                  <th:block th:if="${!partyAtHearingLevel}">
+                    <th:block th:each="case : ${hearing.get('case')}">
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('sittingAt').asText()}"/>
+                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('caseReference').asText()}"/>
+                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
+                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('hearingType').asText()}"/>
+                        <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
+                          <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
+                              th:text="${case.get('formattedDuration').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
+                        </th:block>
+                        <th:block th:if="${case.get('caseSequenceIndicator').asText() == ''}">
+                          <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
+                              th:text="${case.get('formattedDuration').asText()}"/>
+                        </th:block>
+                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendantRepresentative').asText()}"/>
+                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
+                      </tr>
+                      <span th:if="${case.get('linkedCases').asText() != ''}">
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell no-wrap" colspan="6" th:classappend="${case.get('linkedCasesBorder').asText()}">
+                          <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
+                          <span th:text="${case.get('linkedCases').asText()}" />
+                        </td>
+                      </tr>
+                    </span>
+                      <span th:if="${case.get('listingNotes').asText() != ''}">
+                      <tr class="govuk-table__row">
+                        <td class="govuk-table__cell no-wrap" colspan="7">
+                          <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
+                          <span th:text="${case.get('listingNotes').asText()}" />
+                        </td>
+                      </tr>
+                    </span>
+                    </th:block>
+                  </th:block>
                 </th:block>
               </th:block>
               </tbody>
@@ -269,12 +307,12 @@
     </div>
   </div>
   <section>
-    <p class="govuk-body govuk-font-14" th:text="${i18n.dataSource + metadata.provenance}"/>
+    <p class="govuk-body" th:text="${i18n.dataSource + metadata.provenance}" />
     <hr/>
-    <p th:text="${i18n.bottomLegal1}" style="font-family: 'openSans'; font-size: 24px;"/>
-    <p th:text="${i18n.bottomLegal2}" style="font-family: 'openSans'; font-size: 24px;"/>
+    <p class="govuk-body" th:text="${i18n.bottomLegal1}" />
+    <p class="govuk-body" th:text="${i18n.bottomLegal2}" />
     <hr/>
-    <p th:text="${i18n.thanks}" style="text-align: center;"/>
+    <p class="govuk-body" th:text="${i18n.thanks}" />
   </section>
 </div>
 </body>

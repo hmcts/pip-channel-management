@@ -132,11 +132,22 @@ project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 def sonarExclusions = []
 
+// TODO: To be removed once all lists have party field on the case level.
+def sonarDuplicateCodeExclusions = [
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/CrownDailyListSummaryConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/MagistratesPublicListSummaryConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/CrownDailyListFileConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/CrownFirmListFileConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/MagistratesPublicListFileConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/helpers/listmanipulation/CrownFirmListHelper.java"
+]
+
 sonarqube {
   properties {
     property "sonar.projectName", "PIP Channel Management"
     property "sonar.projectKey", "pip-channel-management"
     property "sonar.exclusions", sonarExclusions.join(', ')
+    property "sonar.cpd.exclusions", sonarDuplicateCodeExclusions.join(', ')
   }
 }
 
