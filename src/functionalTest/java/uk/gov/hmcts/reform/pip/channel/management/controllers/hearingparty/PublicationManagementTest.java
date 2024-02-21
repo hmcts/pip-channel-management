@@ -47,6 +47,9 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "84989c64-0ef6-4267-b405-4fb7255ae23d";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "85871ab3-8e53-422a-a3e6-e164c66e1683";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "b872b7e1-4a59-495e-a306-50c47f92e08f";
+    private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "c2939433-dab6-4581-9564-291fa368b3dc";
+    private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
+        = "cccd09d4-c1f9-44c9-874c-1af5a8f61655";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String SYSTEM_HEADER = "x-system";
@@ -76,7 +79,9 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_CROWN_DAILY_LIST), //Crown Daily List
             Arguments.of(ARTEFACT_ID_CROWN_FIRM_LIST), //Crown Firm List
             Arguments.of(ARTEFACT_ID_CROWN_WARNED_LIST), //Crown Warned List
-            Arguments.of(ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST) //Magistrates Public List
+            Arguments.of(ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST), //Magistrates Public List
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
+            Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS) //SSCS Daily List - Additional Hearings
         );
     }
 
@@ -140,6 +145,37 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Prosecuting Authority - Pro_Auth"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins [2 of 3]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Details - Listing details text"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummarySscsDailyList() throws Exception {
+        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SSCS_DAILY_LIST))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(
+            responseContent.contains(
+                "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
+            CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummarySscsDailyListAdditionalHearings() throws Exception {
+        MvcResult response = mockMvc.perform(
+                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(
+            responseContent.contains(
+                "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
+            CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
     @ParameterizedTest
