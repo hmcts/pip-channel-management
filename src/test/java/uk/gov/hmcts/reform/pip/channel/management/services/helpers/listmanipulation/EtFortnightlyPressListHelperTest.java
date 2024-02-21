@@ -79,16 +79,16 @@ class EtFortnightlyPressListHelperTest {
         assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
 
-        assertEquals("", hearing.get("claimant").asText(),
+        assertEquals("", hearing.get(CASE).get(0).get("claimant").asText(),
                      "Unable to find claimant");
 
-        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get(CASE).get(0).get("claimantRepresentative").asText(),
                      "Unable to find claimant representative");
 
-        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
+        assertEquals("Capt. T Test Surname", hearing.get(CASE).get(0).get("respondent").asText(),
                      "Unable to find respondent");
 
-        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get(CASE).get(0).get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
 
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
@@ -126,16 +126,16 @@ class EtFortnightlyPressListHelperTest {
         assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
 
-        assertEquals("", hearing.get("claimant").asText(),
+        assertEquals("", hearing.get(CASE).get(0).get("claimant").asText(),
                      "Unable to find claimant");
 
-        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get(CASE).get(0).get("claimantRepresentative").asText(),
                      "Unable to find claimant representative");
 
-        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
+        assertEquals("Capt. T Test Surname", hearing.get(CASE).get(0).get("respondent").asText(),
                      "Unable to find respondent");
 
-        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get(CASE).get(0).get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
 
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
