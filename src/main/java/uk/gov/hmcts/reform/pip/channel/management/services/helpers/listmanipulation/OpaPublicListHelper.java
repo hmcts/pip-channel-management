@@ -82,19 +82,6 @@ public final class OpaPublicListHelper {
         );
     }
 
-    private static String formatReportingRestriction(JsonNode node) {
-        if (node.has(REPORTING_RESTRICTION_DETAIL)) {
-            List<String> restrictions = new ArrayList<>();
-            node.get(REPORTING_RESTRICTION_DETAIL)
-                .forEach(restriction -> restrictions.add(restriction.asText()));
-
-            return restrictions.stream()
-                .filter(r -> !StringUtils.isBlank(r))
-                .collect(Collectors.joining(DELIMITER));
-        }
-        return "";
-    }
-
     private static List<Defendant> processPartyRoles(JsonNode hearingCase) {
         List<Defendant> defendantInfo = new ArrayList<>();
         hearingCase.get(PARTY).forEach(party -> {
@@ -140,7 +127,9 @@ public final class OpaPublicListHelper {
                 Offence offence = new Offence();
                 offence.setOffenceTitle(GeneralHelper.findAndReturnNodeText(o, OFFENCE_TITLE));
                 offence.setOffenceSection(GeneralHelper.findAndReturnNodeText(o, OFFENCE_SECTION));
-                offence.setOffenceReportingRestriction(formatReportingRestriction(o));
+                offence.setOffenceReportingRestriction(
+                    GeneralHelper.formatNodeArray(o, REPORTING_RESTRICTION_DETAIL, DELIMITER)
+                );
                 offences.add(offence);
             });
         }
