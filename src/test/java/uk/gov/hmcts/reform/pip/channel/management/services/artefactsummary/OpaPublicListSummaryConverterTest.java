@@ -34,7 +34,7 @@ class OpaPublicListSummaryConverterTest {
 
         softly.assertThat(artefactSummary.split(System.lineSeparator()))
             .as("Incorrect output lines")
-            .hasSize(90);
+            .hasSize(60);
 
         softly.assertThat(artefactSummary)
             .as("incorrect name found")

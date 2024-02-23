@@ -51,15 +51,18 @@ public final class OpaPublicListHelper {
             courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                 courtRoom -> courtRoom.get(SESSION).forEach(
                     session -> session.get(SITTINGS).forEach(
-                        sitting -> sitting.get(HEARING).forEach(hearing -> {
-                            if (hearing.has(PARTY)) {
-                                processPartyRoles(hearing).forEach(defendant ->
-                                    hearing.get(CASE).forEach(hearingCase -> {
+                        sitting -> sitting.get(HEARING).forEach(
+                            hearing -> hearing.get(CASE).forEach(hearingCase -> {
+                                if (hearingCase.has("party")) {
+
+                                    processPartyRoles(hearingCase).forEach(defendant -> {
+
                                         CaseInfo caseInfo = buildHearingCase(hearingCase);
                                         rows.add(new OpaPublicList(caseInfo, defendant));
-                                    }));
-                            }
-                        })
+                                    });
+                                }
+                            })
+                        )
                     )
                 )
             )
@@ -79,16 +82,16 @@ public final class OpaPublicListHelper {
         );
     }
 
-    private static List<Defendant> processPartyRoles(JsonNode hearing) {
+    private static List<Defendant> processPartyRoles(JsonNode hearingCase) {
         List<Defendant> defendantInfo = new ArrayList<>();
-        hearing.get(PARTY).forEach(party -> {
+        hearingCase.get(PARTY).forEach(party -> {
             if (party.has(PARTY_ROLE) && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
                 Defendant defendant = new Defendant();
                 processDefendant(party, defendant);
                 defendantInfo.add(defendant);
             }
         });
-        defendantInfo.forEach(d -> d.setProsecutor(OpaPressListHelper.processProsecutor(hearing)));
+        defendantInfo.forEach(d -> d.setProsecutor(OpaPressListHelper.processProsecutor(hearingCase)));
         return defendantInfo;
     }
 
