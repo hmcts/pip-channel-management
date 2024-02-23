@@ -45,11 +45,11 @@ class SscsDailyListArtefactSummaryConverterTest {
 
         softly.assertThat(output)
             .as("Informant does not match")
-            .contains("Prosecutor: NVQ, SQA");
+            .contains("FTA/Respondent: NVQ, SQA");
 
         softly.assertThat(output)
-            .as("Party prosecutor does not match")
-            .contains("Prosecutor: Prosecutor1, Prosecutor2");
+            .as("Respondent does not match")
+            .contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2");
 
         softly.assertThat(output)
             .as("Panel does not match")

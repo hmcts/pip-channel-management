@@ -52,28 +52,12 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Hall"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
                               "individualForenames": "Sausage",
                               "individualMiddleName": "Alpha",
                               "individualSurname": "Foxtrot",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Superman",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Holmes",
                               "title": "Mr"
                             }
                           }
@@ -134,28 +118,12 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Smith"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
                               "individualForenames": "Tom",
                               "individualMiddleName": "W",
                               "individualSurname": "Sawyer",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Alpha",
-                              "individualMiddleName": "D",
-                              "individualSurname": "Spaceman",
                               "title": "Mr"
                             }
                           }
@@ -191,28 +159,12 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor2"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
                               "individualForenames": "George",
                               "individualMiddleName": "Paul",
                               "individualSurname": "Lennon",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Ralph",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Cohen",
                               "title": "Mr"
                             }
                           }
@@ -272,12 +224,6 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Page"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
@@ -288,25 +234,15 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Barrister",
-                              "individualMiddleName": "Bending",
-                              "individualSurname": "Rodriguez",
-                              "title": "Mr"
+                            "partyRole": "RESPONDENT",
+                            "organisationDetails": {
+                              "organisationName": "Respondent Organisation"
                             }
                           },
                           {
-                            "partyRole": "PROSECUTOR",
+                            "partyRole": "RESPONDENT",
                             "organisationDetails": {
-                              "organisationName": "Prosecutor1"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Prosecutor2"
+                              "organisationName": "Respondent Organisation 2"
                             }
                           }
                         ]
@@ -361,12 +297,6 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Reginald"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
@@ -374,16 +304,6 @@
                               "individualMiddleName": "Angelou",
                               "individualSurname": "Aguilera",
                               "title": "Lady"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Queen",
-                              "individualMiddleName": "Z",
-                              "individualSurname": "Latifah",
-                              "title": "Ms"
                             }
                           }
                         ]
@@ -433,28 +353,12 @@
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Gordon"
-                            }
-                          },
-                          {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
                               "individualForenames": "Rona",
                               "individualMiddleName": "Luther",
                               "individualSurname": "Wang",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Bruce",
-                              "individualMiddleName": "L",
-                              "individualSurname": "Banner",
                               "title": "Mr"
                             }
                           }
