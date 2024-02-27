@@ -101,7 +101,7 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .contains("9:00pm",
                       "12341234 [2 of 3]",
-                      "Surname Rep: Mr Individual Forenames Individual Middlename Individual Surname",
+                      "Surname Rep: Mr Individual Forenames Individual Surname",
                       "Authority Surname",
                       "French",
                       "Teams, Attended",
@@ -156,7 +156,7 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .contains("9:20pm",
                       "12341234 [2 of 3]",
-                      "Surname Rep: Mr Individual Forenames Individual Middlename Individual Surname",
+                      "Surname Rep: Mr Individual Forenames Individual Surname",
                       "Authority Surname",
                       "",
                       "Teams, Attended",

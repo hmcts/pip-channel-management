@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,10 @@ import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
     + "ensure they are handled correctly whether they are email-based or API-based subscribers (determined by their "
     + "Channel attribute")
 @RequestMapping("/channel")
+@ApiResponse(responseCode = "401", description = "Invalid access credential")
+@ApiResponse(responseCode = "403", description = "User has not been authorized")
 @IsAdmin
+@SecurityRequirement(name = "bearerAuth")
 public class ChannelManagementController {
 
     private final SubscriberListService subscriberListService;
