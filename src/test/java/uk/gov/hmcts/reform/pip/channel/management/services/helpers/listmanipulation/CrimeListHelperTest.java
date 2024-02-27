@@ -27,6 +27,7 @@ class CrimeListHelperTest {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
+    private static final String CASE = "case";
     private static final String PARTY = "party";
     private static final String INDIVIDUAL_DETAILS = "individualDetails";
     private static final String ORGANISATION_DETAILS = "organisationDetails";
@@ -80,6 +81,7 @@ class CrimeListHelperTest {
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
             .get(HEARING).get(0)
+            .get(CASE).get(0)
             .get(PARTY).get(0)
             .get(INDIVIDUAL_DETAILS)
             .get(ADDRESS);
@@ -103,6 +105,7 @@ class CrimeListHelperTest {
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
             .get(HEARING).get(1)
+            .get(CASE).get(0)
             .get(PARTY).get(1)
             .get(ORGANISATION_DETAILS)
             .get(ORGANISATION_ADDRESS);
@@ -126,6 +129,7 @@ class CrimeListHelperTest {
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
             .get(HEARING).get(0)
+            .get(CASE).get(0)
             .get(PARTY).get(0)
             .get(INDIVIDUAL_DETAILS)
             .get(ADDRESS);
