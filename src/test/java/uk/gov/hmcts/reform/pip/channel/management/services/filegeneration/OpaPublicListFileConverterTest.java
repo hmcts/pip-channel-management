@@ -139,7 +139,7 @@ class OpaPublicListFileConverterTest {
 
         softly.assertThat(document.getElementsByClass(BODY_CLASS).get(6).text())
             .as("Case count summary does not match")
-            .isEqualTo("List containing 12 case(s) generated on 13 February 2022 at 9:30am");
+            .isEqualTo("List containing 8 case(s) generated on 13 February 2022 at 9:30am");
 
         softly.assertAll();
     }
@@ -190,7 +190,7 @@ class OpaPublicListFileConverterTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(data)
             .as(TABLE_DATA_MESSAGE)
-            .hasSize(72);
+            .hasSize(48);
 
         softly.assertThat(data.get(0).text())
             .as(TABLE_DATA_MESSAGE)
@@ -227,16 +227,16 @@ class OpaPublicListFileConverterTest {
         Elements data = document.getElementsByTag("td");
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(data.get(8).text())
+        softly.assertThat(data.get(2).text())
             .as(TABLE_DATA_MESSAGE)
             .contains("Offence title - Offence section "
                           + "Reporting Restriction - Offence Reporting Restriction detail");
 
-        softly.assertThat(data.get(20).text())
+        softly.assertThat(data.get(8).text())
             .as(TABLE_DATA_MESSAGE)
             .contains("Offence title 2 - Offence section 2");
 
-        softly.assertThat(data.get(38).text())
+        softly.assertThat(data.get(14).text())
             .as(TABLE_DATA_MESSAGE)
             .contains("Organisation Offence Title - Organisation Offence Section "
                           + "Reporting Restriction - Offence Reporting Restriction detail "
@@ -244,7 +244,7 @@ class OpaPublicListFileConverterTest {
                           + "Organisation Offence Title 3 - Organisation Offence Section 3 "
                           + "Reporting Restriction - Offence Reporting Restriction detail 3");
 
-        softly.assertThat(data.get(56).text())
+        softly.assertThat(data.get(20).text())
             .as(TABLE_DATA_MESSAGE)
             .contains("");
 
