@@ -36,14 +36,6 @@
                             "caseNumber": "12341234"
                           }
                         ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "NVQ",
-                              "SQA"
-                            ]
-                          }
-                        ],
                         "party": [
                           {
                             "partyRole": "APPLICANT_PETITIONER",
@@ -174,13 +166,6 @@
                         "case": [
                           {
                             "caseNumber": "TEST-7658"
-                          }
-                        ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "Prosecuter"
-                            ]
                           }
                         ],
                         "party": [
@@ -346,13 +331,6 @@
                             "caseNumber": "TEST-5555"
                           }
                         ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "MoJ"
-                            ]
-                          }
-                        ],
                         "party": [
                           {
                             "partyRole": "APPLICANT_PETITIONER",
@@ -416,13 +394,6 @@
                         "case": [
                           {
                             "caseNumber": "TEST-33333"
-                          }
-                        ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "HMCTS"
-                            ]
                           }
                         ],
                         "party": [

@@ -44,10 +44,6 @@ class SscsDailyListArtefactSummaryConverterTest {
             .contains("Appellant: Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
 
         softly.assertThat(output)
-            .as("Informant does not match")
-            .contains("Prosecutor: NVQ, SQA");
-
-        softly.assertThat(output)
             .as("Party prosecutor does not match")
             .contains("Prosecutor: Prosecutor1, Prosecutor2");
 

@@ -29,7 +29,7 @@ class SscsListHelperTest {
     private static JsonNode inputCourtHouseWithProsecutors;
 
     @BeforeAll
-    public static void setup()  throws IOException {
+    public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/sscsDailyList.json")), writer,
                      Charset.defaultCharset()
@@ -59,7 +59,7 @@ class SscsListHelperTest {
             .isEqualTo("a@b.com");
 
         softly.assertThat(courtHouse.getListOfCourtRooms())
-                .hasSize(1);
+            .hasSize(1);
 
         softly.assertAll();
     }
@@ -138,10 +138,6 @@ class SscsListHelperTest {
         softly.assertThat(hearing.getAppellantRepresentative())
             .as("Appellant representative does not match")
             .isEqualTo("Mr Sausage Alpha Foxtrot");
-
-        softly.assertThat(hearing.getRespondent())
-            .as("Respondent does not match")
-            .isEqualTo("NVQ, SQA");
 
         softly.assertThat(hearing.getJudiciary())
             .as("Judiciary does not match")
