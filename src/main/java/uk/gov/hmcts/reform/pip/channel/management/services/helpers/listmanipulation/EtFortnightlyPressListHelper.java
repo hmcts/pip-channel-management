@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.SittingHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -80,14 +78,12 @@ public final class EtFortnightlyPressListHelper {
                         DateHelper.formatStartTime(sitting, TIME_FORMAT);
                         sitting.get(HEARING).forEach(hearing -> {
                             moveTableColumnValuesToHearing(courtRoom, sitting, (ObjectNode) hearing);
-                            if (hearing.has(CASE)) {
-                                hearing.get(CASE).forEach(hearingCase -> {
-                                    moveTablePartyValuesToCase((ObjectNode) hearingCase, language);
-                                    if (!hearingCase.has("caseSequenceIndicator")) {
-                                        ((ObjectNode)hearingCase).put("caseSequenceIndicator", "");
-                                    }
-                                });
-                            }
+                            hearing.get(CASE).forEach(hearingCase -> {
+                                moveTablePartyValuesToCase((ObjectNode) hearingCase, language);
+                                if (!hearingCase.has("caseSequenceIndicator")) {
+                                    ((ObjectNode)hearingCase).put("caseSequenceIndicator", "");
+                                }
+                            });
                         });
                     })
                 )
@@ -138,11 +134,9 @@ public final class EtFortnightlyPressListHelper {
                                     hearingObj.put(APPLICANT, "");
                                     hearingObj.put(RESPONDENT, "");
                                 }
-                                CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase);
                             })
                         );
                     });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
                 })
             )
         );
