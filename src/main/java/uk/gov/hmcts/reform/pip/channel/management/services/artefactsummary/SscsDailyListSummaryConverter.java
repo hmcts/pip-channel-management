@@ -76,7 +76,7 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         }
 
         return appellant
-            + "\nProsecutor: " + hearing.getRespondent()
+            + "\nFTA/Respondent: " + hearing.getRespondent()
             + "\nPanel: " + hearing.getJudiciary()
             + "\nTribunal type: " + sitting.getChannel();
     }
