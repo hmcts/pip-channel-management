@@ -3,14 +3,12 @@ package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.thymeleaf.context.Context;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtFortnightlyPressListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.FamilyMixedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.CIVIL_AND_FAMILY_DAILY_CAUSE_LIST;
-import static uk.gov.hmcts.reform.pip.model.publication.ListType.ET_FORTNIGHTLY_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 
 public final class CommonListHelper {
@@ -65,8 +63,6 @@ public final class CommonListHelper {
         if (FAMILY_DAILY_CAUSE_LIST.name().equals(listType)
             || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
             FamilyMixedListHelper.manipulatedlistData(artefact, language);
-        } else if (ET_FORTNIGHTLY_PRESS_LIST.name().equals(listType)) {
-            EtFortnightlyPressListHelper.manipulatedListData(artefact, language, initialised);
         } else {
             manipulatedListData(artefact, language, initialised);
         }
