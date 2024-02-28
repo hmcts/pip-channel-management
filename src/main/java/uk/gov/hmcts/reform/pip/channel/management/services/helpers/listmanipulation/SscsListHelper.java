@@ -134,11 +134,11 @@ public final class SscsListHelper {
         return informants;
     }
 
-    private static String getPartyProsecutors(JsonNode hearingNode) {
+    private static String getPartyProsecutors(JsonNode node) {
         List<String> prosecutors = new ArrayList<>();
 
-        if (hearingNode.has(PARTY)) {
-            for (JsonNode party : hearingNode.get(PARTY)) {
+        if (node.has(PARTY)) {
+            for (JsonNode party : node.get(PARTY)) {
                 String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
                 if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
                     String prosecutor = GeneralHelper.findAndReturnNodeText(
