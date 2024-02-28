@@ -88,9 +88,9 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "295179be-2437-45a7-9e3f-691b964f9f65";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
-    private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "a954f6f1-fc82-403b-9a01-4bb11578f08a";
+    private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "c2939433-dab6-4581-9564-291fa368b3dc";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
-        = "c21bf262-d0b5-475e-b0e3-12aa34495469";
+        = "cccd09d4-c1f9-44c9-874c-1af5a8f61655";
     private static final String ARTEFACT_ID_OPA_PRESS_LIST = "f83de894-9245-4d2c-90ef-6e64f49cdabb";
     private static final String ARTEFACT_ID_OPA_PUBLIC_LIST = "23c57521-d3f3-4660-b88b-15245c106fbb";
     private static final String ARTEFACT_ID_OPA_RESULTS = "6f76cb9b-3270-477c-a937-2122b2e599b3";
