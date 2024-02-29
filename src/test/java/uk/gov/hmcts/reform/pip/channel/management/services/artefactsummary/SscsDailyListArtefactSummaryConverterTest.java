@@ -29,7 +29,7 @@ class SscsDailyListArtefactSummaryConverterTest {
 
         softly.assertThat(output.split(System.lineSeparator()))
             .as("Output line count does not match")
-            .hasSize(34);
+            .hasSize(39);
 
         softly.assertThat(output)
             .as("Court house does not match")

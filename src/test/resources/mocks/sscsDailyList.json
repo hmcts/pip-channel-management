@@ -308,6 +308,55 @@
                                 }
                               }
                             ]
+                          },
+                          {
+                            "caseNumber": "TEST-56789",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Henman"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Page"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Troy",
+                                  "individualMiddleName": "F",
+                                  "individualSurname": "McClure",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Barrister",
+                                  "individualMiddleName": "Bending",
+                                  "individualSurname": "Rodriguez",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTOR",
+                                "organisationDetails": {
+                                  "organisationName": "Prosecutor1"
+                                }
+                              },
+                              {
+                                "partyRole": "PROSECUTOR",
+                                "organisationDetails": {
+                                  "organisationName": "Prosecutor2"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }

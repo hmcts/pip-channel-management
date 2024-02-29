@@ -8,6 +8,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Case;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
@@ -119,31 +120,44 @@ class SscsListHelperTest {
 
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(hearing.getHearingTime())
+        softly.assertThat(hearing.getListOfCases())
+            .as("Case count does not match")
+            .hasSize(4);
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testSscsCase() throws JsonProcessingException {
+        Case hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouse)
+            .getListOfCourtRooms().get(0)
+            .getListOfSittings().get(0)
+            .getListOfHearings().get(0)
+            .getListOfCases().get(0);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(hearingCase.getHearingTime())
             .as("Hearing time does not match")
             .isEqualTo("12:30am");
 
-        softly.assertThat(hearing.getAppealRef())
+        softly.assertThat(hearingCase.getAppealRef())
             .as("Appeal reference does not match")
             .isEqualTo("12341234");
 
-        softly.assertThat(hearing.getTribunalType())
-            .as("Tribunal type does not match")
-            .isNull();
-
-        softly.assertThat(hearing.getAppellant())
+        softly.assertThat(hearingCase.getAppellant())
             .as("Appellant does not match")
             .isEqualTo("Lovekesh");
 
-        softly.assertThat(hearing.getAppellantRepresentative())
+        softly.assertThat(hearingCase.getAppellantRepresentative())
             .as("Appellant representative does not match")
             .isEqualTo("Mr Sausage Alpha Foxtrot");
 
-        softly.assertThat(hearing.getRespondent())
+        softly.assertThat(hearingCase.getRespondent())
             .as("Respondent does not match")
             .isEqualTo("NVQ, SQA");
 
-        softly.assertThat(hearing.getJudiciary())
+        softly.assertThat(hearingCase.getJudiciary())
             .as("Judiciary does not match")
             .isEqualTo("Judge KnownAs, Judge KnownAs 2");
 
@@ -152,13 +166,15 @@ class SscsListHelperTest {
 
     @Test
     void testFormatRespondentWithNoInformants() throws JsonProcessingException {
-        Hearing hearing = SscsListHelper.courtHouseBuilder(inputCourtHouseWithProsecutors)
+        Case hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouseWithProsecutors)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
-            .getListOfHearings().get(0);
+            .getListOfHearings().get(0)
+            .getListOfCases().get(0);
 
-        assertThat(hearing.getRespondent())
+        assertThat(hearingCase.getRespondent())
             .as("Party prosecutor does not match")
             .isEqualTo("Prosecutor1, Prosecutor2");
     }
+
 }
