@@ -13,5 +13,5 @@ public class Hearing {
     String appellantRepresentative;
     String respondent;
     String judiciary;
-    List<Case> listOfCases;
+    List<HearingCase> listOfCases;
 }

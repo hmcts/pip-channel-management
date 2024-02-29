@@ -3,7 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdai
 import lombok.Data;
 
 @Data
-public class Case {
+public class HearingCase {
     String appealRef;
     String appellant;
     String appellantRepresentative;

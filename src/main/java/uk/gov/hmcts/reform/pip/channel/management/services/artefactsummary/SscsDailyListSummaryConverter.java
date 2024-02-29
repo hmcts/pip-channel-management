@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Case;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
@@ -41,17 +41,14 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         StringBuilder output = new StringBuilder();
         for (CourtRoom courtRoom : courtRoomList) {
             for (Sitting sitting : courtRoom.getListOfSittings()) {
-                output.append('\n');
                 for (Hearing hearing : sitting.getListOfHearings()) {
-                        Iterator<Case> caseIterator = hearing.getListOfCases().iterator();
-                        while (caseIterator.hasNext()) {
-                            Case hearingCase = caseIterator.next();
-                            output.append(courtRoom.getName()).append(", Time: ").append(hearingCase.getHearingTime());
-                            output.append(caseBuilder(hearingCase, sitting));
-                            if (caseIterator.hasNext()) {
-                                output.append('\n');
-                            }
-                        }
+                    Iterator<HearingCase> caseIterator = hearing.getListOfCases().iterator();
+                    while (caseIterator.hasNext()) {
+                        HearingCase hearingCase = caseIterator.next();
+                        output.append('\n');
+                        output.append(courtRoom.getName()).append(", Time: ").append(hearingCase.getHearingTime());
+                        output.append(caseBuilder(hearingCase, sitting));
+                    }
                 }
             }
         }
@@ -66,7 +63,7 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         return courtHouseList;
     }
 
-    private String caseBuilder(Case hearingCase, Sitting sitting) {
+    private String caseBuilder(HearingCase hearingCase, Sitting sitting) {
         StringBuilder appellant = new StringBuilder(30);
         appellant.append("\n Appellant: ")
             .append(hearingCase.getAppellant());

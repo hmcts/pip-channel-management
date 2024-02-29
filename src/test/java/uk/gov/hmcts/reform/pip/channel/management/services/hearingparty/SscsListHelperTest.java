@@ -8,7 +8,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Case;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
@@ -130,7 +130,7 @@ class SscsListHelperTest {
 
     @Test
     void testSscsCase() throws JsonProcessingException {
-        Case hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouse)
+        HearingCase hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouse)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
             .getListOfHearings().get(0)
@@ -167,7 +167,7 @@ class SscsListHelperTest {
 
     @Test
     void testFormatRespondentWithNoInformants() throws JsonProcessingException {
-        Case hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouseWithProsecutors)
+        HearingCase hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouseWithProsecutors)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
             .getListOfHearings().get(0)

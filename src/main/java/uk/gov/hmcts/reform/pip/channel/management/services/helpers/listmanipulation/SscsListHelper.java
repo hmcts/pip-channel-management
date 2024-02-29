@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Case;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
@@ -83,7 +83,7 @@ public final class SscsListHelper {
         DateHelper.formatStartTime(node, TIME_FORMAT);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
-        List<Case> listOfCases = new ArrayList<>();
+        List<HearingCase> listOfCases = new ArrayList<>();
         if (node.has(CHANNEL)) {
             List<String> channelList = MAPPER.readValue(
                 node.get(CHANNEL).toString(), new TypeReference<>() {
@@ -94,23 +94,23 @@ public final class SscsListHelper {
         }
         Iterator<JsonNode> nodeIterator = node.get(HEARING).elements();
         Hearing currentHearing = new Hearing();
-        Case currentCase;
+        HearingCase currentCase;
         while (nodeIterator.hasNext()) {
             JsonNode currentHearingNode = nodeIterator.next();
             Iterator<JsonNode> caseIterator = currentHearingNode.get(CASE).elements();
-                while (caseIterator.hasNext()) {
-                    JsonNode currentCaseNode = caseIterator.next();
-                    if (currentCaseNode.has(PARTY)) {
-                        currentCase = caseBuilder(currentCaseNode);
-                    } else {
-                        currentCase = caseBuilder(currentHearingNode);
-                    }
-                    currentCase.setRespondent(formatRespondent(currentCaseNode, currentHearingNode));
-                    currentCase.setAppealRef(GeneralHelper.safeGet("caseNumber", currentCaseNode));
-                    currentCase.setHearingTime(node.get("time").asText());
-                    currentCase.setJudiciary(sitting.getJudiciary());
-                    listOfCases.add(currentCase);
+            while (caseIterator.hasNext()) {
+                JsonNode currentCaseNode = caseIterator.next();
+                if (currentCaseNode.has(PARTY)) {
+                    currentCase = caseBuilder(currentCaseNode);
+                } else {
+                    currentCase = caseBuilder(currentHearingNode);
                 }
+                currentCase.setRespondent(formatRespondent(currentCaseNode, currentHearingNode));
+                currentCase.setAppealRef(GeneralHelper.safeGet("caseNumber", currentCaseNode));
+                currentCase.setHearingTime(node.get("time").asText());
+                currentCase.setJudiciary(sitting.getJudiciary());
+                listOfCases.add(currentCase);
+            }
             currentHearing.setListOfCases(listOfCases);
         }
         listOfHearings.add(currentHearing);
@@ -118,8 +118,8 @@ public final class SscsListHelper {
         return sitting;
     }
 
-    private static Case caseBuilder(JsonNode node) {
-        Case currentCase = new Case();
+    private static HearingCase caseBuilder(JsonNode node) {
+        HearingCase currentCase = new HearingCase();
         PartyRoleHelper.findAndManipulatePartyInformation(node, false);
         currentCase.setAppellant(node.get(APPLICANT).asText());
         currentCase.setAppellantRepresentative(node.get(APPLICANT_REPRESENTATIVE).asText());
