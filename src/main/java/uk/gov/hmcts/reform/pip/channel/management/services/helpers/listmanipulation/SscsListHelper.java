@@ -111,14 +111,6 @@ public final class SscsListHelper {
         return currentHearing;
     }
 
-   /* private static String formatRespondent(JsonNode hearingNode) {
-        String informants = dealWithInformants(hearingNode);
-        if (informants.isBlank()) {
-            return getPartyRespondents(hearingNode);
-        }
-        return informants;
-    }*/
-
     private static String getPartyRespondents(JsonNode hearingNode) {
         List<String> respondents = new ArrayList<>();
 
