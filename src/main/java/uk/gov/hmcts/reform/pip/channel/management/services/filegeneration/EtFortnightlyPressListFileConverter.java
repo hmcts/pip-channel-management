@@ -22,7 +22,7 @@ public class EtFortnightlyPressListFileConverter implements FileConverter {
         );
     }
 
-    private Context preprocessArtefactForThymeLeafConverter(
+    public static Context preprocessArtefactForThymeLeafConverter(
         JsonNode artefact, Map<String, String> metadata, Map<String, Object> languageResources) {
         Context context = new Context();
         LocationHelper.formatCourtAddress(artefact, "|", false);
