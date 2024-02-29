@@ -52,7 +52,8 @@ class OpaPressListFileConverterTest {
     private static final Map<String, String> METADATA = Map.of("contentDate", CONTENT_DATE,
                                                                "locationName", LOCATION_NAME,
                                                                "language", ENGLISH,
-                                                               "listType", LIST_TYPE);
+                                                               "listType", LIST_TYPE
+    );
 
     private final OpaPressListFileConverter converter = new OpaPressListFileConverter();
 
@@ -231,6 +232,7 @@ class OpaPressListFileConverterTest {
             .as(DEFENDANT_HEADING_MESSAGE)
             .hasSize(11);
 
+
         softly.assertThat(heading.get(0).text())
             .as(DEFENDANT_HEADING_MESSAGE)
             .contains(defendantName);
@@ -399,7 +401,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(sheet.getRow(0).getLastCellNum())
             .as("Incorrect column count")
-            .isEqualTo((short)19);
+            .isEqualTo((short) 19);
 
         softly.assertAll();
     }
