@@ -2,16 +2,12 @@ package uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdai
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class Hearing {
-    String hearingTime;
+public class Case {
     String appealRef;
-    String tribunalType;
     String appellant;
     String appellantRepresentative;
     String respondent;
+    String hearingTime;
     String judiciary;
-    List<Case> listOfCases;
 }
