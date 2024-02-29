@@ -140,7 +140,6 @@ class SscsListHelperTest {
         softly.assertThat(hearing.getRespondent())
             .as("Respondent does not match")
             .isEqualTo("");
-
         softly.assertThat(hearing.getJudiciary())
             .as("Judiciary does not match")
             .isEqualTo("Judge TestName Presiding, Judge TestName 2");
