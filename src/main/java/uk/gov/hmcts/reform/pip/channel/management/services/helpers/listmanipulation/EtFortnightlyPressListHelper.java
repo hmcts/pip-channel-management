@@ -28,7 +28,7 @@ public final class EtFortnightlyPressListHelper {
     private static final String SESSION = "session";
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
-    private static final String APPLICANT = "applicant";
+    private static final String CLAIMANT = "claimant";
     private static final String RESPONDENT = "respondent";
     private static final String TIME_FORMAT = "h:mma";
     private static final String REP = "rep";
@@ -102,8 +102,8 @@ public final class EtFortnightlyPressListHelper {
     }
 
     public static void moveTablePartyValuesToCase(ObjectNode hearingCase, Map<String, Object> language) {
-        hearingCase.put("claimant",
-                        GeneralHelper.findAndReturnNodeText(hearingCase,"claimant"));
+        hearingCase.put(CLAIMANT,
+                        GeneralHelper.findAndReturnNodeText(hearingCase, CLAIMANT));
         hearingCase.put("claimantRepresentative",
                         language.get(REP) + GeneralHelper.findAndReturnNodeText(hearingCase,
                                                                                 "claimantRepresentative"));
@@ -131,7 +131,7 @@ public final class EtFortnightlyPressListHelper {
                                     PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, initialised);
                                 } else {
                                     ObjectNode hearingObj = (ObjectNode) hearingCase;
-                                    hearingObj.put(APPLICANT, "");
+                                    hearingObj.put(CLAIMANT, "");
                                     hearingObj.put(RESPONDENT, "");
                                 }
                             })
