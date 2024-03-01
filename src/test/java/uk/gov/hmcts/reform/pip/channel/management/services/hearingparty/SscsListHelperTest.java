@@ -8,10 +8,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 
@@ -32,8 +32,8 @@ class SscsListHelperTest {
     @BeforeAll
     public static void setup()  throws IOException {
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/sscsDailyList.json")), writer,
-                     Charset.defaultCharset()
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/sscsDailyList.json")),
+                     writer, Charset.defaultCharset()
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());

@@ -44,8 +44,8 @@ class SscsDailyListFileConverterTest {
     void testSscsDailyList(ListType listType) throws IOException {
         Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/", "sscsDailyList.json")), writer,
-                     Charset.defaultCharset()
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/",
+            "sscsDailyList.json")), writer, Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,

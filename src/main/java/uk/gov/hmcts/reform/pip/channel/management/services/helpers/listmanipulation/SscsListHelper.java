@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
@@ -141,17 +141,17 @@ public final class SscsListHelper {
         List<String> respondents = new ArrayList<>();
 
         if (node.has(PARTY)) {
-          for (JsonNode party : node.get(PARTY)) {
-              String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
-              if (RESPONDENT_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
-                  String respondent = GeneralHelper.findAndReturnNodeText(
-                      party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
-                  );
-                  if (!respondent.isBlank()) {
-                      respondents.add(respondent);
-                  }
-              }
-          }
+            for (JsonNode party : node.get(PARTY)) {
+                String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
+                if (RESPONDENT_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
+                    String respondent = GeneralHelper.findAndReturnNodeText(
+                        party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
+                    );
+                    if (!respondent.isBlank()) {
+                        respondents.add(respondent);
+                    }
+                }
+            }
         }
         return String.join(DELIMITER, respondents);
     }
