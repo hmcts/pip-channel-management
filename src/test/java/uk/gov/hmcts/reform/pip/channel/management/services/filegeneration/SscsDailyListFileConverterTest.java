@@ -78,9 +78,9 @@ class SscsDailyListFileConverterTest {
             .isEqualTo("Please note: There may be 2 hearing lists available for this date. Please make sure "
                            + "you look at both lists to see all hearings happening on this date for this location.");
 
-        assertThat(document.getElementsByTag("h2").get(3).text())
+        assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")
-            .isEqualTo("Slough County Court");
+            .isEqualTo("Test court house name");
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
@@ -91,7 +91,12 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
+            .contains("Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect respondent")
+            .extracting(Element::text)
+            .contains("Respondent Organisation, Respondent Organisation 2");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")
@@ -128,9 +133,9 @@ class SscsDailyListFileConverterTest {
                        .select(".mainHeaderText > h1:nth-child(1)").text())
             .as("incorrect header text").isEqualTo("Nawdd Cymdeithasol a Chynnal Plant");
 
-        assertThat(document.getElementsByTag("h2").get(3).text())
+        assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")
-            .isEqualTo("Slough County Court");
+            .isEqualTo("Test court house name");
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
@@ -141,7 +146,13 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Cynghorydd Cyfreithiol: Mr Sausage Alpha Foxtrot");
+            .contains("Surname, Cynghorydd Cyfreithiol: "
+                          + "Mr Individual Forenames Individual Middlename Individual Surname");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect respondent")
+            .extracting(Element::text)
+            .contains("Respondent Organisation, Respondent Organisation 2");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")

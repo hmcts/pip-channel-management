@@ -88,9 +88,9 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "295179be-2437-45a7-9e3f-691b964f9f65";
     private static final String ARTEFACT_ID_SJP_PRESS_LIST = "5dea6753-7a1d-4b91-b3c7-06721e3332cd";
-    private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "c2939433-dab6-4581-9564-291fa368b3dc";
+    private static final String ARTEFACT_ID_SSCS_DAILY_LIST = "1c96a1ca-3129-4e9b-aaeb-499ecd775e8c";
     private static final String ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS
-        = "cccd09d4-c1f9-44c9-874c-1af5a8f61655";
+        = "a0071d36-af08-4638-a7b3-7ea65327b4dd";
     private static final String ARTEFACT_ID_OPA_PRESS_LIST = "c71bcbb7-08b1-4b2a-a0cd-5ae9137f855e";
     private static final String ARTEFACT_ID_OPA_PUBLIC_LIST = "4a4d7c2c-612b-451d-a150-d7224e956ee4";
     private static final String ARTEFACT_ID_OPA_RESULTS = "6f76cb9b-3270-477c-a937-2122b2e599b3";
@@ -408,8 +408,10 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -424,8 +426,10 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 

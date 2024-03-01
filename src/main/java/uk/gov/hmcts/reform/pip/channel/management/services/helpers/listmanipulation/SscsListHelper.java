@@ -36,7 +36,7 @@ public final class SscsListHelper {
     private static final String PARTY_ROLE = "partyRole";
     private static final String ORGANISATION_DETAILS = "organisationDetails";
     private static final String ORGANISATION_NAME = "organisationName";
-    private static final String PROSECUTOR_ROLE = "PROSECUTOR";
+    private static final String RESPONDENT_ROLE = "RESPONDENT";
 
     private SscsListHelper() {
     }
@@ -129,31 +129,31 @@ public final class SscsListHelper {
     private static String formatRespondent(JsonNode caseNode, JsonNode hearingNode) {
         String informants = dealWithInformants(hearingNode);
         if (informants.isBlank()) {
-            informants = getPartyProsecutors(caseNode);
+            informants = getPartyRespondents(caseNode);
         }
         if (informants.isBlank()) {
-            return getPartyProsecutors(hearingNode);
+            return getPartyRespondents(hearingNode);
         }
         return informants;
     }
 
-    private static String getPartyProsecutors(JsonNode node) {
-        List<String> prosecutors = new ArrayList<>();
+    private static String getPartyRespondents(JsonNode node) {
+        List<String> respondents = new ArrayList<>();
 
         if (node.has(PARTY)) {
-            for (JsonNode party : node.get(PARTY)) {
-                String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
-                if (PROSECUTOR_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
-                    String prosecutor = GeneralHelper.findAndReturnNodeText(
-                        party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
-                    );
-                    if (!prosecutor.isBlank()) {
-                        prosecutors.add(prosecutor);
-                    }
-                }
-            }
+          for (JsonNode party : node.get(PARTY)) {
+              String partyRole = GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE);
+              if (RESPONDENT_ROLE.equals(partyRole) && party.has(ORGANISATION_DETAILS)) {
+                  String respondent = GeneralHelper.findAndReturnNodeText(
+                      party.get(ORGANISATION_DETAILS), ORGANISATION_NAME
+                  );
+                  if (!respondent.isBlank()) {
+                      respondents.add(respondent);
+                  }
+              }
+          }
         }
-        return String.join(DELIMITER, prosecutors);
+        return String.join(DELIMITER, respondents);
     }
 
     private static String dealWithInformants(JsonNode node) {
