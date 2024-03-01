@@ -44,8 +44,7 @@ class SscsDailyListFileConverterTest {
     void testSscsDailyList(ListType listType) throws IOException {
         Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/",
-                                                    "sscsDailyList.json")), writer,
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/", "sscsDailyList.json")), writer,
                      Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
@@ -80,9 +79,9 @@ class SscsDailyListFileConverterTest {
             .isEqualTo("Please note: There may be 2 hearing lists available for this date. Please make sure "
                            + "you look at both lists to see all hearings happening on this date for this location.");
 
-        assertThat(document.getElementsByTag("h2").get(3).text())
+        assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")
-            .isEqualTo("Slough County Court");
+            .isEqualTo("Test court house name");
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
@@ -93,7 +92,12 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Legal Advisor: Mr Sausage Alpha Foxtrot");
+            .contains("Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect respondent")
+            .extracting(Element::text)
+            .contains("Respondent Organisation, Respondent Organisation 2");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")
@@ -107,8 +111,7 @@ class SscsDailyListFileConverterTest {
     void testSscsDailyListWelsh(ListType listType) throws IOException {
         Map<String, Object> language = TestUtils.getLanguageResources(listType, "cy");
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
-                                                    "sscsDailyList.json")), writer,
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/", "sscsDailyList.json")), writer,
                      Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
@@ -131,9 +134,9 @@ class SscsDailyListFileConverterTest {
                        .select(".mainHeaderText > h1:nth-child(1)").text())
             .as("incorrect header text").isEqualTo("Nawdd Cymdeithasol a Chynnal Plant");
 
-        assertThat(document.getElementsByTag("h2").get(3).text())
+        assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")
-            .isEqualTo("Slough County Court");
+            .isEqualTo("Test court house name");
 
         assertThat(document.getElementsByTag("p"))
             .as("data is missing")
@@ -144,7 +147,13 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
-            .contains("Lovekesh, Cynghorydd Cyfreithiol: Mr Sausage Alpha Foxtrot");
+            .contains("Surname, Cynghorydd Cyfreithiol: "
+                          + "Mr Individual Forenames Individual Middlename Individual Surname");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect respondent")
+            .extracting(Element::text)
+            .contains("Respondent Organisation, Respondent Organisation 2");
 
         assertThat(document.getElementsByTag("h5"))
             .as("Incorrect published date")
@@ -159,10 +168,7 @@ class SscsDailyListFileConverterTest {
         StringWriter writer = new StringWriter();
         JsonNode inputJson = OBJECT_MAPPER.readTree(writer.toString());
 
-        assertEquals(0, listConversionFactory
-                         .getFileConverter(listType)
-                         .convertToExcel(inputJson, listType)
-                         .length,
+        assertEquals(0, listConversionFactory.getFileConverter(listType).convertToExcel(inputJson, listType).length,
                      "byte array wasn't empty"
         );
     }

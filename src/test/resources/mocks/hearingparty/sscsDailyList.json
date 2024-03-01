@@ -1,6 +1,6 @@
 {
   "document": {
-    "publicationDate": "2016-09-13T23:30:52.123Z"
+    "publicationDate": "2024-02-23T01:01:01Z"
   },
   "venue": {
     "venueName": "This is the venue name",
@@ -12,23 +12,23 @@
   "courtLists": [
     {
       "courtHouse": {
-        "courtHouseName": "Reading Crown Court",
+        "courtHouseName": "Test court house name",
         "courtHouseContact": {
           "venueTelephone": "01234 123 123",
           "venueEmail": "a@b.com"
         },
         "courtRoom": [
           {
-            "courtRoomName": "Court room 1",
+            "courtRoomName": "1",
             "session": [
               {
                 "sessionChannel": [
                   "VIDEO HEARING",
-                  "oof"
+                  ""
                 ],
                 "sittings": [
                   {
-                    "sittingStart": "2016-09-13T23:30:52.123Z",
+                    "sittingStart": "2024-02-23T01:01:01Z",
                     "hearing": [
                       {
                         "case": [
@@ -36,45 +36,66 @@
                             "caseNumber": "12341234"
                           }
                         ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "NVQ",
-                              "SQA"
-                            ]
-                          }
-                        ],
                         "party": [
                           {
                             "partyRole": "APPLICANT_PETITIONER",
                             "individualDetails": {
-                              "individualSurname": "Lovekesh"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Hall"
+                              "individualSurname": "Surname"
                             }
                           },
                           {
                             "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
                             "friendlyRoleName": "Legal Advisor",
                             "individualDetails": {
-                              "individualForenames": "Sausage",
-                              "individualMiddleName": "Alpha",
-                              "individualSurname": "Foxtrot",
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          }
+                        ],
+                        "informant": [
+                          {
+                            "prosecutionAuthorityRef": [
+                              "test",
+                              "test2"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "case": [
+                          {
+                            "caseNumber": "12341235"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "APPLICANT_PETITIONER",
+                            "individualDetails": {
+                              "individualSurname": "Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                            "friendlyRoleName": "Legal Advisor",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
                               "title": "Mr"
                             }
                           },
                           {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Superman",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Holmes",
-                              "title": "Mr"
+                            "partyRole": "RESPONDENT",
+                            "organisationDetails": {
+                              "organisationName": "Respondent Organisation"
+                            }
+                          },
+                          {
+                            "partyRole": "RESPONDENT",
+                            "organisationDetails": {
+                              "organisationName": "Respondent Organisation 2"
                             }
                           }
                         ]
@@ -88,390 +109,11 @@
                 ],
                 "judiciary": [
                   {
-                    "johKnownAs": "Judge KnownAs"
+                    "johKnownAs": "Judge TestName Presiding",
+                    "isPresiding": true
                   },
                   {
-                    "johKnownAs": "Judge KnownAs 2"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "courtHouse": {
-        "courtHouseName": "Reading Magistrates Court",
-        "courtHouseContact": {
-          "venueTelephone": "01234 123 123",
-          "venueEmail": "a@b.com"
-        },
-        "courtRoom": [
-          {
-            "courtRoomName": "Court room 6",
-            "session": [
-              {
-                "sessionChannel": [
-                  "VIDEO HEARING",
-                  "x"
-                ],
-                "sittings": [
-                  {
-                    "sittingStart": "2016-09-13T09:30:52.123Z",
-                    "hearing": [
-                      {
-                        "case": [
-                          {
-                            "caseNumber": "TEST-12345"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Kramer"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Smith"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Tom",
-                              "individualMiddleName": "W",
-                              "individualSurname": "Sawyer",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Alpha",
-                              "individualMiddleName": "D",
-                              "individualSurname": "Spaceman",
-                              "title": "Mr"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
-                    ]
-                  },
-                  {
-                    "sittingStart": "2016-09-13T10:30:52.123Z",
-                    "hearing": [
-                      {
-                        "case": [
-                          {
-                            "caseNumber": "TEST-7658"
-                          }
-                        ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "Prosecuter"
-                            ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Blackmoor2"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "George",
-                              "individualMiddleName": "Paul",
-                              "individualSurname": "Lennon",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Ralph",
-                              "individualMiddleName": "X",
-                              "individualSurname": "Cohen",
-                              "title": "Mr"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Slack"
-                    ]
-                  }
-                ],
-                "judiciary": [
-                  {
-                    "johKnownAs": "Test KnownAs 3"
-                  },
-                  {
-                    "johKnownAs": "Test KnownAs 4"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "courtHouse": {
-        "courtHouseName": "Slough County Court",
-        "courtHouseContact": {
-          "venueTelephone": "01234 123 123",
-          "venueEmail": "a@b.com"
-        },
-        "courtRoom": [
-          {
-            "courtRoomName": "Court room 7",
-            "session": [
-              {
-                "sessionChannel": [
-                  "VIDEO HEARING",
-                  ""
-                ],
-                "sittings": [
-                  {
-                    "sittingStart": "2016-09-13T11:30:52.123Z",
-                    "hearing": [
-                      {
-                        "case": [
-                          {
-                            "caseNumber": "TEST-98765"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Henman"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Page"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Troy",
-                              "individualMiddleName": "F",
-                              "individualSurname": "McClure",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Barrister",
-                              "individualMiddleName": "Bending",
-                              "individualSurname": "Rodriguez",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Prosecutor1"
-                            }
-                          },
-                          {
-                            "partyRole": "PROSECUTOR",
-                            "organisationDetails": {
-                              "organisationName": "Prosecutor2"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Video Hearings"
-                    ]
-                  }
-                ],
-                "judiciary": [
-                  {
-                    "johKnownAs": "Test KnownAs"
-                  },
-                  {
-                    "johKnownAs": "Test KnownAs 2"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "courtRoomName": "Court room 22",
-            "session": [
-              {
-                "sessionChannel": [
-                  "VOICE HEARING",
-                  ""
-                ],
-                "sittings": [
-                  {
-                    "sittingStart": "2016-09-13T14:30:52.123Z",
-                    "hearing": [
-                      {
-                        "case": [
-                          {
-                            "caseNumber": "TEST-5555"
-                          }
-                        ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "MoJ"
-                            ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Wilson"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Reginald"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Mya",
-                              "individualMiddleName": "Angelou",
-                              "individualSurname": "Aguilera",
-                              "title": "Lady"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Queen",
-                              "individualMiddleName": "Z",
-                              "individualSurname": "Latifah",
-                              "title": "Ms"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Video Hearings"
-                    ]
-                  }
-                ],
-                "judiciary": [
-                  {
-                    "johKnownAs": "Test KnownAs 3"
-                  },
-                  {
-                    "johKnownAs": "Test KnownAs 4"
-                  }
-                ]
-              },
-              {
-                "sessionChannel": [
-                  "VOICE HEARING",
-                  ""
-                ],
-                "sittings": [
-                  {
-                    "sittingStart": "2016-09-13T19:30:52.123Z",
-                    "hearing": [
-                      {
-                        "case": [
-                          {
-                            "caseNumber": "TEST-33333"
-                          }
-                        ],
-                        "informant": [
-                          {
-                            "prosecutionAuthorityRef": [
-                              "HMCTS"
-                            ]
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Breakfast"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Gordon"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Rona",
-                              "individualMiddleName": "Luther",
-                              "individualSurname": "Wang",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Bruce",
-                              "individualMiddleName": "L",
-                              "individualSurname": "Banner",
-                              "title": "Mr"
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Call Hearings"
-                    ]
-                  }
-                ],
-                "judiciary": [
-                  {
-                    "johKnownAs": "Test KnownAs 5"
-                  },
-                  {
-                    "johKnownAs": "Test KnownAs 6"
+                    "johKnownAs": "Judge TestName 2"
                   }
                 ]
               }

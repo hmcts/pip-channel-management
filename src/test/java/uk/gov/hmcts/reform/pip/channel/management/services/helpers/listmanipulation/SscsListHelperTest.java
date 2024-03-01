@@ -104,7 +104,7 @@ class SscsListHelperTest {
 
         softly.assertThat(sitting.getListOfHearings())
             .as("Hearing count does not match")
-            .hasSize(2);
+            .hasSize(1);
 
         softly.assertAll();
     }
@@ -120,7 +120,7 @@ class SscsListHelperTest {
 
         softly.assertThat(hearing.getListOfCases())
             .as("Case count does not match")
-            .hasSize(4);
+            .hasSize(3);
 
         softly.assertAll();
     }
@@ -164,10 +164,11 @@ class SscsListHelperTest {
 
     @Test
     void testFormatRespondentWithNoInformants() throws JsonProcessingException {
-        Hearing hearing = SscsListHelper.courtHouseBuilder(inputCourtHouse)
+        HearingCase hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouse)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
-            .getListOfHearings().get(1);
+            .getListOfHearings().get(0)
+            .getListOfCases().get(1);
 
         assertThat(hearingCase.getRespondent())
             .as("Party prosecutor does not match")
