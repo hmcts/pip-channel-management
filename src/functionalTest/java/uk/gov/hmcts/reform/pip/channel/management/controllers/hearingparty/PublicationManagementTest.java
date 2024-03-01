@@ -157,8 +157,10 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -173,8 +175,10 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("Prosecutor: test, test2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge, Justice of the peace"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+                   CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+                   CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
