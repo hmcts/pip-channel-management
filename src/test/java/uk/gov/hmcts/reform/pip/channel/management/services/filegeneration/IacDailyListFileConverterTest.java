@@ -107,6 +107,18 @@ class IacDailyListFileConverterTest {
                       "Teams, Attended",
                       "1234");
 
+        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(1).getElementsByTag("td"))
+            .as("Incorrect table rows")
+            .hasSize(7)
+            .extracting(Element::text)
+            .contains("9:00pm",
+                      "12341234 [2 of 3]",
+                      "Surname Rep: Mr Individual Forenames Individual Surname",
+                      "Authority Surname",
+                      "French",
+                      "VIDEO HEARING",
+                      "1234");
+
         softly.assertAll();
     }
 
@@ -159,7 +171,7 @@ class IacDailyListFileConverterTest {
                       "Surname Rep: Mr Individual Forenames Individual Surname",
                       "Authority Surname",
                       "",
-                      "Teams, Attended",
+                      "VIDEO HEARING",
                       "");
 
         softly.assertAll();
