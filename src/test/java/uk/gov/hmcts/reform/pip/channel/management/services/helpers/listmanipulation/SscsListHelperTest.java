@@ -138,8 +138,9 @@ class SscsListHelperTest {
             .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
 
         softly.assertThat(hearing.getRespondent())
-            .as("Respondent does not match")
+            .as("Respondent does not display")
             .isEqualTo("");
+
         softly.assertThat(hearing.getJudiciary())
             .as("Judiciary does not match")
             .isEqualTo("Judge TestName Presiding, Judge TestName 2");
