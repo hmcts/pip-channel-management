@@ -18,6 +18,10 @@
             "courtRoomName": "Court Room A",
             "session": [
               {
+                "sessionChannel": [
+                  "VIDEO HEARING",
+                  ""
+                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -90,6 +94,10 @@
                 ]
               },
               {
+                "sessionChannel": [
+                  "VIDEO HEARING",
+                  ""
+                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -153,10 +161,6 @@
                           }
                         ]
                       }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
                     ]
                   }
                 ]
@@ -174,6 +178,10 @@
             "courtRoomName": "Court Room B",
             "session": [
               {
+                "sessionChannel": [
+                  "VIDEO HEARING",
+                  ""
+                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
@@ -275,15 +283,15 @@
                           }
                         ]
                       }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
                     ]
                   }
                 ]
               },
               {
+                "sessionChannel": [
+                  "VIDEO HEARING",
+                  ""
+                ],
                 "judiciary": [
                   {
                     "johTitle": "Judge",
