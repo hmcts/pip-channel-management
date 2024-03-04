@@ -110,6 +110,7 @@ public final class SscsListHelper {
         currentHearing.setAppealRef(GeneralHelper.safeGet("case.0.caseNumber", hearingNode));
         return currentHearing;
     }
+
     private static String getPartyRespondents(JsonNode hearingNode) {
         List<String> respondents = new ArrayList<>();
 
