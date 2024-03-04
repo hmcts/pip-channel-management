@@ -28,7 +28,7 @@ class SscsListHelperTest {
     private static JsonNode inputCourtHouse;
 
     @BeforeAll
-    public static void setup()  throws IOException {
+    public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/sscsDailyList.json")), writer,
                      Charset.defaultCharset()
@@ -57,7 +57,7 @@ class SscsListHelperTest {
             .isEqualTo("a@b.com");
 
         softly.assertThat(courtHouse.getListOfCourtRooms())
-                .hasSize(1);
+            .hasSize(1);
 
         softly.assertAll();
     }
