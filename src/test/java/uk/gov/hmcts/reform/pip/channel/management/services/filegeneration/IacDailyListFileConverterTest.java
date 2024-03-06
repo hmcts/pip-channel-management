@@ -73,11 +73,6 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionBailList() {
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1").get(0))
-            .as("Incorrect h1 element")
-            .extracting(Element::text)
-            .isEqualTo("Bail List");
-
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
@@ -89,11 +84,11 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly("Start Time",
                              "Case Ref",
-                             "Appellant",
+                             "Appellant/Applicant",
                              "Respondent",
                              "Interpreter Language",
-                             "Hearing Channel",
-                             "Linked Cases");
+                             "Hearing Type",
+                             "Hearing Channel");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__body").get(0).getElementsByTag("td"))
             .as("Incorrect table rows")
@@ -130,11 +125,11 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly("Start Time",
                              "Case Ref",
-                             "Appellant",
+                             "Appellant/Applicant",
                              "Respondent",
                              "Interpreter Language",
-                             "Hearing Channel",
-                             "Linked Cases");
+                             "Hearing Type",
+                             "Hearing Channel");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))

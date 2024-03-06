@@ -5,13 +5,13 @@
   "venue": {
     "venueName": "This is the venue name",
     "venueContact": {
-      "venueTelephone": "01234 123 123",
-      "venueEmail": "a@b.com"
+      "venueTelephone": " 0300 1231 711",
+      "venueEmail": "contactia@justice.gov.uk"
     }
   },
   "courtLists": [
     {
-      "courtListName": "Bail List",
+      "courtListName": "",
       "courtHouse": {
         "courtRoom": [
           {
@@ -42,11 +42,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [
-                              {
-                                "caseId": "1234"
-                              }
-                            ],
                             "language": "French"
                           }
                         ],
@@ -114,11 +109,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [
-                              {
-                                "caseId": "1234"
-                              }
-                            ],
                             "language": "French"
                           }
                         ],
@@ -197,8 +187,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
-                            "caseType": "case type",
-                            "caseLinked": []
+                            "caseType": "case type"
                           }
                         ],
                         "party": [
@@ -240,8 +229,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
-                            "caseType": "case type",
-                            "caseLinked": []
+                            "caseType": "case type"
                           }
                         ],
                         "party": [
@@ -307,8 +295,7 @@
                           {
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
-                            "caseType": "case type",
-                            "caseLinked": []
+                            "caseType": "case type"
                           }
                         ],
                         "party": [
