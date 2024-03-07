@@ -28,7 +28,7 @@ class SscsListHelperTest {
     private static JsonNode inputCourtHouse;
 
     @BeforeAll
-    public static void setup()  throws IOException {
+    public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/sscsDailyList.json")), writer,
                      Charset.defaultCharset()
@@ -57,7 +57,7 @@ class SscsListHelperTest {
             .isEqualTo("a@b.com");
 
         softly.assertThat(courtHouse.getListOfCourtRooms())
-                .hasSize(1);
+            .hasSize(1);
 
         softly.assertAll();
     }
@@ -138,8 +138,8 @@ class SscsListHelperTest {
             .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
 
         softly.assertThat(hearing.getRespondent())
-            .as("Respondent does not match")
-            .isEqualTo("test, test2");
+            .as("Respondent does not display")
+            .isEqualTo("");
 
         softly.assertThat(hearing.getJudiciary())
             .as("Judiciary does not match")
@@ -149,14 +149,14 @@ class SscsListHelperTest {
     }
 
     @Test
-    void testFormatRespondentWithNoInformants() throws JsonProcessingException {
+    void testFormatRespondentWithRespondents() throws JsonProcessingException {
         Hearing hearing = SscsListHelper.courtHouseBuilder(inputCourtHouse)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
             .getListOfHearings().get(1);
 
         assertThat(hearing.getRespondent())
-            .as("Party prosecutor does not match")
+            .as("Party respondent does not match")
             .isEqualTo("Respondent Organisation, Respondent Organisation 2");
     }
 }
