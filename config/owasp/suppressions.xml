@@ -6,8 +6,8 @@
     <cve>CVE-2023-36052</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.8.0.jar]]></notes>
-    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.8.0</packageUrl>
+    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.10.0.jar]]></notes>
+    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.10.0</packageUrl>
     <cve>CVE-2021-42306</cve>
   </suppress>
   <suppress>
@@ -20,10 +20,10 @@
     <packageUrl regex="true">^pkg:maven/com\.azure/azure\-identity@.*$</packageUrl>
     <cve>CVE-2023-36415</cve>
   </suppress>
-  <suppress>
-    <notes>Vulnerability across multiple springframework dependencies</notes>
-    <cve>CVE-2024-22233</cve>
-  </suppress>
+<!--  <suppress>-->
+<!--    <notes>Vulnerability across multiple springframework dependencies</notes>-->
+<!--    <cve>CVE-2024-22233</cve>-->
+<!--  </suppress>-->
   <suppress>
     <notes>Vulnerability in commons-compress. Already on latest version of parent</notes>
     <packageUrl regex="true">^pkg:maven/org.apache.commons/commons-compress@1.25.0</packageUrl>
