@@ -99,7 +99,7 @@ class SscsDailyListFileConverterTest {
             .contains("VIDEO HEARING");
 
         assertThat(document.getElementsByTag("td"))
-            .as("Incorrect channel when sitting and session is not present")
+            .as("Incorrect channel when sitting and session are empty")
             .extracting(Element::text)
             .contains("");
 
