@@ -89,6 +89,21 @@ class SscsDailyListFileConverterTest {
             .containsSequence("Thank you for reading this document thoroughly.");
 
         assertThat(document.getElementsByTag("td"))
+            .as("Incorrect channel when channel is present")
+            .extracting(Element::text)
+            .contains("Teams, Attended");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect channel when session is used")
+            .extracting(Element::text)
+            .contains("VIDEO HEARING");
+
+        assertThat(document.getElementsByTag("td"))
+            .as("Incorrect channel when sitting and session is not present")
+            .extracting(Element::text)
+            .contains("");
+
+        assertThat(document.getElementsByTag("td"))
             .as("Incorrect appellant")
             .extracting(Element::text)
             .contains("Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname");

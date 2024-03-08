@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelp
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public final class SscsListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -57,16 +58,16 @@ public final class SscsListHelper {
         CourtRoom thisCourtRoom = new CourtRoom();
         thisCourtRoom.setName(GeneralHelper.safeGet("courtRoomName", node));
         List<Sitting> sittingList = new ArrayList<>();
-        List<String> sessionChannel;
         TypeReference<List<String>> typeReference = new TypeReference<>() {
         };
         for (final JsonNode session : node.get(SESSION)) {
-            sessionChannel = MAPPER.readValue(
-                session.get(SESSION_CHANNEL).toString(),
-                typeReference
-            );
+            String sessionChannelString = "";
+            if (session.has(SESSION_CHANNEL)) {
+                List<String> sessionChannel = MAPPER.readValue(session.get(SESSION_CHANNEL).toString(), typeReference);
+                sessionChannelString = String.join(DELIMITER, sessionChannel);
+            }
+
             String judiciary = JudiciaryHelper.findAndManipulateJudiciary(session);
-            String sessionChannelString = String.join(DELIMITER, sessionChannel);
             for (JsonNode sitting : session.get(SITTINGS)) {
                 sittingList.add(sittingBuilder(sessionChannelString, sitting, judiciary));
             }
@@ -81,10 +82,8 @@ public final class SscsListHelper {
         DateHelper.formatStartTime(node, TIME_FORMAT);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
-        if (node.has(CHANNEL)) {
-            List<String> channelList = MAPPER.readValue(
-                node.get(CHANNEL).toString(), new TypeReference<>() {
-                });
+        if (node.has(CHANNEL) && !Objects.equals(node.get(CHANNEL).toString(), "[]")) {
+            List<String> channelList = MAPPER.readValue(node.get(CHANNEL).toString(), new TypeReference<>() {});
             sitting.setChannel(String.join(DELIMITER, channelList));
         } else {
             sitting.setChannel(sessionChannel);
