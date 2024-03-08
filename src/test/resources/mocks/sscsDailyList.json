@@ -147,9 +147,9 @@
                 ]
               },
               {
+                "sessionChannel": [],
                 "sittings": [
                   {
-                    "sessionChannel": [],
                     "sittingStart": "2024-02-23T01:01:01Z",
                     "hearing": [
                       {
