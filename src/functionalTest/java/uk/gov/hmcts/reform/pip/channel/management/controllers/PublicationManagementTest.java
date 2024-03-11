@@ -83,7 +83,8 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_ET_DAILY_LIST = "d5b3538d-5f38-476e-81fe-efa05e304d73";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "982356b6-70cf-441f-92af-f1628201e3fc";
     private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "0e9872de-11f1-4217-b037-7b2342cc705b";
-    private static final String ARTEFACT_ID_IAC_DAILY_LIST = "eae53af8-f870-4d9d-a232-4ddcf6b91270";
+    private static final String ARTEFACT_ID_IAC_DAILY_LIST = "3c686d87-b14b-467c-9af0-1982aa8b6253";
+    //private static final String ARTEFACT_ID_IAC_DAILY_LIST = "eae53af8-f870-4d9d-a232-4ddcf6b91270";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "a46d2ae9-22ff-4707-a83d-708ef5264bc3";
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "295179be-2437-45a7-9e3f-691b964f9f65";
