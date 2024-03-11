@@ -177,8 +177,8 @@
                 <th th:text="${i18n.appellant}" scope="col" class="govuk-table__header"/>
                 <th th:text="${i18n.respondent}" scope="col" class="govuk-table__header"/>
                 <th th:text="${i18n.interpreterLanguage}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.hearingType}" scope="col" class="govuk-table__header"/>
                 <th th:text="${i18n.hearingChannel}" scope="col" class="govuk-table__header"/>
+                <th th:text="${i18n.hearingType}" scope="col" class="govuk-table__header"/>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -219,7 +219,7 @@
                       </th:block>
 
                       <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
-                      <td class="govuk-table__cell" th:text="${case.get('formattedLinkedCases').asText()}"/>
+                      <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
                     </tr>
                   </th:block>
                 </th:block>
