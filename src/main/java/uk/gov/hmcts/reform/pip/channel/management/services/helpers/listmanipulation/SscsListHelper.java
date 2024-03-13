@@ -127,14 +127,11 @@ public final class SscsListHelper {
     }
 
     private static String formatRespondent(JsonNode caseNode, JsonNode hearingNode) {
-        String informants = dealWithInformants(hearingNode);
-        if (informants.isBlank()) {
-            informants = getPartyRespondents(caseNode);
-        }
-        if (informants.isBlank()) {
+        String respondents = getPartyRespondents(caseNode);
+        if (respondents.isBlank()) {
             return getPartyRespondents(hearingNode);
         }
-        return informants;
+        return respondents;
     }
 
     private static String getPartyRespondents(JsonNode node) {
@@ -154,15 +151,5 @@ public final class SscsListHelper {
             }
         }
         return String.join(DELIMITER, respondents);
-    }
-
-    private static String dealWithInformants(JsonNode node) {
-        List<String> informants = new ArrayList<>();
-        if (node.has("informant")) {
-            GeneralHelper.safeGetNode("informant.0.prosecutionAuthorityRef", node).forEach(
-                informant -> informants.add(informant.asText())
-            );
-        }
-        return String.join(DELIMITER, informants);
     }
 }

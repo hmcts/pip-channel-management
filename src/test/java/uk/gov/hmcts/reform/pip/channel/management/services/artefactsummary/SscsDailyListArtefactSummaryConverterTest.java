@@ -45,10 +45,6 @@ class SscsDailyListArtefactSummaryConverterTest {
                           + "Mr Individual Forenames Individual Middlename Individual Surname");
 
         softly.assertThat(output)
-            .as("Informant does not match")
-            .contains("FTA/Respondent: test, test2");
-
-        softly.assertThat(output)
             .as("Respondent does not match")
             .contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2");
 
