@@ -202,7 +202,7 @@ dependencies {
 
   implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
   implementation group: 'com.openhtmltopdf', name: 'openhtmltopdf-pdfbox', version: '1.0.10'
-  implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.1'
+  implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.2'
 
   testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
