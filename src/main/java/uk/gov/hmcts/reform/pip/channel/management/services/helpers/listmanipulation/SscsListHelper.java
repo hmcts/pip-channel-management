@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.pip.channel.management.services.helpers.PartyRoleHelp
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public final class SscsListHelper {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -82,7 +81,7 @@ public final class SscsListHelper {
         DateHelper.formatStartTime(node, TIME_FORMAT);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
-        if (node.has(CHANNEL) && !Objects.equals(node.get(CHANNEL).size(), 0)) {
+        if (node.has(CHANNEL) && !node.get(CHANNEL).isEmpty()) {
             List<String> channelList = MAPPER.readValue(node.get(CHANNEL).toString(), new TypeReference<>() {});
             sitting.setChannel(String.join(DELIMITER, channelList));
         } else {
