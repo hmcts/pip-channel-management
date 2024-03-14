@@ -82,7 +82,7 @@ public final class SscsListHelper {
         DateHelper.formatStartTime(node, TIME_FORMAT);
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
-        if (node.has(CHANNEL) && !Objects.equals(node.get(CHANNEL).toString(), "[]")) {
+        if (node.has(CHANNEL) && !Objects.equals(node.get(CHANNEL).size(), 0)) {
             List<String> channelList = MAPPER.readValue(node.get(CHANNEL).toString(), new TypeReference<>() {});
             sitting.setChannel(String.join(DELIMITER, channelList));
         } else {
