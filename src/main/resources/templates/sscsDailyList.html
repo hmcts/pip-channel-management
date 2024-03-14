@@ -195,24 +195,26 @@
         </tr>
         <th:block th:each="sitting: ${courtRoom.listOfSittings}">
           <th:block th:each="hearing: ${sitting.listOfHearings}">
-            <tr>
-              <td th:text="${hearing.hearingTime}"/>
-              <td th:text="${hearing.appealRef}"/>
-              <td th:text="${sitting.channel}"/>
-              <th:block th:if="${#strings.isEmpty(hearing.appellantRepresentative)}">
-                <td class="govuk-table__cell" th:text="${hearing.appellant}" />
-              </th:block>
-              <th:block th:if="!${#strings.isEmpty(hearing.appellantRepresentative)}">
-                <th:block th:if="${#strings.isEmpty(hearing.appellant)}">
-                  <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + hearing.appellantRepresentative}" />
+            <th:block th:each="case: ${hearing.listOfCases}">
+              <tr>
+                <td th:text="${case.hearingTime}"/>
+                <td th:text="${case.appealRef}"/>
+                <td th:text="${sitting.channel}"/>
+                <th:block th:if="${#strings.isEmpty(case.appellantRepresentative)}">
+                  <td class="govuk-table__cell" th:text="${case.appellant}" />
                 </th:block>
-                <th:block th:if="!${#strings.isEmpty(hearing.appellant)}">
-                  <td class="govuk-table__cell" th:text="${hearing.appellant + ', ' + i18n.legalAdvisor + hearing.appellantRepresentative}" />
+                <th:block th:if="!${#strings.isEmpty(case.appellantRepresentative)}">
+                  <th:block th:if="${#strings.isEmpty(case.appellant)}">
+                    <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + case.appellantRepresentative}" />
+                  </th:block>
+                  <th:block th:if="!${#strings.isEmpty(case.appellant)}">
+                    <td class="govuk-table__cell" th:text="${case.appellant + ', ' + i18n.legalAdvisor + case.appellantRepresentative}" />
+                  </th:block>
                 </th:block>
-              </th:block>
-              <td th:text="${hearing.respondent}"/>
-              <td th:text="${sitting.judiciary}"/>
-            </tr>
+                <td th:text="${case.respondent}"/>
+                <td th:text="${sitting.judiciary}"/>
+              </tr>
+            </th:block>
           </th:block>
         </th:block>
       </table>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtHouse;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.CourtRoom;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
+import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 
@@ -40,14 +41,13 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         StringBuilder output = new StringBuilder();
         for (CourtRoom courtRoom : courtRoomList) {
             for (Sitting sitting : courtRoom.getListOfSittings()) {
-                output.append('\n');
-                Iterator<Hearing> hearingIterator = sitting.getListOfHearings().iterator();
-                while (hearingIterator.hasNext()) {
-                    Hearing hearing = hearingIterator.next();
-                    output.append(courtRoom.getName()).append(", Time: ").append(hearing.getHearingTime());
-                    output.append(hearingBuilder(hearing, sitting));
-                    if (hearingIterator.hasNext()) {
+                for (Hearing hearing : sitting.getListOfHearings()) {
+                    Iterator<HearingCase> caseIterator = hearing.getListOfCases().iterator();
+                    while (caseIterator.hasNext()) {
+                        HearingCase hearingCase = caseIterator.next();
                         output.append('\n');
+                        output.append(courtRoom.getName()).append(", Time: ").append(hearingCase.getHearingTime());
+                        output.append(caseBuilder(hearingCase, sitting));
                     }
                 }
             }
@@ -63,21 +63,21 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         return courtHouseList;
     }
 
-    private String hearingBuilder(Hearing hearing, Sitting sitting) {
+    private String caseBuilder(HearingCase hearingCase, Sitting sitting) {
         StringBuilder appellant = new StringBuilder(30);
         appellant.append("\n Appellant: ")
-            .append(hearing.getAppellant());
-        if (StringUtils.isNotEmpty(hearing.getAppellantRepresentative())) {
-            if (StringUtils.isNotEmpty(hearing.getAppellant())) {
+            .append(hearingCase.getAppellant());
+        if (StringUtils.isNotEmpty(hearingCase.getAppellantRepresentative())) {
+            if (StringUtils.isNotEmpty(hearingCase.getAppellant())) {
                 appellant.append(", ");
             }
             appellant.append("Legal Advisor: ")
-                .append(hearing.getAppellantRepresentative());
+                .append(hearingCase.getAppellantRepresentative());
         }
 
         return appellant
-            + "\nFTA/Respondent: " + hearing.getRespondent()
-            + "\nPanel: " + hearing.getJudiciary()
+            + "\nFTA/Respondent: " + hearingCase.getRespondent()
+            + "\nPanel: " + hearingCase.getJudiciary()
             + "\nTribunal type: " + sitting.getChannel();
     }
 }
