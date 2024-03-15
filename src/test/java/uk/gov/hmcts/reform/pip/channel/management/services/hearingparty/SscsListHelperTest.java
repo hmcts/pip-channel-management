@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdail
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Hearing;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.HearingCase;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.sscsdailylist.Sitting;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.SscsListHelper;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -29,10 +30,10 @@ class SscsListHelperTest {
     private static JsonNode inputCourtHouse;
 
     @BeforeAll
-    public static void setup() throws IOException {
+    public static void setup()  throws IOException {
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/sscsDailyList.json")), writer,
-                     Charset.defaultCharset()
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/sscsDailyList.json")),
+                     writer, Charset.defaultCharset()
         );
 
         JsonNode inputJson = new ObjectMapper().readTree(writer.toString());
@@ -150,7 +151,7 @@ class SscsListHelperTest {
 
         softly.assertThat(hearing.getListOfCases())
             .as("Case count does not match")
-            .hasSize(3);
+            .hasSize(2);
 
         softly.assertAll();
     }
@@ -182,7 +183,7 @@ class SscsListHelperTest {
             .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
 
         softly.assertThat(hearingCase.getRespondent())
-            .as("Respondent does not display")
+            .as("Respondent does not match")
             .isEqualTo("");
 
         softly.assertThat(hearingCase.getJudiciary())
@@ -193,7 +194,7 @@ class SscsListHelperTest {
     }
 
     @Test
-    void testFormatRespondentWithRespondents() throws JsonProcessingException {
+    void testFormatRespondentWithRespondent() throws JsonProcessingException {
         HearingCase hearingCase = SscsListHelper.courtHouseBuilder(inputCourtHouse)
             .getListOfCourtRooms().get(0)
             .getListOfSittings().get(0)
@@ -201,7 +202,7 @@ class SscsListHelperTest {
             .getListOfCases().get(1);
 
         assertThat(hearingCase.getRespondent())
-            .as("Party respondent does not match")
+            .as("Respondent does not match")
             .isEqualTo("Respondent Organisation, Respondent Organisation 2");
     }
 

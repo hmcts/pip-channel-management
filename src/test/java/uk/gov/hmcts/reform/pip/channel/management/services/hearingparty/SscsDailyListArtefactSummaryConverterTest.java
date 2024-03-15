@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +19,7 @@ class SscsDailyListArtefactSummaryConverterTest {
     void testSscsDailyListSummary(ListType listType) throws IOException {
         String output;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream("mocks/sscsDailyList.json")) {
+            .getResourceAsStream("mocks/hearingparty/sscsDailyList.json")) {
             JsonNode payload = new ObjectMapper().readTree(new String(mockFile.readAllBytes()));
             output = new ListConversionFactory().getArtefactSummaryConverter(listType)
                 .convert(payload);
