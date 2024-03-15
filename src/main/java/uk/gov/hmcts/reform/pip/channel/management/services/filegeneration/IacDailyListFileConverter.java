@@ -37,9 +37,6 @@ public class IacDailyListFileConverter implements FileConverter {
         context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                true, false));
 
-        context.setVariable("telephone", artefact.get("venue").get("venueContact").get("venueTelephone").asText());
-        context.setVariable("email", artefact.get("venue").get("venueContact").get("venueEmail").asText());
-
         return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 

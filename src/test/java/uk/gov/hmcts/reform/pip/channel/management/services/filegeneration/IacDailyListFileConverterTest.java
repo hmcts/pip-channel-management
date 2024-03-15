@@ -31,7 +31,8 @@ class IacDailyListFileConverterTest {
                                               "language", "ENGLISH",
                                               "provenance", "MANUAL_UPLOAD",
                                               "locationName", "Location Name",
-                                              "listType", "IAC_DAILY_LIST");
+                                              "listType", "IAC_DAILY_LIST"
+        );
         Map<String, Object> language = handleLanguage();
         JsonNode input = getInput("/mocks/iacDailyList.json");
 
@@ -73,34 +74,38 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionBailList() {
         SoftAssertions softly = new SoftAssertions();
 
-        /*softly.assertThat(doc.getElementsByClass("govuk-accordion").get(1).getElementsByTag("h3").get(0))
+        softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
-            .isEqualTo("Court Room A, Before Judge Test Name, Magistrate Test Name");*/
+            .isEqualTo("Hearing Room: Court Room A");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__head").get(0).getElementsByTag("th"))
             .as("Incorrect table headers")
             .hasSize(7)
             .extracting(Element::text)
-            .containsExactly("Start Time",
-                             "Case Ref",
-                             "Appellant/Applicant",
-                             "Respondent",
-                             "Interpreter Language",
-                             "Hearing Channel",
-                             "Hearing Type");
+            .containsExactly(
+                "Start Time",
+                "Case Ref",
+                "Appellant/Applicant",
+                "Respondent",
+                "Interpreter Language",
+                "Hearing Channel",
+                "Hearing Type"
+            );
 
         softly.assertThat(doc.getElementsByClass("govuk-table__body").get(0).getElementsByTag("td"))
             .as("Incorrect table rows")
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:00pm",
-                      "12341234 [2 of 3]",
-                      "Surname Rep: Mr Individual Forenames Individual Surname",
-                      "Authority Surname",
-                      "French",
-                      "Teams, Attended",
-                      "Directions");
+            .contains(
+                "9:00pm",
+                "12341234 [2 of 3]",
+                "Surname Rep: Mr Individual Forenames Individual Surname",
+                "Authority Surname",
+                "French",
+                "Teams, Attended",
+                "Directions"
+            );
 
         softly.assertAll();
     }
@@ -123,39 +128,45 @@ class IacDailyListFileConverterTest {
             .as("Incorrect table headers")
             .hasSize(7)
             .extracting(Element::text)
-            .containsExactly("Start Time",
-                             "Case Ref",
-                             "Appellant/Applicant",
-                             "Respondent",
-                             "Interpreter Language",
-                             "Hearing Channel",
-                             "Hearing Type");
+            .containsExactly(
+                "Start Time",
+                "Case Ref",
+                "Appellant/Applicant",
+                "Respondent",
+                "Interpreter Language",
+                "Hearing Channel",
+                "Hearing Type"
+            );
 
         softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))
             .as("Incorrect table rows")
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:20pm",
-                      "12341234 [2 of 3]",
-                      "Surname Rep: No Representative",
-                      "Authority Surname",
-                      "",
-                      "Teams, Attended",
-                      "");
+            .contains(
+                "9:20pm",
+                "12341234 [2 of 3]",
+                "Surname Rep: No Representative",
+                "Authority Surname",
+                "",
+                "Teams, Attended",
+                ""
+            );
 
         softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
                               .getElementsByClass("govuk-table__row").get(1).getElementsByTag("td"))
             .as("Incorrect table rows")
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:20pm",
-                      "12341234 [2 of 3]",
-                      "Surname Rep: Mr Individual Forenames Individual Surname",
-                      "Authority Surname",
-                      "",
-                      "Teams, Attended",
-                      "");
+            .contains(
+                "9:20pm",
+                "12341234 [2 of 3]",
+                "Surname Rep: Mr Individual Forenames Individual Surname",
+                "Authority Surname",
+                "",
+                "Teams, Attended",
+                ""
+            );
 
         softly.assertAll();
     }
