@@ -26,9 +26,9 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                             sitting.get("sittingStart").asText(), Language.ENGLISH, false, false, "h:mma"
                         );
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
-                        sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.findAndManipulatePartyInformation(hearing, false);
+                        sitting.get("hearing").forEach(hearing ->
                             hearing.get("case").forEach(hearingCase -> {
+                                PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, false);
                                 GeneralHelper.appendToStringBuilder(output, "List Name - ",
                                                                     courtList, "courtListName");
                                 output
@@ -42,13 +42,15 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
 
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Channel - ",
                                                                     sitting, "caseHearingChannel");
+
                                 GeneralHelper.appendToStringBuilder(output, "Appellant/Applicant - ",
                                                                     hearing, "claimant");
+
                                 GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
-                                                                    hearing, "prosecutingAuthority");
+                                                                    hearingCase, "prosecutingAuthority");
                                 output.append('\n');
-                            });
-                        });
+                            })
+                        );
                     })
                 )
             )

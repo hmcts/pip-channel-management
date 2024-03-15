@@ -194,22 +194,22 @@
                         <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>
                       </th:block>
 
-                      <th:block th:if="${hearing.get('claimantRepresentative') != null && hearing.get('claimantRepresentative').asText().length > 0}">
+                      <th:block th:if="${case.get('claimantRepresentative') != null && case.get('claimantRepresentative').asText().length > 0}">
                         <td class="govuk-table__cell">
-                          <span th:text="${hearing.get('claimant').asText()}"/>
+                          <span th:text="${case.get('claimant').asText()}"/>
                           <br/>
-                          <span th:text="${i18n.rep + hearing.get('claimantRepresentative').asText()}"/>
+                          <span th:text="${i18n.rep + case.get('claimantRepresentative').asText()}"/>
                         </td>
                       </th:block>
-                      <th:block th:if="${hearing.get('claimantRepresentative') == null || hearing.get('claimantRepresentative').asText().length == 0}">
+                      <th:block th:if="${case.get('claimantRepresentative') == null || case.get('claimantRepresentative').asText().length == 0}">
                         <td class="govuk-table__cell">
-                          <span th:text="${hearing.get('claimant').asText()}"/>
+                          <span th:text="${case.get('claimant').asText()}"/>
                           <br/>
                           <span th:text="${i18n.rep + i18n.noRep}"/>
                         </td>
                       </th:block>
 
-                      <td class="govuk-table__cell" th:text="${hearing.get('prosecutingAuthority').asText()}"/>
+                      <td class="govuk-table__cell" th:text="${case.get('prosecutingAuthority').asText()}"/>
 
                       <th:block th:if="${case.get('language') != null}">
                         <td class="govuk-table__cell" th:text="${case.get('language').asText()}"/>
