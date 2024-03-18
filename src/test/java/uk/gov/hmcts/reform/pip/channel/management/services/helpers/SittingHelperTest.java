@@ -39,13 +39,43 @@ class SittingHelperTest {
         }
         """;
 
+    private static String sittingWithChannel = """
+         {
+            "channel": [
+              "Teams",
+              "Attended"
+            ]
+         }
+        """;
+
+    private static String sittingWithoutChannel = """
+         {}
+        """;
+
+    private static String session = """
+         {
+            "sessionChannel": [
+              "VIDEO HEARING",
+              ""
+            ]
+         }
+        """;
+
     private JsonNode nodeWithJudiciaryJson;
     private JsonNode nodeWithCrimeJudiciaryJson;
     private JsonNode courtRoomJson;
     private JsonNode nodeWithoutJudiciaryJson;
 
+    private JsonNode nodeWithSessionJson;
+
+    private JsonNode nodeWithSittingChannelJson;
+
+    private JsonNode nodeWithoutSittingChannelJson;
+
     private static final String DESTINATION_NODE_NAME = "This is a destination node name";
     private static final String COURT_ROOM_NAME_ERROR = "Correct court room name not shown";
+
+    private static final String CASE_HEARING_CHANNEL = "caseHearingChannel";
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
@@ -53,6 +83,9 @@ class SittingHelperTest {
         nodeWithCrimeJudiciaryJson = objectMapper.readTree(nodeWithCrimeJudiciary);
         courtRoomJson = objectMapper.readTree(courtRoom);
         nodeWithoutJudiciaryJson = objectMapper.createObjectNode();
+        nodeWithSittingChannelJson = objectMapper.readTree(sittingWithChannel);
+        nodeWithoutSittingChannelJson = objectMapper.readTree(sittingWithoutChannel);
+        nodeWithSessionJson = objectMapper.readTree(session);
     }
 
     @Test
@@ -96,6 +129,22 @@ class SittingHelperTest {
 
         assertEquals("This is a court room name: Judge Test Name",
                      nodeWithCrimeJudiciaryJson.get(DESTINATION_NODE_NAME).asText(),
+                     COURT_ROOM_NAME_ERROR);
+    }
+
+    @Test
+    void testFindAndConcatenateHearingPlatformWithSittingChannel() {
+        SittingHelper.findAndConcatenateHearingPlatform(nodeWithSittingChannelJson, nodeWithSessionJson);
+
+        assertEquals("Teams, Attended", nodeWithSittingChannelJson.get(CASE_HEARING_CHANNEL).asText(),
+                     COURT_ROOM_NAME_ERROR);
+    }
+
+    @Test
+    void testFindAndConcatenateHearingPlatformWithSessionChannel() {
+        SittingHelper.findAndConcatenateHearingPlatform(nodeWithoutSittingChannelJson, nodeWithSessionJson);
+
+        assertEquals("VIDEO HEARING", nodeWithoutSittingChannelJson.get(CASE_HEARING_CHANNEL).asText(),
                      COURT_ROOM_NAME_ERROR);
     }
 }
