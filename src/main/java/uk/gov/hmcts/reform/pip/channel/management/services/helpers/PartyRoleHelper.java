@@ -32,7 +32,7 @@ public final class PartyRoleHelper {
     private PartyRoleHelper() {
     }
 
-    public static void findAndManipulatePartyInformation(JsonNode hearing, boolean initialised) {
+    public static void findAndManipulatePartyInformation(JsonNode node, boolean initialised) {
         StringBuilder applicant = new StringBuilder();
         StringBuilder applicantRepresentative = new StringBuilder();
         StringBuilder respondent = new StringBuilder();
@@ -40,7 +40,7 @@ public final class PartyRoleHelper {
         StringBuilder claimant = new StringBuilder();
         StringBuilder claimantRepresentative = new StringBuilder();
 
-        hearing.get(PARTY).forEach(party -> {
+        node.get(PARTY).forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
                 switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
                     case "APPLICANT_PETITIONER" ->
@@ -60,20 +60,20 @@ public final class PartyRoleHelper {
             }
         });
 
-        ObjectNode hearingObj = (ObjectNode) hearing;
-        hearingObj.put(APPLICANT,
+        ObjectNode nodeObj = (ObjectNode) node;
+        nodeObj.put(APPLICANT,
                        GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        hearingObj.put(APPLICANT_REPRESENTATIVE,
+        nodeObj.put(APPLICANT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
-        hearingObj.put(RESPONDENT,
+        nodeObj.put(RESPONDENT,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
-        hearingObj.put(RESPONDENT_REPRESENTATIVE,
+        nodeObj.put(RESPONDENT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
-        hearingObj.put(CLAIMANT,
+        nodeObj.put(CLAIMANT,
                        GeneralHelper.trimAnyCharacterFromStringEnd(claimant.toString()));
-        hearingObj.put(CLAIMANT_REPRESENTATIVE,
+        nodeObj.put(CLAIMANT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(claimantRepresentative.toString()));
-        hearingObj.put(PROSECUTING_AUTHORITY,
+        nodeObj.put(PROSECUTING_AUTHORITY,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
     }
 

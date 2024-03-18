@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,7 +17,7 @@ import java.time.Instant;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper.preprocessArtefactForThymeLeafConverter;
+import static uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.EtFortnightlyPressListFileConverter.preprocessArtefactForThymeLeafConverter;
 
 @ActiveProfiles("test")
 class EtFortnightlyPressListHelperTest {
@@ -30,7 +31,7 @@ class EtFortnightlyPressListHelperTest {
     private static final String CASE = "case";
     private static final String PROVENANCE = "provenance";
 
-    Map<String, Object> language = Map.of("rep", "Rep: ",
+    Map<String, Object> languageResources = Map.of("rep", "Rep: ",
                                           "noRep", "Rep: ",
                                           "legalAdvisor", "Legal Advisor: ");
 
@@ -54,8 +55,10 @@ class EtFortnightlyPressListHelperTest {
 
     @Test
     void testEtFortnightlyListFormattedMethod() {
-        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
-        EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson, language);
+        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, languageResources);
+        Language language = Language.valueOf(metadataMap.get("language"));
+        EtFortnightlyPressListHelper.manipulatedListData(inputJson, language, true);
+        EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson, languageResources);
 
         JsonNode sitting = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
@@ -79,16 +82,16 @@ class EtFortnightlyPressListHelperTest {
         assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
 
-        assertEquals("", hearing.get("claimant").asText(),
+        assertEquals("", hearing.get(CASE).get(0).get("claimant").asText(),
                      "Unable to find claimant");
 
-        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get(CASE).get(0).get("claimantRepresentative").asText(),
                      "Unable to find claimant representative");
 
-        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
+        assertEquals("Capt. T Test Surname", hearing.get(CASE).get(0).get("respondent").asText(),
                      "Unable to find respondent");
 
-        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get(CASE).get(0).get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
 
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
@@ -100,8 +103,10 @@ class EtFortnightlyPressListHelperTest {
 
     @Test
     void testSplitByCourtAndDateMethod() {
-        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, language, true);
-        EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson,language);
+        preprocessArtefactForThymeLeafConverter(inputJson, metadataMap, languageResources);
+        Language language = Language.valueOf(metadataMap.get("language"));
+        EtFortnightlyPressListHelper.manipulatedListData(inputJson, language, true);
+        EtFortnightlyPressListHelper.etFortnightlyListFormatted(inputJson,languageResources);
         EtFortnightlyPressListHelper.splitByCourtAndDate(inputJson);
 
         JsonNode sitting = inputJson.get(COURT_LISTS).get(0)
@@ -126,16 +131,16 @@ class EtFortnightlyPressListHelperTest {
         assertEquals("12341234", hearing.get(CASE).get(0).get("caseNumber").asText(),
                      "Unable to find case number");
 
-        assertEquals("", hearing.get("claimant").asText(),
+        assertEquals("", hearing.get(CASE).get(0).get("claimant").asText(),
                      "Unable to find claimant");
 
-        assertEquals("Rep: Mr T Test Surname 2", hearing.get("claimantRepresentative").asText(),
+        assertEquals("Rep: Mr T Test Surname 2", hearing.get(CASE).get(0).get("claimantRepresentative").asText(),
                      "Unable to find claimant representative");
 
-        assertEquals("Capt. T Test Surname", hearing.get("respondent").asText(),
+        assertEquals("Capt. T Test Surname", hearing.get(CASE).get(0).get("respondent").asText(),
                      "Unable to find respondent");
 
-        assertEquals("Rep: Dr T Test Surname 2", hearing.get("respondentRepresentative").asText(),
+        assertEquals("Rep: Dr T Test Surname 2", hearing.get(CASE).get(0).get("respondentRepresentative").asText(),
                      "Unable to find respondent representative");
 
         assertEquals("This is a hearing type", hearing.get("hearingType").asText(),
