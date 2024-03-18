@@ -25,6 +25,12 @@ class IacDailyListFileConverterTest {
 
     private static Document doc;
 
+    private static final String GOVUK_TABLE_BODY = "govuk-table__body";
+    private static final String TABLE_ROW_ERROR = "Incorrect table rows";
+    private static final String CASE_REF = "12341234 [2 of 3]";
+    private static final String RESPONDENT = "Authority Surname";
+
+
     @BeforeAll
     public static void beforeAll() throws IOException {
         Map<String, String> metaData = Map.of("contentDate", "02 October 2022",
@@ -93,8 +99,8 @@ class IacDailyListFileConverterTest {
                 "Hearing Type"
             );
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(0).getElementsByTag("td"))
-            .as("Incorrect table rows")
+        softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(0).getElementsByTag("td"))
+            .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
             .contains(
@@ -106,6 +112,18 @@ class IacDailyListFileConverterTest {
                 "Teams, Attended",
                 "Directions"
             );
+
+        softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(1).getElementsByTag("td"))
+            .as(TABLE_ROW_ERROR)
+            .hasSize(7)
+            .extracting(Element::text)
+            .contains("9:00pm",
+                      CASE_REF,
+                      "Surname Rep: Mr Individual Forenames Individual Surname",
+                      RESPONDENT,
+                      "French",
+                      "VIDEO HEARING",
+                      "1234");
 
         softly.assertAll();
     }
@@ -138,9 +156,9 @@ class IacDailyListFileConverterTest {
                 "Hearing Type"
             );
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
+        softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))
-            .as("Incorrect table rows")
+            .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
             .contains(
@@ -153,9 +171,9 @@ class IacDailyListFileConverterTest {
                 ""
             );
 
-        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(2)
+        softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(2)
                               .getElementsByClass("govuk-table__row").get(1).getElementsByTag("td"))
-            .as("Incorrect table rows")
+            .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
             .contains(
