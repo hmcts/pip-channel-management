@@ -53,6 +53,10 @@ class IacDailyListSummaryConverterTest {
             .contains("Teams, Attended");
 
         softly.assertThat(artefactSummary)
+            .as("incorrect hearing channel found")
+            .contains("VIDEO HEARING");
+
+        softly.assertThat(artefactSummary)
             .as("incorrect claimant found")
             .contains("Surname");
 
