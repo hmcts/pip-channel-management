@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.Application;
 import uk.gov.hmcts.reform.pip.channel.management.config.WebClientTestConfiguration;
 import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.TestUtils;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
@@ -43,8 +44,8 @@ class SscsDailyListFileConverterTest {
     void testSscsDailyList(ListType listType) throws IOException {
         Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/", "sscsDailyList.json")),
-                     writer, Charset.defaultCharset()
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/",
+            "sscsDailyList.json")), writer, Charset.defaultCharset()
         );
         Map<String, String> metadataMap = Map.of(CONTENT_DATE, Instant.now().toString(),
                                                  PROVENANCE, PROVENANCE,
