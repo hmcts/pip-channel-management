@@ -123,7 +123,7 @@ class IacDailyListFileConverterTest {
                       RESPONDENT,
                       "French",
                       "VIDEO HEARING",
-                      "1234");
+                      "Directions");
 
         softly.assertAll();
     }
@@ -182,7 +182,8 @@ class IacDailyListFileConverterTest {
                 "Surname Rep: Mr Individual Forenames Individual Surname",
                 "Authority Surname",
                 "",
-                "Teams, Attended",
+                "VIDEO HEARING",
+                "Directions",
                 ""
             );
 
