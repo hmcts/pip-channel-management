@@ -57,12 +57,13 @@ public class PublicationFileGenerationService {
      * @throws ProcessingException error.
      */
     public Optional<PublicationFiles> generate(UUID artefactId, String payload) {
+        String rawJson = payload == null ? dataManagementService.getArtefactJsonBlob(artefactId) : payload;
         Artefact artefact = dataManagementService.getArtefact(artefactId);
         Location location = dataManagementService.getLocation(artefact.getLocationId());
         JsonNode topLevelNode;
 
         try {
-            topLevelNode = MAPPER.readTree(payload);
+            topLevelNode = MAPPER.readTree(rawJson);
             FileConverter fileConverter = listConversionFactory.getFileConverter(artefact.getListType());
 
             if (fileConverter == null) {
