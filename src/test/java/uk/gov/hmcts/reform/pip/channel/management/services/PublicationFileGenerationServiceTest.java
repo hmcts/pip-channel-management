@@ -27,7 +27,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @ActiveProfiles(profiles = "test")
 @SpringBootTest(classes = {Application.class})
@@ -95,6 +97,7 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
         Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, sjpPublicListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -122,6 +125,7 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
         Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, sjpPublicListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -150,6 +154,7 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
         Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, civilDailyListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -178,6 +183,7 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
         Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, civilDailyListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -197,6 +203,17 @@ class PublicationFileGenerationServiceTest {
             .isEmpty();
 
         softly.assertAll();
+    }
+
+    @Test
+    void testGenerateFilesWithoutPayload() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(civilDailyListInput);
+        when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
+        when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
+
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, null);
+        verify(dataManagementService).getArtefactJsonBlob(ARTEFACT_ID);
     }
 
     @Test
