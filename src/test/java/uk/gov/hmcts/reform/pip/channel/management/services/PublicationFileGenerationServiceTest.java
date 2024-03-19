@@ -212,7 +212,7 @@ class PublicationFileGenerationServiceTest {
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, null);
+        publicationFileGenerationService.generate(ARTEFACT_ID, null);
         verify(dataManagementService).getArtefactJsonBlob(ARTEFACT_ID);
     }
 
