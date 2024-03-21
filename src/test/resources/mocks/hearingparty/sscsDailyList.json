@@ -23,8 +23,7 @@
             "session": [
               {
                 "sessionChannel": [
-                  "VIDEO HEARING",
-                  ""
+                  "VIDEO HEARING"
                 ],
                 "sittings": [
                   {
@@ -97,6 +96,82 @@
                       "Teams",
                       "Attended"
                     ]
+                  },
+                  {
+                    "sittingStart": "2024-02-23T01:01:01Z",
+                    "hearing": [
+                      {
+                        "case": [
+                          {
+                            "caseNumber": "12341234"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "APPLICANT_PETITIONER",
+                            "individualDetails": {
+                              "individualSurname": "Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                            "friendlyRoleName": "Legal Advisor",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": []
+                  }
+                ],
+                "judiciary": [
+                  {
+                    "johKnownAs": "Judge TestName Presiding",
+                    "isPresiding": true
+                  },
+                  {
+                    "johKnownAs": "Judge TestName 2"
+                  }
+                ]
+              },
+              {
+                "sessionChannel": [],
+                "sittings": [
+                  {
+                    "sittingStart": "2024-02-23T01:01:01Z",
+                    "hearing": [
+                      {
+                        "case": [
+                          {
+                            "caseNumber": "12341234"
+                          }
+                        ],
+                        "party": [
+                          {
+                            "partyRole": "APPLICANT_PETITIONER",
+                            "individualDetails": {
+                              "individualSurname": "Surname"
+                            }
+                          },
+                          {
+                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                            "friendlyRoleName": "Legal Advisor",
+                            "individualDetails": {
+                              "individualForenames": "Individual Forenames",
+                              "individualMiddleName": "Individual Middlename",
+                              "individualSurname": "Individual Surname",
+                              "title": "Mr"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": []
                   }
                 ],
                 "judiciary": [
