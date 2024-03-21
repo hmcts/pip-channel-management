@@ -51,7 +51,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatJudiciary() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -64,7 +64,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingDuration() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -78,7 +78,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingTime() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -92,7 +92,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingChannel() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -106,7 +106,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatCaseName() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -122,7 +122,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testCaseType() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -138,7 +138,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithIndividualDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
@@ -170,7 +170,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithOrganisationDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
@@ -202,7 +202,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyForHearingWithMultipleCases() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedlistDataV1(inputJson, Language.ENGLISH);
 
         JsonNode hearing = inputJson.get(COURT_LISTS).get(1)
             .get(COURT_HOUSE)

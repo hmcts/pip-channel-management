@@ -34,7 +34,8 @@ class CftListHelperTest {
     @BeforeAll
     public static void setup()  throws IOException {
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/familyDailyCauseList.json")), writer,
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/familyDailyCauseList.json")),
+                     writer,
                      Charset.defaultCharset()
         );
 
