@@ -139,7 +139,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      * @return String with that stuff in it.
      */
     private String processCivilDailyHearings(JsonNode node) {
-        StringBuilder output = new StringBuilder(47);
+        StringBuilder output = new StringBuilder(60);
         Iterator<JsonNode> hearingNode = node.get("hearing").elements();
         while (hearingNode.hasNext()) {
             JsonNode currentHearing = hearingNode.next();
