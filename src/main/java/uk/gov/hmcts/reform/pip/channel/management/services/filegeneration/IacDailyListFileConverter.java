@@ -70,7 +70,6 @@ public class IacDailyListFileConverter implements FileConverter {
                         sitting.get("hearing").forEach(hearing ->
                             hearing.get("case").forEach(hearingCase -> {
                                 PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, false);
-                                CaseHelper.formatLinkedCases(hearingCase);
                             })
                         );
                     });
