@@ -75,7 +75,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_NOT_FOUND_MESSAGE = "Artefact with id %s not found";
     private static final String NOT_FOUND_RESPONSE_MESSAGE = "Artefact not found message does not match";
     private static final String ARTEFACT_ID_CARE_STANDARDS_LIST = "877033f5-1435-461d-9f0b-eefaeb394b1b";
-    private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "a1464fc0-9dc7-4721-a59b-2d870d6f5c35";
+    private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "3b757c55-413b-4da5-ab88-1611a61b6252";
     private static final String ARTEFACT_ID_COP_DAILY_CAUSE_LIST = "2e8d48ad-2290-4383-b263-dd7ce328fa0a";
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "8d798ae9-0770-48a3-a615-18363ec2af41";
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "3b2f6c2d-e0ee-46f0-83cd-f048862e3e84";
@@ -185,6 +185,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Judiciary: Presiding, Firstname1 Surname1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Name: A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Reference: 12345678"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Type: type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: FMPO"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Start Time: 9:40am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Channel: testSittingChannel"), CONTENT_MISMATCH_ERROR);
