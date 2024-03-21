@@ -146,8 +146,10 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
             String hearingType = currentHearing.get("hearingType").asText();
             String caseName = currentHearing.get("case").get(0).get("caseName").asText();
             String caseNumber = currentHearing.get("case").get(0).get("caseNumber").asText();
+            String caseType = currentHearing.get("case").get(0).get("caseType").asText();
             output.append("\nCase Name: ").append(caseName)
                 .append("\nCase Reference: ").append(caseNumber)
+                .append("\nCase Type: ").append(caseType)
                 .append("\nHearing Type: ").append(hearingType);
         }
         return output.toString();
