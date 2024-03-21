@@ -18,31 +18,60 @@ public final class FamilyMixedListHelper {
     private static final String RESPONDENT = "respondent";
     private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
     private static final String PARTY_ROLE = "partyRole";
+
+    private static final String COURT_LIST = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
+    private static final String COURT_ROOM = "courtRoom";
+    private static final String SESSION = "session";
+    private static final String SITTINGS = "sittings";
+    private static final String HEARING = "hearing";
+    private static final String CASE = "case";
+    private static final String PARTY = "party";
 
     private FamilyMixedListHelper() {
     }
 
     public static void manipulatedlistData(JsonNode artefact, Language language) {
-        artefact.get("courtLists")
-            .forEach(courtList -> courtList.get(COURT_HOUSE).get("courtRoom")
-                .forEach(courtRoom -> courtRoom.get("session").forEach(session -> {
+        artefact.get(COURT_LIST)
+            .forEach(courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM)
+                .forEach(courtRoom -> courtRoom.get(SESSION).forEach(session -> {
                     ((ObjectNode) session).put("formattedSessionJudiciary",
                                                JudiciaryHelper.findAndManipulateJudiciary(session));
-                    session.get("sittings").forEach(sitting -> {
+                    session.get(SITTINGS).forEach(sitting -> {
                         DateHelper.calculateDuration(sitting, language);
                         DateHelper.formatStartTime(sitting, "h:mma");
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
-                        sitting.get("hearing").forEach(hearing -> {
-                            if (hearing.has("party")
-                                && hearing.has("case")
-                                && hearing.get("case").size() == 1) {
+                        sitting.get(HEARING).forEach(
+                            hearing -> hearing.get(CASE).forEach(hearingCase -> {
+                                handleParties(hearingCase);
+                                CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase);
+                            })
+                        );
+                    });
+                })));
+    }
+
+    @Deprecated
+    public static void manipulatedlistDataV1(JsonNode artefact, Language language) {
+        artefact.get(COURT_LIST)
+            .forEach(courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM)
+                .forEach(courtRoom -> courtRoom.get(SESSION).forEach(session -> {
+                    ((ObjectNode) session).put("formattedSessionJudiciary",
+                                               JudiciaryHelper.findAndManipulateJudiciary(session));
+                    session.get(SITTINGS).forEach(sitting -> {
+                        DateHelper.calculateDuration(sitting, language);
+                        DateHelper.formatStartTime(sitting, "h:mma");
+                        SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
+
+                        sitting.get(HEARING).forEach(hearing -> {
+                            if (hearing.has(CASE)
+                                && hearing.get(CASE).size() == 1) {
                                 handleParties(hearing);
                             } else {
                                 setEmptyParties(hearing);
                             }
-                            hearing.get("case").forEach(
+                            hearing.get(CASE).forEach(
                                 hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
                             );
                         });
@@ -50,47 +79,53 @@ public final class FamilyMixedListHelper {
                 })));
     }
 
-    private static void handleParties(JsonNode hearing) {
+    private static void handleParties(JsonNode node) {
         StringBuilder applicant = new StringBuilder();
         StringBuilder applicantRepresentative = new StringBuilder();
         StringBuilder respondent = new StringBuilder();
         StringBuilder respondentRepresentative = new StringBuilder();
 
-        hearing.get("party").forEach(party -> {
-            if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
-                switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
-                    case "APPLICANT_PETITIONER" ->
-                        PartyRoleHelper.formatPartyDetails(applicant, createPartyDetails(party));
-                    case "APPLICANT_PETITIONER_REPRESENTATIVE" ->
-                        PartyRoleHelper.formatPartyDetails(applicantRepresentative,
-                                                           createPartyDetails(party));
-                    case "RESPONDENT" ->
-                        PartyRoleHelper.formatPartyDetails(respondent, createPartyDetails(party));
-                    case "RESPONDENT_REPRESENTATIVE" ->
-                        PartyRoleHelper.formatPartyDetails(respondentRepresentative,
-                                                           createPartyDetails(party));
-                    default -> { }
+        if (node.has(PARTY)) {
+            node.get(PARTY).forEach(party -> {
+                if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
+                    switch (PartyRoleMapper.convertPartyRole(party.get(PARTY_ROLE).asText())) {
+                        case "APPLICANT_PETITIONER" -> PartyRoleHelper.formatPartyDetails(
+                            applicant,
+                            createPartyDetails(party)
+                        );
+                        case "APPLICANT_PETITIONER_REPRESENTATIVE" -> PartyRoleHelper.formatPartyDetails(
+                            applicantRepresentative,
+                            createPartyDetails(party)
+                        );
+                        case "RESPONDENT" -> PartyRoleHelper.formatPartyDetails(respondent, createPartyDetails(party));
+                        case "RESPONDENT_REPRESENTATIVE" -> PartyRoleHelper.formatPartyDetails(
+                            respondentRepresentative,
+                            createPartyDetails(party)
+                        );
+                        default -> {
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        ObjectNode hearingObj = (ObjectNode) hearing;
-        hearingObj.put(APPLICANT,
+        ObjectNode nodeObj = (ObjectNode) node;
+        nodeObj.put(APPLICANT,
                        GeneralHelper.trimAnyCharacterFromStringEnd(applicant.toString()));
-        hearingObj.put(APPLICANT_REPRESENTATIVE,
+        nodeObj.put(APPLICANT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(applicantRepresentative.toString()));
-        hearingObj.put(RESPONDENT,
+        nodeObj.put(RESPONDENT,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondent.toString()));
-        hearingObj.put(RESPONDENT_REPRESENTATIVE,
+        nodeObj.put(RESPONDENT_REPRESENTATIVE,
                        GeneralHelper.trimAnyCharacterFromStringEnd(respondentRepresentative.toString()));
     }
 
-    private static void setEmptyParties(JsonNode hearing) {
-        ObjectNode hearingObj = (ObjectNode) hearing;
-        hearingObj.put(APPLICANT, "");
-        hearingObj.put(APPLICANT_REPRESENTATIVE, "");
-        hearingObj.put(RESPONDENT, "");
-        hearingObj.put(RESPONDENT_REPRESENTATIVE, "");
+    private static void setEmptyParties(JsonNode node) {
+        ObjectNode nodeObj = (ObjectNode) node;
+        nodeObj.put(APPLICANT, "");
+        nodeObj.put(APPLICANT_REPRESENTATIVE, "");
+        nodeObj.put(RESPONDENT, "");
+        nodeObj.put(RESPONDENT_REPRESENTATIVE, "");
     }
 
     private static String createPartyDetails(JsonNode party) {
