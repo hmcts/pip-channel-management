@@ -139,28 +139,29 @@ class FamilyMixedListHelperTest {
     void testGetPartyWithIndividualDetails() {
         FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
 
-        JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
+        JsonNode hearingCase = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
             .get(COURT_ROOM).get(0)
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
-            .get(HEARING).get(0);
+            .get(HEARING).get(0)
+            .get(CASE).get(0);
 
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(hearing.get(APPLICANT).asText())
+        softly.assertThat(hearingCase.get(APPLICANT).asText())
             .as(APPLICANT_MESSAGE)
-            .isEqualTo("Surname");
+            .isEqualTo("Applicant Surname 1");
 
-        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
+        softly.assertThat(hearingCase.get(APPLICANT_REPRESENTATIVE).asText())
             .as(APPLICANT_REPRESENTATIVE_MESSAGE)
-            .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
+            .isEqualTo("Mr Rep Forenames 1 Rep Middlename 1 Rep Surname 1");
 
-        softly.assertThat(hearing.get(RESPONDENT).asText())
+        softly.assertThat(hearingCase.get(RESPONDENT).asText())
             .as(RESPONDENT_MESSAGE)
-            .isEqualTo("Surname");
+            .isEqualTo("Respondent Surname 1");
 
-        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
+        softly.assertThat(hearingCase.get(RESPONDENT_REPRESENTATIVE).asText())
             .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
             .isEmpty();
 
@@ -171,62 +172,31 @@ class FamilyMixedListHelperTest {
     void testGetPartyWithOrganisationDetails() {
         FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
 
-        JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
+        JsonNode hearingCase = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
             .get(COURT_ROOM).get(0)
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
-            .get(HEARING).get(1);
+            .get(HEARING).get(1)
+            .get(CASE).get(0);
 
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(hearing.get(APPLICANT).asText())
+        softly.assertThat(hearingCase.get(APPLICANT).asText())
             .as(APPLICANT_MESSAGE)
             .isEqualTo("Applicant org name");
 
-        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
+        softly.assertThat(hearingCase.get(APPLICANT_REPRESENTATIVE).asText())
             .as(APPLICANT_REPRESENTATIVE_MESSAGE)
             .isEqualTo("Applicant rep org name");
 
-        softly.assertThat(hearing.get(RESPONDENT).asText())
+        softly.assertThat(hearingCase.get(RESPONDENT).asText())
             .as(RESPONDENT_MESSAGE)
             .isEqualTo("Respondent org name");
 
-        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
+        softly.assertThat(hearingCase.get(RESPONDENT_REPRESENTATIVE).asText())
             .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
             .isEqualTo("Respondent rep org name");
-
-        softly.assertAll();
-    }
-
-    @Test
-    void testGetPartyForHearingWithMultipleCases() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
-
-        JsonNode hearing = inputJson.get(COURT_LISTS).get(1)
-            .get(COURT_HOUSE)
-            .get(COURT_ROOM).get(0)
-            .get(SESSION).get(0)
-            .get(SITTINGS).get(0)
-            .get(HEARING).get(0);
-
-        SoftAssertions softly = new SoftAssertions();
-
-        softly.assertThat(hearing.get(APPLICANT).asText())
-            .as(APPLICANT_MESSAGE)
-            .isEmpty();
-
-        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
-            .as(APPLICANT_REPRESENTATIVE_MESSAGE)
-            .isEmpty();
-
-        softly.assertThat(hearing.get(RESPONDENT).asText())
-            .as(RESPONDENT_MESSAGE)
-            .isEmpty();
-
-        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
-            .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
-            .isEmpty();
 
         softly.assertAll();
     }
