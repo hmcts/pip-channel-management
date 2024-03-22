@@ -168,7 +168,7 @@ class PublicationManagementTest {
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Case Name - A1 Vs B1 [2 of 3]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case ID - 12345678"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case Type: type"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Type: Case Type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type - Hearing Type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
