@@ -59,16 +59,16 @@ public final class SscsListHelper {
         CourtRoom thisCourtRoom = new CourtRoom();
         thisCourtRoom.setName(GeneralHelper.safeGet("courtRoomName", node));
         List<Sitting> sittingList = new ArrayList<>();
-        List<String> sessionChannel;
         TypeReference<List<String>> typeReference = new TypeReference<>() {
         };
         for (final JsonNode session : node.get(SESSION)) {
-            sessionChannel = MAPPER.readValue(
-                session.get(SESSION_CHANNEL).toString(),
-                typeReference
-            );
+            String sessionChannelString = "";
+            if (session.has(SESSION_CHANNEL)) {
+                List<String> sessionChannel = MAPPER.readValue(session.get(SESSION_CHANNEL).toString(), typeReference);
+                sessionChannelString = String.join(DELIMITER, sessionChannel);
+            }
+
             String judiciary = JudiciaryHelper.findAndManipulateJudiciary(session);
-            String sessionChannelString = String.join(DELIMITER, sessionChannel);
             for (JsonNode sitting : session.get(SITTINGS)) {
                 sittingList.add(sittingBuilder(sessionChannelString, sitting, judiciary));
             }
@@ -84,10 +84,8 @@ public final class SscsListHelper {
         sitting.setJudiciary(judiciary);
         List<Hearing> listOfHearings = new ArrayList<>();
         List<HearingCase> listOfCases = new ArrayList<>();
-        if (node.has(CHANNEL)) {
-            List<String> channelList = MAPPER.readValue(
-                node.get(CHANNEL).toString(), new TypeReference<>() {
-                });
+        if (node.has(CHANNEL) && !node.get(CHANNEL).isEmpty()) {
+            List<String> channelList = MAPPER.readValue(node.get(CHANNEL).toString(), new TypeReference<>() {});
             sitting.setChannel(String.join(DELIMITER, channelList));
         } else {
             sitting.setChannel(sessionChannel);
