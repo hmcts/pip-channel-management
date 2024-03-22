@@ -98,7 +98,7 @@ class PublicationManagementTest {
         = "3e281505-5f3a-42f9-af50-726e671c5cb5";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
-        = "23d03397-de93-4ad5-b168-0130cf27d1db";
+        = "afd64f45-4042-4263-8a3d-60bffc3ef576";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "48732761-5ab5-482a-ad98-3aa91e4d5d5a";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
