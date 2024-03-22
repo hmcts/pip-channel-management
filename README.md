@@ -74,6 +74,8 @@ The converter does a very similar job to the frontend style guides. It maps the 
 
 The summary generator produces a string that is used in the subscription email that contains key fields extracted from the blob. These fields vary depending on the list type.
 
+Note that the PDFs, Excel spreadsheet and email summary are only generated if the JSON publication uploaded to CaTH does not exceed the size limit.
+
 ## Roles
 
 Any endpoint that should require authentication, needs to be annotated either at controller or endpoint level with @IsAdmin.

@@ -78,7 +78,7 @@ class SscsListHelperTest {
 
         softly.assertThat(courtRoom.getListOfSittings())
             .as("Court room sitting count does not match")
-            .hasSize(1);
+            .hasSize(3);
 
         softly.assertAll();
     }
@@ -106,6 +106,36 @@ class SscsListHelperTest {
         softly.assertThat(sitting.getListOfHearings())
             .as("Hearing count does not match")
             .hasSize(1);
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testSscsSittingWithoutChannel() throws JsonProcessingException {
+        Sitting sitting = SscsListHelper.courtHouseBuilder(inputCourtHouse)
+            .getListOfCourtRooms().get(0)
+            .getListOfSittings().get(1);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(sitting.getChannel())
+            .as("Channel does not match")
+            .isEqualTo("VIDEO HEARING");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testSscsSittingWithoutSittingChannelOrSessionChannel() throws JsonProcessingException {
+        Sitting sitting = SscsListHelper.courtHouseBuilder(inputCourtHouse)
+            .getListOfCourtRooms().get(0)
+            .getListOfSittings().get(2);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(sitting.getChannel())
+            .as("Channel does not match")
+            .isEqualTo("");
 
         softly.assertAll();
     }
