@@ -172,8 +172,8 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs Presiding, " +
-                                                "Judge KnownAs 2"),
+        assertTrue(responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs Presiding, "
+                                                + "Judge KnownAs 2"),
                    CONTENT_MISMATCH_ERROR);
     }
 
