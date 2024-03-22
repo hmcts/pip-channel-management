@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.EtFortnightlyPressListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -18,7 +17,7 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
         Map<String, Object> language =
             Map.of("rep", "Rep: ",
                    "noRep", "Rep: ");
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
+        EtFortnightlyPressListHelper.manipulatedListData(payload, Language.ENGLISH, true);
         EtFortnightlyPressListHelper.etFortnightlyListFormatted(payload, language);
         EtFortnightlyPressListHelper.splitByCourtAndDate(payload);
         return this.processEtFortnightlyPressList(payload);
@@ -45,11 +44,11 @@ public class EtFortnightlyPressListSummaryConverter implements ArtefactSummaryCo
                             GeneralHelper.appendToStringBuilder(output, "Case Number - ",
                                                                 hearingCase, "caseNumber");
                             GeneralHelper.appendToStringBuilder(output, "Claimant - ",
-                                                                hearing,"claimant");
-                            output.append(", ").append(hearing.get("claimantRepresentative").asText());
+                                                                hearingCase,"claimant");
+                            output.append(", ").append(hearingCase.get("claimantRepresentative").asText());
                             GeneralHelper.appendToStringBuilder(output, "Respondent - ",
-                                                                hearing,"respondent");
-                            output.append(", ").append(hearing.get("respondentRepresentative").asText());
+                                                                hearingCase,"respondent");
+                            output.append(", ").append(hearingCase.get("respondentRepresentative").asText());
                             GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                 hearing,"hearingType");
                             GeneralHelper.appendToStringBuilder(output, "Hearing Platform - ",
