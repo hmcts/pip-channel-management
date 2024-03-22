@@ -3,15 +3,11 @@
     "publicationDate": "2022-10-20T20:00:00.001Z"
   },
   "venue": {
-    "venueName": "This is the venue name",
-    "venueContact": {
-      "venueTelephone": "01234 123 123",
-      "venueEmail": "a@b.com"
-    }
+    "venueName": "This is the venue name"
   },
   "courtLists": [
     {
-      "courtListName": "Bail List",
+      "courtListName": "",
       "courtHouse": {
         "courtRoom": [
           {
@@ -46,11 +42,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [
-                              {
-                                "caseId": "1234"
-                              }
-                            ],
                             "language": "French",
                             "party": [
                               {
@@ -122,11 +113,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [
-                              {
-                                "caseId": "1234"
-                              }
-                            ],
                             "language": "French",
                             "party": [
                               {
@@ -206,7 +192,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [],
                             "party": [
                               {
                                 "partyRole": "CLAIMANT_PETITIONER",
@@ -249,7 +234,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [],
                             "party": [
                               {
                                 "partyRole": "CLAIMANT_PETITIONER",
@@ -316,7 +300,6 @@
                             "caseNumber": "12341234",
                             "caseSequenceIndicator": "2 of 3",
                             "caseType": "case type",
-                            "caseLinked": [],
                             "party": [
                               {
                                 "partyRole": "CLAIMANT_PETITIONER",
