@@ -29,7 +29,7 @@ class SscsDailyListArtefactSummaryConverterTest {
 
         softly.assertThat(output.split(System.lineSeparator()))
             .as("Output line count does not match")
-            .hasSize(12);
+            .hasSize(22);
 
         softly.assertThat(output)
             .as("Court house does not match")
@@ -55,6 +55,10 @@ class SscsDailyListArtefactSummaryConverterTest {
         softly.assertThat(output)
             .as("Tribunal type does not match")
             .contains("Tribunal type: Teams, Attended");
+
+        softly.assertThat(output)
+            .as("Tribunal type does not match when no sitting channel is present")
+            .contains("Tribunal type: VIDEO HEARING");
 
         softly.assertAll();
     }
