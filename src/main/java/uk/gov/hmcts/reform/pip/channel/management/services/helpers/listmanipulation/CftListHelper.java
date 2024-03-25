@@ -69,7 +69,7 @@ public final class CftListHelper {
         if (FAMILY_DAILY_CAUSE_LIST.name().equals(listType)
             || CIVIL_AND_FAMILY_DAILY_CAUSE_LIST.name().equals(listType)) {
             if (GeneralHelper.hearingHasParty(artefact)) {
-                FamilyMixedListHelper.manipulatedlistDataV1(artefact, language);
+                FamilyMixedListHelper.manipulatedlistDataPartyAtHearingLevel(artefact, language);
                 context.setVariable("partyAtHearingLevel", true);
             } else {
                 FamilyMixedListHelper.manipulatedlistData(artefact, language);
