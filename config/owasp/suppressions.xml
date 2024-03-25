@@ -6,23 +6,19 @@
     <cve>CVE-2023-36052</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.8.0.jar]]></notes>
-    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.8.0</packageUrl>
+    <notes><![CDATA[file name: spring-cloud-azure-starter-active-directory-5.10.0.jar]]></notes>
+    <packageUrl regex="true">^pkg:maven/com.azure.spring/spring-cloud-azure-starter-active-directory@5.10.0</packageUrl>
     <cve>CVE-2021-42306</cve>
   </suppress>
   <suppress>
     <notes>The vulnerability exists in the latest version of lib too. Need to wait for new version with the fix</notes>
-    <packageUrl regex="true">^pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.15.3</packageUrl>
+    <packageUrl regex="true">^pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.15.4</packageUrl>
     <cve>CVE-2023-35116</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[file name: azure-identity-1.10.0.jar]]></notes>
     <packageUrl regex="true">^pkg:maven/com\.azure/azure\-identity@.*$</packageUrl>
     <cve>CVE-2023-36415</cve>
-  </suppress>
-  <suppress>
-    <notes>Vulnerability across multiple springframework dependencies</notes>
-    <cve>CVE-2024-22233</cve>
   </suppress>
   <suppress>
     <notes>Vulnerability in commons-compress. Already on latest version of parent</notes>
