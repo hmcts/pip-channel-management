@@ -3,7 +3,11 @@
     "publicationDate": "2022-10-20T20:00:00.001Z"
   },
   "venue": {
-    "venueName": "This is the venue name"
+    "venueName": "This is the venue name",
+    "venueContact": {
+      "venueTelephone": "03001231711",
+      "venueEmail": "contactia@justice.gov.uk"
+    }
   },
   "courtLists": [
     {
