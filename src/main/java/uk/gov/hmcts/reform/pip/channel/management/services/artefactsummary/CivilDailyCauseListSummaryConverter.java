@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.JudiciaryHelper;
 
 import java.util.Iterator;
@@ -139,15 +140,17 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
      * @return String with that stuff in it.
      */
     private String processCivilDailyHearings(JsonNode node) {
-        StringBuilder output = new StringBuilder(47);
+        StringBuilder output = new StringBuilder(60);
         Iterator<JsonNode> hearingNode = node.get("hearing").elements();
         while (hearingNode.hasNext()) {
             JsonNode currentHearing = hearingNode.next();
             String hearingType = currentHearing.get("hearingType").asText();
             String caseName = currentHearing.get("case").get(0).get("caseName").asText();
             String caseNumber = currentHearing.get("case").get(0).get("caseNumber").asText();
+            String caseType = GeneralHelper.findAndReturnNodeText(currentHearing.get("case").get(0), "caseType");
             output.append("\nCase Name: ").append(caseName)
                 .append("\nCase Reference: ").append(caseNumber)
+                .append("\nCase Type: ").append(caseType)
                 .append("\nHearing Type: ").append(hearingType);
         }
         return output.toString();

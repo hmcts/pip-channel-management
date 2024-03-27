@@ -143,12 +143,13 @@ class CivilDailyCauseListFileConverterTest {
         // Assert the table columns are expected
         assertThat(getTableHeaders(firstTableElement))
             .as("Incorrect table headers")
-            .hasSize(6)
+            .hasSize(7)
             .extracting(Element::text)
             .containsExactly(
                 "Time",
                 "Case ID",
                 "Case name",
+                "Case type",
                 "Hearing type",
                 "Location",
                 "Duration"
