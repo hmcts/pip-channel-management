@@ -57,35 +57,35 @@
                             "caseName": "This is a case name",
                             "caseNumber": "12341234",
                             "caseType": "normal",
-                            "caseSequenceIndicator": "2 of 3"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor"
+                            "caseSequenceIndicator": "2 of 3",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Applicant Surname 1"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Respondent Surname 1"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 1",
+                                  "individualMiddleName": "Rep Middlename 1",
+                                  "individualSurname": "Rep Surname 1",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor"
+                              }
+                            ]
                           }
                         ]
                       },
@@ -95,35 +95,35 @@
                           {
                             "caseName": "This is a case name 2",
                             "caseNumber": "12341235",
-                            "caseType": "normal"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "partyRole": "APPLICANT_PETITIONER",
-                            "organisationDetails": {
-                              "organisationName": "Applicant org name"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "organisationDetails": {
-                              "organisationName": "Respondent org name"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "organisationDetails": {
-                              "organisationName": "Applicant rep org name"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "organisationDetails": {
-                              "organisationName": "Respondent rep org name"
-                            }
+                            "caseType": "normal",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "organisationDetails": {
+                                  "organisationName": "Applicant org name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "organisationDetails": {
+                                  "organisationName": "Respondent org name"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "organisationDetails": {
+                                  "organisationName": "Applicant rep org name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "organisationDetails": {
+                                  "organisationName": "Respondent rep org name"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
@@ -173,12 +173,80 @@
                           {
                             "caseName": "This is a case name 3",
                             "caseNumber": "12341236",
-                            "caseType": "normal"
+                            "caseType": "normal",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Applicant Surname 2"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Respondent Surname 2"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 2",
+                                  "individualMiddleName": "Rep Middlename 2",
+                                  "individualSurname": "Rep Surname 2",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 3",
+                                  "individualMiddleName": "Rep Middlename 3",
+                                  "individualSurname": "Rep Surname 3",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           },
                           {
                             "caseName": "This is a case name 4",
                             "caseNumber": "12341237",
-                            "caseType": "normal"
+                            "caseType": "normal",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Applicant Surname 3"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Respondent Surname 3"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 3",
+                                  "individualMiddleName": "Rep Middlename 3",
+                                  "individualSurname": "Rep Surname 3",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 4",
+                                  "individualMiddleName": "Rep Middlename 4",
+                                  "individualSurname": "Rep Surname 4",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }
@@ -237,40 +305,41 @@
                             "caseName": "This is a case name",
                             "caseNumber": "12341234",
                             "caseType": "normal",
-                            "caseSequenceIndicator": "2 of 3"
-                          }
-                        ],
-                        "party": [
-                          {
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT",
-                            "individualDetails": {
-                              "individualSurname": "Surname"
-                            }
-                          },
-                          {
-                            "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
-                          },
-                          {
-                            "partyRole": "RESPONDENT_REPRESENTATIVE",
-                            "friendlyRoleName": "Legal Advisor",
-                            "individualDetails": {
-                              "individualForenames": "Individual Forenames",
-                              "individualMiddleName": "Individual Middlename",
-                              "individualSurname": "Individual Surname",
-                              "title": "Mr"
-                            }
+                            "caseSequenceIndicator": "2 of 3",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "individualDetails": {
+                                  "individualSurname": "Applicant Surname 4"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "individualDetails": {
+                                  "individualSurname": "Respondent Surname 4"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 5",
+                                  "individualMiddleName": "Rep Middlename 5",
+                                  "individualSurname": "Rep Surname 5",
+                                  "title": "Mr"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "individualDetails": {
+                                  "individualForenames": "Rep Forenames 6",
+                                  "individualMiddleName": "Rep Middlename 6",
+                                  "individualSurname": "Rep Surname 6",
+                                  "title": "Mr"
+                                }
+                              }
+                            ]
                           }
                         ]
                       }

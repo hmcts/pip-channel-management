@@ -160,8 +160,8 @@ class FamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
-                "Surname"
+                "Applicant Surname 1, Legal Advisor: Mr Rep Forenames 1 Rep Middlename 1 Rep Surname 1",
+                "Respondent Surname 1"
             );
 
         softly.assertThat(doc.getElementsByTag("td"))
@@ -175,8 +175,9 @@ class FamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "",
-                ""
+                "Applicant Surname 2, Legal Advisor: Mr Rep Forenames 3 Rep Middlename 3 Rep Surname 3, "
+                    + "Mr Rep Forenames 2 Rep Middlename 2 Rep Surname 2",
+                "Respondent Surname 2"
             );
 
         softly.assertAll();

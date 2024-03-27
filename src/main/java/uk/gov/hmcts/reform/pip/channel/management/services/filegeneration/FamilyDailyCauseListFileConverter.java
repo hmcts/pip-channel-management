@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LanguageResourceHelper;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CftListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class FamilyDailyCauseListFileConverter implements FileConverter {
 
         return TemplateEngine.processTemplate(
             metadata.get("listType"),
-            CommonListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, languageResources, false)
+            CftListHelper.preprocessArtefactForThymeLeafConverter(artefact, metadata, languageResources, false)
         );
     }
 }

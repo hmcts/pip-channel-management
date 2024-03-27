@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers;
+package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-class CommonListHelperTest {
+class CftListHelperTest {
     private static final String COURT_LISTS = "courtLists";
     private static final String COURT_HOUSE = "courtHouse";
     private static final String COURT_ROOM = "courtRoom";
@@ -42,7 +42,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatCourtRoomName() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -55,7 +55,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingDuration() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -69,7 +69,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingTime() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -83,7 +83,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatHearingChannel() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -97,7 +97,7 @@ class CommonListHelperTest {
 
     @Test
     void testFormatCaseName() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -113,7 +113,7 @@ class CommonListHelperTest {
 
     @Test
     void testCaseType() {
-        CommonListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
+        CftListHelper.manipulatedListData(inputJson, Language.ENGLISH, false);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)

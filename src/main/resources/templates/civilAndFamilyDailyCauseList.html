@@ -216,26 +216,29 @@
                       <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
                       <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
                       <td class="govuk-table__cell no-wrap" th:text="${sitting.get('formattedDuration').asText()}"/>
-                      <th:block th:if="${#strings.isEmpty(hearing.get('applicantRepresentative').asText())}">
-                        <td class="govuk-table__cell" th:text="${hearing.get('applicant').asText()}"/>
-                      </th:block>
-                      <th:block th:if="!${#strings.isEmpty(hearing.get('applicantRepresentative').asText())}">
-                        <th:block th:if="${#strings.isEmpty(hearing.get('applicant').asText())}">
-                          <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + hearing.get('applicantRepresentative').asText()}" />
+                      <th:block th:with="node=${partyAtHearingLevel} ? ${hearing} : ${case} ">
+                        <th:block th:if="${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
+                          <td class="govuk-table__cell" th:text="${node.get('applicant').asText()}"/>
                         </th:block>
-                        <th:block th:if="!${#strings.isEmpty(hearing.get('applicant').asText())}">
-                          <td class="govuk-table__cell" th:text="${hearing.get('applicant').asText() + ', ' + i18n.legalAdvisor + hearing.get('applicantRepresentative').asText()}" />
+                        <th:block th:if="!${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
+                          <th:block th:if="${#strings.isEmpty(node.get('applicant').asText())}">
+                            <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
+                          </th:block>
+                          <th:block th:if="!${#strings.isEmpty(node.get('applicant').asText())}">
+                            <td class="govuk-table__cell" th:text="${node.get('applicant').asText() + ', ' + i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
+                          </th:block>
                         </th:block>
-                      </th:block>
-                      <th:block th:if="${#strings.isEmpty(hearing.get('respondentRepresentative').asText())}">
-                        <td class="govuk-table__cell" th:text="${hearing.get('respondent').asText()}"/>
-                      </th:block>
-                      <th:block th:if="!${#strings.isEmpty(hearing.get('respondentRepresentative').asText())}">
-                        <th:block th:if="${#strings.isEmpty(hearing.get('respondent').asText())}">
-                          <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + hearing.get('respondentRepresentative').asText()}" />
+
+                        <th:block th:if="${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
+                          <td class="govuk-table__cell" th:text="${node.get('respondent').asText()}"/>
                         </th:block>
-                        <th:block th:if="!${#strings.isEmpty(hearing.get('respondent').asText())}">
-                          <td class="govuk-table__cell" th:text="${hearing.get('respondent').asText() + ', ' + i18n.legalAdvisor + hearing.get('respondentRepresentative').asText()}" />
+                        <th:block th:if="!${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
+                          <th:block th:if="${#strings.isEmpty(node.get('respondent').asText())}">
+                            <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
+                          </th:block>
+                          <th:block th:if="!${#strings.isEmpty(node.get('respondent').asText())}">
+                            <td class="govuk-table__cell" th:text="${node.get('respondent').asText() + ', ' + i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
+                          </th:block>
                         </th:block>
                       </th:block>
                     </tr>

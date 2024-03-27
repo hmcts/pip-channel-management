@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CaseHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.CommonListHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownFirmListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -13,7 +12,6 @@ import uk.gov.hmcts.reform.pip.model.publication.Language;
 public class CrownFirmListSummaryConverter  implements ArtefactSummaryConverter {
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        CommonListHelper.manipulatedListData(payload, Language.ENGLISH, true);
         if (GeneralHelper.hearingHasParty(payload)) {
             CrownFirmListHelper.crownFirmListFormattedV1(payload, Language.ENGLISH);
             CrownFirmListHelper.splitByCourtAndDateV1(payload);
