@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,8 +63,19 @@ public class PublicationManagementController {
     @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
     @Operation(summary = "Takes in an artefact ID and generates/stores a publication file")
     @PostMapping("/{artefactId}")
+    @Deprecated
     public ResponseEntity<Void> generateFiles(@PathVariable UUID artefactId) {
-        publicationManagementService.generateFiles(artefactId);
+        publicationManagementService.generateFiles(artefactId, null);
+        return ResponseEntity.accepted().build();
+    }
+
+    @ApiResponse(responseCode = ACCEPTED_CODE, description = "Request to generate files accepted")
+    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
+    @Operation(summary = "Generates/stores a publication file for a given artefact ID and payload")
+    @PostMapping("/v2/{artefactId}")
+    public ResponseEntity<Void> generateFiles(@PathVariable UUID artefactId, @RequestBody String payload) {
+        publicationManagementService.generateFiles(artefactId, payload);
         return ResponseEntity.accepted().build();
     }
 
