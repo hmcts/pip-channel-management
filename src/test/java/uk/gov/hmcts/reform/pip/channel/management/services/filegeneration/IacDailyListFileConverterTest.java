@@ -79,15 +79,10 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionBailList() {
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(doc.getElementsByTag("h1").get(0))
-            .as("Incorrect h1 element")
-            .extracting(Element::text)
-            .isEqualTo("Bail List");
-
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
-            .isEqualTo("Court Room A, Before Judge Test Name, Magistrate Test Name");
+            .isEqualTo("Hearing Room: Court Room A");
 
         softly.assertThat(doc.getElementsByClass("govuk-table__head").get(0).getElementsByTag("th"))
             .as("Incorrect table headers")
@@ -95,11 +90,11 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly("Start Time",
                              "Case Ref",
-                             "Appellant",
+                             "Appellant/Applicant",
                              "Respondent",
                              "Interpreter Language",
                              "Hearing Channel",
-                             "Linked Cases");
+                             "Hearing Type");
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(0).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
@@ -111,7 +106,7 @@ class IacDailyListFileConverterTest {
                       RESPONDENT,
                       "French",
                       "Teams, Attended",
-                      "1234");
+                      "Directions");
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(1).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
@@ -123,7 +118,7 @@ class IacDailyListFileConverterTest {
                       RESPONDENT,
                       "French",
                       "VIDEO HEARING",
-                      "1234");
+                      "Directions");
 
         softly.assertAll();
     }
@@ -135,7 +130,7 @@ class IacDailyListFileConverterTest {
         softly.assertThat(doc.getElementsByTag("h1").get(1))
             .as("Incorrect h1 element")
             .extracting(Element::text)
-            .isEqualTo("Non Bail List");
+            .isEqualTo("Float List");
 
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(1).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
@@ -148,11 +143,11 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly("Start Time",
                              "Case Ref",
-                             "Appellant",
+                             "Appellant/Applicant",
                              "Respondent",
                              "Interpreter Language",
                              "Hearing Channel",
-                             "Linked Cases");
+                             "Hearing Type");
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))
