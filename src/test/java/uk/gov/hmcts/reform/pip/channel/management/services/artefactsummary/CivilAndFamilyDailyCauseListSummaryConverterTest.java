@@ -43,6 +43,10 @@ class CivilAndFamilyDailyCauseListSummaryConverterTest {
             .contains("12341234");
 
         softly.assertThat(emailOutput)
+            .as("incorrect case type found")
+            .contains("normal");
+
+        softly.assertThat(emailOutput)
             .as("incorrect hearing found")
             .contains("Directions");
 
