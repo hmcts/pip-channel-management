@@ -29,7 +29,7 @@ class CivilDailyCauseListSummaryConverterTest {
 
         softly.assertThat(outputLines)
             .as("Output line count does not match")
-            .hasSize(36);
+            .hasSize(41);
 
         softly.assertThat(outputLines[2])
             .as("Court room name does not match")
@@ -52,14 +52,18 @@ class CivilDailyCauseListSummaryConverterTest {
             .isEqualTo("Case Reference: This is case number 1");
 
         softly.assertThat(outputLines[7])
+            .as("Case type does not match")
+            .isEqualTo("Case Type: This is a case type");
+
+        softly.assertThat(outputLines[8])
             .as("Hearing type does not match")
             .isEqualTo("Hearing Type: This is hearing type 1");
 
-        softly.assertThat(outputLines[8])
+        softly.assertThat(outputLines[9])
             .as("Start time does not match")
             .isEqualTo("Start Time: 2:01am");
 
-        softly.assertThat(outputLines[9])
+        softly.assertThat(outputLines[10])
             .as("Hearing channel does not match")
             .isEqualTo("Hearing Channel: Channel A, Channel B");
 
