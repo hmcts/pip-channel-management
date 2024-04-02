@@ -157,12 +157,9 @@ public class PublicationManagementService {
      * @return true if any file exists, else false.
      */
     public boolean fileExists(UUID artefactId) {
-        if (azureBlobService.blobFileExists(artefactId + PDF.getExtension())
+        return azureBlobService.blobFileExists(artefactId + PDF.getExtension())
             || azureBlobService.blobFileExists(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension())
-            || azureBlobService.blobFileExists(artefactId + EXCEL.getExtension())) {
-            return true;
-        }
-        return false;
+            || azureBlobService.blobFileExists(artefactId + EXCEL.getExtension());
     }
 
     /**
