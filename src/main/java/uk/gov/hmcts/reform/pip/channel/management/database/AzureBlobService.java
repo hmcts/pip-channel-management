@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.database;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.models.BlobStorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,29 @@ public class AzureBlobService {
         if (!blobClient.deleteIfExists()) {
             log.info(writeLog(String.format("Blob file with name %s not found", fileName)));
         }
+    }
+
+    /**
+     * Checks the existence of a blob file.
+     *
+     * @param fileName The name of the file.
+     * @return true if any file exists, else false.
+     */
+    public boolean blobFileExists(String fileName) {
+        BlobClient blobClient = blobContainerClient.getBlobClient(fileName);
+        return blobClient.exists();
+    }
+
+    /**
+     * Retrieves the size of a file in the blob store.
+     *
+     * @param fileName The name of the file.
+     * @return the file size.
+     */
+    public Long getBlobSize(String fileName) {
+        BlobClient blobClient = blobContainerClient.getBlobClient(fileName);
+        return blobClient.exists()
+            ? blobClient.getProperties().getBlobSize()
+            : null;
     }
 }

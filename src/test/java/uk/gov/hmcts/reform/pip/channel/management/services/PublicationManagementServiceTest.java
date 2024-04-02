@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
 import uk.gov.hmcts.reform.pip.model.location.Location;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -36,6 +37,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,6 +75,8 @@ class PublicationManagementServiceTest {
     private static final String NOT_FOUND_MESSAGE = "File not found";
     private static final String BYTES_NO_MATCH = "Bytes didn't match";
     private static final String EXCEPTION_NOT_MATCH = "Exception message should contain expected";
+    private static final String FILE_EXISTS_FLAG_MESSAGE = "File exists flag does not match";
+    private static final String FILE_SIZE_MESSAGE = "File size does not match";
     private static final String TEST = "test";
     private static final byte[] TEST_BYTE = TEST.getBytes();
 
@@ -398,6 +403,58 @@ class PublicationManagementServiceTest {
         verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + PDF.getExtension());
         verify(azureBlobService).deleteBlobFile(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension());
         verify(azureBlobService, never()).deleteBlobFile(TEST_ARTEFACT_ID + EXCEL.getExtension());
+    }
+
+    @Test
+    void testFileExistsReturnTrueIfAllFilesExist() {
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + PDF.getExtension()))
+            .thenReturn(true);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID  + WELSH_PDF_SUFFIX + PDF.getExtension()))
+            .thenReturn(true);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + EXCEL.getExtension()))
+            .thenReturn(true);
+
+        assertTrue(publicationManagementService.fileExists(TEST_ARTEFACT_ID), FILE_EXISTS_FLAG_MESSAGE);
+    }
+
+    @Test
+    void testFileExistsReturnTrueIfOnlyOneFileExists() {
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + PDF.getExtension()))
+            .thenReturn(false);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID  + WELSH_PDF_SUFFIX + PDF.getExtension()))
+            .thenReturn(false);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + EXCEL.getExtension()))
+            .thenReturn(true);
+
+        assertTrue(publicationManagementService.fileExists(TEST_ARTEFACT_ID), FILE_EXISTS_FLAG_MESSAGE);
+    }
+
+    @Test
+    void testFileExistsReturnFalseIfNoFileExist() {
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + PDF.getExtension()))
+            .thenReturn(false);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID  + WELSH_PDF_SUFFIX + PDF.getExtension()))
+            .thenReturn(false);
+        when(azureBlobService.blobFileExists(TEST_ARTEFACT_ID + EXCEL.getExtension()))
+            .thenReturn(false);
+
+        assertFalse(publicationManagementService.fileExists(TEST_ARTEFACT_ID), FILE_EXISTS_FLAG_MESSAGE);
+    }
+
+    @Test
+    void testGetFileSizesReturnFileSizeIfPresent() {
+        when(azureBlobService.getBlobSize(TEST_ARTEFACT_ID + PDF.getExtension()))
+            .thenReturn(1234L);
+        when(azureBlobService.getBlobSize(TEST_ARTEFACT_ID  + WELSH_PDF_SUFFIX + PDF.getExtension()))
+            .thenReturn(null);
+        when(azureBlobService.getBlobSize(TEST_ARTEFACT_ID + EXCEL.getExtension()))
+            .thenReturn(123L);
+
+        PublicationFileSizes fileSizes = publicationManagementService.getFileSizes(TEST_ARTEFACT_ID);
+
+        assertNull(fileSizes.getAdditionalPdf(), FILE_SIZE_MESSAGE);
+        assertEquals(1234L, fileSizes.getPrimaryPdf(), FILE_SIZE_MESSAGE);
+        assertEquals(123L, fileSizes.getExcel(), FILE_SIZE_MESSAGE);
     }
 
     private static Stream<Arguments> sjpParameters() throws JsonProcessingException {
