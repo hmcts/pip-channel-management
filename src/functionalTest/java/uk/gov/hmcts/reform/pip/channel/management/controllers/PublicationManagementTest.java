@@ -26,6 +26,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionRespons
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.stream.Stream;
@@ -171,8 +172,10 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Hearing Type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1, Before: Presiding, Firstname1 Surname1"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("Judge - 1, Before: Presiding, Firstname1 Surname1"),
+            CONTENT_MISMATCH_ERROR
+        );
     }
 
     @Test
@@ -295,7 +298,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Judge - This is the court room name, Before: First known as, "
-                                               + "Second known as"), CONTENT_MISMATCH_ERROR);
+                                                + "Second known as"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
@@ -408,10 +411,14 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
-                   CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+            CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(
+            responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -426,10 +433,14 @@ class PublicationManagementTest {
                 "Appellant: Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
         );
-        assertTrue(responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
-                   CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("FTA/Respondent: Respondent Organisation, Respondent Organisation 2"),
+            CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(
+            responseContent.contains("Panel: Judge TestName Presiding, Judge TestName 2"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Tribunal type: Teams, Attended"), CONTENT_MISMATCH_ERROR);
     }
 
@@ -497,15 +508,21 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Offence 1 Title - Offence title 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 1 Section - Offence section 2"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 1 Decision Date - 06 January 2024"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Allocation Decision - Decision detail 2"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("Offence 1 Allocation Decision - Decision detail 2"),
+            CONTENT_MISMATCH_ERROR
+        );
         assertTrue(responseContent.contains("Offence 1 Bail Status - Unconditional bail"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence 1 Next Hearing Date - 10 February 2024"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Next Hearing Location - Hearing location 2"),
-                   CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Offence 1 Reporting Restrictions - Reporting restriction detail "
-                                                + "2, Reporting restriction detail 3"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("Offence 1 Next Hearing Location - Hearing location 2"),
+            CONTENT_MISMATCH_ERROR
+        );
+        assertTrue(
+            responseContent.contains("Offence 1 Reporting Restrictions - Reporting restriction detail "
+                                         + "2, Reporting restriction detail 3"),
+            CONTENT_MISMATCH_ERROR
+        );
     }
 
     @Test
@@ -527,6 +544,51 @@ class PublicationManagementTest {
     @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
     void testGenerateArtefactSummaryUnauthorized() throws Exception {
         mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testGenerateFileWithPayloadAccepted() throws Exception {
+
+        try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream("data/civilAndFamilyDailyCauseList.json")) {
+
+            when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+
+            mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH)
+                                .content(mockFile.readAllBytes())
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        }
+    }
+
+    @Test
+    void testGenerateFileWithPayloadNotFound() throws Exception {
+        try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream("data/civilAndFamilyDailyCauseList.json")) {
+            MvcResult mvcResult = mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID_NOT_FOUND)
+                                                      .content(mockFile.readAllBytes())
+                                                      .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+            ExceptionResponse exceptionResponse = objectMapper.readValue(
+                mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
+
+            assertEquals(
+                exceptionResponse.getMessage(),
+                String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
+                NOT_FOUND_RESPONSE_MESSAGE
+            );
+        }
+    }
+
+    @Test
+    @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
+    void testGenerateFileWithPayloadUnauthorized() throws Exception {
+        mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID)
+                            .content("test body")
+                            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
     }
 
@@ -644,7 +706,7 @@ class PublicationManagementTest {
 
         assertTrue(
             response.getResponse().getContentAsString().contains("File with type PDF for artefact with id "
-                   + listArtefactId + " has size over the limit of 10 bytes"),
+                                                 + listArtefactId + " has size over the limit of 10 bytes"),
             "Response does not contain expected result"
         );
     }
