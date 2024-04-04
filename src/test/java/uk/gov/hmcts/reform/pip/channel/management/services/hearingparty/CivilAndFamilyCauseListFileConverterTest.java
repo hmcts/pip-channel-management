@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CivilAndFamilyDailyCauseListFileConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,12 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 class CivilAndFamilyCauseListFileConverterTest {
-    @Autowired
-    CivilAndFamilyDailyCauseListFileConverter civilAndFamilyDailyCauseListConverter;
-
     private static final String PROVENANCE = "provenance";
     private static final String HEADER_TEXT = "Incorrect Header Text";
-
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Map<String, String> METADATA = Map.of(
         "contentDate", Instant.now().toString(),
@@ -43,6 +40,8 @@ class CivilAndFamilyCauseListFileConverterTest {
         "language", "ENGLISH",
         "listType", "CIVIL_AND_FAMILY_DAILY_CAUSE_LIST"
     );
+    @Autowired
+    CivilAndFamilyDailyCauseListFileConverter civilAndFamilyDailyCauseListConverter;
 
     @Test
     void testFamilyCauseListTemplate() throws IOException {
@@ -157,8 +156,8 @@ class CivilAndFamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "Applicant Surname 1, Legal Advisor: Mr Rep Forenames 1 Rep Middlename 1 Rep Surname 1",
-                "Respondent Surname 1"
+                "",
+                ""
             );
 
         softly.assertThat(doc.getElementsByTag("td"))
@@ -181,7 +180,7 @@ class CivilAndFamilyCauseListFileConverterTest {
 
     private JsonNode getInputJson() throws IOException {
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/",
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/",
                                                     "civilAndFamilyDailyCauseList.json")), writer,
                      Charset.defaultCharset()
         );
