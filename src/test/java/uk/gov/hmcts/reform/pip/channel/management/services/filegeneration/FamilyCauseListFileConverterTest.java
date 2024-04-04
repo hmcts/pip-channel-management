@@ -33,6 +33,7 @@ class FamilyCauseListFileConverterTest {
     FamilyDailyCauseListFileConverter familyDailyCauseListConverter;
 
     private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String TITLE_TEXT = "Incorrect Title Text";
     private static final String PROVENANCE = "provenance";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -65,6 +66,10 @@ class FamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-heading-l")
             .get(0).text())
             .as(HEADER_TEXT).isEqualTo("Family Daily Cause List for location");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
@@ -101,6 +106,10 @@ class FamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
             .as(HEADER_TEXT).isEqualTo("Rhestr Ddyddiol o Achosion Teulu gyfer location");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
