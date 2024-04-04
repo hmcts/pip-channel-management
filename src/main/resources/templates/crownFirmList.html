@@ -281,7 +281,7 @@
                       </tr>
                       <span th:if="${case.get('linkedCases').asText() != ''}">
                       <tr class="govuk-table__row">
-                        <td class="govuk-table__cell no-wrap" colspan="6" th:classappend="${case.get('linkedCasesBorder').asText()}">
+                        <td class="govuk-table__cell no-wrap" colspan="7" th:classappend="${case.get('linkedCasesBorder').asText()}">
                           <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
                           <span th:text="${case.get('linkedCases').asText()}" />
                         </td>
