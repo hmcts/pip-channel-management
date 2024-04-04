@@ -11,6 +11,7 @@
     "Time",
     "Case ID",
     "Case name",
+    "Case type",
     "Hearing type",
     "Location",
     "Duration"

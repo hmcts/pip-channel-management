@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.FamilyMixedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
 import java.io.IOException;
@@ -43,14 +44,14 @@ class FamilyMixedListHelperTest {
     @BeforeAll
     static void setup()  throws IOException {
         StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/familyDailyCauseList.json")),
+        IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/hearingparty/familyDailyCauseList.json")),
                      writer, Charset.defaultCharset());
         inputJson = OBJECT_MAPPER.readTree(writer.toString());
     }
 
     @Test
     void testFormatJudiciary() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -63,7 +64,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingDuration() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -77,7 +78,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingTime() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -91,7 +92,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingChannel() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -105,7 +106,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatCaseName() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -121,7 +122,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testCaseType() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -137,31 +138,30 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithIndividualDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
-        JsonNode hearingCase = inputJson.get(COURT_LISTS).get(0)
+        JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
             .get(COURT_ROOM).get(0)
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
-            .get(HEARING).get(0)
-            .get(CASE).get(0);
+            .get(HEARING).get(0);
 
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(hearingCase.get(APPLICANT).asText())
+        softly.assertThat(hearing.get(APPLICANT).asText())
             .as(APPLICANT_MESSAGE)
-            .isEqualTo("Applicant Surname 1");
+            .isEqualTo("Surname");
 
-        softly.assertThat(hearingCase.get(APPLICANT_REPRESENTATIVE).asText())
+        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
             .as(APPLICANT_REPRESENTATIVE_MESSAGE)
-            .isEqualTo("Mr Rep Forenames 1 Rep Middlename 1 Rep Surname 1");
+            .isEqualTo("Mr Individual Forenames Individual Middlename Individual Surname");
 
-        softly.assertThat(hearingCase.get(RESPONDENT).asText())
+        softly.assertThat(hearing.get(RESPONDENT).asText())
             .as(RESPONDENT_MESSAGE)
-            .isEqualTo("Respondent Surname 1");
+            .isEqualTo("Surname");
 
-        softly.assertThat(hearingCase.get(RESPONDENT_REPRESENTATIVE).asText())
+        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
             .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
             .isEmpty();
 
@@ -170,33 +170,64 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithOrganisationDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
 
-        JsonNode hearingCase = inputJson.get(COURT_LISTS).get(0)
+        JsonNode hearing = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
             .get(COURT_ROOM).get(0)
             .get(SESSION).get(0)
             .get(SITTINGS).get(0)
-            .get(HEARING).get(1)
-            .get(CASE).get(0);
+            .get(HEARING).get(1);
 
         SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(hearingCase.get(APPLICANT).asText())
+        softly.assertThat(hearing.get(APPLICANT).asText())
             .as(APPLICANT_MESSAGE)
             .isEqualTo("Applicant org name");
 
-        softly.assertThat(hearingCase.get(APPLICANT_REPRESENTATIVE).asText())
+        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
             .as(APPLICANT_REPRESENTATIVE_MESSAGE)
             .isEqualTo("Applicant rep org name");
 
-        softly.assertThat(hearingCase.get(RESPONDENT).asText())
+        softly.assertThat(hearing.get(RESPONDENT).asText())
             .as(RESPONDENT_MESSAGE)
             .isEqualTo("Respondent org name");
 
-        softly.assertThat(hearingCase.get(RESPONDENT_REPRESENTATIVE).asText())
+        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
             .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
             .isEqualTo("Respondent rep org name");
+
+        softly.assertAll();
+    }
+
+    @Test
+    void testGetPartyForHearingWithMultipleCases() {
+        FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(inputJson, Language.ENGLISH);
+
+        JsonNode hearing = inputJson.get(COURT_LISTS).get(1)
+            .get(COURT_HOUSE)
+            .get(COURT_ROOM).get(0)
+            .get(SESSION).get(0)
+            .get(SITTINGS).get(0)
+            .get(HEARING).get(0);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(hearing.get(APPLICANT).asText())
+            .as(APPLICANT_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(hearing.get(APPLICANT_REPRESENTATIVE).asText())
+            .as(APPLICANT_REPRESENTATIVE_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(hearing.get(RESPONDENT).asText())
+            .as(RESPONDENT_MESSAGE)
+            .isEmpty();
+
+        softly.assertThat(hearing.get(RESPONDENT_REPRESENTATIVE).asText())
+            .as(RESPONDENT_REPRESENTATIVE_MESSAGE)
+            .isEmpty();
 
         softly.assertAll();
     }

@@ -75,14 +75,14 @@ class PublicationManagementTest {
     private static final String ARTEFACT_NOT_FOUND_MESSAGE = "Artefact with id %s not found";
     private static final String NOT_FOUND_RESPONSE_MESSAGE = "Artefact not found message does not match";
     private static final String ARTEFACT_ID_CARE_STANDARDS_LIST = "877033f5-1435-461d-9f0b-eefaeb394b1b";
-    private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "a1464fc0-9dc7-4721-a59b-2d870d6f5c35";
+    private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "3b757c55-413b-4da5-ab88-1611a61b6252";
     private static final String ARTEFACT_ID_COP_DAILY_CAUSE_LIST = "2e8d48ad-2290-4383-b263-dd7ce328fa0a";
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "8d798ae9-0770-48a3-a615-18363ec2af41";
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "3b2f6c2d-e0ee-46f0-83cd-f048862e3e84";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "ca685a57-dc4c-404c-9966-bd92b0953bd7";
     private static final String ARTEFACT_ID_ET_DAILY_LIST = "026deb0e-c5ba-4c55-85ef-368e848712fa";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "50fb5f6a-c08b-4ea8-821d-d7b2e6b36e13";
-    private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "0e9872de-11f1-4217-b037-7b2342cc705b";
+    private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "8dc35dda-0f86-4a61-b273-42c99609335d";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "1fe1a207-dc73-4481-b018-b2f3718f50a2";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "a46d2ae9-22ff-4707-a83d-708ef5264bc3";
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
@@ -95,10 +95,10 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_OPA_PUBLIC_LIST = "4a4d7c2c-612b-451d-a150-d7224e956ee4";
     private static final String ARTEFACT_ID_OPA_RESULTS = "6f76cb9b-3270-477c-a937-2122b2e599b3";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
-        = "3e281505-5f3a-42f9-af50-726e671c5cb5";
+        = "7e7136a6-ce33-4c71-83b7-8bae846543f8";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
-        = "23d03397-de93-4ad5-b168-0130cf27d1db";
+        = "f067b4dd-0408-4c9f-bba7-e813b78a00e3";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "48732761-5ab5-482a-ad98-3aa91e4d5d5a";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
@@ -166,12 +166,14 @@ class PublicationManagementTest {
                 get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Case Name - A1 Vs B1 [2 of 3]"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case ID - 12345678"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Hearing Type - Hearing Type"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Location - testSittingChannel"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Duration - 1 hour 5 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - 1, Before: Presiding, Firstname1 Surname1"),
+        assertTrue(responseContent.contains("Case Name - This is a case name [2 of 3]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case ID - 12341234"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Type - normal"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs Presiding, "
+                                                + "Judge KnownAs 2"),
                    CONTENT_MISMATCH_ERROR);
     }
 
@@ -185,6 +187,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Judiciary: Presiding, Firstname1 Surname1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Name: A1 Vs B1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Reference: 12345678"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Type: type"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Type: FMPO"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Start Time: 9:40am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Channel: testSittingChannel"), CONTENT_MISMATCH_ERROR);
