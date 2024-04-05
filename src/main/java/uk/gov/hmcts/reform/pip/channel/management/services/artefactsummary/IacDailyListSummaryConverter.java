@@ -29,7 +29,7 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
                         sitting.get("hearing").forEach(hearing ->
                             hearing.get("case").forEach(hearingCase -> {
                                 PartyRoleHelper.findAndManipulatePartyInformation(hearingCase, false);
-                                GeneralHelper.appendToStringBuilder(output, "",
+                                GeneralHelper.appendToStringBuilder(output, "List Name - ",
                                                                     courtList, "courtListName");
                                 output
                                     .append("\nStart Time - ")
