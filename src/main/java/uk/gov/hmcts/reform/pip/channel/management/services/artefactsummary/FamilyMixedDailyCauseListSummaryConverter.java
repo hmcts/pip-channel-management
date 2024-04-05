@@ -38,6 +38,9 @@ public class FamilyMixedDailyCauseListSummaryConverter implements ArtefactSummar
                                     GeneralHelper.appendToStringBuilder(output, "Case ID - ",
                                                                         hearingCase, "caseNumber"
                                     );
+                                    GeneralHelper.appendToStringBuilder(output, "Case Type - ",
+                                                                        hearingCase, "caseType"
+                                    );
                                     output.append('\n');
                                     GeneralHelper.appendToStringBuilder(output, "Hearing Type - ",
                                                                         hearing, "hearingType"
