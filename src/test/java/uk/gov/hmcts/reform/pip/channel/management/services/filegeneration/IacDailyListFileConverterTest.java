@@ -79,6 +79,11 @@ class IacDailyListFileConverterTest {
     void testSuccessfulConversionBailList() {
         SoftAssertions softly = new SoftAssertions();
 
+        softly.assertThat(doc.getElementsByTag("h1").get(0))
+            .as("Incorrect h1 element")
+            .extracting(Element::text)
+            .isEqualTo("Bail List");
+
         softly.assertThat(doc.getElementsByClass("govuk-accordion").get(0).getElementsByTag("h3").get(0))
             .as("Incorrect room name element")
             .extracting(Element::text)
