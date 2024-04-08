@@ -79,6 +79,11 @@ class SjpPressListFileConverterTest {
             .as("incorrect header text")
             .isEqualTo(expectedTitle);
 
+        softly.assertThat(document.getElementsByTag("a"))
+            .as("Incorrect anchor title")
+            .hasSize(1)
+            .extracting(element -> element.attr("title"))
+            .containsExactly("Protocol on sharing court lists, registers and documents with the media");
 
         softly.assertThat(document.getElementsByTag("summary").get(0).text())
             .as("incorrect important information header text")

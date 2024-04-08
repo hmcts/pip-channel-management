@@ -56,6 +56,14 @@ class PublicationManagementControllerTest {
     }
 
     @Test
+    void testGenerateFilesV2() {
+        ResponseEntity<Void> response = publicationManagementController
+            .generateFiles(UUID.randomUUID(), "payload");
+
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode(), STATUS_MESSAGE);
+    }
+
+    @Test
     void testGetFile() {
         when(publicationManagementService.getStoredPublication(any(), any(), any(), eq(USER_ID), eq(true),
                                                                eq(false)

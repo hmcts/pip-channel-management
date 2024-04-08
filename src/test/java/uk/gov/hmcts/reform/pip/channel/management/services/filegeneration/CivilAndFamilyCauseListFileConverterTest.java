@@ -34,6 +34,7 @@ class CivilAndFamilyCauseListFileConverterTest {
 
     private static final String PROVENANCE = "provenance";
     private static final String HEADER_TEXT = "Incorrect Header Text";
+    private static final String TITLE_TEXT = "Incorrect Title Text";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Map<String, String> METADATA = Map.of(
@@ -69,6 +70,10 @@ class CivilAndFamilyCauseListFileConverterTest {
                        .get(2).text())
             .as(HEADER_TEXT).contains("Last updated 21 July 2022");
 
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
+
         assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
             .as("Incorrect table titles")
             .extracting(Element::text)
@@ -102,6 +107,10 @@ class CivilAndFamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
             .as(HEADER_TEXT).contains("Diweddarwyd ddiwethaf 21 July 2022 am 3:01pm");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
             .as("Incorrect table titles")
