@@ -33,6 +33,7 @@ class FamilyCauseListFileConverterTest {
     FamilyDailyCauseListFileConverter familyDailyCauseListConverter;
 
     private static final String HEADER_TEXT = "Incorrect header text";
+    private static final String TITLE_TEXT = "Incorrect Title Text";
     private static final String PROVENANCE = "provenance";
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -65,6 +66,10 @@ class FamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-heading-l")
             .get(0).text())
             .as(HEADER_TEXT).isEqualTo("Family Daily Cause List for location");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
@@ -101,6 +106,10 @@ class FamilyCauseListFileConverterTest {
         assertThat(document.getElementsByClass("govuk-heading-l")
                        .get(0).text())
             .as(HEADER_TEXT).isEqualTo("Rhestr Ddyddiol o Achosion Teulu gyfer location");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(2).text())
@@ -160,8 +169,8 @@ class FamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
-                "Surname"
+                "Applicant Surname 1, Legal Advisor: Mr Rep Forenames 1 Rep Middlename 1 Rep Surname 1",
+                "Respondent Surname 1"
             );
 
         softly.assertThat(doc.getElementsByTag("td"))
@@ -175,8 +184,9 @@ class FamilyCauseListFileConverterTest {
                 "Directions",
                 "Teams, Attended",
                 "1 hour 25 mins",
-                "",
-                ""
+                "Applicant Surname 2, Legal Advisor: Mr Rep Forenames 3 Rep Middlename 3 Rep Surname 3, "
+                    + "Mr Rep Forenames 2 Rep Middlename 2 Rep Surname 2",
+                "Respondent Surname 2"
             );
 
         softly.assertAll();

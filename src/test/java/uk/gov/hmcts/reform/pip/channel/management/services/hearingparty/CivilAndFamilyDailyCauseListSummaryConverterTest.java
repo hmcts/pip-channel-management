@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
+package uk.gov.hmcts.reform.pip.channel.management.services.hearingparty;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ class CivilAndFamilyDailyCauseListSummaryConverterTest {
     void testCivilAndFamilyCauseListTemplate() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
-            "src/test/resources/mocks/",
+            "src/test/resources/mocks/hearingparty/",
             "civilAndFamilyDailyCauseList.json"
                      )), writer,
                      Charset.defaultCharset()
@@ -41,10 +41,6 @@ class CivilAndFamilyDailyCauseListSummaryConverterTest {
         softly.assertThat(emailOutput)
             .as("incorrect case ID found")
             .contains("12341234");
-
-        softly.assertThat(emailOutput)
-            .as("incorrect case type found")
-            .contains("normal");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing found")

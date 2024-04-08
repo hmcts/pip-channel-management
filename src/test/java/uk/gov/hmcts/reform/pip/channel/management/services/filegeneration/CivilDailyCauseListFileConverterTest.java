@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
 class CivilDailyCauseListFileConverterTest {
     private static final String OXFORD_COURT = "Oxford Combined Court Centre";
+    private static final String TITLE_TEXT = "Incorrect Title Text";
     private static final String MANUAL_UPLOAD = "MANUAL_UPLOAD";
 
     private static final Map<String, String> METADATA = Map.of(
@@ -56,6 +57,10 @@ class CivilDailyCauseListFileConverterTest {
             .as("incorrect document title")
             .isEqualTo("Civil Daily Cause List for");
 
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
+
         assertFirstPageContent(document.getElementsByClass("first-page").get(0));
         assertCourtHouseInfo(document.getElementsByClass("site-address"));
         assertHearingTables(document);
@@ -82,6 +87,10 @@ class CivilDailyCauseListFileConverterTest {
         assertThat(document.title())
             .as("incorrect document title")
             .isEqualTo("Rhestr Ddyddiol o Achosion Sifil gyfer");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByClass("govuk-accordion__section-heading"))
             .as("Incorrect table titles")
@@ -143,12 +152,13 @@ class CivilDailyCauseListFileConverterTest {
         // Assert the table columns are expected
         assertThat(getTableHeaders(firstTableElement))
             .as("Incorrect table headers")
-            .hasSize(6)
+            .hasSize(7)
             .extracting(Element::text)
             .containsExactly(
                 "Time",
                 "Case ID",
                 "Case name",
+                "Case type",
                 "Hearing type",
                 "Location",
                 "Duration"

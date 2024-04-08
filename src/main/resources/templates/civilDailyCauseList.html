@@ -170,7 +170,7 @@
         + i18n.importantInformationP2c + phone + i18n.importantInformationP2d}"/>
     <p th:text="${i18n.importantInformationP3}"/>
     <p th:text="${i18n.importantInformationP4}"/>
-    <span class="govuk-body" th:text="${i18n.importantInformationP5}" /> <a href="${i18n.openJusticeGuidance}" class="govuk-link" th:text="${i18n.openJusticeGuidance}" />
+    <span class="govuk-body" th:text="${i18n.importantInformationP5}" /> <a th:href="${i18n.openJusticeGuidance}" class="govuk-link" th:title="${i18n.linkTitle}" th:text="${i18n.openJusticeGuidance}" />
   </div>
 </div>
 <div aria-label="Court Lists" class="landscape">
@@ -208,6 +208,7 @@
                     <td class="govuk-table__cell no-wrap" th:text="${sitting.get('time').asText()}"/>
                     <td class="govuk-table__cell no-wrap" th:text="${case.get('caseNumber').asText()}"/>
                     <td class="govuk-table__cell" th:text="${case.get('caseName').asText()}"/>
+                    <td class="govuk-table__cell" th:text="${case.get('caseType').asText()}"/>
                     <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
                     <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
                     <td class="govuk-table__cell no-wrap" th:text="${sitting.get('formattedDuration').asText()}"/>
