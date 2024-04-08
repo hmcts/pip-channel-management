@@ -35,6 +35,8 @@ class SscsDailyListFileConverterTest {
     private static final String PROVENANCE = "provenance";
     private static final String CONTENT_DATE = "contentDate";
 
+    private static final String TITLE_TEXT = "Incorrect Title Text";
+
     @Autowired
     private ListConversionFactory listConversionFactory;
 
@@ -77,6 +79,10 @@ class SscsDailyListFileConverterTest {
             .as("incorrect warning text")
             .isEqualTo("Please note: There may be 2 hearing lists available for this date. Please make sure "
                            + "you look at both lists to see all hearings happening on this date for this location.");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
 
         assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")
@@ -147,6 +153,10 @@ class SscsDailyListFileConverterTest {
         assertThat(document.getElementsByClass("mainHeaderText")
                        .select(".mainHeaderText > h1:nth-child(1)").text())
             .as("incorrect header text").isEqualTo("Nawdd Cymdeithasol a Chynnal Plant");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByTag("h2").get(1).text())
             .as("Header seems to be missing.")

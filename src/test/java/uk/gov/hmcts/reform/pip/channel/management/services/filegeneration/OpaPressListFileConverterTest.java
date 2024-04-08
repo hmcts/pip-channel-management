@@ -48,6 +48,7 @@ class OpaPressListFileConverterTest {
     private static final String DEFENDANT_HEADING_MESSAGE = "Defendant heading does not match";
     private static final String DEFENDANT_INFO_MESSAGE = "Defendant info does not match";
     private static final String OFFENCE_INFO_MESSAGE = "Offence info does not match";
+    private static final String LINK_TITLE_MESSAGE = "Incorrect Title Text";
 
     private static final Map<String, String> METADATA = Map.of("contentDate", CONTENT_DATE,
                                                                "locationName", LOCATION_NAME,
@@ -99,6 +100,12 @@ class OpaPressListFileConverterTest {
             .as(HEADING_MESSAGE)
             .contains("Online Plea and Allocation Cases Press View for " + LOCATION_NAME);
 
+        softly.assertThat(document.getElementsByTag("a"))
+            .as("Incorrect anchor title")
+            .hasSize(1)
+            .extracting(element -> element.attr("title"))
+            .containsExactly("Protocol on sharing court lists, registers and documents with the media");
+
         Elements resultBody = document.getElementsByClass(BODY_CLASS);
         softly.assertThat(resultBody.get(0).text())
             .as(CONTENT_DATE_MESSAGE)
@@ -132,6 +139,12 @@ class OpaPressListFileConverterTest {
         softly.assertThat(document.getElementsByClass(HEADING_CLASS).get(0).text())
             .as(HEADING_MESSAGE)
             .contains("Achosion Pledio Ar-lein a Dyrannu – Rhestr y Wasg ar gyfer " + LOCATION_NAME);
+
+        softly.assertThat(document.getElementsByTag("a"))
+            .as("Incorrect anchor title")
+            .hasSize(1)
+            .extracting(element -> element.attr("title"))
+            .containsExactly("Protocol ar rannu rhestrau’r llys a dogfennau gyda’r cyfryngau");
 
         Elements resultBody = document.getElementsByClass(BODY_CLASS);
         softly.assertThat(resultBody.get(0).text())
