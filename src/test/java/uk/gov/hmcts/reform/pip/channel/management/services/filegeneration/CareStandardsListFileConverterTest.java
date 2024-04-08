@@ -48,6 +48,12 @@ class CareStandardsListFileConverterTest {
                 "Last updated 04 October 2022 at 10am"
             );
 
+        softly.assertThat(doc.getElementsByTag("a"))
+            .as("Incorrect anchor title")
+            .hasSize(1)
+            .extracting(element -> element.attr("title"))
+            .containsExactly("How to observe a court or tribunal hearing");
+
         softly.assertThat(doc.getElementsByTag("th"))
             .as("Incorrect table headers")
             .hasSize(5)
