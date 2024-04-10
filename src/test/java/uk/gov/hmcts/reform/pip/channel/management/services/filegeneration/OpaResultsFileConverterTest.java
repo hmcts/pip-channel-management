@@ -21,6 +21,7 @@ import java.util.Objects;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("PMD.LooseCoupling")
 class OpaResultsFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

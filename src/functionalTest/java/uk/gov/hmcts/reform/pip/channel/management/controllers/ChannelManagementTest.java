@@ -90,7 +90,7 @@ class ChannelManagementTest {
         expectedResult.put(VALID_EMAIL_1, List.of(SUBSCRIPTION_VALID_USER_1, SUBSCRIPTION_VALID_USER_1));
         expectedResult.put(VALID_EMAIL_2, List.of(SUBSCRIPTION_VALID_USER_2, SUBSCRIPTION_VALID_USER_2));
 
-        ConcurrentHashMap<String, List<Subscription>> actualResponse = om.readValue(
+        Map<String, List<Subscription>> actualResponse = om.readValue(
             response.getResponse().getContentAsString(),
             new TypeReference<>() {});
 
@@ -109,7 +109,7 @@ class ChannelManagementTest {
         Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
         expected.put(VALID_EMAIL_1, List.of(SUBSCRIPTION_VALID_USER_1));
 
-        ConcurrentHashMap<String, List<Subscription>> actualResponse = om.readValue(
+        Map<String, List<Subscription>> actualResponse = om.readValue(
             response.getResponse().getContentAsString(),
             new TypeReference<>() {});
 
@@ -143,7 +143,7 @@ class ChannelManagementTest {
         Map<String, List<Subscription>> expected = new ConcurrentHashMap<>();
         expected.put("testCourtelApi", subscriptions);
 
-        ConcurrentHashMap<String, List<Subscription>> mappedResponse = om.readValue(response.getResponse()
+        Map<String, List<Subscription>> mappedResponse = om.readValue(response.getResponse()
                                                                                         .getContentAsString(),
                                                                       new TypeReference<>() {});
 

@@ -49,17 +49,17 @@ public final class EtFortnightlyPressListHelper {
                 int currentSittingDate = i;
                 ObjectNode sittingNode = MAPPER.createObjectNode();
                 ArrayNode hearingNodeArray = MAPPER.createArrayNode();
-                (sittingNode).put(SITTING_DATE, uniqueSittingDates[currentSittingDate]);
+                sittingNode.put(SITTING_DATE, uniqueSittingDates[currentSittingDate]);
                 courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
                     courtRoom -> courtRoom.get(SESSION).forEach(
                         session -> session.get(SITTINGS).forEach(sitting -> {
-                            (sittingNode).put("time", sitting.get("time").asText());
+                            sittingNode.put("time", sitting.get("time").asText());
                             SittingHelper.checkSittingDateAlreadyExists(sitting, uniqueSittingDates,
                                                           hearingNodeArray, currentSittingDate);
                         })
                     )
                 );
-                (sittingNode).putArray(HEARING).addAll(hearingNodeArray);
+                sittingNode.putArray(HEARING).addAll(hearingNodeArray);
                 sittingArray.add(sittingNode);
             }
             ((ObjectNode)courtList).putArray(SITTINGS).addAll(sittingArray);

@@ -126,7 +126,7 @@ public class CivilDailyCauseListSummaryConverter implements ArtefactSummaryConve
                 outputString.append(channel);
             }
         } else {
-            List<String> channelList = MAPPER.convertValue(currentSittingNode, new TypeReference<List<String>>() {
+            List<String> channelList = MAPPER.convertValue(currentSittingNode, new TypeReference<>() {
             });
             outputString.append(String.join(", ", channelList));
         }
