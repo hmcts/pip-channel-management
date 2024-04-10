@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import com.openhtmltopdf.slf4j.Slf4jLogger;
+import com.openhtmltopdf.util.XRLog;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ public class PublicationFileGenerationService {
                                             ListConversionFactory listConversionFactory) {
         this.dataManagementService = dataManagementService;
         this.listConversionFactory = listConversionFactory;
+        XRLog.setLoggerImpl(new Slf4jLogger());
     }
 
     public static String maskDataSourceName(String provenance) {
