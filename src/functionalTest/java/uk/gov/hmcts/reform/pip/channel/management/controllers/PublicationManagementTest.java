@@ -598,7 +598,7 @@ class PublicationManagementTest {
     }
 
     @Test
-    void testGetfileSizes() throws Exception {
+    void testGetFileSizes() throws Exception {
         when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.downloadContent()).thenReturn(
             BinaryData.fromString(new String(file.getBytes())));
