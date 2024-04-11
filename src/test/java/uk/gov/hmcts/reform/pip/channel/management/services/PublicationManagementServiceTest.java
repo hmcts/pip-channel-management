@@ -126,12 +126,11 @@ class PublicationManagementServiceTest {
 
     @Test
     void testGenerateFilesSjpEnglish() {
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(sjpPublicListInput);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
         when(azureBlobService.uploadFile(any(), any())).thenReturn(UPLOADED);
 
-        publicationManagementService.generateFiles(TEST_ARTEFACT_ID);
+        publicationManagementService.generateFiles(TEST_ARTEFACT_ID, sjpPublicListInput);
 
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + PDF.getExtension()), any());
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + EXCEL.getExtension()), any());
@@ -141,12 +140,11 @@ class PublicationManagementServiceTest {
 
     @Test
     void testGenerateFilesSjpWelsh() {
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(sjpPublicListInput);
         when(dataManagementService.getArtefact(any())).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
         when(azureBlobService.uploadFile(any(), any())).thenReturn(UPLOADED);
 
-        publicationManagementService.generateFiles(TEST_ARTEFACT_ID);
+        publicationManagementService.generateFiles(TEST_ARTEFACT_ID, sjpPublicListInput);
 
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + PDF.getExtension()), any());
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + EXCEL.getExtension()), any());
@@ -157,12 +155,11 @@ class PublicationManagementServiceTest {
     @Test
     void testGenerateFilesNonSjpEnglish() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(civilDailyListInput);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
         when(azureBlobService.uploadFile(any(), any())).thenReturn(UPLOADED);
 
-        publicationManagementService.generateFiles(TEST_ARTEFACT_ID);
+        publicationManagementService.generateFiles(TEST_ARTEFACT_ID, civilDailyListInput);
 
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + PDF.getExtension()), any());
         verify(azureBlobService, never())
@@ -173,12 +170,11 @@ class PublicationManagementServiceTest {
     @Test
     void testGenerateFilesNonSjpWelsh() {
         WELSH_ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(civilDailyListInput);
         when(dataManagementService.getArtefact(any())).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
         when(azureBlobService.uploadFile(any(), any())).thenReturn(UPLOADED);
 
-        publicationManagementService.generateFiles(TEST_ARTEFACT_ID);
+        publicationManagementService.generateFiles(TEST_ARTEFACT_ID, civilDailyListInput);
 
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + PDF.getExtension()), any());
         verify(azureBlobService).uploadFile(eq(TEST_ARTEFACT_ID + WELSH_PDF_SUFFIX + PDF.getExtension()), any());

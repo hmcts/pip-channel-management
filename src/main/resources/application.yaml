@@ -58,3 +58,8 @@ springdoc:
 
 pdf:
   font: /opt/app/openSans.ttf
+
+logging:
+  level:
+    com.openhtmltopdf.match: WARN
+    com.openhtmltopdf.load: WARN

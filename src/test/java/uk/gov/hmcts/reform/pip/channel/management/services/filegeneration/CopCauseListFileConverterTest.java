@@ -32,6 +32,7 @@ class CopCauseListFileConverterTest {
 
     private static final String PROVENANCE = "provenance";
     private static final String HEADER_TEXT = "incorrect header text";
+    private static final String TITLE_TEXT = "Incorrect Title Text";
 
     @Test
     void testCopCauseListTemplate() throws IOException {
@@ -67,6 +68,10 @@ class CopCauseListFileConverterTest {
                        .get(0).text())
             .as(HEADER_TEXT)
             .isEqualTo("In the Court of Protection Regional COP Court");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("How to observe a court or tribunal hearing");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
@@ -120,6 +125,10 @@ class CopCauseListFileConverterTest {
                        .get(0).text())
             .as(HEADER_TEXT)
             .isEqualTo("Yn y Llys Gwarchod Regional COP Court");
+
+        assertThat(document.getElementsByTag("a")
+                       .get(0).attr("title"))
+            .as(TITLE_TEXT).contains("Sut i arsylwi gwrandawiad llys neu dribiwnlys");
 
         assertThat(document.getElementsByClass("govuk-body")
                        .get(1).text())
