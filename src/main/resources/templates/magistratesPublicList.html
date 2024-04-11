@@ -253,14 +253,12 @@
                               th:text="${sitting.get('formattedDuration').asText()}"/>
                           </th:block>
                         </tr>
-                        <span th:if="${hearing.get('listingNotes').asText() != ''}">
-                          <tr class="govuk-table__row">
-                            <td class="govuk-table__cell no-wrap" colspan="6">
-                              <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
-                              <span th:text="${hearing.get('listingNotes').asText()}" />
-                            </td>
-                          </tr>
-                        </span>
+                        <tr class="govuk-table__row" th:if="${hearing.get('listingNotes').asText() != ''}">
+                          <td class="govuk-table__cell no-wrap" colspan="6">
+                            <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
+                            <span th:text="${hearing.get('listingNotes').asText()}" />
+                          </td>
+                        </tr>
                       </th:block>
                     </th:block>
                   </th:block>

@@ -238,22 +238,18 @@
                       <td class="govuk-table__cell" th:classappend="${rowBorder}" th:text="${row.defendantRepresentative}"/>
                       <td class="govuk-table__cell" th:classappend="${rowBorder}" th:text="${row.prosecutingAuthority}"/>
                     </tr>
-                    <span th:if="${row.linkedCases != ''}">
-                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell" th:classappend="${linkedCasesBorder}" colspan="5">
-                          <span class="additional-header" th:text="${i18n.linkedCases}" />
-                          <span th:text="${row.linkedCases}" />
-                        </td>
-                      </tr>
-                    </span>
-                    <span th:if="${row.listingNotes != ''}">
-                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell" colspan="5">
-                          <span class="additional-header" th:text="${i18n.listingNotes}" />
-                          <span th:text="${row.listingNotes}" />
-                        </td>
-                      </tr>
-                    </span>
+                    <tr class="govuk-table__row" th:if="${row.linkedCases != ''}">
+                      <td class="govuk-table__cell" th:classappend="${linkedCasesBorder}" colspan="5">
+                        <span class="additional-header" th:text="${i18n.linkedCases}" />
+                        <span th:text="${row.linkedCases}" />
+                      </td>
+                    </tr>
+                    <tr class="govuk-table__row" th:if="${row.listingNotes != ''}">
+                      <td class="govuk-table__cell" colspan="5">
+                        <span class="additional-header" th:text="${i18n.listingNotes}" />
+                        <span th:text="${row.listingNotes}" />
+                      </td>
+                    </tr>
                   </th:block>
                 </tbody>
               </table>

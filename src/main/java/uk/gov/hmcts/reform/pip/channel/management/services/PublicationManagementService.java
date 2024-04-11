@@ -52,23 +52,25 @@ public class PublicationManagementService {
     /**
      * Generate and store the PDF/Excel files for a given artefact.
      *
-     * @param artefactId The artefact Id to generate the files for.
+     * @param artefactId The artefact ID to generate the files for.
+     * @param payload The payload of the artefact.
      */
-    public void generateFiles(UUID artefactId) {
-        publicationFileGenerationService.generate(artefactId).ifPresent(files -> {
-            if (files.getPrimaryPdf().length > 0) {
-                azureBlobService.uploadFile(artefactId + PDF.getExtension(), files.getPrimaryPdf());
-            }
+    public void generateFiles(UUID artefactId, String payload) {
+        publicationFileGenerationService.generate(artefactId, payload)
+            .ifPresent(files -> {
+                if (files.getPrimaryPdf().length > 0) {
+                    azureBlobService.uploadFile(artefactId + PDF.getExtension(), files.getPrimaryPdf());
+                }
 
-            if (files.getAdditionalPdf().length > 0) {
-                azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(),
-                                            files.getAdditionalPdf());
-            }
+                if (files.getAdditionalPdf().length > 0) {
+                    azureBlobService.uploadFile(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension(),
+                                                files.getAdditionalPdf());
+                }
 
-            if (files.getExcel().length > 0) {
-                azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), files.getExcel());
-            }
-        });
+                if (files.getExcel().length > 0) {
+                    azureBlobService.uploadFile(artefactId + EXCEL.getExtension(), files.getExcel());
+                }
+            });
     }
 
     /**
