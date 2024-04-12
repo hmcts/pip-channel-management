@@ -40,7 +40,7 @@ class ChannelManagementTest {
     private static final String API_URL = ROOT_URL + "/api";
 
     //test accounts ids and emails that exist in account man staging
-    private static final String VALID_USER_ID_1 = "bcd9c298-697e-4d7d-abcd-f0ca8bdbe039";
+    private static final String VALID_USER_ID_1 = "6b549284-c19d-4b05-a40b-33535859895c";
     private static final String VALID_USER_ID_2 = "163b03a3-1752-4f3c-9d15-a0fda9d09935";
     private static final String VALID_EMAIL_1 = "test_account@hmcts.com";
     private static final String VALID_EMAIL_2 = "test_account_admin@hmcts.com";
