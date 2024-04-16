@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
@@ -108,5 +109,19 @@ public class PublicationManagementController {
     ) {
         publicationManagementService.deleteFiles(artefactId, listType, language);
         return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponse(responseCode = OK_CODE, description = "PDF or Excel file for an artefact exists")
+    @Operation(summary = "Checks if any publication file exists for the artefact")
+    @GetMapping("/{artefactId}/exists")
+    public ResponseEntity<Boolean> fileExists(@PathVariable UUID artefactId) {
+        return ResponseEntity.ok(publicationManagementService.fileExists(artefactId));
+    }
+
+    @ApiResponse(responseCode = OK_CODE, description = "PDF or Excel file for an artefact exists")
+    @Operation(summary = "Returns the publication file sizes from Azure blob storage")
+    @GetMapping("/{artefactId}/sizes")
+    public ResponseEntity<PublicationFileSizes> getFileSizes(@PathVariable UUID artefactId) {
+        return ResponseEntity.ok(publicationManagementService.getFileSizes(artefactId));
     }
 }
