@@ -42,6 +42,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     private static final String OFFENCE = "offence";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
+    private static final String ACCUSED_VALUE = "ACCUSED";
+    private static final String PROSECUTOR_VALUE = "PROSECUTOR";
 
     /**
      * parent method for the process.
@@ -181,9 +183,9 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     private void processPartyRoles(SjpPressList thisCase, JsonNode hearing) {
         hearing.get(PARTY).forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
-                if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
+                if (ACCUSED_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     processAccusedParty(thisCase, party);
-                } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
+                } else if (PROSECUTOR_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     thisCase.setProsecutor(PartyRoleHelper.createOrganisationDetails(party));
                 }
             }

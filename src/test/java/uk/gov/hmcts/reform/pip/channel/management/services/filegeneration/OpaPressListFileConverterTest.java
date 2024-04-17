@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.LooseCoupling"})
 class OpaPressListFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String CONTENT_DATE = "10 October 2023";

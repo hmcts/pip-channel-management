@@ -80,8 +80,7 @@ public final class CrimeListHelper {
         }
 
         if (hearing.has(LISTING_DETAILS)) {
-            listingNotes.append(hearing.get(LISTING_DETAILS).get("listingRepDeadline"));
-            listingNotes.append(", ");
+            listingNotes.append(hearing.get(LISTING_DETAILS).get("listingRepDeadline")).append(", ");
         }
         ((ObjectNode) hearing).put(LISTING_NOTES,
                                    GeneralHelper.trimAnyCharacterFromStringEnd(listingNotes.toString())
@@ -110,7 +109,7 @@ public final class CrimeListHelper {
         if (hearing.has(CASE)) {
             hearing.get(CASE).forEach(hearingCase -> {
                 ObjectNode caseObj = (ObjectNode) hearingCase;
-                (caseObj).put("caseCellBorder", "");
+                caseObj.put("caseCellBorder", "");
                 if (!GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES).isEmpty()
                     || !GeneralHelper.findAndReturnNodeText(

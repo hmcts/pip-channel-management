@@ -81,8 +81,7 @@ public final class MagistratesPublicListHelper {
         }
 
         if (hearing.has(LISTING_DETAILS)) {
-            listingNotes.append(hearing.get(LISTING_DETAILS).get("listingRepDeadline"));
-            listingNotes.append(", ");
+            listingNotes.append(hearing.get(LISTING_DETAILS).get("listingRepDeadline")).append(", ");
         }
         ((ObjectNode)hearing).put(LISTING_NOTES, GeneralHelper.trimAnyCharacterFromStringEnd(listingNotes.toString())
             .replace("\"", ""));

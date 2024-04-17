@@ -31,8 +31,9 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
         StringBuilder output = new StringBuilder(67);
         List<CourtHouse> courtHouseList = jsonParsePayload(payload);
         for (CourtHouse courtHouse : courtHouseList) {
-            output.append("\n•").append(courtHouse.getName());
-            output.append(courtRoomIterator(courtHouse.getListOfCourtRooms()));
+            output.append("\n•")
+                .append(courtHouse.getName())
+                .append(courtRoomIterator(courtHouse.getListOfCourtRooms()));
         }
         return output.toString();
     }
@@ -45,9 +46,9 @@ public class SscsDailyListSummaryConverter implements ArtefactSummaryConverter {
                     Iterator<HearingCase> caseIterator = hearing.getListOfCases().iterator();
                     while (caseIterator.hasNext()) {
                         HearingCase hearingCase = caseIterator.next();
-                        output.append('\n');
-                        output.append(courtRoom.getName()).append(", Time: ").append(hearingCase.getHearingTime());
-                        output.append(caseBuilder(hearingCase, sitting));
+                        output.append('\n')
+                            .append(courtRoom.getName()).append(", Time: ").append(hearingCase.getHearingTime())
+                            .append(caseBuilder(hearingCase, sitting));
                     }
                 }
             }

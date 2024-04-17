@@ -25,7 +25,7 @@ public class SjpPublicListSummaryConverter implements ArtefactSummaryConverter {
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder(47);
 
         payload.get(COURT_LISTS).forEach(courtList ->
             courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
