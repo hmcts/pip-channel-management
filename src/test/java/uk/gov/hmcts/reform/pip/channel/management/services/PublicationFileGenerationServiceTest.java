@@ -27,6 +27,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles(profiles = "test")
@@ -91,11 +93,11 @@ class PublicationFileGenerationServiceTest {
 
     @Test
     void testGenerateFilesSjpEnglish() {
-        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(sjpPublicListInput);
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, sjpPublicListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -119,11 +121,11 @@ class PublicationFileGenerationServiceTest {
 
     @Test
     void testGenerateFilesSjpWelsh() {
-        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(sjpPublicListInput);
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, sjpPublicListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -148,11 +150,11 @@ class PublicationFileGenerationServiceTest {
     @Test
     void testGenerateFilesNonSjpEnglish() {
         ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(civilDailyListInput);
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, civilDailyListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -177,11 +179,11 @@ class PublicationFileGenerationServiceTest {
     @Test
     void testGenerateFilesNonSjpWelsh() {
         WELSH_ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
-        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(civilDailyListInput);
         when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(WELSH_ARTEFACT);
         when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
 
-        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID);
+        Optional<PublicationFiles> files = publicationFileGenerationService.generate(ARTEFACT_ID, civilDailyListInput);
+        verify(dataManagementService, never()).getArtefactJsonBlob(ARTEFACT_ID);
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(files)
@@ -204,13 +206,23 @@ class PublicationFileGenerationServiceTest {
     }
 
     @Test
+    void testGenerateFilesWithoutPayload() {
+        ARTEFACT.setListType(ListType.CIVIL_DAILY_CAUSE_LIST);
+        when(dataManagementService.getArtefactJsonBlob(ARTEFACT_ID)).thenReturn(civilDailyListInput);
+        when(dataManagementService.getArtefact(ARTEFACT_ID)).thenReturn(ARTEFACT);
+        when(dataManagementService.getLocation(LOCATION_ID)).thenReturn(LOCATION);
+
+        publicationFileGenerationService.generate(ARTEFACT_ID, null);
+        verify(dataManagementService).getArtefactJsonBlob(ARTEFACT_ID);
+    }
+
+    @Test
     void testGenerateFilesWithoutConverter() {
         ARTEFACT.setListType(ListType.SJP_PRESS_REGISTER);
-        when(dataManagementService.getArtefactJsonBlob(any())).thenReturn(sjpPublicListInput);
         when(dataManagementService.getArtefact(any())).thenReturn(ARTEFACT);
         when(dataManagementService.getLocation(any())).thenReturn(LOCATION);
 
-        assertThat(publicationFileGenerationService.generate(ARTEFACT_ID))
+        assertThat(publicationFileGenerationService.generate(ARTEFACT_ID, sjpPublicListInput))
             .as(FILE_NOT_PRESENT_MESSAGE)
             .isEmpty();
     }

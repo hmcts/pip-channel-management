@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -56,6 +57,14 @@ class PublicationManagementControllerTest {
     }
 
     @Test
+    void testGenerateFilesV2() {
+        ResponseEntity<Void> response = publicationManagementController
+            .generateFiles(UUID.randomUUID(), "payload");
+
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode(), STATUS_MESSAGE);
+    }
+
+    @Test
     void testGetFile() {
         when(publicationManagementService.getStoredPublication(any(), any(), any(), eq(USER_ID), eq(true),
                                                                eq(false)
@@ -75,5 +84,24 @@ class PublicationManagementControllerTest {
 
         ResponseEntity<Void> response = publicationManagementController.deleteFiles(ARTEFACT_ID, LIST_TYPE, LANGUAGE);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), STATUS_MESSAGE);
+    }
+
+    @Test
+    void testFileExists() {
+        when(publicationManagementService.fileExists(ARTEFACT_ID)).thenReturn(true);
+
+        ResponseEntity<Boolean> response = publicationManagementController.fileExists(ARTEFACT_ID);
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
+        assertEquals(true, response.getBody(), RESPONSE_BODY_MESSAGE);
+    }
+
+    @Test
+    void testGetFileSizes() {
+        PublicationFileSizes fileSizes = new PublicationFileSizes(1234L, null, 123L);
+        when(publicationManagementService.getFileSizes(ARTEFACT_ID)).thenReturn(fileSizes);
+
+        ResponseEntity<PublicationFileSizes> response = publicationManagementController.getFileSizes(ARTEFACT_ID);
+        assertEquals(HttpStatus.OK, response.getStatusCode(), STATUS_MESSAGE);
+        assertEquals(fileSizes, response.getBody(), RESPONSE_BODY_MESSAGE);
     }
 }

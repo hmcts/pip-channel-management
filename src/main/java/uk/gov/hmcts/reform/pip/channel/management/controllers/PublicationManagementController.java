@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
 import uk.gov.hmcts.reform.pip.channel.management.services.PublicationManagementService;
 import uk.gov.hmcts.reform.pip.model.authentication.roles.IsAdmin;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
@@ -62,8 +64,19 @@ public class PublicationManagementController {
     @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
     @Operation(summary = "Takes in an artefact ID and generates/stores a publication file")
     @PostMapping("/{artefactId}")
+    @Deprecated
     public ResponseEntity<Void> generateFiles(@PathVariable UUID artefactId) {
-        publicationManagementService.generateFiles(artefactId);
+        publicationManagementService.generateFiles(artefactId, null);
+        return ResponseEntity.accepted().build();
+    }
+
+    @ApiResponse(responseCode = ACCEPTED_CODE, description = "Request to generate files accepted")
+    @ApiResponse(responseCode = NOT_FOUND_CODE, description = NOT_FOUND_DESCRIPTION)
+    @ApiResponse(responseCode = INTERNAL_ERROR_CODE, description = "Cannot process the artefact")
+    @Operation(summary = "Generates/stores a publication file for a given artefact ID and payload")
+    @PostMapping("/v2/{artefactId}")
+    public ResponseEntity<Void> generateFiles(@PathVariable UUID artefactId, @RequestBody String payload) {
+        publicationManagementService.generateFiles(artefactId, payload);
         return ResponseEntity.accepted().build();
     }
 
@@ -96,5 +109,19 @@ public class PublicationManagementController {
     ) {
         publicationManagementService.deleteFiles(artefactId, listType, language);
         return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponse(responseCode = OK_CODE, description = "PDF or Excel file for an artefact exists")
+    @Operation(summary = "Checks if any publication file exists for the artefact")
+    @GetMapping("/{artefactId}/exists")
+    public ResponseEntity<Boolean> fileExists(@PathVariable UUID artefactId) {
+        return ResponseEntity.ok(publicationManagementService.fileExists(artefactId));
+    }
+
+    @ApiResponse(responseCode = OK_CODE, description = "PDF or Excel file for an artefact exists")
+    @Operation(summary = "Returns the publication file sizes from Azure blob storage")
+    @GetMapping("/{artefactId}/sizes")
+    public ResponseEntity<PublicationFileSizes> getFileSizes(@PathVariable UUID artefactId) {
+        return ResponseEntity.ok(publicationManagementService.getFileSizes(artefactId));
     }
 }
