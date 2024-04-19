@@ -25,6 +25,7 @@ import java.util.Objects;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("PMD.LooseCoupling")
 class MagistratesStandardListFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

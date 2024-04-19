@@ -22,6 +22,7 @@ import java.util.Objects;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("PMD.LooseCoupling")
 class OpaPublicListFileConverterTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String HEADING_CLASS = "govuk-heading-l";

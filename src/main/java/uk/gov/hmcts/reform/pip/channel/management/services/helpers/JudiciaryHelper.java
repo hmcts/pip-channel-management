@@ -22,7 +22,7 @@ public final class JudiciaryHelper {
         if (judiciaryNode.has(JUDICIARY)) {
             judiciaryNode.get(JUDICIARY).forEach(judiciary -> {
                 String johKnownAs = GeneralHelper.findAndReturnNodeText(judiciary, "johKnownAs");
-                if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
+                if (Boolean.TRUE.toString().equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
                     presidingJudiciary.set(new StringBuilder(johKnownAs));
                 } else {
                     judiciaries.add(johKnownAs);
@@ -47,7 +47,7 @@ public final class JudiciaryHelper {
                 String judgeName = Stream.of(johTitle, johNameSurname)
                     .filter(StringUtils::isNotBlank)
                     .collect(Collectors.joining(" "));
-                if ("true".equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
+                if (Boolean.TRUE.toString().equals(GeneralHelper.findAndReturnNodeText(judiciary, "isPresiding"))) {
                     presidingJudiciary.set(new StringBuilder(judgeName));
                 } else {
                     judiciaries.add(judgeName);

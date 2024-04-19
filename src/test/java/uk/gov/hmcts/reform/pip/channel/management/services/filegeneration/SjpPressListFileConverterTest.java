@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
+@SuppressWarnings("PMD.LooseCoupling")
 class SjpPressListFileConverterTest {
 
     @Autowired
