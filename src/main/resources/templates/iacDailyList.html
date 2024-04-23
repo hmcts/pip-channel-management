@@ -230,6 +230,9 @@
                     <th:block th:if="${hearing.get('hearingType') != null}">
                       <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
                     </th:block>
+                    <th:block th:if="${hearing.get('hearingType') == null}">
+                      <td class="govuk-table__cell"/>
+                    </th:block>
 
                   </tr>
                 </th:block>

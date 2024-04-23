@@ -107,7 +107,6 @@
                     "sittingEnd": "2020-02-20T22:00:00.001Z",
                     "hearing": [
                       {
-                        "hearingType": "Directions",
                         "case": [
                           {
                             "caseNumber": "12341234",
