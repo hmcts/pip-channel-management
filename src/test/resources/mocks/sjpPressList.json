@@ -117,8 +117,7 @@
                             "partyRole": "ACCUSED",
                             "individualDetails": {
                               "individualMiddleName": "This is a middlename",
-                              "dateOfBirth": "01/01/1800",
-                              "age": 50,
+                              "dateOfBirth": "01/01/1980",
                               "title": "This is a title"
                             }
                           },
@@ -158,8 +157,6 @@
                             "individualDetails": {
                               "individualForenames": "This is a forename",
                               "individualSurname": "This is a surname",
-                              "dateOfBirth": "01/01/1800",
-                              "age": 50,
                               "address": {
                               },
                               "title": "This is a title"

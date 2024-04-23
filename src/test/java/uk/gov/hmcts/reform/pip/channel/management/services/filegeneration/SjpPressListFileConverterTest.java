@@ -196,6 +196,16 @@ class SjpPressListFileConverterTest {
             .as("Address line should be empty (for empty address field)")
             .isEmpty();
 
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(3) > table > tbody > tr:nth-child(2) > td").text())
+            .as("Dob only should be present (for missing age field)")
+            .isEqualTo("01/01/1980");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(4) > table > tbody > tr:nth-child(2) > td").text())
+            .as("Dob and age should be empty (for missing dob and age fields)")
+            .isEmpty();
+
         Elements pages = document.getElementsByClass("pageSeparatedCase");
         softly.assertThat(pages)
             .as("Incorrect number of pages")

@@ -275,8 +275,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         if (party.has(INDIVIDUAL_DETAILS)) {
             JsonNode individualDetailsNode = party.get(INDIVIDUAL_DETAILS);
             thisCase.setName(PartyRoleHelper.createIndividualDetails(party, false));
-            thisCase.setDateOfBirth(individualDetailsNode.get("dateOfBirth").asText());
-            thisCase.setAge(individualDetailsNode.get("age").asText());
+            thisCase.setDateOfBirth(GeneralHelper.findAndReturnNodeText(individualDetailsNode, "dateOfBirth"));
+            thisCase.setAge(GeneralHelper.findAndReturnNodeText(individualDetailsNode, "age"));
 
             if (individualDetailsNode.has("address")) {
                 processAddress(thisCase, individualDetailsNode.get("address"));
