@@ -291,6 +291,21 @@ class SjpPressListFileConverterTest {
             .as("Prosecutor Name column is different")
             .isEqualTo("Prosecutor Name");
 
+        Row row = sheet.getRow(1);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB and age should be present")
+            .isEqualTo("01/01/1800 (50)");
+
+        row = sheet.getRow(3);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB only should be present (for missing age fields)")
+            .isEqualTo("01/01/1980");
+
+        row = sheet.getRow(4);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB and age should be empty (for missing DOB and age fields)")
+            .isEmpty();
+
         softly.assertAll();
     }
 }

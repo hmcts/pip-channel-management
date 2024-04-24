@@ -121,8 +121,17 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
                     : String.join(" ", entry.getAddressRemainder());
                 String referenceRemainder = entry.getReferenceRemainder() == null ? ""
                     : String.join(" ", entry.getReferenceRemainder());
-                String accusedDob = entry.getDateOfBirth() == null ? ""
-                    : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+
+                String accusedDob;
+                if (StringUtils.isEmpty(entry.getDateOfBirth())) {
+                    accusedDob = StringUtils.isEmpty(entry.getAge())
+                        ? ""
+                        : String.format("(%s)", entry.getAge());
+                } else {
+                    accusedDob = StringUtils.isEmpty(entry.getAge())
+                        ? entry.getDateOfBirth()
+                        : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+                }
 
                 setCellValue(dataRow, 0, concatenateStrings(entry.getAddressLine1(), addressRemainder));
                 setCellValue(dataRow, 1, concatenateStrings(entry.getReference1(), referenceRemainder));
