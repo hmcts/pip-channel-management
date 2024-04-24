@@ -121,17 +121,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
                     : String.join(" ", entry.getAddressRemainder());
                 String referenceRemainder = entry.getReferenceRemainder() == null ? ""
                     : String.join(" ", entry.getReferenceRemainder());
-
-                String accusedDob;
-                if (StringUtils.isEmpty(entry.getDateOfBirth())) {
-                    accusedDob = StringUtils.isEmpty(entry.getAge())
-                        ? ""
-                        : String.format("(%s)", entry.getAge());
-                } else {
-                    accusedDob = StringUtils.isEmpty(entry.getAge())
-                        ? entry.getDateOfBirth()
-                        : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
-                }
+                String accusedDob = getAccusedDob(entry);
 
                 setCellValue(dataRow, 0, concatenateStrings(entry.getAddressLine1(), addressRemainder));
                 setCellValue(dataRow, 1, concatenateStrings(entry.getReference1(), referenceRemainder));
@@ -304,5 +294,17 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         return Arrays.stream(groupOfStrings)
             .filter(s -> !StringUtils.isBlank(s))
             .collect(Collectors.joining(" "));
+    }
+
+    private String getAccusedDob(SjpPressList entry) {
+        if (StringUtils.isEmpty(entry.getDateOfBirth())) {
+            return StringUtils.isEmpty(entry.getAge())
+                ? ""
+                : String.format("(%s)", entry.getAge());
+        } else {
+            return StringUtils.isEmpty(entry.getAge())
+                ? entry.getDateOfBirth()
+                : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+        }
     }
 }
