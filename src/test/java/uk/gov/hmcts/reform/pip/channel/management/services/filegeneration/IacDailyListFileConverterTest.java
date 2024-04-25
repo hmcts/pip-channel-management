@@ -119,8 +119,8 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .contains("9:00pm",
                       CASE_REF,
-                      "Surname Rep: Mr Individual Forenames Individual Surname",
-                      RESPONDENT,
+                      "Organisation Name Rep: Organisation Name",
+                      "Organisation Name",
                       "French",
                       "VIDEO HEARING",
                       "1234");

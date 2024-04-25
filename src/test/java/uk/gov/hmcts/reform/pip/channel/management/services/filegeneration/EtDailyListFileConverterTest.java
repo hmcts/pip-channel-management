@@ -94,6 +94,17 @@ class EtDailyListFileConverterTest {
                         "This is a sitting channel"
             );
 
+        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(1).getElementsByTag("td"))
+            .as("Incorrect table contents for organisation details")
+            .hasSize(14)
+            .extracting(Element::text)
+            .startsWith("9:30am",
+                      "3 mins",
+                      "12341234",
+                      "Organisation Name",
+                      "Organisation Name",
+                      "Hearing Type 1");
+
         softly.assertAll();
     }
 
