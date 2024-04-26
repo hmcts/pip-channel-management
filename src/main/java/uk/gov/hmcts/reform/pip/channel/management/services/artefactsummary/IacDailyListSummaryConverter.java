@@ -42,7 +42,7 @@ public class IacDailyListSummaryConverter implements ArtefactSummaryConverter {
 
                                 GeneralHelper.appendToStringBuilder(output, "Hearing Channel - ",
                                                                     sitting, "caseHearingChannel");
-                                GeneralHelper.appendToStringBuilder(output, "Appellant - ",
+                                GeneralHelper.appendToStringBuilder(output, "Appellant/Applicant - ",
                                                                     hearingCase, "claimant");
                                 GeneralHelper.appendToStringBuilder(output, "Prosecuting Authority - ",
                                                                     hearingCase, "prosecutingAuthority");
