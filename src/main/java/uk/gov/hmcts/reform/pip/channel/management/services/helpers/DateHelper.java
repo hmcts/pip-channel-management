@@ -32,7 +32,7 @@ public final class DateHelper {
     public static String formatTimeStampToBst(String timestamp, Language language, boolean isTimeOnly,
                                               boolean isBothDateAndTime, String dateFormat) {
         ZonedDateTime zonedDateTime = convertStringToBst(timestamp);
-        String pattern = DateHelper.getDateTimeFormat(zonedDateTime, isTimeOnly, isBothDateAndTime, language,
+        String pattern = getDateTimeFormat(zonedDateTime, isTimeOnly, isBothDateAndTime, language,
                                                       dateFormat);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern, Locale.UK);
         return dtf.format(zonedDateTime);

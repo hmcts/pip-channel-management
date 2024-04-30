@@ -19,6 +19,8 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
     private static final String ORGANISATION_ADDRESS = "organisationAddress";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
+    private static final String ACCUSED_VALUE = "ACCUSED";
+    private static final String PROSECUTOR_VALUE = "PROSECUTOR";
 
     /**
      * sjp press parent method - iterates over session data. Routes to specific methods which handle offences and
@@ -126,10 +128,10 @@ public class SjpPressListSummaryConverter implements ArtefactSummaryConverter {
         while (partyNode.hasNext()) {
             JsonNode party = partyNode.next();
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
-                if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
+                if (ACCUSED_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     accused = getAccusedName(party);
                     postcode = getAccusedPostcode(party);
-                } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
+                } else if (PROSECUTOR_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     prosecutor = PartyRoleHelper.createOrganisationDetails(party);
                 }
             }

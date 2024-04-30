@@ -37,7 +37,8 @@ class IacDailyListFileConverterTest {
                                               "language", "ENGLISH",
                                               "provenance", "MANUAL_UPLOAD",
                                               "locationName", "Location Name",
-                                              "listType", "IAC_DAILY_LIST");
+                                              "listType", "IAC_DAILY_LIST"
+        );
         Map<String, Object> language = handleLanguage();
         JsonNode input = getInput("/mocks/iacDailyList.json");
 
@@ -93,37 +94,43 @@ class IacDailyListFileConverterTest {
             .as("Incorrect table headers")
             .hasSize(7)
             .extracting(Element::text)
-            .containsExactly("Start Time",
-                             "Case Ref",
-                             "Appellant",
-                             "Respondent",
-                             "Interpreter Language",
-                             "Hearing Channel",
-                             "Linked Cases");
+            .containsExactly(
+                "Start Time",
+                "Case Ref",
+                "Appellant/Applicant",
+                "Respondent",
+                "Interpreter Language",
+                "Hearing Channel",
+                "Hearing Type"
+            );
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(0).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:00pm",
-                      CASE_REF,
-                      "Surname Rep: Mr Individual Forenames Individual Surname",
-                      RESPONDENT,
-                      "French",
-                      "Teams, Attended",
-                      "1234");
+            .contains(
+                "9:00pm",
+                CASE_REF,
+                "Surname Rep: Mr Individual Forenames Individual Surname",
+                RESPONDENT,
+                "French",
+                "Teams, Attended",
+                "Directions"
+            );
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(1).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:00pm",
-                      CASE_REF,
-                      "Organisation Name Rep: Organisation Name",
-                      "Organisation Name",
-                      "French",
-                      "VIDEO HEARING",
-                      "1234");
+            .contains(
+                "9:00pm",
+                CASE_REF,
+                "Surname Rep: Mr Individual Forenames Individual Surname",
+                RESPONDENT,
+                "French",
+                "VIDEO HEARING",
+                ""
+            );
 
         softly.assertAll();
     }
@@ -146,39 +153,45 @@ class IacDailyListFileConverterTest {
             .as("Incorrect table headers")
             .hasSize(7)
             .extracting(Element::text)
-            .containsExactly("Start Time",
-                             "Case Ref",
-                             "Appellant",
-                             "Respondent",
-                             "Interpreter Language",
-                             "Hearing Channel",
-                             "Linked Cases");
+            .containsExactly(
+                "Start Time",
+                "Case Ref",
+                "Appellant/Applicant",
+                "Respondent",
+                "Interpreter Language",
+                "Hearing Channel",
+                "Hearing Type"
+            );
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(2)
                               .getElementsByClass("govuk-table__row").get(0).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:20pm",
-                      CASE_REF,
-                      "Surname Rep: No Representative",
-                      RESPONDENT,
-                      "",
-                      "Teams, Attended",
-                      "");
+            .contains(
+                "9:20pm",
+                CASE_REF,
+                "Surname Rep: No Representative",
+                RESPONDENT,
+                "",
+                "Teams, Attended",
+                ""
+            );
 
         softly.assertThat(doc.getElementsByClass(GOVUK_TABLE_BODY).get(2)
                               .getElementsByClass("govuk-table__row").get(1).getElementsByTag("td"))
             .as(TABLE_ROW_ERROR)
             .hasSize(7)
             .extracting(Element::text)
-            .contains("9:20pm",
-                      CASE_REF,
-                      "Surname Rep: Mr Individual Forenames Individual Surname",
-                      RESPONDENT,
-                      "",
-                      "VIDEO HEARING",
-                      "");
+            .contains(
+                "9:20pm",
+                CASE_REF,
+                "Surname Rep: Mr Individual Forenames Individual Surname",
+                RESPONDENT,
+                "",
+                "VIDEO HEARING",
+                ""
+            );
 
         softly.assertAll();
     }

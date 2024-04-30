@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.pip.channel.management.database.AzureBlobService;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
+import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
 import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
@@ -151,6 +152,31 @@ public class PublicationManagementService {
         }
     }
 
+    /**
+     * Checks if any publication file exists for a given artefact.
+     *
+     * @param artefactId The artefact ID to check for the existence of files.
+     * @return true if any file exists, else false.
+     */
+    public boolean fileExists(UUID artefactId) {
+        return azureBlobService.blobFileExists(artefactId + PDF.getExtension())
+            || azureBlobService.blobFileExists(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension())
+            || azureBlobService.blobFileExists(artefactId + EXCEL.getExtension());
+    }
+
+    /**
+     * Retrieves the file sizes of all publication files for a given artefact.
+     *
+     * @param artefactId The artefact ID to retrieve the file sizes.
+     * @return The file sizes.
+     */
+    public PublicationFileSizes getFileSizes(UUID artefactId) {
+        return new PublicationFileSizes(
+            azureBlobService.getBlobSize(artefactId + PDF.getExtension()),
+            azureBlobService.getBlobSize(artefactId + ADDITIONAL_PDF_SUFFIX + PDF.getExtension()),
+            azureBlobService.getBlobSize(artefactId + EXCEL.getExtension())
+        );
+    }
 
     private boolean isAuthorised(Artefact artefact, String userId, boolean system) {
         if (system || artefact.getSensitivity().equals(Sensitivity.PUBLIC)) {

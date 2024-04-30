@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {Application.class, WebClientTestConfiguration.class})
+@SuppressWarnings("PMD.LooseCoupling")
 class SjpPressListFileConverterTest {
 
     @Autowired
@@ -195,6 +196,16 @@ class SjpPressListFileConverterTest {
             .as("Address line should be empty (for empty address field)")
             .isEmpty();
 
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(3) > table > tbody > tr:nth-child(2) > td").text())
+            .as("DOB only should be present (for missing age field)")
+            .isEqualTo("01/01/1980");
+
+        softly.assertThat(document.select(
+                "div.pageSeparatedCase:nth-child(4) > table > tbody > tr:nth-child(2) > td").text())
+            .as("DOB and age should be empty (for missing DOB and age fields)")
+            .isEmpty();
+
         Elements pages = document.getElementsByClass("pageSeparatedCase");
         softly.assertThat(pages)
             .as("Incorrect number of pages")
@@ -279,6 +290,21 @@ class SjpPressListFileConverterTest {
         softly.assertThat(headingRow.getCell(10).getStringCellValue())
             .as("Prosecutor Name column is different")
             .isEqualTo("Prosecutor Name");
+
+        Row row = sheet.getRow(1);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB and age should be present")
+            .isEqualTo("01/01/1800 (50)");
+
+        row = sheet.getRow(3);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB only should be present (for missing age fields)")
+            .isEqualTo("01/01/1980");
+
+        row = sheet.getRow(4);
+        softly.assertThat(row.getCell(2).getStringCellValue())
+            .as("DOB and age should be empty (for missing DOB and age fields)")
+            .isEmpty();
 
         softly.assertAll();
     }

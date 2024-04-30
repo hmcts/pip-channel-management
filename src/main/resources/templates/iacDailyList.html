@@ -138,11 +138,11 @@
 
 </head>
 <body>
-<div class = "header">
+<div class="header">
   <h2 id="page-heading" class="govuk-heading-l" th:text="${i18n.heading}"/>
   <h2 id="page-heading" class="govuk-heading-l" th:text="${locationName + i18n.dailyList}"/>
-  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1" th:text="${i18n.listFor + contentDate}" />
-  <p class="govuk-body" th:text="${i18n.lastUpdated + publicationDate + i18n.at + publicationTime}" />
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1" th:text="${i18n.listFor + contentDate}"/>
+  <p class="govuk-body" th:text="${i18n.lastUpdated + publicationDate + i18n.at + publicationTime}"/>
   <details class="govuk-details">
     <summary class="govuk-details__summary">
       <p th:text="${i18n.importantInfo}" class="govuk-details__summary-text"/>
@@ -157,73 +157,87 @@
 
   <div id="parentTable" aria-label="Court Lists" class="landscape">
     <th:block th:each="courtList : ${artefact.get('courtLists')}">
-      <h1 class="govuk-heading-l list-name" tabindex="0" th:text="${courtList.get('courtListName').asText()}" />
+      <h1 class="govuk-heading-l list-name" tabindex="0" th:text="${courtList.get('courtListName').asText()}"/>
       <div class="govuk-accordion" th:each="courtRoom : ${courtList.get('courtHouse').get('courtRoom')}">
         <th:block th:each="session: ${courtRoom.get('session')}">
           <th:block th:if="${!courtList.get('isBailList').asBoolean()}">
-            <h3 class="govuk-accordion__section-heading" th:text="${i18n.hearingRoom + courtRoom.get('courtRoomName').asText}"/>
+            <h3 class="govuk-accordion__section-heading"
+                th:text="${i18n.hearingRoom + courtRoom.get('courtRoomName').asText}"/>
           </th:block>
-          <th:block th:if="${#strings.length(session.get('formattedJudiciary').asText()) > 0 && courtList.get('isBailList').asBoolean()}">
-            <h3 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText() + ',' + i18n.beforeJudge + session.get('formattedJudiciary').asText()}"/>
+          <th:block
+            th:if="${#strings.length(session.get('formattedJudiciary').asText()) > 0 && courtList.get('isBailList').asBoolean()}">
+            <h3 class="govuk-accordion__section-heading"
+                th:text="${courtRoom.get('courtRoomName').asText() + ',' + i18n.beforeJudge + session.get('formattedJudiciary').asText()}"/>
           </th:block>
-          <th:block th:if="${#strings.length(session.get('formattedJudiciary').asText()) == 0 && courtList.get('isBailList').asBoolean()}">
+          <th:block
+            th:if="${#strings.length(session.get('formattedJudiciary').asText()) == 0 && courtList.get('isBailList').asBoolean()}">
             <h3 class="govuk-accordion__section-heading" th:text="${courtRoom.get('courtRoomName').asText()}"/>
           </th:block>
           <table class="govuk-table">
             <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th th:text="${i18n.startTime}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.caseRef}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.appellant}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.respondent}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.interpreterLanguage}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.hearingChannel}" scope="col" class="govuk-table__header"/>
-                <th th:text="${i18n.linkedCases}" scope="col" class="govuk-table__header"/>
-              </tr>
+            <tr class="govuk-table__row">
+              <th th:text="${i18n.startTime}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.caseRef}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.appellant}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.respondent}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.interpreterLanguage}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.hearingChannel}" scope="col" class="govuk-table__header"/>
+              <th th:text="${i18n.hearingType}" scope="col" class="govuk-table__header"/>
+            </tr>
             </thead>
             <tbody class="govuk-table__body">
-              <th:block th:each="sitting: ${session.get('sittings')}">
-                <th:block th:each="hearing: ${sitting.get('hearing')}">
-                  <th:block th:each="case: ${hearing.get('case')}">
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell" th:text="${sitting.get('formattedStart').asText()}"/>
-                      <th:block th:if="${case.get('caseSequenceIndicator') != null}">
-                        <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
-                      </th:block>
-                      <th:block th:if="${case.get('caseSequenceIndicator') == null}">
-                        <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>
-                      </th:block>
+            <th:block th:each="sitting: ${session.get('sittings')}">
+              <th:block th:each="hearing: ${sitting.get('hearing')}">
+                <th:block th:each="case: ${hearing.get('case')}">
+                  <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" th:text="${sitting.get('formattedStart').asText()}"/>
+                    <th:block th:if="${case.get('caseSequenceIndicator') != null}">
+                      <td class="govuk-table__cell"
+                          th:text="${case.get('caseNumber').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
+                    </th:block>
+                    <th:block th:if="${case.get('caseSequenceIndicator') == null}">
+                      <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>
+                    </th:block>
 
-                      <th:block th:if="${case.get('claimantRepresentative') != null && case.get('claimantRepresentative').asText().length > 0}">
-                        <td class="govuk-table__cell">
-                          <span th:text="${case.get('claimant').asText()}"/>
-                          <br/>
-                          <span th:text="${i18n.rep + case.get('claimantRepresentative').asText()}"/>
-                        </td>
-                      </th:block>
-                      <th:block th:if="${case.get('claimantRepresentative') == null || case.get('claimantRepresentative').asText().length == 0}">
-                        <td class="govuk-table__cell">
-                          <span th:text="${case.get('claimant').asText()}"/>
-                          <br/>
-                          <span th:text="${i18n.rep + i18n.noRep}"/>
-                        </td>
-                      </th:block>
+                    <th:block
+                      th:if="${case.get('claimantRepresentative') != null && case.get('claimantRepresentative').asText().length > 0}">
+                      <td class="govuk-table__cell">
+                        <span th:text="${case.get('claimant').asText()}"/>
+                        <br/>
+                        <span th:text="${i18n.rep + case.get('claimantRepresentative').asText()}"/>
+                      </td>
+                    </th:block>
+                    <th:block
+                      th:if="${case.get('claimantRepresentative') == null || case.get('claimantRepresentative').asText().length == 0}">
+                      <td class="govuk-table__cell">
+                        <span th:text="${case.get('claimant').asText()}"/>
+                        <br/>
+                        <span th:text="${i18n.rep + i18n.noRep}"/>
+                      </td>
+                    </th:block>
 
-                      <td class="govuk-table__cell" th:text="${case.get('prosecutingAuthority').asText()}"/>
+                    <td class="govuk-table__cell" th:text="${case.get('prosecutingAuthority').asText()}"/>
 
-                      <th:block th:if="${case.get('language') != null}">
-                        <td class="govuk-table__cell" th:text="${case.get('language').asText()}"/>
-                      </th:block>
-                      <th:block th:if="${case.get('language') == null}">
-                        <td class="govuk-table__cell"/>
-                      </th:block>
+                    <th:block th:if="${case.get('language') != null}">
+                      <td class="govuk-table__cell" th:text="${case.get('language').asText()}"/>
+                    </th:block>
+                    <th:block th:if="${case.get('language') == null}">
+                      <td class="govuk-table__cell"/>
+                    </th:block>
 
-                      <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
-                      <td class="govuk-table__cell" th:text="${case.get('formattedLinkedCases').asText()}"/>
-                    </tr>
-                  </th:block>
+                    <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
+
+                    <th:block th:if="${hearing.get('hearingType') != null}">
+                      <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
+                    </th:block>
+                    <th:block th:if="${hearing.get('hearingType') == null}">
+                      <td class="govuk-table__cell"/>
+                    </th:block>
+
+                  </tr>
                 </th:block>
               </th:block>
+            </th:block>
             </tbody>
           </table>
         </th:block>

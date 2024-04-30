@@ -51,7 +51,7 @@ public final class GeneralHelper {
                                                        String nodeName, String prefix) {
         builder.append(prefix)
             .append(text)
-            .append(GeneralHelper.findAndReturnNodeText(node, nodeName));
+            .append(findAndReturnNodeText(node, nodeName));
     }
 
     public static String formatNodeArray(JsonNode node, String nodeName, String delimiter) {

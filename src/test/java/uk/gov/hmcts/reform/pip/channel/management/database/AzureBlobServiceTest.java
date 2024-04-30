@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.pip.channel.management.database;
 import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.models.BlobStorageException;
 import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +32,17 @@ class AzureBlobServiceTest {
 
     private static final byte[] TEST_BYTE = MESSAGES_MATCH.getBytes();
 
+    private static final String FILE_EXISTS_FLAG_MESSAGE = "File exists flag does not match";
+    private static final String FILE_SIZE_MESSAGE = "File size does not match";
+
     @Mock
     BlobContainerClient blobContainerClient;
 
     @Mock
     BlobClient blobClient;
+
+    @Mock
+    BlobProperties blobProperties;
 
     @InjectMocks
     AzureBlobService azureBlobService;
@@ -97,5 +104,40 @@ class AzureBlobServiceTest {
                 .as("Log message does not match")
                 .contains("Blob file with name " + BLOB_NAME + " not found");
         }
+    }
+
+    @Test
+    void testBlobFileExists() {
+        when(blobClient.exists()).thenReturn(true);
+        assertThat(azureBlobService.blobFileExists(BLOB_NAME))
+            .as(FILE_EXISTS_FLAG_MESSAGE)
+            .isTrue();
+    }
+
+    @Test
+    void testBlobFileDoesNotExist() {
+        when(blobClient.exists()).thenReturn(false);
+        assertThat(azureBlobService.blobFileExists(BLOB_NAME))
+            .as(FILE_EXISTS_FLAG_MESSAGE)
+            .isFalse();
+    }
+
+    @Test
+    void testGetBlobSizeIfFileExists() {
+        when(blobClient.exists()).thenReturn(true);
+        when(blobClient.getProperties()).thenReturn(blobProperties);
+        when(blobProperties.getBlobSize()).thenReturn(123L);
+
+        assertThat(azureBlobService.getBlobSize(BLOB_NAME))
+            .as(FILE_SIZE_MESSAGE)
+            .isEqualTo(123L);
+    }
+
+    @Test
+    void testGetBlobSizeIfFileDoesNotExist() {
+        when(blobClient.exists()).thenReturn(false);
+        assertThat(azureBlobService.getBlobSize(BLOB_NAME))
+            .as(FILE_SIZE_MESSAGE)
+            .isNull();
     }
 }

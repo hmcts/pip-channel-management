@@ -26,7 +26,6 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.ExceptionRespons
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.stream.Stream;
@@ -173,9 +172,11 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Hearing Type - Directions"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Location - Teams, Attended"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Duration - 1 hour 25 mins"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs Presiding, "
-                                                + "Judge KnownAs 2"),
-                   CONTENT_MISMATCH_ERROR);
+        assertTrue(
+            responseContent.contains("Judge - This is the court room name, Before: Judge KnownAs Presiding, "
+                                         + "Judge KnownAs 2"),
+            CONTENT_MISMATCH_ERROR
+        );
     }
 
     @Test
@@ -310,7 +311,7 @@ class PublicationManagementTest {
         assertTrue(responseContent.contains("Start Time - 11:30am"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case Ref - 12341234 [1 of 2]"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Hearing Channel - Teams, Attended"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Appellant - Mr Individual Forenames Individual Middlename "
+        assertTrue(responseContent.contains("Appellant/Applicant - Mr Individual Forenames Individual Middlename "
                                                 + "Individual Surname"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecuting Authority - Test Name"), CONTENT_MISMATCH_ERROR);
     }
@@ -548,51 +549,6 @@ class PublicationManagementTest {
             .andExpect(status().isForbidden());
     }
 
-    @Test
-    void testGenerateFileWithPayloadAccepted() throws Exception {
-
-        try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream("data/civilAndFamilyDailyCauseList.json")) {
-
-            when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
-
-            mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH)
-                                .content(mockFile.readAllBytes())
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted()).andReturn();
-        }
-    }
-
-    @Test
-    void testGenerateFileWithPayloadNotFound() throws Exception {
-        try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
-            .getResourceAsStream("data/civilAndFamilyDailyCauseList.json")) {
-            MvcResult mvcResult = mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID_NOT_FOUND)
-                                                      .content(mockFile.readAllBytes())
-                                                      .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
-
-            ExceptionResponse exceptionResponse = objectMapper.readValue(
-                mvcResult.getResponse().getContentAsString(), ExceptionResponse.class);
-
-            assertEquals(
-                exceptionResponse.getMessage(),
-                String.format(ARTEFACT_NOT_FOUND_MESSAGE, ARTEFACT_ID_NOT_FOUND),
-                NOT_FOUND_RESPONSE_MESSAGE
-            );
-        }
-    }
-
-    @Test
-    @WithMockUser(username = UNAUTHORIZED_USERNAME, authorities = {UNAUTHORIZED_ROLE})
-    void testGenerateFileWithPayloadUnauthorized() throws Exception {
-        mockMvc.perform(post(ROOT_URL + "/v2/" + ARTEFACT_ID)
-                            .content("test body")
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
-    }
-
     @ParameterizedTest
     @MethodSource(INPUT_PARAMETERS)
     void testGenerateFileAccepted(String listArtefactId) throws Exception {
@@ -623,6 +579,38 @@ class PublicationManagementTest {
     void testGenerateFileUnauthorized() throws Exception {
         mockMvc.perform(post(ROOT_URL + "/" + ARTEFACT_ID))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testGetfileExists() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MvcResult response = mockMvc.perform(
+                get(ROOT_URL + "/" + ARTEFACT_ID_SJP_PRESS_LIST + "/exists"))
+            .andExpect(status().isOk()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should not be null"
+        );
+    }
+
+    @Test
+    void testGetFileSizes() throws Exception {
+        when(blobContainerClient.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.downloadContent()).thenReturn(
+            BinaryData.fromString(new String(file.getBytes())));
+
+        MvcResult response = mockMvc.perform(
+                get(ROOT_URL + "/" + ARTEFACT_ID_SJP_PRESS_LIST + "/sizes"))
+            .andExpect(status().isOk()).andReturn();
+
+        assertNotNull(
+            response.getResponse().getContentAsString(),
+            "Response should not be null"
+        );
     }
 
     @ParameterizedTest
@@ -672,7 +660,7 @@ class PublicationManagementTest {
 
         assertNotNull(
             response.getResponse().getContentAsString(),
-            "Response should not be null"
+            "Null response"
         );
         byte[] decodedBytes = Base64.getDecoder().decode(response.getResponse().getContentAsString());
         String decodedResponse = new String(decodedBytes);
@@ -702,12 +690,12 @@ class PublicationManagementTest {
 
         assertNotNull(
             response.getResponse().getContentAsString(),
-            "Response should not be null"
+            "Null response"
         );
 
         assertTrue(
             response.getResponse().getContentAsString().contains("File with type PDF for artefact with id "
-                                                 + listArtefactId + " has size over the limit of 10 bytes"),
+                                                         + listArtefactId + " has size over the limit of 10 bytes"),
             "Response does not contain expected result"
         );
     }

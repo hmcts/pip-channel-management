@@ -42,6 +42,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     private static final String OFFENCE = "offence";
     private static final String PARTY = "party";
     private static final String PARTY_ROLE = "partyRole";
+    private static final String ACCUSED_VALUE = "ACCUSED";
+    private static final String PROSECUTOR_VALUE = "PROSECUTOR";
 
     /**
      * parent method for the process.
@@ -119,8 +121,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
                     : String.join(" ", entry.getAddressRemainder());
                 String referenceRemainder = entry.getReferenceRemainder() == null ? ""
                     : String.join(" ", entry.getReferenceRemainder());
-                String accusedDob = entry.getDateOfBirth() == null ? ""
-                    : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+                String accusedDob = getAccusedDob(entry);
 
                 setCellValue(dataRow, 0, concatenateStrings(entry.getAddressLine1(), addressRemainder));
                 setCellValue(dataRow, 1, concatenateStrings(entry.getReference1(), referenceRemainder));
@@ -181,9 +182,9 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
     private void processPartyRoles(SjpPressList thisCase, JsonNode hearing) {
         hearing.get(PARTY).forEach(party -> {
             if (!GeneralHelper.findAndReturnNodeText(party, PARTY_ROLE).isEmpty()) {
-                if ("ACCUSED".equals(party.get(PARTY_ROLE).asText())) {
+                if (ACCUSED_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     processAccusedParty(thisCase, party);
-                } else if ("PROSECUTOR".equals(party.get(PARTY_ROLE).asText())) {
+                } else if (PROSECUTOR_VALUE.equals(party.get(PARTY_ROLE).asText())) {
                     thisCase.setProsecutor(PartyRoleHelper.createOrganisationDetails(party));
                 }
             }
@@ -273,8 +274,8 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         if (party.has(INDIVIDUAL_DETAILS)) {
             JsonNode individualDetailsNode = party.get(INDIVIDUAL_DETAILS);
             thisCase.setName(PartyRoleHelper.createIndividualDetails(party, false));
-            thisCase.setDateOfBirth(individualDetailsNode.get("dateOfBirth").asText());
-            thisCase.setAge(individualDetailsNode.get("age").asText());
+            thisCase.setDateOfBirth(GeneralHelper.findAndReturnNodeText(individualDetailsNode, "dateOfBirth"));
+            thisCase.setAge(GeneralHelper.findAndReturnNodeText(individualDetailsNode, "age"));
 
             if (individualDetailsNode.has("address")) {
                 processAddress(thisCase, individualDetailsNode.get("address"));
@@ -293,5 +294,17 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         return Arrays.stream(groupOfStrings)
             .filter(s -> !StringUtils.isBlank(s))
             .collect(Collectors.joining(" "));
+    }
+
+    private String getAccusedDob(SjpPressList entry) {
+        if (StringUtils.isEmpty(entry.getDateOfBirth())) {
+            return StringUtils.isEmpty(entry.getAge())
+                ? ""
+                : String.format("(%s)", entry.getAge());
+        } else {
+            return StringUtils.isEmpty(entry.getAge())
+                ? entry.getDateOfBirth()
+                : String.format("%s (%s)", entry.getDateOfBirth(), entry.getAge());
+        }
     }
 }

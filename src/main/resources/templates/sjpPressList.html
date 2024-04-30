@@ -149,7 +149,7 @@
       </tr>
       <tr>
         <th th:text="${i18n.tableHeaders[1]}"/>
-        <td th:text="${#strings.isEmpty(case.dateOfBirth) ? '' : case.dateOfBirth + ' (' + case.age + ')'}"/>
+        <td th:text="${#strings.isEmpty(case.age) ? case.dateOfBirth : case.dateOfBirth + ' (' + case.age + ')'}"/>
       </tr>
       <tr>
         <th th:text="${i18n.tableHeaders[2]}"/>
