@@ -41,12 +41,20 @@ class EtDailyListSummaryConverterTest {
             .contains("Case Number: 12341234");
 
         softly.assertThat(output)
-            .as("Incorrect claimant")
+            .as("Incorrect individual claimant")
             .contains("Claimant: Mr T Test Surname");
 
         softly.assertThat(output)
-            .as("Incorrect respondent")
+            .as("Incorrect individual respondent")
             .contains("Capt. T Test Surname 2");
+
+        softly.assertThat(output)
+            .as("Incorrect organisation claimant")
+            .contains("Claimant: Organisation Name");
+
+        softly.assertThat(output)
+            .as("Incorrect organisation respondent")
+            .contains("Respondent: Organisation Name");
 
         softly.assertThat(output)
             .as("Incorrect hearing type")

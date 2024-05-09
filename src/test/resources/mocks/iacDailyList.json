@@ -116,30 +116,58 @@
                             "party": [
                               {
                                 "partyRole": "CLAIMANT_PETITIONER",
-                                "individualDetails": {
-                                  "individualSurname": "Surname"
+                                "organisationDetails": {
+                                  "organisationName": "Organisation Name",
+                                  "organisationAddress": {
+                                    "line": [
+                                      "ORGANISATION ADDRESS"
+                                    ],
+                                    "town": "town name",
+                                    "county": "",
+                                    "postCode": ""
+                                  }
                                 }
                               },
                               {
                                 "partyRole": "RESPONDENT",
-                                "individualDetails": {
-                                  "individualSurname": "Authority Surname"
+                                "organisationDetails": {
+                                  "organisationName": "Organisation Name",
+                                  "organisationAddress": {
+                                    "line": [
+                                      "ORGANISATION ADDRESS"
+                                    ],
+                                    "town": "town name",
+                                    "county": "",
+                                    "postCode": ""
+                                  }
                                 }
                               },
                               {
                                 "partyRole": "CLAIMANT_PETITIONER_REPRESENTATIVE",
-                                "individualDetails": {
-                                  "individualForenames": "Individual Forenames",
-                                  "individualSurname": "Individual Surname",
-                                  "title": "Mr"
+                                "organisationDetails": {
+                                  "organisationName": "Organisation Name",
+                                  "organisationAddress": {
+                                    "line": [
+                                      "ORGANISATION ADDRESS"
+                                    ],
+                                    "town": "town name",
+                                    "county": "",
+                                    "postCode": ""
+                                  }
                                 }
                               },
                               {
                                 "partyRole": "RESPONDENT_REPRESENTATIVE",
-                                "individualDetails": {
-                                  "individualForenames": "Individual Forenames",
-                                  "individualSurname": "Individual Surname",
-                                  "title": "Mr"
+                                "organisationDetails": {
+                                  "organisationName": "Organisation Name",
+                                  "organisationAddress": {
+                                    "line": [
+                                      "ORGANISATION ADDRESS"
+                                    ],
+                                    "town": "town name",
+                                    "county": "",
+                                    "postCode": ""
+                                  }
                                 }
                               }
                             ]

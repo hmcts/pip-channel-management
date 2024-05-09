@@ -57,8 +57,12 @@ class IacDailyListSummaryConverterTest {
             .contains("VIDEO HEARING");
 
         softly.assertThat(artefactSummary)
-            .as("incorrect claimant found")
+            .as("incorrect individual claimant found")
             .contains("Surname");
+
+        softly.assertThat(artefactSummary)
+            .as("incorrect organisation claimant found")
+            .contains("Organisation Name");
 
         softly.assertThat(artefactSummary)
             .as("incorrect prosecuting authority found")

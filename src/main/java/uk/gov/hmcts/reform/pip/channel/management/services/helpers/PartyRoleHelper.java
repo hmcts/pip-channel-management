@@ -28,6 +28,7 @@ public final class PartyRoleHelper {
     private static final String INDIVIDUAL_MIDDLE_NAME = "individualMiddleName";
     private static final String INDIVIDUAL_SURNAME = "individualSurname";
     private static final String TITLE = "title";
+    private static final String ORGANISATION_DETAILS = "organisationDetails";
 
     private PartyRoleHelper() {
     }
@@ -78,8 +79,13 @@ public final class PartyRoleHelper {
     }
 
     private static void formatPartyDetails(JsonNode party, StringBuilder builder, boolean initialised) {
-        String details = createIndividualDetails(party, initialised);
-        formatPartyDetails(builder, details);
+        if (party.has(INDIVIDUAL_DETAILS)) {
+            String details = createIndividualDetails(party, initialised);
+            formatPartyDetails(builder, details);
+        } else if (party.has(ORGANISATION_DETAILS)) {
+            String details = createOrganisationDetails(party);
+            formatPartyDetails(builder, details);
+        }
     }
 
     public static void formatPartyDetails(StringBuilder builder, String details) {

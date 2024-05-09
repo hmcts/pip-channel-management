@@ -93,84 +93,6 @@
                         "hearingType": "Directions",
                         "case": [
                           {
-                            "caseName": "This is a case name 2",
-                            "caseNumber": "12341235",
-                            "caseType": "normal",
-                            "party": [
-                              {
-                                "partyRole": "APPLICANT_PETITIONER",
-                                "organisationDetails": {
-                                  "organisationName": "Applicant org name"
-                                }
-                              },
-                              {
-                                "partyRole": "RESPONDENT",
-                                "organisationDetails": {
-                                  "organisationName": "Respondent org name"
-                                }
-                              },
-                              {
-                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
-                                "friendlyRoleName": "Legal Advisor",
-                                "organisationDetails": {
-                                  "organisationName": "Applicant rep org name"
-                                }
-                              },
-                              {
-                                "partyRole": "RESPONDENT_REPRESENTATIVE",
-                                "friendlyRoleName": "Legal Advisor",
-                                "organisationDetails": {
-                                  "organisationName": "Respondent rep org name"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ],
-                    "channel": [
-                      "Teams",
-                      "Attended"
-                    ]
-                  }
-                ],
-                "judiciary": [
-                  {
-                    "isPresiding": true,
-                    "johKnownAs": "Judge KnownAs Presiding"
-                  },
-                  {
-                    "isPresiding": false,
-                    "johKnownAs": "Judge KnownAs"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "courtHouse": {
-        "courtHouseName": "This is the site name",
-        "courtHouseContact": {
-          "venueTelephone": "01234 123 123",
-          "venueEmail": "a@b.com"
-        },
-        "courtRoom": [
-          {
-            "courtRoomName": "This is the court room name",
-            "session": [
-              {
-                "sittings": [
-                  {
-                    "sittingStart": "2022-08-19T09:30:00Z",
-                    "sittingEnd": "2022-08-19T10:55:00Z",
-                    "hearing": [
-                      {
-                        "hearingType": "Directions",
-                        "case": [
-                          {
                             "caseName": "This is a case name 3",
                             "caseNumber": "12341236",
                             "caseType": "normal",
@@ -244,6 +166,84 @@
                                   "individualMiddleName": "Rep Middlename 4",
                                   "individualSurname": "Rep Surname 4",
                                   "title": "Mr"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "channel": [
+                      "Teams",
+                      "Attended"
+                    ]
+                  }
+                ],
+                "judiciary": [
+                  {
+                    "isPresiding": true,
+                    "johKnownAs": "Judge KnownAs Presiding"
+                  },
+                  {
+                    "isPresiding": false,
+                    "johKnownAs": "Judge KnownAs"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "courtHouse": {
+        "courtHouseName": "This is the site name",
+        "courtHouseContact": {
+          "venueTelephone": "01234 123 123",
+          "venueEmail": "a@b.com"
+        },
+        "courtRoom": [
+          {
+            "courtRoomName": "This is the court room name",
+            "session": [
+              {
+                "sittings": [
+                  {
+                    "sittingStart": "2022-08-19T09:30:00Z",
+                    "sittingEnd": "2022-08-19T10:55:00Z",
+                    "hearing": [
+                      {
+                        "hearingType": "Directions",
+                        "case": [
+                          {
+                            "caseName": "This is a case name 2",
+                            "caseNumber": "12341235",
+                            "caseType": "normal",
+                            "party": [
+                              {
+                                "partyRole": "APPLICANT_PETITIONER",
+                                "organisationDetails": {
+                                  "organisationName": "Applicant org name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT",
+                                "organisationDetails": {
+                                  "organisationName": "Respondent org name"
+                                }
+                              },
+                              {
+                                "partyRole": "APPLICANT_PETITIONER_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "organisationDetails": {
+                                  "organisationName": "Applicant rep org name"
+                                }
+                              },
+                              {
+                                "partyRole": "RESPONDENT_REPRESENTATIVE",
+                                "friendlyRoleName": "Legal Advisor",
+                                "organisationDetails": {
+                                  "organisationName": "Respondent rep org name"
                                 }
                               }
                             ]

@@ -189,6 +189,21 @@ class FamilyCauseListFileConverterTest {
                 "Respondent Surname 2"
             );
 
+        softly.assertThat(doc.getElementsByClass("govuk-table__body").get(1).getElementsByTag("td"))
+            .as("Incorrect table contents for hearing with organisation details")
+            .extracting(Element::text)
+            .containsSequence(
+                "10:30am",
+                "12341235",
+                "This is a case name 2",
+                "normal",
+                "Directions",
+                "Teams, Attended",
+                "1 hour 25 mins",
+                "Applicant org name, Legal Advisor: Applicant rep org name",
+                "Respondent org name, Legal Advisor: Respondent rep org name"
+            );
+
         softly.assertAll();
     }
 

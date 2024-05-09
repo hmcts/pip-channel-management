@@ -53,12 +53,16 @@ class EtFortnightlyPressListSummaryConverterTest {
             .contains("12341234");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Claimant found")
+            .as("Incorrect individual claimant")
             .contains("Rep: Mr T Test Surname 2");
 
         softly.assertThat(emailOutput)
-            .as("incorrect Respondent found")
+            .as("Incorrect individual respondent")
             .contains("Capt. T Test Surname");
+
+        softly.assertThat(emailOutput)
+            .as("Incorrect organisation claimant")
+            .contains("Claimant - Organisation Name, Rep: Organisation Name");
 
         softly.assertThat(emailOutput)
             .as("incorrect hearing type found")
