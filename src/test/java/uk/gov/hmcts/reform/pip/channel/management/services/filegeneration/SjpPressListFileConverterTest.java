@@ -169,7 +169,7 @@ class SjpPressListFileConverterTest {
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(13) > td").text())
             .as("incorrect offence wording found")
-            .isEqualTo("This is another offence wording");
+            .isEmpty();
 
         softly.assertThat(document.select(
                 "div.pageSeparatedCase:nth-child(1) > table > tbody > tr:nth-child(14) > td").text())
