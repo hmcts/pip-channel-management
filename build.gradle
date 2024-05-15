@@ -168,12 +168,10 @@ repositories {
   maven { url 'https://jitpack.io' }
 }
 
-def versions = [
-  log4JVersion           : '2.23.1',
-  reformLoggingVersion   : '6.1.4',
-  springBoot             : springBoot.class.package.implementationVersion,
-  springfoxSwagger       : '3.0.0'
-]
+ext {
+  log4JVersion = '2.23.1'
+  reformLoggingVersion = '6.1.4'
+}
 
 dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
@@ -194,11 +192,11 @@ dependencies {
 
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLoggingVersion
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
+  implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
 
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4JVersion
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4JVersion
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
 
   implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
   implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.12.0'
