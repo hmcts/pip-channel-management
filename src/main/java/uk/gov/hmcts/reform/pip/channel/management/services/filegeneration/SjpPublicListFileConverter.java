@@ -53,7 +53,7 @@ public class SjpPublicListFileConverter extends ExcelAbstractList implements Fil
     @Override
     public byte[] convertToExcel(JsonNode artefact, ListType listType) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("SJP Public List");
+            Sheet sheet = workbook.createSheet(listType.getFriendlyName());
             CellStyle boldStyle = createBoldStyle(workbook);
             AtomicInteger rowIdx = new AtomicInteger();
             Row headingRow = sheet.createRow(rowIdx.getAndIncrement());
