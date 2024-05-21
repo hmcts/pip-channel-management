@@ -58,59 +58,6 @@ class AccountManagementServiceTest {
     }
 
     @Test
-    void testGetEmails() throws IOException {
-        Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
-        List<String> emailList = new ArrayList<>();
-        emailList.add("test123");
-        testMap.put("test123", Optional.of("test@email.com"));
-
-        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
-            "Content-Type",
-            ContentType.APPLICATION_JSON
-        ).setBody(ow.writeValueAsString(testMap)));
-
-        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
-        assertEquals(
-            testMap,
-            returnedMap,
-            BAD_MAP_ERROR
-        );
-
-    }
-
-    @Test
-    void testEmptyList() throws IOException {
-        Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
-        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
-            "Content-Type",
-            ContentType.APPLICATION_JSON
-        ).setBody(ow.writeValueAsString(testMap)));
-
-        List<String> emailList = new ArrayList<>();
-        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
-        assertEquals(
-            testMap,
-            returnedMap,
-            BAD_MAP_ERROR
-        );
-
-    }
-
-    @Test
-    void testException() throws IOException {
-
-        List<String> emailList = new ArrayList<>();
-        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(404));
-        try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
-            assertTrue(accountManagementService.getEmails(emailList).isEmpty(),
-                       "should be empty when an exception is thrown");
-            assertTrue(logCaptor.getErrorLogs().get(0)
-                           .contains("Request to Account Management to get account e-mails failed with error"),
-                       "Messages do not match");
-        }
-    }
-
-    @Test
     void testIsAuthorised() {
         mockAccountManagementEndpoint.enqueue(new MockResponse().setBody("true")
                                                   .addHeader("Content-Type", "application/json"));

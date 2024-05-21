@@ -1,0 +1,3 @@
+service-to-service:
+  account-management: http://localhost:6969
+  data-management: http://localhost:8090
