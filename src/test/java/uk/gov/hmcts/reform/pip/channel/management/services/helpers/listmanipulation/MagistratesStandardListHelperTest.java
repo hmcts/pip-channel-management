@@ -70,14 +70,14 @@ class MagistratesStandardListHelperTest {
 
         assertThat(result.get(COURT_ROOM1))
             .hasSize(3)
-            .extracting(d -> d.getDefendantHeading())
+            .extracting(MagistratesStandardList::getDefendantHeading)
             .containsExactly("Surname1, Forename1 (male)",
                              "Surname2, Forename2 (male)*",
                              "Surname3, Forename3 (male)*");
 
         assertThat(result.get(COURT_ROOM2))
             .hasSize(4)
-            .extracting(d -> d.getDefendantHeading())
+            .extracting(MagistratesStandardList::getDefendantHeading)
             .containsExactly("Surname4, Forename4 (male)*",
                              "Surname5, Forename5 (male)*",
                              "Surname6, Forename6 (male)*",
