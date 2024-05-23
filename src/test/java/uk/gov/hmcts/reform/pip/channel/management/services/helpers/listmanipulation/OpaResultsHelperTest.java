@@ -59,19 +59,19 @@ class OpaResultsHelperTest {
         softly.assertThat(values.get(0))
             .as(DEFENDANT_NAME_MESSAGE)
             .hasSize(1)
-            .extracting(v -> v.getDefendant())
+            .extracting(OpaResults::getDefendant)
             .containsExactly("Organisation name");
 
         softly.assertThat(values.get(1))
             .as(DEFENDANT_NAME_MESSAGE)
             .hasSize(1)
-            .extracting(v -> v.getDefendant())
+            .extracting(OpaResults::getDefendant)
             .containsExactly("Surname 2, Forename 2 MiddleName 2");
 
         softly.assertThat(values.get(2))
             .as(DEFENDANT_NAME_MESSAGE)
             .hasSize(2)
-            .extracting(v -> v.getDefendant())
+            .extracting(OpaResults::getDefendant)
             .containsExactly("Surname, Forename MiddleName", "Surname 3, Forename 3 MiddleName 3");
 
         softly.assertAll();
@@ -89,19 +89,19 @@ class OpaResultsHelperTest {
         softly.assertThat(values.get(0))
             .as(CASE_URN_MESSAGE)
             .hasSize(1)
-            .extracting(v -> v.getCaseUrn())
+            .extracting(OpaResults::getCaseUrn)
             .containsExactly("URN456");
 
         softly.assertThat(values.get(1))
             .as(CASE_URN_MESSAGE)
             .hasSize(1)
-            .extracting(v -> v.getCaseUrn())
+            .extracting(OpaResults::getCaseUrn)
             .containsExactly("URN456");
 
         softly.assertThat(values.get(2))
             .as(CASE_URN_MESSAGE)
             .hasSize(2)
-            .extracting(v -> v.getCaseUrn())
+            .extracting(OpaResults::getCaseUrn)
             .containsExactly("URN123", "URN789");
 
         softly.assertAll();

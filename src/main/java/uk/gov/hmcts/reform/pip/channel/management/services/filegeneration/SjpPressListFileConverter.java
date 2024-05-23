@@ -245,7 +245,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
             Map<String, String> thisOffenceMap = Map.of(
                 OFFENCE, thisOffence.get("offenceTitle").asText(),
                 REPORTING_RESTRICTION, processReportingRestrictionSjpPress(thisOffence),
-                "wording", thisOffence.get("offenceWording").asText()
+                "wording", GeneralHelper.findAndReturnNodeText(thisOffence, "offenceWording")
             );
             listOfOffences.add(thisOffenceMap);
         }
