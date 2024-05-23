@@ -35,7 +35,7 @@ public final class MagistratesPublicListHelper {
                             formatCaseInformation(hearing);
                             formatCaseHtmlTable(hearing);
                             hearing.get("case").forEach(
-                                hearingCase -> PartyRoleHelper.handleParties(hearingCase)
+                                PartyRoleHelper::handleParties
                             );
                         });
                     });

@@ -35,7 +35,7 @@ public final class CrownDailyListHelper {
                             CrimeListHelper.formatCaseInformation(hearing);
                             CrimeListHelper.formatCaseHtmlTable(hearing);
                             hearing.get("case").forEach(
-                                hearingCase -> PartyRoleHelper.handleParties(hearingCase)
+                                PartyRoleHelper::handleParties
                             );
                         });
                     });
