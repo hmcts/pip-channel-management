@@ -40,11 +40,7 @@ public class IacDailyListFileConverter implements FileConverter {
         context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                true, false
         ));
-
-        context.setVariable("telephone", TELEPHONE);
-        context.setVariable("email", EMAIL);
-
-
+        
         return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
