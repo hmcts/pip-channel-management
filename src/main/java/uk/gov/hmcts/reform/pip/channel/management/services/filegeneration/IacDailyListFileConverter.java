@@ -16,10 +16,6 @@ import java.util.Map;
  * FileConverter class for the IAC daily list to generate the PDF.
  */
 public class IacDailyListFileConverter implements FileConverter {
-
-    private static final String TELEPHONE = "03001231711";
-    private static final String EMAIL = "contactia@justice.gov.uk";
-
     @Override
     public String convert(JsonNode artefact, Map<String, String> metadata,
                           Map<String, Object> languageResources) throws IOException {
@@ -40,7 +36,7 @@ public class IacDailyListFileConverter implements FileConverter {
         context.setVariable("publicationTime", DateHelper.formatTimeStampToBst(publicationDate, language,
                                                                                true, false
         ));
-        
+
         return TemplateEngine.processTemplate(metadata.get("listType"), context);
     }
 
