@@ -64,6 +64,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PUBLIC_LIST
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_RESULTS;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.PRIMARY_HEALTH_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PRESS_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_DELTA_PUBLIC_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.SSCS_DAILY_LIST;
@@ -75,6 +76,8 @@ public class ListConversionFactory {
     private static final Map<ListType, Pair<FileConverter, ArtefactSummaryConverter>> LIST_MAP = Map.ofEntries(
         Map.entry(SJP_PUBLIC_LIST, Pair.of(new SjpPublicListFileConverter(),
                                            new SjpPublicListSummaryConverter())),
+        Map.entry(SJP_DELTA_PUBLIC_LIST, Pair.of(new SjpPublicListFileConverter(),
+                                                 new SjpPublicListSummaryConverter())),
         Map.entry(SJP_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
                                           new SjpPressListSummaryConverter())),
         Map.entry(SJP_DELTA_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
