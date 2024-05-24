@@ -397,7 +397,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant: A This is a surname"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: AA"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is a prosecutor organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
 
