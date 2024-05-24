@@ -53,7 +53,6 @@ class PublicationManagementTest {
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String SYSTEM_HEADER = "x-system";
-    private static ObjectMapper objectMapper;
     private static MockMultipartFile file;
     @MockBean
     BlobContainerClient blobContainerClient;
@@ -69,7 +68,7 @@ class PublicationManagementTest {
             StandardCharsets.UTF_8)
         );
 
-        objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
     }
 
