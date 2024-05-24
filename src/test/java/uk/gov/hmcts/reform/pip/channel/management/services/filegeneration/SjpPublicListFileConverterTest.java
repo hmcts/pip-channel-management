@@ -47,11 +47,11 @@ class SjpPublicListFileConverterTest {
             .extracting(Element::text)
             .containsExactly(
                 "A This is a surname",
-                "AA1",
+                "AA",
                 "This is an offence title, This is an offence title 2",
                 "This is a prosecutor organisation",
                 "This is an accused organisation name",
-                "A99",
+                "A9",
                 "This is an offence title 3",
                 "This is a prosecutor organisation 2");
     }
@@ -69,7 +69,7 @@ class SjpPublicListFileConverterTest {
             .extracting(Element::text)
             .containsExactly(
                 "A This is a surname 2",
-                "AA1",
+                "AA",
                 "This is an offence title 2",
                 "This is an organisation 2"
             );
