@@ -100,6 +100,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
         = "f067b4dd-0408-4c9f-bba7-e813b78a00e3";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "48732761-5ab5-482a-ad98-3aa91e4d5d5a";
+    private static final String ARTEFACT_ID_SJP_DELTA_PUBLIC_LIST = "f60f5568-0efd-4de3-b5aa-2e6418a9e878";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
     private static final String UNAUTHORIZED_USERNAME = "unauthorized_username";
@@ -140,6 +141,7 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_PRIMARY_HEALTH_LIST), //Primary Health Tribunal Hearing List
             Arguments.of(ARTEFACT_ID_SJP_PRESS_LIST), //Single Justice Procedure Press List
             Arguments.of(ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH), //Single Justice Procedure Public List
+            Arguments.of(ARTEFACT_ID_SJP_DELTA_PUBLIC_LIST), //Single Justice Procedure Delta Public List
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST), //SSCS Daily List
             Arguments.of(ARTEFACT_ID_SSCS_DAILY_LIST_ADDITIONAL_HEARINGS), //SSCS Daily List - Additional Hearings
             Arguments.of(ARTEFACT_ID_OPA_PRESS_LIST), //OPA Press List
@@ -401,6 +403,20 @@ class PublicationManagementTest {
 
         assertTrue(responseContent.contains("Defendant: This is an accused organisation name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Postcode: A99"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummarySingleJusticeProcedureDeltaPublicList() throws Exception {
+        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SJP_DELTA_PUBLIC_LIST))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(responseContent.contains("Defendant: A This is a surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A1"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor: This is a prosecutor organisation"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
+
+        assertTrue(responseContent.contains("Defendant: This is an accused organisation name"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A9"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test

@@ -3,22 +3,23 @@ package uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PUBLIC_LIST;
-
 class SjpPublicListSummaryConverterTest {
-    @Test
-    void testSjpPublicListSummary() throws IOException {
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"SJP_PUBLIC_LIST", "SJP_DELTA_PUBLIC_LIST"})
+    void testSjpPublicListSummary(ListType listType) throws IOException {
         String[] outputLines;
         try (InputStream mockFile = Thread.currentThread().getContextClassLoader()
             .getResourceAsStream("mocks/sjpPublicList.json")) {
             JsonNode payload = new ObjectMapper().readTree(new String(mockFile.readAllBytes()));
-            String result = new ListConversionFactory().getArtefactSummaryConverter(SJP_PUBLIC_LIST)
+            String result = new ListConversionFactory().getArtefactSummaryConverter(listType)
                 .convert(payload);
             outputLines = result.split(System.lineSeparator());
         }
