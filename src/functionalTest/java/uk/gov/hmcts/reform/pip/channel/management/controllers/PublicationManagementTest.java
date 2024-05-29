@@ -96,10 +96,10 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_OPA_RESULTS = "6f76cb9b-3270-477c-a937-2122b2e599b3";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_WELSH
         = "7e7136a6-ce33-4c71-83b7-8bae846543f8";
-    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "055bea62-713b-45f0-b3d2-1f30430804d6";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "64d476db-78a8-45c3-bdd1-ef994d4ca2b0";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
         = "f067b4dd-0408-4c9f-bba7-e813b78a00e3";
-    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "48732761-5ab5-482a-ad98-3aa91e4d5d5a";
+    private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "e4bdc96d-a438-4f04-8475-1da17733f453";
     private static final String ARTEFACT_ID_SJP_DELTA_PUBLIC_LIST = "f60f5568-0efd-4de3-b5aa-2e6418a9e878";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
     private static final String FILE_TYPE_HEADER = "x-file-type";
@@ -397,12 +397,12 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant: A This is a surname"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: AA1"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A1"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Prosecutor: This is a prosecutor organisation"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Offence: This is an offence title"), CONTENT_MISMATCH_ERROR);
 
         assertTrue(responseContent.contains("Defendant: This is an accused organisation name"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Postcode: A99"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Postcode: A9"), CONTENT_MISMATCH_ERROR);
     }
 
     @Test
