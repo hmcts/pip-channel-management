@@ -84,30 +84,30 @@ public final class OpaResultsHelper {
     private static Optional<OpaResults> processParty(JsonNode party) {
         if (party.has(PARTY_ROLE)
             && DEFENDANT.equals(party.get(PARTY_ROLE).asText())) {
-            String defendant = processDefendant(party);
-            List<Offence> offences = processOffences(party);
+            OpaResults opaResults = new OpaResults();
+            processDefendant(party, opaResults);
 
-            // The offence's decision date is used to group and sort the cases for the defendant. If the deciion date
+            // The offence's decision date is used to group and sort the cases for the defendant. If the decision date
             // is blank the entry will be dropped
-            if (StringUtils.isNotBlank(defendant)
-                && !offences.isEmpty()
-                && StringUtils.isNotBlank(offences.get(0).getDecisionDate())) {
-                OpaResults opaResults = new OpaResults();
-                opaResults.setDefendant(defendant);
-                opaResults.setOffences(offences);
+            if (StringUtils.isNotBlank(opaResults.getDefendant())
+                && !opaResults.getOffences().isEmpty()
+                && StringUtils.isNotBlank(opaResults.getOffences().get(0).getDecisionDate())) {
                 return Optional.of(opaResults);
             }
         }
         return Optional.empty();
     }
 
-    private static String processDefendant(JsonNode party) {
+    private static void processDefendant(JsonNode party, OpaResults opaResults) {
         if (party.has(INDIVIDUAL_DETAILS)) {
-            return formatDefendantName(party.get(INDIVIDUAL_DETAILS));
+            JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
+            opaResults.setDefendant(formatDefendantName(individualDetails));
+            opaResults.setOffences(processOffences(individualDetails));
         } else if (party.has(ORGANISATION_DETAILS)) {
-            return GeneralHelper.findAndReturnNodeText(party.get(ORGANISATION_DETAILS), ORGANISATION_NAME);
+            JsonNode organisationDetails = party.get(ORGANISATION_DETAILS);
+            opaResults.setDefendant(GeneralHelper.findAndReturnNodeText(organisationDetails, ORGANISATION_NAME));
+            opaResults.setOffences(processOffences(organisationDetails));
         }
-        return null;
     }
 
     private static String formatDefendantName(JsonNode individualDetails) {
@@ -124,10 +124,10 @@ public final class OpaResultsHelper {
             .collect(Collectors.joining(DELIMITER));
     }
 
-    private static List<Offence> processOffences(JsonNode party) {
+    private static List<Offence> processOffences(JsonNode details) {
         List<Offence> offences = new ArrayList<>();
-        if (party.has(OFFENCE)) {
-            party.get(OFFENCE)
+        if (details.has(OFFENCE)) {
+            details.get(OFFENCE)
                 .forEach(o -> offences.add(buildSingleOffence(o)));
         }
         return offences;
