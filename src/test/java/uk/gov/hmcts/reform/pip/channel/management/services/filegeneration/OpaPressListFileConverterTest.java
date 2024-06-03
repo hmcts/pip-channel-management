@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -194,7 +195,7 @@ class OpaPressListFileConverterTest {
 
         softly.assertThat(document.getElementsByClass("restriction-list-section").get(0).getElementsByTag("h3"))
             .as("reporting restriction title does not match")
-            .extracting(r -> r.text())
+            .extracting(Element::text)
             .contains("Restrictions on publishing or writing about these cases");
 
         softly.assertThat(document.getElementsByClass("govuk-warning-text__text").get(0).text())

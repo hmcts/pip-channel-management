@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static uk.gov.hmcts.reform.pip.model.publication.ListType.SJP_PRESS_LIST;
-
 /**
  * FileConverter class for SJP press list and SJP delta press list - builds a nice pdf from input json and a html
  * template (found in resources/mocks). Uses Thymeleaf to take in variables from model and build appropriately. Final
@@ -85,10 +83,7 @@ public class SjpPressListFileConverter extends ExcelAbstractList implements File
         try (Workbook workbook = new XSSFWorkbook()) {
             final List<SjpPressList> cases = processRawJson(artefact);
 
-            String sheetName = SJP_PRESS_LIST.equals(listType)
-                ? "SJP Press List (Full list)"
-                : "SJP Press List (New cases)";
-            Sheet sheet = workbook.createSheet(sheetName);
+            Sheet sheet = workbook.createSheet(listType.getFriendlyName());
             CellStyle boldStyle = createBoldStyle(workbook);
 
             int rowIdx = 0;
