@@ -49,9 +49,6 @@ service-to-service:
   subscription-management: ${SUBSCRIPTION_MANAGEMENT_URL:https://pip-subscription-management.staging.platform.hmcts.net}
   data-management: ${DATA_MANAGEMENT_URL:https://pip-data-management.staging.platform.hmcts.net}
 
-third-party-api:
-  courtel: ${COURTEL_API:testCourtelApi}
-
 springdoc:
   swagger-ui:
     path: /swagger-ui/

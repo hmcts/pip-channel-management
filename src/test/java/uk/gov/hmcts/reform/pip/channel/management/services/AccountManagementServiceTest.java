@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.pip.channel.management.services;
 
-import com.azure.core.http.ContentType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import nl.altindag.log.LogCaptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -20,14 +18,8 @@ import uk.gov.hmcts.reform.pip.model.publication.ListType;
 import uk.gov.hmcts.reform.pip.model.publication.Sensitivity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -55,59 +47,6 @@ class AccountManagementServiceTest {
     @AfterEach
     void teardown() throws IOException {
         mockAccountManagementEndpoint.shutdown();
-    }
-
-    @Test
-    void testGetEmails() throws IOException {
-        Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
-        List<String> emailList = new ArrayList<>();
-        emailList.add("test123");
-        testMap.put("test123", Optional.of("test@email.com"));
-
-        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
-            "Content-Type",
-            ContentType.APPLICATION_JSON
-        ).setBody(ow.writeValueAsString(testMap)));
-
-        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
-        assertEquals(
-            testMap,
-            returnedMap,
-            BAD_MAP_ERROR
-        );
-
-    }
-
-    @Test
-    void testEmptyList() throws IOException {
-        Map<String, Optional<String>> testMap = new ConcurrentHashMap<>();
-        mockAccountManagementEndpoint.enqueue(new MockResponse().addHeader(
-            "Content-Type",
-            ContentType.APPLICATION_JSON
-        ).setBody(ow.writeValueAsString(testMap)));
-
-        List<String> emailList = new ArrayList<>();
-        Map<String, Optional<String>> returnedMap = accountManagementService.getEmails(emailList);
-        assertEquals(
-            testMap,
-            returnedMap,
-            BAD_MAP_ERROR
-        );
-
-    }
-
-    @Test
-    void testException() throws IOException {
-
-        List<String> emailList = new ArrayList<>();
-        mockAccountManagementEndpoint.enqueue(new MockResponse().setResponseCode(404));
-        try (LogCaptor logCaptor = LogCaptor.forClass(AccountManagementService.class)) {
-            assertTrue(accountManagementService.getEmails(emailList).isEmpty(),
-                       "should be empty when an exception is thrown");
-            assertTrue(logCaptor.getErrorLogs().get(0)
-                           .contains("Request to Account Management to get account e-mails failed with error"),
-                       "Messages do not match");
-        }
     }
 
     @Test
