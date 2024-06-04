@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ChannelNotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileSizeLimitException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.NotFoundException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
@@ -23,19 +22,6 @@ import static uk.gov.hmcts.reform.pip.model.LogBuilder.writeLog;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    /**
-     * Template exception handler, that handles a custom ChannelNotFoundException,
-     * and returns a 404 in the standard format.
-     * @param ex The exception that has been thrown.
-     * @return The error response, modelled using the ExceptionResponse object.
-     */
-    @ExceptionHandler(ChannelNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleChannelNotFound(ChannelNotFoundException ex) {
-        log.error(writeLog("404, no channels found for any subscribers"));
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(generateExceptionResponse(ex.getMessage()));
-    }
 
     @ExceptionHandler(ServiceToServiceException.class)
     public ResponseEntity<ExceptionResponse> handleServiceToService(ServiceToServiceException ex) {
