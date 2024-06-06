@@ -37,17 +37,13 @@
 - [License](#license)
 
 ## Overview
-`pip-channel-management` is a microservice that deals with operations related to retrieving subscription channels, and the generation of alternative publishing formats used throughout the subscription process (such as PDFs).
+`pip-channel-management` is a microservice that deals with operations related to the generation of alternative publishing formats used throughout the subscription process (such as PDFs).
 
 It sits within the Court and Tribunal Hearings Service (CaTH hereafter), written with Spring Boot/Java.
 
 In practice, the service is usually containerized within a hosted kubernetes environment within Azure.
 
-Broadly speaking, this service has two main components detailed below:
-
-##### Subscription Channels
-- For email subscriptions, it maps the subscriptions to their related email address.
-- For third party subscription, it retrieves the API address to send the subscription to.
+Broadly speaking, this service has the following main component:
 
 ##### Alternative publishing formats
 - The generation (and associated CRUD operations) of PDFs and Excel spreadsheets for JSON publications.
@@ -59,8 +55,6 @@ All interactions with `pip-channel-management` are performed through the API (sp
 
 - Generation of PDFs from JSON for each list type. These are used in the subscriptions process and also via the Frontend
 - Generation of publication summary, which contains details about a JSON publication. This is used in the subscription email.
-- Mapping of a list of subscriptions to their appropriate email. It also de-duplicates the list, which in turn means only one email is sent per user.
-- Mapping a third party subscription to its appropriate API endpoint.
 - Azure Blob Storage: Handles interactions with the CaTH Azure Blob Storage instance (or local Azurite emulator/Azure Storage Explorer instances)
 - Secure/Insecure Mode: Use of bearer tokens for authentication with the secure instance (if desired)
 - OpenAPI Spec/Swagger-UI: Documents and allows users or developers to access API resources within the browser.
@@ -141,8 +135,6 @@ Below is a table of currently used environment variables for starting the servic
 | DATA_MANAGEMENT_URL       | URL used for connecting to the pip-data-management service. Defaults to staging if not provided.                                                                                                                                                                       | No        |
 | ACCOUNT_MANAGEMENT_AZ_API | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-account management service                                                                                                            | No        |
 | DATA_MANAGEMENT_AZ_API    | Used as part of the `scope` parameter when requesting a token from Azure. Used for service-to-service communication with the pip-data-management service                                                                                                               | No        |
-| COURTEL_API               | API value for third party                                                                                                                                                                                                                                              | No        |
-
 
 
 ##### Additional Test secrets

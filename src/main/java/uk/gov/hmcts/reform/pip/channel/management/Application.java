@@ -4,14 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import uk.gov.hmcts.reform.pip.channel.management.config.AzureBlobConfigurationProperties;
-import uk.gov.hmcts.reform.pip.channel.management.utils.ThirdPartyApi;
 
-@EnableConfigurationProperties({
-    ThirdPartyApi.class,
-    AzureBlobConfigurationProperties.class
-})
+@EnableConfigurationProperties(AzureBlobConfigurationProperties.class)
 @SpringBootApplication
-@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
+@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
 public class Application {
 
     public static void main(final String[] args) {
