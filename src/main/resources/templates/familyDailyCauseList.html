@@ -137,6 +137,10 @@
     .govuk-table__header {
       font-weight: 700;
     }
+
+    .no-border-bottom {
+      border-bottom: 0;
+    }
   </style>
   <meta charset="UTF-8"/>
   <meta name="subject" content="Accessible PDF template"/>
@@ -199,39 +203,49 @@
                 <tbody class="govuk-table__body">
                   <th:block th:each="sitting : ${session.get('sittings')}">
                     <th:block th:each="hearing : ${sitting.get('hearing')}">
-                      <tr class="govuk-table__row" th:each="case : ${hearing.get('case')}">
-                        <td class="govuk-table__cell no-wrap" th:text="${sitting.get('time').asText()}" />
-                        <td class="govuk-table__cell no-wrap" th:text="${case.get('caseNumber').asText()}" />
-                        <td class="govuk-table__cell" th:text="${case.get('caseName').asText()}" />
-                        <td class="govuk-table__cell" th:text="${case.get('caseType').asText()}" />
-                        <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}" />
-                        <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}" />
-                        <td class="govuk-table__cell no-wrap" th:text="${sitting.get('formattedDuration').asText()}" />
-                        <th:block th:with="node=${partyAtHearingLevel} ? ${hearing} : ${case} ">
-                          <th:block th:if="${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
-                            <td class="govuk-table__cell" th:text="${node.get('applicant').asText()}"/>
-                          </th:block>
-                          <th:block th:if="!${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
-                            <th:block th:if="${#strings.isEmpty(node.get('applicant').asText())}">
-                              <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
+                      <th:block th:each="case : ${hearing.get('case')}">
+                        <th:block th:with="noBorder=${case.get('formattedReportingRestriction').asText() != ''} ? 'no-border-bottom' : '' ">
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell no-wrap" th:classappend="${noBorder}" th:text="${sitting.get('time').asText()}" />
+                            <td class="govuk-table__cell no-wrap" th:classappend="${noBorder}" th:text="${case.get('caseNumber').asText()}" />
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseName').asText()}" />
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseType').asText()}" />
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${hearing.get('hearingType').asText()}" />
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${sitting.get('caseHearingChannel').asText()}" />
+                            <td class="govuk-table__cell no-wrap" th:classappend="${noBorder}" th:text="${sitting.get('formattedDuration').asText()}" />
+                            <th:block th:with="node=${partyAtHearingLevel} ? ${hearing} : ${case} ">
+                              <th:block th:if="${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
+                                <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${node.get('applicant').asText()}"/>
+                              </th:block>
+                              <th:block th:if="!${#strings.isEmpty(node.get('applicantRepresentative').asText())}">
+                                <th:block th:if="${#strings.isEmpty(node.get('applicant').asText())}">
+                                  <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
+                                </th:block>
+                                <th:block th:if="!${#strings.isEmpty(node.get('applicant').asText())}">
+                                  <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${node.get('applicant').asText() + ', ' + i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
+                                </th:block>
+                              </th:block>
+                              <th:block th:if="${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
+                                <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${node.get('respondent').asText()}"/>
+                              </th:block>
+                              <th:block th:if="!${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
+                                <th:block th:if="${#strings.isEmpty(node.get('respondent').asText())}">
+                                  <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
+                                </th:block>
+                                <th:block th:if="!${#strings.isEmpty(node.get('respondent').asText())}">
+                                  <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${node.get('respondent').asText() + ', ' + i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
+                                </th:block>
+                              </th:block>
                             </th:block>
-                            <th:block th:if="!${#strings.isEmpty(node.get('applicant').asText())}">
-                              <td class="govuk-table__cell" th:text="${node.get('applicant').asText() + ', ' + i18n.legalAdvisor + node.get('applicantRepresentative').asText()}" />
-                            </th:block>
-                          </th:block>
-                          <th:block th:if="${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
-                            <td class="govuk-table__cell" th:text="${node.get('respondent').asText()}"/>
-                          </th:block>
-                          <th:block th:if="!${#strings.isEmpty(node.get('respondentRepresentative').asText())}">
-                            <th:block th:if="${#strings.isEmpty(node.get('respondent').asText())}">
-                              <td class="govuk-table__cell" th:text="${i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
-                            </th:block>
-                            <th:block th:if="!${#strings.isEmpty(node.get('respondent').asText())}">
-                              <td class="govuk-table__cell" th:text="${node.get('respondent').asText() + ', ' + i18n.legalAdvisor + node.get('respondentRepresentative').asText()}" />
-                            </th:block>
-                          </th:block>
+                          </tr>
+                          <tr class="govuk-table__row" th:if="${case.get('formattedReportingRestriction').asText() != ''}">
+                            <td class="govuk-table__cell" colspan="9">
+                              <span class="govuk-table__header" th:text="${i18n.reportingRestriction}" />
+                              <span th:text="${case.get('formattedReportingRestriction').asText()}" />
+                            </td>
+                          </tr>
                         </th:block>
-                      </tr>
+                      </th:block>
                     </th:block>
                   </th:block>
                 </tbody>

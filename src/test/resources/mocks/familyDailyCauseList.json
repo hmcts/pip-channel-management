@@ -58,6 +58,10 @@
                             "caseNumber": "12341234",
                             "caseType": "normal",
                             "caseSequenceIndicator": "2 of 3",
+                            "reportingRestrictionDetail": [
+                              "Reporting restriction 1",
+                              "Reporting restriction 2"
+                            ],
                             "party": [
                               {
                                 "partyRole": "APPLICANT_PETITIONER",

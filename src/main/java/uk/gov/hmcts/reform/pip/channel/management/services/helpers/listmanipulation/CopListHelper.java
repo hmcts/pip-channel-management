@@ -17,6 +17,7 @@ public final class CopListHelper {
     private static final String SESSION = "session";
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
+    private static final String REPORTING_RESTRICTION_DETAIL = "reportingRestrictionDetail";
 
     private CopListHelper() {
     }
@@ -39,8 +40,13 @@ public final class CopListHelper {
                         SittingHelper.findAndConcatenateHearingPlatform(sitting, session);
 
                         sitting.get(HEARING).forEach(
-                            hearing -> hearing.get("case")
-                                .forEach(CopListHelper::manipulateCaseInformation)
+                            hearing -> hearing.get("case").forEach(hearingCase -> {
+                                manipulateCaseInformation(hearingCase);
+                                ((ObjectNode) hearingCase).put(
+                                    "formattedReportingRestriction",
+                                    GeneralHelper.formatNodeArray(hearingCase, REPORTING_RESTRICTION_DETAIL, ", ")
+                                );
+                            })
                         );
                     });
                 })

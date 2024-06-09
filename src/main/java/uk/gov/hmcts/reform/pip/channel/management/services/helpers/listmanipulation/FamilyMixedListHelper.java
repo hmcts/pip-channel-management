@@ -27,6 +27,7 @@ public final class FamilyMixedListHelper {
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
     private static final String PARTY = "party";
+    private static final String REPORTING_RESTRICTION_DETAIL = "reportingRestrictionDetail";
 
     private FamilyMixedListHelper() {
     }
@@ -46,6 +47,10 @@ public final class FamilyMixedListHelper {
                             hearing -> hearing.get(CASE).forEach(hearingCase -> {
                                 handleParties(hearingCase);
                                 CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase);
+                                ((ObjectNode) hearingCase).put(
+                                    "formattedReportingRestriction",
+                                    GeneralHelper.formatNodeArray(hearingCase, REPORTING_RESTRICTION_DETAIL, ", ")
+                                );
                             })
                         );
                     });
@@ -71,9 +76,13 @@ public final class FamilyMixedListHelper {
                             } else {
                                 setEmptyParties(hearing);
                             }
-                            hearing.get(CASE).forEach(
-                                hearingCase -> CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase)
-                            );
+                            hearing.get(CASE).forEach(hearingCase -> {
+                                CaseHelper.manipulateCaseInformation((ObjectNode) hearingCase);
+                                ((ObjectNode) hearingCase).put(
+                                    "formattedReportingRestriction",
+                                    GeneralHelper.formatNodeArray(hearingCase, REPORTING_RESTRICTION_DETAIL, ", ")
+                                );
+                            });
                         });
                     });
                 })));

@@ -21,6 +21,7 @@
     "Applicant/Petitioner",
     "Respondent"
   ],
+  "reportingRestriction": "Reporting Restriction: ",
   "beforeJudge": "Before: ",
   "legalAdvisor": "Legal Advisor: ",
   "linkTitle": "How to observe a court or tribunal hearing",
