@@ -85,7 +85,8 @@ public final class FamilyMixedListHelper {
                             });
                         });
                     });
-                })));
+                }))
+            );
     }
 
     private static void handleParties(JsonNode node) {

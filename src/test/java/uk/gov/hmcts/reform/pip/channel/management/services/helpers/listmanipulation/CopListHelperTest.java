@@ -133,7 +133,7 @@ class CopListHelperTest {
                        .get(HEARING).get(0)
                        .get(CASE).get(0)
                        .get(REPORTING_RESTRICTION).asText())
-            .as("Unable to get reporting restriction")
+            .as("Reporting restriction does not match")
             .isEqualTo("Reporting restriction 1, Reporting restriction 2");
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
@@ -144,7 +144,7 @@ class CopListHelperTest {
                        .get(HEARING).get(0)
                        .get(CASE).get(0)
                        .get(REPORTING_RESTRICTION).asText())
-            .as("Unable to get reporting restriction")
+            .as("Reporting restriction should be empty")
             .isEmpty();
     }
 }
