@@ -84,6 +84,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "50fb5f6a-c08b-4ea8-821d-d7b2e6b36e13";
     private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "8dc35dda-0f86-4a61-b273-42c99609335d";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "1fe1a207-dc73-4481-b018-b2f3718f50a2";
+    private static final String ARTEFACT_ID_IAC_DAILY_LIST_ADDITIONAL_CASES = "52bef656-3ddf-4e80-9b4f-122a8da3545b";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "a46d2ae9-22ff-4707-a83d-708ef5264bc3";
     private static final String ARTEFACT_ID_MAGISTRATES_STANDARD_LIST = "d2a77de9-9af9-4256-ba05-ba9fad36745d";
     private static final String ARTEFACT_ID_PRIMARY_HEALTH_LIST = "295179be-2437-45a7-9e3f-691b964f9f65";
@@ -136,6 +137,8 @@ class PublicationManagementTest {
             Arguments.of(ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST), //Employment Tribunals Fortnightly Press List
             Arguments.of(ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST), //Family Daily Cause List
             Arguments.of(ARTEFACT_ID_IAC_DAILY_LIST), //Immigration and Asylum Chamber Daily List
+            Arguments.of(ARTEFACT_ID_IAC_DAILY_LIST_ADDITIONAL_CASES),
+            //Immigration and Asylum Chamber Daily List Additional Cases
             Arguments.of(ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST), //Magistrates Public List
             Arguments.of(ARTEFACT_ID_MAGISTRATES_STANDARD_LIST), //Magistrates Standard List
             Arguments.of(ARTEFACT_ID_PRIMARY_HEALTH_LIST), //Primary Health Tribunal Hearing List
@@ -308,6 +311,20 @@ class PublicationManagementTest {
     @Test
     void testGenerateArtefactSummaryImmigrationAndAsylumChamberDailyList() throws Exception {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_IAC_DAILY_LIST))
+            .andExpect(status().isOk()).andReturn();
+        String responseContent = response.getResponse().getContentAsString();
+        assertTrue(responseContent.contains("Start Time - 11:30am"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Case Ref - 12341234 [1 of 2]"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Hearing Channel - Teams, Attended"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Appellant/Applicant - Mr Individual Forenames Individual Middlename "
+                                                + "Individual Surname"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecuting Authority - Test Name"), CONTENT_MISMATCH_ERROR);
+    }
+
+    @Test
+    void testGenerateArtefactSummaryImmigrationAndAsylumChamberDailyListAdditionalCases() throws Exception {
+        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/"
+                                                     + ARTEFACT_ID_IAC_DAILY_LIST_ADDITIONAL_CASES))
             .andExpect(status().isOk()).andReturn();
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Start Time - 11:30am"), CONTENT_MISMATCH_ERROR);
