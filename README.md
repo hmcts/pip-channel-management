@@ -86,7 +86,7 @@ The above diagram is somewhat simplified for readability (e.g. it does not inclu
 
 ##### General
 
-- [Java JDK 17](https://openjdk.org/projects/jdk/17/) - this is used throughout all of our services.
+- [Java JDK 21](https://openjdk.org/projects/jdk/21/) - this is used throughout all of our services.
 - REST client of some description (e.g. [Curl](https://github.com/curl/curl), [Insomnia](https://insomnia.rest/), [Postman](https://www.postman.com/)). Swagger-UI can also be used to send requests.
 
 ##### Local development
