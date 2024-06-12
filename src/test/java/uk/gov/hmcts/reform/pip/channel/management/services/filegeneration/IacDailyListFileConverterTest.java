@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pip.channel.management.services.filegeneration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -8,46 +7,46 @@ import org.assertj.core.api.SoftAssertions;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.Objects;
 
 @ActiveProfiles("test")
 class IacDailyListFileConverterTest {
 
     private static final IacDailyListFileConverter CONVERTER = new IacDailyListFileConverter();
 
-    private static Document doc;
-
     private static final String GOVUK_TABLE_BODY = "govuk-table__body";
     private static final String TABLE_ROW_ERROR = "Incorrect table rows";
     private static final String CASE_REF = "12341234 [2 of 3]";
     private static final String RESPONDENT = "Authority Surname";
+    private static final String IAC_DAILY_LIST = "IAC_DAILY_LIST";
+    private static final String IAC_DAILY_LIST_ADDITIONAL_CASES = "IAC_DAILY_LIST_ADDITIONAL_CASES";
 
-
-    @BeforeAll
-    public static void beforeAll() throws IOException {
+    private static Document setupTest(ListType listType) throws IOException {
         Map<String, String> metaData = Map.of("contentDate", "02 October 2022",
                                               "language", "ENGLISH",
                                               "provenance", "MANUAL_UPLOAD",
                                               "locationName", "Location Name",
-                                              "listType", "IAC_DAILY_LIST"
+                                              "listType", listType.name()
         );
-        Map<String, Object> language = handleLanguage();
+        Map<String, Object> language = TestUtils.getLanguageResources(listType, "en");
         JsonNode input = getInput("/mocks/iacDailyList.json");
 
         String result = CONVERTER.convert(input, metaData, language);
-        doc = Jsoup.parse(result);
+        return Jsoup.parse(result);
     }
 
-    @Test
-    void testSuccessfulConversionMetadata() {
+    @EnumSource(value = ListType.class, names = {IAC_DAILY_LIST, IAC_DAILY_LIST_ADDITIONAL_CASES})
+    @ParameterizedTest
+    void testSuccessfulConversionMetadata(ListType listType) throws IOException {
+        Document doc = setupTest(listType);
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(doc.getElementsByTag("h2"))
@@ -56,7 +55,8 @@ class IacDailyListFileConverterTest {
             .extracting(Element::text)
             .containsExactly(
                 "First-tier Tribunal: Immigration and Asylum Chamber",
-                "Location Name Daily List"
+                "Location Name Daily List" + (listType.equals(ListType.IAC_DAILY_LIST_ADDITIONAL_CASES)
+                    ? " - Additional Cases" : "")
             );
 
         softly.assertThat(doc.getElementsByClass("header").get(0).getElementsByTag("p"))
@@ -76,8 +76,10 @@ class IacDailyListFileConverterTest {
         softly.assertAll();
     }
 
-    @Test
-    void testSuccessfulConversionBailList() {
+    @EnumSource(value = ListType.class, names = {IAC_DAILY_LIST, IAC_DAILY_LIST_ADDITIONAL_CASES})
+    @ParameterizedTest
+    void testSuccessfulConversionBailList(ListType listType) throws IOException {
+        Document doc = setupTest(listType);
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(doc.getElementsByTag("h1").get(0))
@@ -135,8 +137,10 @@ class IacDailyListFileConverterTest {
         softly.assertAll();
     }
 
-    @Test
-    void testSuccessfulConversionNonBailList() {
+    @EnumSource(value = ListType.class, names = {IAC_DAILY_LIST, IAC_DAILY_LIST_ADDITIONAL_CASES})
+    @ParameterizedTest
+    void testSuccessfulConversionNonBailList(ListType listType) throws IOException {
+        Document doc = setupTest(listType);
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(doc.getElementsByTag("h1").get(1))
@@ -200,15 +204,6 @@ class IacDailyListFileConverterTest {
         try (InputStream inputStream = IacDailyListFileConverterTest.class.getResourceAsStream(resourcePath)) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             return new ObjectMapper().readTree(inputRaw);
-        }
-    }
-
-    private static Map<String, Object> handleLanguage() throws IOException {
-        try (InputStream languageFile = Thread.currentThread()
-            .getContextClassLoader().getResourceAsStream("templates/languages/en/iacDailyList.json")) {
-            return new ObjectMapper().readValue(
-                Objects.requireNonNull(languageFile).readAllBytes(), new TypeReference<>() {
-                });
         }
     }
 

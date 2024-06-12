@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.reform.pip.channel.management.services.ListConversionFactory;
+import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -14,13 +16,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static uk.gov.hmcts.reform.pip.model.publication.ListType.IAC_DAILY_LIST;
-
 @ActiveProfiles("test")
 class IacDailyListSummaryConverterTest {
 
-    @Test
-    void testIacDailyListTemplate() throws IOException {
+    @ParameterizedTest
+    @EnumSource(value = ListType.class, names = {"IAC_DAILY_LIST", "IAC_DAILY_LIST_ADDITIONAL_CASES"})
+    void testIacDailyListTemplate(ListType listType) throws IOException {
 
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get(
@@ -31,7 +32,7 @@ class IacDailyListSummaryConverterTest {
         );
 
         JsonNode payload = new ObjectMapper().readTree(writer.toString());
-        String artefactSummary = new ListConversionFactory().getArtefactSummaryConverter(IAC_DAILY_LIST)
+        String artefactSummary = new ListConversionFactory().getArtefactSummaryConverter(listType)
             .convert(payload);
 
         SoftAssertions softly = new SoftAssertions();
