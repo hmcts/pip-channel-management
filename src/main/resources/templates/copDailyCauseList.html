@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style th:inline="text">
+  <style th:inline="text">
     @page {
       margin: 30px 20px;
 
@@ -112,7 +112,6 @@
       word-wrap: break-word;
     }
 
-
     .govuk-table {
       table-layout: fixed;
       font-family: "openSans";
@@ -140,7 +139,11 @@
     .govuk-table__header {
       font-weight: 700;
     }
-    </style>
+
+    .no-border-bottom {
+      border-bottom: 0;
+    }
+  </style>
   <meta charset="UTF-8"/>
   <meta name="subject" content="Accessible PDF template"/>
   <meta name="author" content="HMCTS Court and Tribunal Hearings"/>
@@ -193,25 +196,35 @@
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                <th:block th:each="sitting : ${session.get('sittings')}">
-                  <th:block th:each="hearing : ${sitting.get('hearing')}">
-                    <tr class="govuk-table__row" th:each="case : ${hearing.get('case')}">
-                      <td class="govuk-table__cell" th:text="${sitting.get('time').asText()}"/>
-                      <td class="govuk-table__cell" th:text="${case.get('caseNumber').asText()}"/>
-                      <td class="govuk-table__cell" th:text="${case.get('caseSuppressionName').asText()}"/>
-                      <td class="govuk-table__cell" th:text="${hearing.get('hearingType').asText()}"/>
-                      <th:block th:if="${case.get('caseIndicator') != null}">
-                        <td class="govuk-table__cell"
-                          th:text="${sitting.get('formattedDuration').asText() + ' [' + case.get('caseIndicator').asText() + ']'}"/>
+                  <th:block th:each="sitting : ${session.get('sittings')}">
+                    <th:block th:each="hearing : ${sitting.get('hearing')}">
+                      <th:block th:each="case : ${hearing.get('case')}">
+                        <th:block th:with="noBorder=${case.get('formattedReportingRestriction').asText() != ''} ? 'no-border-bottom' : '' ">
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${sitting.get('time').asText()}"/>
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseNumber').asText()}"/>
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseSuppressionName').asText()}"/>
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${hearing.get('hearingType').asText()}"/>
+                            <th:block th:if="${case.get('caseIndicator') != null}">
+                              <td class="govuk-table__cell" th:classappend="${noBorder}"
+                                  th:text="${sitting.get('formattedDuration').asText() + ' [' + case.get('caseIndicator').asText() + ']'}"/>
+                            </th:block>
+                            <th:block th:if="${case.get('caseIndicator') == null}">
+                              <td class="govuk-table__cell" th:classappend="${noBorder}"
+                                  th:text="${sitting.get('formattedDuration').asText()}"/>
+                            </th:block>
+                            <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${sitting.get('caseHearingChannel').asText()}"/>
+                          </tr>
+                          <tr class="govuk-table__row" th:if="${case.get('formattedReportingRestriction').asText() != ''}">
+                            <td class="govuk-table__cell" colspan="6">
+                              <span class="govuk-table__header" th:text="${i18n.reportingRestriction}" />
+                              <span th:text="${case.get('formattedReportingRestriction').asText()}" />
+                            </td>
+                          </tr>
+                        </th:block>
                       </th:block>
-                      <th:block th:if="${case.get('caseIndicator') == null}">
-                        <td class="govuk-table__cell"
-                          th:text="${sitting.get('formattedDuration').asText()}"/>
-                      </th:block>
-                      <td class="govuk-table__cell" th:text="${sitting.get('caseHearingChannel').asText()}"/>
-                    </tr>
+                    </th:block>
                   </th:block>
-                </th:block>
                 </tbody>
               </table>
             </div>

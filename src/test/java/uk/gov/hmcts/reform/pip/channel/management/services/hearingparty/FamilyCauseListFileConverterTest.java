@@ -146,7 +146,7 @@ class FamilyCauseListFileConverterTest {
 
         softly.assertThat(doc.getElementsByTag("td"))
             .as("Incorrect table size")
-            .hasSize(45);
+            .hasSize(46);
 
         softly.assertThat(doc.getElementsByTag("td"))
             .as("Incorrect table contents for hearing with a single case")
@@ -160,7 +160,8 @@ class FamilyCauseListFileConverterTest {
                 "Teams, Attended",
                 "1 hour 25 mins",
                 "Surname, Legal Advisor: Mr Individual Forenames Individual Middlename Individual Surname",
-                "Surname"
+                "Surname",
+                "Reporting Restriction: Reporting restriction 1, Reporting restriction 2"
             );
 
         softly.assertThat(doc.getElementsByTag("td"))

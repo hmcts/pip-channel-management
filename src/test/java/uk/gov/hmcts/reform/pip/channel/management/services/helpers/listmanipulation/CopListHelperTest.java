@@ -25,6 +25,7 @@ class CopListHelperTest {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
+    private static final String REPORTING_RESTRICTION = "formattedReportingRestriction";
 
     private static JsonNode inputJson;
 
@@ -117,6 +118,33 @@ class CopListHelperTest {
 
         assertThat(newInputJson.get("regionalJoh").asText())
             .as("Unable to get regional Joh")
+            .isEmpty();
+    }
+
+    @Test
+    void testReportingRestriction() {
+        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(0)
+                       .get(SITTINGS).get(0)
+                       .get(HEARING).get(0)
+                       .get(CASE).get(0)
+                       .get(REPORTING_RESTRICTION).asText())
+            .as("Reporting restriction does not match")
+            .isEqualTo("Reporting restriction 1, Reporting restriction 2");
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(1)
+                       .get(SITTINGS).get(0)
+                       .get(HEARING).get(0)
+                       .get(CASE).get(0)
+                       .get(REPORTING_RESTRICTION).asText())
+            .as("Reporting restriction should be empty")
             .isEmpty();
     }
 }

@@ -32,6 +32,7 @@ class FamilyMixedListHelperTest {
     private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
     private static final String RESPONDENT = "respondent";
     private static final String RESPONDENT_REPRESENTATIVE = "respondentRepresentative";
+    private static final String REPORTING_RESTRICTION = "formattedReportingRestriction";
 
     private static final String APPLICANT_MESSAGE = "Applicant does not match";
     private static final String APPLICANT_REPRESENTATIVE_MESSAGE = "Applicant representative does not match";
@@ -199,5 +200,32 @@ class FamilyMixedListHelperTest {
             .isEqualTo("Respondent rep org name");
 
         softly.assertAll();
+    }
+
+    @Test
+    void testReportingRestriction() {
+        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(0)
+                       .get(SITTINGS).get(0)
+                       .get(HEARING).get(0)
+                       .get(CASE).get(0)
+                       .get(REPORTING_RESTRICTION).asText())
+            .as("Reporting restriction does not match")
+            .isEqualTo("Reporting restriction 1, Reporting restriction 2");
+
+        assertThat(inputJson.get(COURT_LISTS).get(0)
+                       .get(COURT_HOUSE)
+                       .get(COURT_ROOM).get(0)
+                       .get(SESSION).get(0)
+                       .get(SITTINGS).get(0)
+                       .get(HEARING).get(1)
+                       .get(CASE).get(0)
+                       .get(REPORTING_RESTRICTION).asText())
+            .as("Reporting restriction should be empty")
+            .isEmpty();
     }
 }

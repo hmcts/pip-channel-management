@@ -76,13 +76,13 @@ class PublicationManagementTest {
     private static final String NOT_FOUND_RESPONSE_MESSAGE = "Artefact not found message does not match";
     private static final String ARTEFACT_ID_CARE_STANDARDS_LIST = "877033f5-1435-461d-9f0b-eefaeb394b1b";
     private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "3b757c55-413b-4da5-ab88-1611a61b6252";
-    private static final String ARTEFACT_ID_COP_DAILY_CAUSE_LIST = "2e8d48ad-2290-4383-b263-dd7ce328fa0a";
+    private static final String ARTEFACT_ID_COP_DAILY_CAUSE_LIST = "9b5ea026-56fa-4b4e-a990-327ceec19841";
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "8d798ae9-0770-48a3-a615-18363ec2af41";
     private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "3b2f6c2d-e0ee-46f0-83cd-f048862e3e84";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "ca685a57-dc4c-404c-9966-bd92b0953bd7";
     private static final String ARTEFACT_ID_ET_DAILY_LIST = "026deb0e-c5ba-4c55-85ef-368e848712fa";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "50fb5f6a-c08b-4ea8-821d-d7b2e6b36e13";
-    private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "8dc35dda-0f86-4a61-b273-42c99609335d";
+    private static final String ARTEFACT_ID_FAMILY_DAILY_CAUSE_LIST = "f0d3fd42-3a99-4bc1-bd24-975246a15422";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST = "1fe1a207-dc73-4481-b018-b2f3718f50a2";
     private static final String ARTEFACT_ID_IAC_DAILY_LIST_ADDITIONAL_CASES = "2e7a6937-80b5-4e3e-b9f9-a97708001965";
     private static final String ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST = "a46d2ae9-22ff-4707-a83d-708ef5264bc3";
@@ -99,7 +99,7 @@ class PublicationManagementTest {
         = "7e7136a6-ce33-4c71-83b7-8bae846543f8";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_WELSH = "64d476db-78a8-45c3-bdd1-ef994d4ca2b0";
     private static final String ARTEFACT_ID_CIVIL_AND_FAMILY_DAILY_CAUSE_LIST_ENGLISH
-        = "f067b4dd-0408-4c9f-bba7-e813b78a00e3";
+        = "30304c47-942e-40aa-9134-35bb40386a0b";
     private static final String ARTEFACT_ID_SJP_PUBLIC_LIST_ENGLISH = "e4bdc96d-a438-4f04-8475-1da17733f453";
     private static final String ARTEFACT_ID_SJP_DELTA_PUBLIC_LIST = "f60f5568-0efd-4de3-b5aa-2e6418a9e878";
     private static final String CONTENT_MISMATCH_ERROR = "Artefact summary content should match";
