@@ -57,6 +57,7 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.ET_DAILY_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.ET_FORTNIGHTLY_PRESS_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.FAMILY_DAILY_CAUSE_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.IAC_DAILY_LIST;
+import static uk.gov.hmcts.reform.pip.model.publication.ListType.IAC_DAILY_LIST_ADDITIONAL_CASES;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_PUBLIC_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.MAGISTRATES_STANDARD_LIST;
 import static uk.gov.hmcts.reform.pip.model.publication.ListType.OPA_PRESS_LIST;
@@ -105,6 +106,8 @@ public class ListConversionFactory {
         Map.entry(SSCS_DAILY_LIST_ADDITIONAL_HEARINGS, Pair.of(new SscsDailyListFileConverter(),
                                                                new SscsDailyListSummaryConverter())),
         Map.entry(IAC_DAILY_LIST, Pair.of(new IacDailyListFileConverter(),
+                                          new IacDailyListSummaryConverter())),
+        Map.entry(IAC_DAILY_LIST_ADDITIONAL_CASES, Pair.of(new IacDailyListFileConverter(),
                                           new IacDailyListSummaryConverter())),
         Map.entry(PRIMARY_HEALTH_LIST, Pair.of(new PrimaryHealthListFileConverter(),
                                                new TribunalNationalListsSummaryConverter())),
