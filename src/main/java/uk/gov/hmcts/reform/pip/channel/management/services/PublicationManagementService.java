@@ -84,12 +84,10 @@ public class PublicationManagementService {
      */
     public String generateArtefactSummary(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-        ArtefactSummaryData artefactSummaryData = listConversionFactory.getArtefactSummaryData(
-            artefact.getListType()
-        );
+        ArtefactSummaryData artefactSummaryData = listConversionFactory.getArtefactSummaryData(artefact.getListType());
 
         if (artefactSummaryData == null) {
-            log.error("Failed to find summary data for list type");
+            log.error("Failed to retrieve summary data for list type");
             return "";
         }
 

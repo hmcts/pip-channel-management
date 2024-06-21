@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class MagistratesPublicListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         if (GeneralHelper.hearingHasParty(payload)) {
             MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(payload, Language.ENGLISH);
             return processMagistratesPublicListV1(payload);

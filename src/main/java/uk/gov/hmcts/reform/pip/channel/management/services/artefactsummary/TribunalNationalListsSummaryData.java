@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class TribunalNationalListsSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         List<Map<String, String>> summaryCases = new ArrayList<>();
         LocationHelper.formatCourtAddress(payload, ", ", true);
 

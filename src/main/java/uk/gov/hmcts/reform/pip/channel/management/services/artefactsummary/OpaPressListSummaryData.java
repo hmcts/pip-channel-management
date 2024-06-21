@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class OpaPressListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         List<Map<String, String>> summaryCases = new ArrayList<>();
         OpaPressListHelper.processRawListData(payload).forEach(
             (pleaData, list) -> list.forEach(item -> {

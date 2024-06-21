@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class CrownDailyListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         if (GeneralHelper.hearingHasParty(payload)) {
             CrownDailyListHelper.manipulatedCrownDailyListDataV1(payload, Language.ENGLISH);
             CrownDailyListHelper.findUnallocatedCases(payload);

@@ -21,7 +21,7 @@ public class SjpPublicListSummaryData implements ArtefactSummaryData {
     private static final String SITTINGS = "sittings";
 
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         List<Map<String, String>> summaryCases = new ArrayList<>();
         payload.get(COURT_LISTS).forEach(courtList ->
             courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(

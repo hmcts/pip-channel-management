@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class CrownFirmListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         if (GeneralHelper.hearingHasParty(payload)) {
             CrownFirmListHelper.crownFirmListFormattedV1(payload, Language.ENGLISH);
             CrownFirmListHelper.splitByCourtAndDateV1(payload);

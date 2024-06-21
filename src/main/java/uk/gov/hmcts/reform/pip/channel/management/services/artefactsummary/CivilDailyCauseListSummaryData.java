@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class CivilDailyCauseListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         CftListHelper.manipulatedListData(payload, Language.ENGLISH, false);
         List<Map<String, String>> summaryCases = new ArrayList<>();
 

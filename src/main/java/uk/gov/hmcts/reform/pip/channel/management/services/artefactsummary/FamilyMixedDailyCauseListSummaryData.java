@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class FamilyMixedDailyCauseListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         boolean hearingHasParty = GeneralHelper.hearingHasParty(payload);
         if (hearingHasParty) {
             FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(payload, Language.ENGLISH);

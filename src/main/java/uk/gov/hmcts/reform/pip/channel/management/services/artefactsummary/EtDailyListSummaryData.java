@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class EtDailyListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         EtDailyListHelper.processRawListData(payload, Language.ENGLISH);
         List<Map<String, String>> summaryCases = new ArrayList<>();
 

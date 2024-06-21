@@ -10,16 +10,16 @@ public class PublicationSummaryGenerationService {
     /**
      * Generate the list summary for GOV.UK Notify subscription email template.
      *
-     * @param data the summary data used to generate the summary.
+     * @param data - the summary data used to generate the summary.
      * @return the summary string
      */
     public String generate(Map<String, List<Map<String, String>>> data) {
         StringBuilder output = new StringBuilder(256);
         // The summary data consist of sections.
         // If the section heading value is 'null', each section consists of a single case only, and each case is
-        // separated from teh adjacent cases by a horizontal line. Most list types are in this category.
-        // If the section has a heading, each section can contain one or more cases, and each section is separated from
-        // adjacent sections by a horizontal lines.
+        // separated from the adjacent cases by a horizontal line. Most list types are in this category.
+        // If the section has a heading, the heading will be bold. Each section can contain one or more cases, and
+        // each section is separated from adjacent sections by a horizontal lines.
         data.entrySet()
             .forEach(summarySection -> {
                 if (summarySection.getKey() == null) {
@@ -34,7 +34,8 @@ public class PublicationSummaryGenerationService {
                         .append(summarySection.getKey())
                         .append('\n');
 
-                    summarySection.getValue().forEach(summaryCase -> output.append(formatSummaryField(summaryCase)));
+                    summarySection.getValue()
+                        .forEach(summaryCase -> output.append(formatSummaryField(summaryCase)));
                 }
             });
 

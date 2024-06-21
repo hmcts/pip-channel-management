@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class EtFortnightlyPressListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         Map<String, Object> language =
             Map.of("rep", "Rep: ",
                    "noRep", "Rep: ");

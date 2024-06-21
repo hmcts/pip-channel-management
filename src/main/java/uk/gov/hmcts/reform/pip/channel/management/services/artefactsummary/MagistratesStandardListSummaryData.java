@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class MagistratesStandardListSummaryData implements ArtefactSummaryData {
     @Override
-    public Map<String, List<Map<String, String>>> get(JsonNode payload) throws JsonProcessingException {
+    public Map<String, List<Map<String, String>>> get(JsonNode payload) {
         List<Map<String, String>> summaryCases = new ArrayList<>();
         MagistratesStandardListHelper.processRawListData(payload, Language.ENGLISH)
             .forEach(
