@@ -22,9 +22,9 @@ public class TribunalNationalListsSummaryData implements ArtefactSummaryData {
         TribunalNationalListHelper.processRawListData(payload, Language.ENGLISH)
             .forEach(data -> {
                 Map<String, String> fields = ImmutableMap.of(
-                    "Case Name", data.getCaseName(),
-                    "Hearing Date", data.getHearingDate(),
-                    "Hearing Type", data.getHearingType()
+                    "Case name", data.getCaseName(),
+                    "Hearing date", data.getHearingDate(),
+                    "Hearing type", data.getHearingType()
                 );
                 summaryCases.add(fields);
             });

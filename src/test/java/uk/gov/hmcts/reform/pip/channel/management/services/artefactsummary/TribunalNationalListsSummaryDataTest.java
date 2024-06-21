@@ -93,15 +93,15 @@ class TribunalNationalListsSummaryDataTest {
 
         softly.assertThat(keys.get(0))
             .as(SUMMARY_FIELD_KEY_MESSAGE)
-            .isEqualTo("Case Name");
+            .isEqualTo("Case name");
 
         softly.assertThat(keys.get(1))
             .as(SUMMARY_FIELD_KEY_MESSAGE)
-            .isEqualTo("Hearing Date");
+            .isEqualTo("Hearing date");
 
         softly.assertThat(keys.get(2))
             .as(SUMMARY_FIELD_KEY_MESSAGE)
-            .isEqualTo("Hearing Type");
+            .isEqualTo("Hearing type");
     }
 
     private void assertPrimaryHealthListSummaryFieldValues(SoftAssertions softly, Map<String, String> summaryFields) {
