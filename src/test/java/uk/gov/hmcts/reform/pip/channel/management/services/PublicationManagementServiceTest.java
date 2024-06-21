@@ -192,7 +192,8 @@ class PublicationManagementServiceTest {
         assertTrue(response.contains("Prosecutor - This is a prosecutor organisation"), RESPONSE_MESSAGE);
         assertTrue(response.contains("Postcode - AA"),
                    RESPONSE_MESSAGE);
-        assertTrue(response.contains("Offence - This is an offence title, This is an offence title 2"), RESPONSE_MESSAGE);
+        assertTrue(response.contains("Offence - This is an offence title, This is an offence title 2"),
+                   RESPONSE_MESSAGE);
     }
 
     @Test
