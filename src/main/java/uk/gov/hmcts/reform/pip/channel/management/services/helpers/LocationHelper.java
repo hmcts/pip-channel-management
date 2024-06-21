@@ -68,7 +68,7 @@ public final class LocationHelper {
             }
 
             ((ObjectNode)courtHouse).put("formattedCourtHouseAddress",
-                                         GeneralHelper.convertToDelimitedString(courtAddress, ", "));
+                                         GeneralHelper.convertToDelimitedString(courtAddress, delimiter));
         });
     }
 
