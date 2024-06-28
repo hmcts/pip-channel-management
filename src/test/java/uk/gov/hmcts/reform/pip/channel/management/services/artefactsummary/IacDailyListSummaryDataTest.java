@@ -20,8 +20,8 @@ import java.util.Map;
 
 @ActiveProfiles("test")
 class IacDailyListSummaryDataTest {
-    private static final String BAIL_LIST_HEADING = "List name - Bail List";
-    private static final String NON_BAIL_LIST_HEADING = "List name - Non Bail List";
+    private static final String BAIL_LIST_HEADING = "Bail List";
+    private static final String NON_BAIL_LIST_HEADING = "Non Bail List";
 
     private static final String SUMMARY_SECTIONS_MESSAGE = "Summary sections count does not match";
     private static final String SUMMARY_SECTION_HEADING_MESSAGE = "Summary section heading does not match";

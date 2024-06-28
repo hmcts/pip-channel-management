@@ -40,7 +40,7 @@ public class IacDailyListSummaryData implements ArtefactSummaryData {
                                     GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber")
                                 );
 
-                                summaryData.computeIfAbsent("List name - " + courtListName, x -> new ArrayList<>())
+                                summaryData.computeIfAbsent(courtListName, x -> new ArrayList<>())
                                     .add(fields);
                             })
                         );

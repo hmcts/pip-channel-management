@@ -289,7 +289,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
 
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("List name - Bail list"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Bail list"), CONTENT_MISMATCH_ERROR);
         assertTrue(
             responseContent.contains("Appellant - Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
@@ -305,7 +305,7 @@ class PublicationManagementTest {
             .andExpect(status().isOk()).andReturn();
 
         String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("List name - Bail list"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Bail list"), CONTENT_MISMATCH_ERROR);
         assertTrue(
             responseContent.contains("Appellant - Mr Individual Forenames Individual Middlename Individual Surname"),
             CONTENT_MISMATCH_ERROR
