@@ -188,11 +188,12 @@ class PublicationManagementServiceTest {
 
         String response = publicationManagementService.generateArtefactSummary(TEST_ARTEFACT_ID);
 
-        assertTrue(response.contains("AA"), RESPONSE_MESSAGE);
-        assertTrue(response.contains("Prosecutor: This is a prosecutor organisation"), RESPONSE_MESSAGE);
-        assertTrue(response.contains("Offence: This is an offence title, This is an offence title 2"),
+        assertTrue(response.contains("Name - A This is a surname"), RESPONSE_MESSAGE);
+        assertTrue(response.contains("Prosecutor - This is a prosecutor organisation"), RESPONSE_MESSAGE);
+        assertTrue(response.contains("Postcode - AA"),
                    RESPONSE_MESSAGE);
-        assertTrue(response.contains("A This is a surname"), RESPONSE_MESSAGE);
+        assertTrue(response.contains("Offence - This is an offence title, This is an offence title 2"),
+                   RESPONSE_MESSAGE);
     }
 
     @Test

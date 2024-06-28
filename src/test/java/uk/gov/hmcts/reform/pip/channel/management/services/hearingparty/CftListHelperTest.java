@@ -26,7 +26,7 @@ class CftListHelperTest {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
-    private static final String CASE_NAME = "caseName";
+    private static final String FORMATTED_CASE_NAME = "formattedCaseName";
     private static final String CASE_TYPE = "caseType";
 
     private static JsonNode inputJson;
@@ -108,9 +108,9 @@ class CftListHelperTest {
                        .get(SITTINGS).get(0)
                        .get(HEARING).get(0)
                        .get(CASE).get(0)
-                       .get(CASE_NAME).asText())
+                       .get(FORMATTED_CASE_NAME).asText())
             .as("Unable to get case name")
-            .contains("[2 of 3]");
+            .isEqualTo("This is a case name [2 of 3]");
     }
 
     @Test

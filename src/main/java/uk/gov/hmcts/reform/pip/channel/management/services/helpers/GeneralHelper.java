@@ -60,11 +60,15 @@ public final class GeneralHelper {
             node.get(nodeName)
                 .forEach(n -> values.add(n.asText()));
 
-            return values.stream()
-                .filter(r -> !StringUtils.isBlank(r))
-                .collect(Collectors.joining(delimiter));
+            return convertToDelimitedString(values, delimiter);
         }
         return "";
+    }
+
+    public static String convertToDelimitedString(List<String> values, String delimiter) {
+        return values.stream()
+            .filter(StringUtils::isNotBlank)
+            .collect(Collectors.joining(delimiter));
     }
 
     public static String safeGet(String jsonPath, JsonNode node) {

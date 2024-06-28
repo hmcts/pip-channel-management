@@ -132,8 +132,8 @@ def sonarExclusions = []
 
 // TODO: To be removed once all lists have party field on the case level.
 def sonarDuplicateCodeExclusions = [
-  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/CrownDailyListSummaryConverter.java",
-  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/MagistratesPublicListSummaryConverter.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/CrownDailyListSummaryData.java",
+  "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/artefactsummary/MagistratesPublicListSummaryData.java",
   "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/CrownDailyListFileConverter.java",
   "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/CrownFirmListFileConverter.java",
   "src/main/java/uk/gov/hmcts/reform/pip/channel/management/services/filegeneration/MagistratesPublicListFileConverter.java",

@@ -10,7 +10,7 @@ import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.FileS
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.ProcessingException;
 import uk.gov.hmcts.reform.pip.channel.management.errorhandling.exceptions.UnauthorisedException;
 import uk.gov.hmcts.reform.pip.channel.management.models.PublicationFileSizes;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryData;
 import uk.gov.hmcts.reform.pip.model.publication.Artefact;
 import uk.gov.hmcts.reform.pip.model.publication.FileType;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -35,18 +35,21 @@ public class PublicationManagementService {
     private final AccountManagementService accountManagementService;
     private final ListConversionFactory listConversionFactory;
     private final PublicationFileGenerationService publicationFileGenerationService;
+    private final PublicationSummaryGenerationService publicationSummaryGenerationService;
 
     @Autowired
     public PublicationManagementService(AzureBlobService azureBlobService,
                                         DataManagementService dataManagementService,
                                         AccountManagementService accountManagementService,
                                         ListConversionFactory listConversionFactory,
-                                        PublicationFileGenerationService publicationFileGenerationService) {
+                                        PublicationFileGenerationService publicationFileGenerationService,
+                                        PublicationSummaryGenerationService publicationSummaryGenerationService) {
         this.azureBlobService = azureBlobService;
         this.dataManagementService = dataManagementService;
         this.accountManagementService = accountManagementService;
         this.listConversionFactory = listConversionFactory;
         this.publicationFileGenerationService = publicationFileGenerationService;
+        this.publicationSummaryGenerationService = publicationSummaryGenerationService;
     }
 
     /**
@@ -81,23 +84,19 @@ public class PublicationManagementService {
      */
     public String generateArtefactSummary(UUID artefactId) {
         Artefact artefact = dataManagementService.getArtefact(artefactId);
-        String summary = "";
-        ArtefactSummaryConverter artefactSummaryConverter = listConversionFactory.getArtefactSummaryConverter(
-            artefact.getListType()
-        );
+        ArtefactSummaryData artefactSummaryData = listConversionFactory.getArtefactSummaryData(artefact.getListType());
 
-        if (artefactSummaryConverter == null) {
-            log.error("Failed to find converter for list type");
-            return summary;
+        if (artefactSummaryData == null) {
+            log.error("Failed to retrieve summary data for list type");
+            return "";
         }
 
         try {
             String rawJson = dataManagementService.getArtefactJsonBlob(artefactId);
-            summary = artefactSummaryConverter.convert(MAPPER.readTree(rawJson));
+            return publicationSummaryGenerationService.generate(artefactSummaryData.get(MAPPER.readTree(rawJson)));
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(String.format("Failed to generate summary for artefact id %s", artefactId));
         }
-        return summary;
     }
 
     /**

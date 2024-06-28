@@ -31,9 +31,7 @@ public final class JudiciaryHelper {
         }
 
         judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
-        return judiciaries.stream()
-            .filter(StringUtils::isNotBlank)
-            .collect(Collectors.joining(", "));
+        return GeneralHelper.convertToDelimitedString(judiciaries, ", ");
     }
 
     public static String findAndManipulateJudiciaryForCrime(JsonNode judiciaryNode) {
@@ -56,8 +54,6 @@ public final class JudiciaryHelper {
         }
 
         judiciaries.add(0, String.valueOf(presidingJudiciary.get()));
-        return judiciaries.stream()
-            .filter(StringUtils::isNotBlank)
-            .collect(Collectors.joining(", "));
+        return GeneralHelper.convertToDelimitedString(judiciaries, ", ");
     }
 }

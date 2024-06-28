@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 public final class LocationHelper {
@@ -68,10 +67,8 @@ public final class LocationHelper {
                 courtAddress.add(GeneralHelper.findAndReturnNodeText(courtHouseAddress, POSTCODE));
             }
 
-            String formattedCourtAddress = courtAddress.stream()
-                .filter(StringUtils::isNotBlank)
-                .collect(Collectors.joining(delimiter));
-            ((ObjectNode)courtHouse).put("formattedCourtHouseAddress", formattedCourtAddress);
+            ((ObjectNode)courtHouse).put("formattedCourtHouseAddress",
+                                         GeneralHelper.convertToDelimitedString(courtAddress, delimiter));
         });
     }
 

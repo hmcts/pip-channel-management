@@ -217,7 +217,7 @@
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-wrap" th:classappend="${noBorder}" th:text="${sitting.get('time').asText()}"/>
                           <td class="govuk-table__cell no-wrap" th:classappend="${noBorder}" th:text="${case.get('caseNumber').asText()}"/>
-                          <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseName').asText()}"/>
+                          <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('formattedCaseName').asText()}"/>
                           <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${case.get('caseType').asText()}"/>
                           <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${hearing.get('hearingType').asText()}"/>
                           <td class="govuk-table__cell" th:classappend="${noBorder}" th:text="${sitting.get('caseHearingChannel').asText()}"/>
