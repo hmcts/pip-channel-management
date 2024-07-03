@@ -46,29 +46,6 @@ public final class CrownDailyListHelper {
         );
     }
 
-    @Deprecated
-    public static void manipulatedCrownDailyListDataV1(JsonNode artefact, Language language) {
-        artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get("session").forEach(session -> {
-                    StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
-                    session.get("sittings").forEach(sitting -> {
-                        DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, "h:mma");
-                        sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.handleParties(hearing);
-                            CrimeListHelper.formatCaseInformation(hearing);
-                            CrimeListHelper.formatCaseHtmlTable(hearing);
-                        });
-                    });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
-                    CrimeListHelper.formattedCourtRoomName(courtRoom, session);
-                })
-            )
-        );
-    }
-
     public static void findUnallocatedCases(JsonNode artefact) {
         ArrayNode unAllocatedCasesNodeArray = MAPPER.createArrayNode();
         artefact.get(COURT_LIST).forEach(courtList -> {

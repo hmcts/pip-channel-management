@@ -24,11 +24,6 @@ public class CrownDailyListSummaryConverter implements ArtefactSummaryConverter 
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        if (GeneralHelper.hearingHasParty(payload)) {
-            CrownDailyListHelper.manipulatedCrownDailyListDataV1(payload, Language.ENGLISH);
-            CrownDailyListHelper.findUnallocatedCases(payload);
-            return processCrownDailyListV1(payload);
-        }
         CrownDailyListHelper.manipulatedCrownDailyListData(payload, Language.ENGLISH);
         CrownDailyListHelper.findUnallocatedCases(payload);
         return processCrownDailyList(payload);

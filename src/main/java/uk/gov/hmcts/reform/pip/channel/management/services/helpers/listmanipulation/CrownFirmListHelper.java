@@ -79,38 +79,6 @@ public final class CrownFirmListHelper {
         );
     }
 
-    @Deprecated
-    public static void crownFirmListFormattedV1(JsonNode artefact, Language language) {
-        artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get(SESSION).forEach(session -> {
-                    StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
-
-                    session.get(SITTINGS).forEach(sitting -> {
-                        DateHelper.calculateDuration(sitting, language);
-                        String sittingDate = DateHelper.formatTimeStampToBst(
-                            sitting.get(SITTING_START).asText(), Language.ENGLISH,
-                            false, false, "EEEE dd MMMM yyyy");
-                        ((ObjectNode)sitting).put(SITTING_DATE, sittingDate);
-                        SittingHelper.manipulatedSitting(courtRoom, session, sitting, FORMATTED_COURT_ROOM);
-
-                        sitting.get(HEARING).forEach(hearing -> {
-                            formatCaseTime(sitting, (ObjectNode) hearing);
-                            PartyRoleHelper.handleParties(hearing);
-                            CrimeListHelper.formatCaseInformation(hearing);
-                            CrimeListHelper.formatCaseHtmlTable(hearing);
-                            hearing.get("case").forEach(
-                                caseNode -> moveTableColumnValuesToHearing(sitting, hearing, caseNode)
-                            );
-                        });
-                    });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
-                })
-            )
-        );
-    }
-
     public static void splitByCourtAndDate(JsonNode artefact) {
         List<String> uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
         String[] uniqueDates =  uniqueSittingDates.toArray(new String[0]);
@@ -139,54 +107,6 @@ public final class CrownFirmListHelper {
                             sitting -> SittingHelper.checkSittingDateAlreadyExists(
                             sitting, uniqueDates, hearingArray, finalI
                             ));
-
-                        checkToBeAllocatedRoom(courtRoomNode, session, unAllocatedCourtRoom, hearingArray,
-                                               unAllocatedCourtRoomHearings);
-                    });
-                    if (!GeneralHelper.findAndReturnNodeText(courtRoomNode, FORMATTED_COURT_ROOM_NAME).isBlank()) {
-                        checkAndAddToArrayNode(hearingArray, courtRoomNode,
-                                               HEARINGS, courtRoomsArray);
-                    }
-                });
-                checkAndAddToArrayNode(unAllocatedCourtRoomHearings, unAllocatedCourtRoom, HEARINGS, courtRoomsArray);
-
-                checkAndAddToArrayNode(courtRoomsArray, courtListNode,
-                                       "courtRooms", courtListArray);
-            });
-            courtListByDateArray.add(courtListArray);
-        }
-        ((ObjectNode)artefact).putArray("courtListsByDate")
-            .addAll(courtListByDateArray);
-    }
-
-    @Deprecated
-    public static void splitByCourtAndDateV1(JsonNode artefact) {
-        List<String> uniqueSittingDates = findUniqueSittingDatesPerCounts(artefact);
-        String[] uniqueDates =  uniqueSittingDates.toArray(new String[0]);
-        setListToDates((ObjectNode) artefact, uniqueSittingDates);
-        ArrayNode courtListByDateArray = MAPPER.createArrayNode();
-        for (int i = 0; i < uniqueSittingDates.size(); i++) {
-            int finalI = i;
-            ArrayNode courtListArray = MAPPER.createArrayNode();
-            artefact.get(COURT_LIST).forEach(courtList -> {
-
-                ObjectNode courtListNode = MAPPER.createObjectNode();
-                ArrayNode courtRoomsArray = MAPPER.createArrayNode();
-                ObjectNode unAllocatedCourtRoom = MAPPER.createObjectNode();
-                ArrayNode unAllocatedCourtRoomHearings = MAPPER.createArrayNode();
-
-                courtListNode.put("courtName",
-                                  GeneralHelper.findAndReturnNodeText(courtList.get(COURT_HOUSE),
-                                                                      "courtHouseName"));
-                courtListNode.put("courtSittingDate", uniqueSittingDates.get(finalI));
-
-                courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(courtRoom -> {
-                    ObjectNode courtRoomNode = MAPPER.createObjectNode();
-                    ArrayNode hearingArray = MAPPER.createArrayNode();
-                    courtRoom.get("session").forEach(session -> {
-                        session.get(SITTINGS).forEach(sitting ->
-                                                          SittingHelper.checkSittingDateAlreadyExists(
-                                                              sitting, uniqueDates, hearingArray, finalI));
 
                         checkToBeAllocatedRoom(courtRoomNode, session, unAllocatedCourtRoom, hearingArray,
                                                unAllocatedCourtRoomHearings);

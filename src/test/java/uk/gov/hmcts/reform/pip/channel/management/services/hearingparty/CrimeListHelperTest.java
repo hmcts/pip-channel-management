@@ -43,7 +43,7 @@ class CrimeListHelperTest {
 
     @Test
     void testFormattedCourtRoomNameMethod() {
-        CrownDailyListHelper.manipulatedCrownDailyListDataV1(inputJsonCrownDailyList, Language.ENGLISH);
+        CrownDailyListHelper.manipulatedCrownDailyListData(inputJsonCrownDailyList, Language.ENGLISH);
         CrownDailyListHelper.findUnallocatedCases(inputJsonCrownDailyList);
 
         assertEquals("1: Firstname1 Surname1, Firstname2 Surname2", inputJsonCrownDailyList.get(COURT_LISTS)

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.MagistratesPublicListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -41,13 +40,8 @@ public class MagistratesPublicListFileConverter implements FileConverter {
         context.setVariable("version", artefact.get("document").get("version").asText());
         context.setVariable("artefact", artefact);
 
-        if (GeneralHelper.hearingHasParty(artefact)) {
-            MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(artefact, language);
-            context.setVariable("partyAtHearingLevel", true);
-        } else {
-            MagistratesPublicListHelper.manipulatedMagistratesPublicListData(artefact, language);
-            context.setVariable("partyAtHearingLevel", false);
-        }
+        MagistratesPublicListHelper.manipulatedMagistratesPublicListData(artefact, language);
+
         return context;
     }
 }

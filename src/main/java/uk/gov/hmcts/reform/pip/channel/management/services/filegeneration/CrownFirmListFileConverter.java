@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownFirmListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -41,15 +40,9 @@ public class CrownFirmListFileConverter  implements FileConverter {
         context.setVariable("version", artefact.get("document").get("version").asText());
         context.setVariable("artefact", artefact);
 
-        if (GeneralHelper.hearingHasParty(artefact)) {
-            CrownFirmListHelper.crownFirmListFormattedV1(artefact, language);
-            CrownFirmListHelper.splitByCourtAndDateV1(artefact);
-            context.setVariable("partyAtHearingLevel", true);
-        } else {
-            CrownFirmListHelper.crownFirmListFormatted(artefact, language);
-            CrownFirmListHelper.splitByCourtAndDate(artefact);
-            context.setVariable("partyAtHearingLevel", false);
-        }
+        CrownFirmListHelper.crownFirmListFormatted(artefact, language);
+        CrownFirmListHelper.splitByCourtAndDate(artefact);
+
         return context;
     }
 }

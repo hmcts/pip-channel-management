@@ -54,10 +54,6 @@ public class MagistratesPublicListSummaryConverter implements ArtefactSummaryCon
      */
     @Override
     public String convert(JsonNode payload) throws JsonProcessingException {
-        if (GeneralHelper.hearingHasParty(payload)) {
-            MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(payload, Language.ENGLISH);
-            return processMagistratesPublicListV1(payload);
-        }
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(payload, Language.ENGLISH);
         return processMagistratesPublicList(payload);
     }
