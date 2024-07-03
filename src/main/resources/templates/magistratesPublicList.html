@@ -231,13 +231,9 @@
                         <tr class="govuk-table__row">
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('bottomBorder').asText()}" th:text="${sitting.get('time').asText()}"/>
                           <td class="govuk-table__cell" th:classappend="${case.get('bottomBorder').asText()}" th:text="${case.get('caseNumber').asText()}"/>
-                          <th:block>
-                            <td class="govuk-table__cell" th:classappend="${case.get('bottomBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
-                          </th:block>
+                          <td class="govuk-table__cell" th:classappend="${case.get('bottomBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
                           <td class="govuk-table__cell no-wrap" th:classappend="${case.get('bottomBorder').asText()}" th:text="${hearing.get('hearingType').asText()}"/>
-                          <th:block>
-                            <td class="govuk-table__cell" th:classappend="${case.get('bottomBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
-                          </th:block>
+                          <td class="govuk-table__cell" th:classappend="${case.get('bottomBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
                           <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
                             <td class="govuk-table__cell no-wrap" th:classappend="${case.get('bottomBorder').asText()}"
                               th:text="${sitting.get('formattedDuration').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
