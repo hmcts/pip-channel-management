@@ -227,37 +227,35 @@
               <tbody class="govuk-table__body">
               <th:block th:each="hearings : ${courtRoom.get('hearings')}">
                 <th:block th:each="hearing : ${hearings}">
-                  <th:block>
-                    <th:block th:each="case : ${hearing.get('case')}">
-                      <tr class="govuk-table__row">
-                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('sittingAt').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('caseReference').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
-                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('hearingType').asText()}"/>
-                        <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
-                          <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
-                              th:text="${case.get('formattedDuration').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
-                        </th:block>
-                        <th:block th:if="${case.get('caseSequenceIndicator').asText() == ''}">
-                          <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
-                              th:text="${case.get('formattedDuration').asText()}"/>
-                        </th:block>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendantRepresentative').asText()}"/>
-                        <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
-                      </tr>
-                      <tr class="govuk-table__row" th:if="${case.get('linkedCases').asText() != ''}">
-                        <td class="govuk-table__cell no-wrap" colspan="7" th:classappend="${case.get('linkedCasesBorder').asText()}">
-                          <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
-                          <span th:text="${case.get('linkedCases').asText()}" />
-                        </td>
-                      </tr>
-                      <tr class="govuk-table__row" th:if="${case.get('listingNotes').asText() != ''}">
-                        <td class="govuk-table__cell no-wrap" colspan="7">
-                          <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
-                          <span th:text="${case.get('listingNotes').asText()}" />
-                        </td>
-                      </tr>
-                    </th:block>
+                  <th:block th:each="case : ${hearing.get('case')}">
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('sittingAt').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('caseReference').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendant').asText()}"/>
+                      <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('hearingType').asText()}"/>
+                      <th:block th:if="${case.get('caseSequenceIndicator').asText() != ''}">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
+                            th:text="${case.get('formattedDuration').asText() + ' [' + case.get('caseSequenceIndicator').asText() + ']'}"/>
+                      </th:block>
+                      <th:block th:if="${case.get('caseSequenceIndicator').asText() == ''}">
+                        <td class="govuk-table__cell no-wrap" th:classappend="${case.get('caseCellBorder').asText()}"
+                            th:text="${case.get('formattedDuration').asText()}"/>
+                      </th:block>
+                      <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('defendantRepresentative').asText()}"/>
+                      <td class="govuk-table__cell" th:classappend="${case.get('caseCellBorder').asText()}" th:text="${case.get('prosecutingAuthority').asText()}"/>
+                    </tr>
+                    <tr class="govuk-table__row" th:if="${case.get('linkedCases').asText() != ''}">
+                      <td class="govuk-table__cell no-wrap" colspan="7" th:classappend="${case.get('linkedCasesBorder').asText()}">
+                        <span class="linked-cases-heading" th:text="${i18n.linkedCases}" />
+                        <span th:text="${case.get('linkedCases').asText()}" />
+                      </td>
+                    </tr>
+                    <tr class="govuk-table__row" th:if="${case.get('listingNotes').asText() != ''}">
+                      <td class="govuk-table__cell no-wrap" colspan="7">
+                        <span class="linked-cases-heading" th:text="${i18n.listingNotes}" />
+                        <span th:text="${case.get('listingNotes').asText()}" />
+                      </td>
+                    </tr>
                   </th:block>
                 </th:block>
               </th:block>
