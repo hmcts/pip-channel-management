@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -34,7 +35,7 @@ class GeneralHelperTest {
     private static JsonNode inputJson;
 
     @BeforeAll
-    public static void setup()  throws IOException {
+    public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/familyDailyCauseList.json")), writer,
                      Charset.defaultCharset()
@@ -96,8 +97,9 @@ class GeneralHelperTest {
     void testAppendToStringBuilderMethod() {
         StringBuilder builder = new StringBuilder();
         builder.append("Test1");
-        GeneralHelper.appendToStringBuilder(builder,"Test2 ", inputJson.get("venue"),
-                                            "venueName");
+        GeneralHelper.appendToStringBuilder(builder, "Test2 ", inputJson.get("venue"),
+                                            "venueName"
+        );
         assertThat(builder)
             .as(ERR_MSG)
             .hasToString("Test1\nTest2 This is the venue name");
@@ -107,8 +109,9 @@ class GeneralHelperTest {
     void testAppendToStringBuilderWithPrefix() {
         StringBuilder builder = new StringBuilder();
         builder.append("Test1");
-        GeneralHelper.appendToStringBuilderWithPrefix(builder,"Test2: ", inputJson.get("venue"),
-                                                      "venueName", "\t\t");
+        GeneralHelper.appendToStringBuilderWithPrefix(builder, "Test2: ", inputJson.get("venue"),
+                                                      "venueName", "\t\t"
+        );
         assertThat(builder)
             .as(ERR_MSG)
             .hasToString("Test1\t\tTest2: This is the venue name");
@@ -160,5 +163,29 @@ class GeneralHelperTest {
         assertThat(GeneralHelper.safeGet("Test.0", inputJson.get(DOCUMENT)))
             .as(ERR_MSG)
             .isEmpty();
+    }
+
+    @Test
+    void testHearingHasParty() throws IOException {
+        try (InputStream inputStream = GeneralHelperTest.class
+            .getResourceAsStream("/mocks/hearingparty/civilAndFamilyDailyCauseList.json")) {
+            String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
+            JsonNode inputJson = OBJECT_MAPPER.readTree(inputRaw);
+            assertThat(GeneralHelper.hearingHasParty(inputJson))
+                .as("hearing should have party")
+                .isTrue();
+        }
+    }
+
+    @Test
+    void testHearingHasNoParty() throws IOException {
+        try (InputStream inputStream = GeneralHelperTest.class
+            .getResourceAsStream("/mocks/crownDailyList.json")) {
+            String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
+            JsonNode inputJson = OBJECT_MAPPER.readTree(inputRaw);
+            assertThat(GeneralHelper.hearingHasParty(inputJson))
+                .as("hearing should not have party")
+                .isFalse();
+        }
     }
 }
