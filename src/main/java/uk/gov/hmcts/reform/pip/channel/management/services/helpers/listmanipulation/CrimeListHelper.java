@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * Helper class for crime lists.
@@ -151,8 +150,6 @@ public final class CrimeListHelper {
         fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "town"));
         fullAddress.add(GeneralHelper.findAndReturnNodeText(addressNode, "county"));
 
-        return fullAddress.stream()
-            .filter(line -> !StringUtils.isBlank(line))
-            .collect(Collectors.joining(", "));
+        return GeneralHelper.convertToDelimitedString(fullAddress, ", ");
     }
 }

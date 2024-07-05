@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public final class OpaPressListHelper {
@@ -183,11 +184,11 @@ public final class OpaPressListHelper {
         String middleName = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_MIDDLE_NAME);
         String surname = GeneralHelper.findAndReturnNodeText(individualDetails, INDIVIDUAL_SURNAME);
 
-        String forenames = List.of(forename, middleName).stream()
+        String forenames = Stream.of(forename, middleName)
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(" "));
 
-        return List.of(surname, forenames).stream()
+        return Stream.of(surname, forenames)
             .filter(n -> !StringUtils.isBlank(n))
             .collect(Collectors.joining(DELIMITER));
     }
@@ -223,8 +224,7 @@ public final class OpaPressListHelper {
                 }
             });
         }
-        return prosecutors.stream()
-            .collect(Collectors.joining(DELIMITER));
+        return GeneralHelper.convertToDelimitedString(prosecutors, DELIMITER);
     }
 
     private static List<Offence> processOffences(JsonNode detailsNode) {

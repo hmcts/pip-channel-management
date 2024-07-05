@@ -26,7 +26,7 @@ class FamilyMixedListHelperTest {
     private static final String SITTINGS = "sittings";
     private static final String HEARING = "hearing";
     private static final String CASE = "case";
-    private static final String CASE_NAME = "caseName";
+    private static final String FORMATTED_CASE_NAME = "formattedCaseName";
     private static final String CASE_TYPE = "caseType";
     private static final String APPLICANT = "applicant";
     private static final String APPLICANT_REPRESENTATIVE = "applicantRepresentative";
@@ -51,7 +51,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatJudiciary() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -64,7 +64,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingDuration() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -78,7 +78,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingTime() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -92,7 +92,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatHearingChannel() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -106,7 +106,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testFormatCaseName() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -115,14 +115,14 @@ class FamilyMixedListHelperTest {
                        .get(SITTINGS).get(0)
                        .get(HEARING).get(0)
                        .get(CASE).get(0)
-                       .get(CASE_NAME).asText())
+                       .get(FORMATTED_CASE_NAME).asText())
             .as("Unable to get case name")
-            .contains("[2 of 3]");
+            .isEqualTo("This is a case name [2 of 3]");
     }
 
     @Test
     void testCaseType() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
@@ -138,7 +138,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithIndividualDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         JsonNode hearingCase = inputJson.get(COURT_LISTS).get(0)
             .get(COURT_HOUSE)
@@ -171,7 +171,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testGetPartyWithOrganisationDetails() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         JsonNode hearingCase = inputJson.get(COURT_LISTS).get(1)
             .get(COURT_HOUSE)
@@ -204,7 +204,7 @@ class FamilyMixedListHelperTest {
 
     @Test
     void testReportingRestriction() {
-        FamilyMixedListHelper.manipulatedlistData(inputJson, Language.ENGLISH);
+        FamilyMixedListHelper.manipulatedListData(inputJson, Language.ENGLISH);
 
         assertThat(inputJson.get(COURT_LISTS).get(0)
                        .get(COURT_HOUSE)
