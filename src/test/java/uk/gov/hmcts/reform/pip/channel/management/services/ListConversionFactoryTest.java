@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryData;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CivilDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.model.publication.ListType;
 
@@ -28,14 +28,14 @@ class ListConversionFactoryTest {
 
     @Test
     void testGetArtefactSummeryConverter() {
-        assertThat(listConversionFactory.getArtefactSummaryConverter(ListType.SJP_PRESS_LIST))
+        assertThat(listConversionFactory.getArtefactSummaryData(ListType.SJP_PRESS_LIST))
             .as("Artefact summary does not match")
-            .isInstanceOf(SjpPressListSummaryConverter.class);
+            .isInstanceOf(SjpPressListSummaryData.class);
     }
 
     @Test
     void testGetArtefactSummeryConverterNotFound() {
-        assertThat(listConversionFactory.getArtefactSummaryConverter(ListType.SJP_PRESS_REGISTER))
+        assertThat(listConversionFactory.getArtefactSummaryData(ListType.SJP_PRESS_REGISTER))
             .as("Artefact summary is not null")
             .isNull();
     }

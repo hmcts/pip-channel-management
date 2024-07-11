@@ -148,7 +148,7 @@ public final class MagistratesStandardListHelper {
             caseSitting.setOffences(processOffences(party));
 
             String defendantHeading = formatDefendantHeading(party.get(INDIVIDUAL_DETAILS),
-                                                             PartyRoleHelper.createIndividualDetails(party));
+                                                             caseSitting.getDefendantInfo().getName());
             addDefendantCase(cases, defendantHeading, caseSitting);
         }
     }
@@ -162,6 +162,8 @@ public final class MagistratesStandardListHelper {
 
     private static DefendantInfo buildDefendantInfo(JsonNode party) {
         DefendantInfo defendantInfo = new DefendantInfo();
+        defendantInfo.setName(PartyRoleHelper.createIndividualDetails(party));
+
         JsonNode individualDetails = party.get(INDIVIDUAL_DETAILS);
         defendantInfo.setDob(GeneralHelper.findAndReturnNodeText(individualDetails, DOB));
         defendantInfo.setAge(GeneralHelper.findAndReturnNodeText(individualDetails, AGE));

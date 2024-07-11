@@ -32,7 +32,7 @@ public final class FamilyMixedListHelper {
     private FamilyMixedListHelper() {
     }
 
-    public static void manipulatedlistData(JsonNode artefact, Language language) {
+    public static void manipulatedListData(JsonNode artefact, Language language) {
         artefact.get(COURT_LIST)
             .forEach(courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM)
                 .forEach(courtRoom -> courtRoom.get(SESSION).forEach(session -> {
