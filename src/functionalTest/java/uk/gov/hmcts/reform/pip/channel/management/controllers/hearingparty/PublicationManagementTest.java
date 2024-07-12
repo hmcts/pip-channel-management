@@ -77,61 +77,6 @@ class PublicationManagementTest {
     }
 
     @Test
-    void testGenerateArtefactSummaryCrownDailyList() throws Exception {
-        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CROWN_DAILY_LIST))
-            .andExpect(status().isOk()).andReturn();
-
-        String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant - Defendant_SN, Defendant_FN"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Pro_Auth"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case reference - 112233445"), CONTENT_MISMATCH_ERROR);
-        assertTrue(
-            responseContent.contains("Hearing type - FHDRA1 (First Hearing and Dispute Resolution Appointment)"),
-            CONTENT_MISMATCH_ERROR
-        );
-    }
-
-    @Test
-    void testGenerateArtefactSummaryCrownFirmList() throws Exception {
-        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CROWN_FIRM_LIST))
-            .andExpect(status().isOk()).andReturn();
-
-        String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant - Surname, Forenames"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Org name"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case reference - 12341234"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Hearing type - Directions"), CONTENT_MISMATCH_ERROR);
-    }
-
-    @Test
-    void testGenerateArtefactSummaryCrownWarnedList() throws Exception {
-        MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_CROWN_WARNED_LIST))
-            .andExpect(status().isOk()).andReturn();
-
-        String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant - Surname, Forenames"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Org name"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case reference - 12341234"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Hearing date - 03/03/2023"), CONTENT_MISMATCH_ERROR);
-    }
-
-    @Test
-    void testGenerateArtefactSummaryMagistratesPublicList() throws Exception {
-        MvcResult response = mockMvc.perform(
-                get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_MAGISTRATES_PUBLIC_LIST))
-            .andExpect(status().isOk()).andReturn();
-
-        String responseContent = response.getResponse().getContentAsString();
-        assertTrue(responseContent.contains("Defendant - Defendant_SN, Defendant_FN"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Pro_Auth"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Case reference - 112233445"), CONTENT_MISMATCH_ERROR);
-        assertTrue(
-            responseContent.contains("Hearing type - FHDRA1 (First Hearing and Dispute Resolution Appointment)"),
-            CONTENT_MISMATCH_ERROR
-        );
-    }
-
-    @Test
     void testGenerateArtefactSummarySscsDailyList() throws Exception {
         MvcResult response = mockMvc.perform(get(GET_ARTEFACT_SUMMARY + "/" + ARTEFACT_ID_SSCS_DAILY_LIST))
             .andExpect(status().isOk()).andReturn();

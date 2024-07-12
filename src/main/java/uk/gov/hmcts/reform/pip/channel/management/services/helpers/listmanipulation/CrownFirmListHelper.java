@@ -194,35 +194,6 @@ public final class CrownFirmListHelper {
                     GeneralHelper.findAndReturnNodeText(hearingCase, LINKED_CASES_BORDER));
     }
 
-    @Deprecated
-    private static void moveTableColumnValuesToHearing(JsonNode sitting, JsonNode hearing, JsonNode caseNode) {
-        ObjectNode hearingObj = (ObjectNode) hearing;
-        hearingObj.put("sittingAt",
-                       GeneralHelper.findAndReturnNodeText(hearing,"time"));
-        hearingObj.put("caseReference",
-                       GeneralHelper.findAndReturnNodeText(caseNode,"caseNumber"));
-        hearingObj.put(DEFENDANT,
-                       GeneralHelper.findAndReturnNodeText(hearing, DEFENDANT));
-        hearingObj.put(HEARING_TYPE,
-                       GeneralHelper.findAndReturnNodeText(hearing,HEARING_TYPE));
-        hearingObj.put(FORMATTED_DURATION,
-                       GeneralHelper.findAndReturnNodeText(sitting,FORMATTED_DURATION));
-        hearingObj.put(CASE_SEQUENCE_INDICATOR,
-                       GeneralHelper.findAndReturnNodeText(caseNode,CASE_SEQUENCE_INDICATOR));
-        hearingObj.put(DEFENDANT_REPRESENTATIVE,
-                       GeneralHelper.findAndReturnNodeText(hearing, DEFENDANT_REPRESENTATIVE));
-        hearingObj.put(PROSECUTING_AUTHORITY,
-                       GeneralHelper.findAndReturnNodeText(hearing, PROSECUTING_AUTHORITY));
-        hearingObj.put(LINKED_CASES,
-                       GeneralHelper.findAndReturnNodeText(caseNode, LINKED_CASES));
-        hearingObj.put(LISTING_NOTES,
-                       GeneralHelper.findAndReturnNodeText(hearing, LISTING_NOTES));
-        hearingObj.put(CASE_CELL_BORDER,
-                       GeneralHelper.findAndReturnNodeText(caseNode, CASE_CELL_BORDER));
-        hearingObj.put(LINKED_CASES_BORDER,
-                       GeneralHelper.findAndReturnNodeText(caseNode, LINKED_CASES_BORDER));
-    }
-
     private static void setListToDates(ObjectNode artefact, List<String> uniqueSittingDates) {
         String startDate = uniqueSittingDates.get(0)
             .substring(uniqueSittingDates.get(0).indexOf(' ') + 1);
