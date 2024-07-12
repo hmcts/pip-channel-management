@@ -13,6 +13,8 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +33,7 @@ class GeneralHelperTest {
     private static final String SITTINGS = "sittings";
     private static final String CHANNEL = "channel";
     private static final String SESSION_CHANNEL = "sessionChannel";
+    private static final String DELIMITER = ", ";
 
     private static JsonNode inputJson;
 
@@ -138,10 +141,30 @@ class GeneralHelperTest {
             .get(SESSION).get(0)
             .get(SITTINGS).get(0);
 
-        assertThat(GeneralHelper.formatNodeArray(sitting, CHANNEL, ", "))
+        assertThat(GeneralHelper.formatNodeArray(sitting, CHANNEL, DELIMITER))
             .as(ERR_MSG)
             .isEqualTo("Teams, Attended");
+    }
 
+    @Test
+    void testConvertToDelimitedStringWithEmptyList() {
+        assertThat(GeneralHelper.convertToDelimitedString(Collections.emptyList(), DELIMITER))
+            .as(ERR_MSG)
+            .isEmpty();
+    }
+
+    @Test
+    void testConvertToDelimitedStringWithSingleValue() {
+        assertThat(GeneralHelper.convertToDelimitedString(List.of(TEST), DELIMITER))
+            .as(ERR_MSG)
+            .isEqualTo(TEST);
+    }
+
+    @Test
+    void testConvertToDelimitedStringWithMultipleValues() {
+        assertThat(GeneralHelper.convertToDelimitedString(List.of(TEST, TEST), DELIMITER))
+            .as(ERR_MSG)
+            .isEqualTo(TEST + DELIMITER + TEST);
     }
 
     @Test

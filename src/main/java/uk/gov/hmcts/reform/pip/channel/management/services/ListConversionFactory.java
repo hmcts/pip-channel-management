@@ -2,25 +2,25 @@ package uk.gov.hmcts.reform.pip.channel.management.services;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CivilDailyCauseListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownFirmListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownWarnedListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.FamilyMixedDailyCauseListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPressListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPublicListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaResultsSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryConverter;
-import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.TribunalNationalListsSummaryConverter;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.ArtefactSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CivilDailyCauseListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CopDailyCauseListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownDailyListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownFirmListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.CrownWarnedListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtDailyListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.EtFortnightlyPressListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.FamilyMixedDailyCauseListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.IacDailyListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesPublicListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.MagistratesStandardListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPressListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaPublicListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.OpaResultsSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPressListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SjpPublicListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.SscsDailyListSummaryData;
+import uk.gov.hmcts.reform.pip.channel.management.services.artefactsummary.TribunalNationalListsSummaryData;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CareStandardsListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CivilAndFamilyDailyCauseListFileConverter;
 import uk.gov.hmcts.reform.pip.channel.management.services.filegeneration.CivilDailyCauseListFileConverter;
@@ -74,52 +74,52 @@ import static uk.gov.hmcts.reform.pip.model.publication.ListType.SSCS_DAILY_LIST
 @Component
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.UseConcurrentHashMap"})
 public class ListConversionFactory {
-    private static final Map<ListType, Pair<FileConverter, ArtefactSummaryConverter>> LIST_MAP = Map.ofEntries(
+    private static final Map<ListType, Pair<FileConverter, ArtefactSummaryData>> LIST_MAP = Map.ofEntries(
         Map.entry(SJP_PUBLIC_LIST, Pair.of(new SjpPublicListFileConverter(),
-                                           new SjpPublicListSummaryConverter())),
+                                           new SjpPublicListSummaryData())),
         Map.entry(SJP_DELTA_PUBLIC_LIST, Pair.of(new SjpPublicListFileConverter(),
-                                                 new SjpPublicListSummaryConverter())),
+                                                 new SjpPublicListSummaryData())),
         Map.entry(SJP_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
-                                          new SjpPressListSummaryConverter())),
+                                          new SjpPressListSummaryData())),
         Map.entry(SJP_DELTA_PRESS_LIST, Pair.of(new SjpPressListFileConverter(),
-                                                new SjpPressListSummaryConverter())),
+                                                new SjpPressListSummaryData())),
         Map.entry(CROWN_DAILY_LIST, Pair.of(new CrownDailyListFileConverter(),
-                                            new CrownDailyListSummaryConverter())),
+                                            new CrownDailyListSummaryData())),
         Map.entry(CROWN_FIRM_LIST, Pair.of(new CrownFirmListFileConverter(),
-                                           new CrownFirmListSummaryConverter())),
+                                           new CrownFirmListSummaryData())),
         Map.entry(CROWN_WARNED_LIST, Pair.of(new CrownWarnedListFileConverter(),
-                                             new CrownWarnedListSummaryConverter())),
+                                             new CrownWarnedListSummaryData())),
         Map.entry(MAGISTRATES_STANDARD_LIST, Pair.of(new MagistratesStandardListFileConverter(),
-                                                     new MagistratesStandardListSummaryConverter())),
+                                                     new MagistratesStandardListSummaryData())),
         Map.entry(MAGISTRATES_PUBLIC_LIST, Pair.of(new MagistratesPublicListFileConverter(),
-                                                   new MagistratesPublicListSummaryConverter())),
+                                                   new MagistratesPublicListSummaryData())),
         Map.entry(CIVIL_DAILY_CAUSE_LIST, Pair.of(new CivilDailyCauseListFileConverter(),
-                                                  new CivilDailyCauseListSummaryConverter())),
+                                                  new CivilDailyCauseListSummaryData())),
         Map.entry(FAMILY_DAILY_CAUSE_LIST, Pair.of(new FamilyDailyCauseListFileConverter(),
-                                                   new FamilyMixedDailyCauseListSummaryConverter())),
+                                                   new FamilyMixedDailyCauseListSummaryData())),
         Map.entry(CIVIL_AND_FAMILY_DAILY_CAUSE_LIST, Pair.of(new CivilAndFamilyDailyCauseListFileConverter(),
-                                                             new FamilyMixedDailyCauseListSummaryConverter())),
+                                                             new FamilyMixedDailyCauseListSummaryData())),
         Map.entry(COP_DAILY_CAUSE_LIST, Pair.of(new CopDailyCauseListFileConverter(),
-                                                new CopDailyCauseListSummaryConverter())),
+                                                new CopDailyCauseListSummaryData())),
         Map.entry(SSCS_DAILY_LIST, Pair.of(new SscsDailyListFileConverter(),
-                                           new SscsDailyListSummaryConverter())),
+                                           new SscsDailyListSummaryData())),
         Map.entry(SSCS_DAILY_LIST_ADDITIONAL_HEARINGS, Pair.of(new SscsDailyListFileConverter(),
-                                                               new SscsDailyListSummaryConverter())),
+                                                               new SscsDailyListSummaryData())),
         Map.entry(IAC_DAILY_LIST, Pair.of(new IacDailyListFileConverter(),
-                                          new IacDailyListSummaryConverter())),
+                                          new IacDailyListSummaryData())),
         Map.entry(IAC_DAILY_LIST_ADDITIONAL_CASES, Pair.of(new IacDailyListFileConverter(),
-                                          new IacDailyListSummaryConverter())),
+                                          new IacDailyListSummaryData())),
         Map.entry(PRIMARY_HEALTH_LIST, Pair.of(new PrimaryHealthListFileConverter(),
-                                               new TribunalNationalListsSummaryConverter())),
+                                               new TribunalNationalListsSummaryData())),
         Map.entry(CARE_STANDARDS_LIST, Pair.of(new CareStandardsListFileConverter(),
-                                               new TribunalNationalListsSummaryConverter())),
+                                               new TribunalNationalListsSummaryData())),
         Map.entry(ET_DAILY_LIST, Pair.of(new EtDailyListFileConverter(),
-                                         new EtDailyListSummaryConverter())),
+                                         new EtDailyListSummaryData())),
         Map.entry(ET_FORTNIGHTLY_PRESS_LIST, Pair.of(new EtFortnightlyPressListFileConverter(),
-                                                     new EtFortnightlyPressListSummaryConverter())),
-        Map.entry(OPA_PUBLIC_LIST, Pair.of(new OpaPublicListFileConverter(), new OpaPublicListSummaryConverter())),
-        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryConverter())),
-        Map.entry(OPA_RESULTS, Pair.of(new OpaResultsFileConverter(), new OpaResultsSummaryConverter()))
+                                                     new EtFortnightlyPressListSummaryData())),
+        Map.entry(OPA_PUBLIC_LIST, Pair.of(new OpaPublicListFileConverter(), new OpaPublicListSummaryData())),
+        Map.entry(OPA_PRESS_LIST, Pair.of(new OpaPressListFileConverter(), new OpaPressListSummaryData())),
+        Map.entry(OPA_RESULTS, Pair.of(new OpaResultsFileConverter(), new OpaResultsSummaryData()))
     );
 
     public FileConverter getFileConverter(ListType listType) {
@@ -129,7 +129,7 @@ public class ListConversionFactory {
         return null;
     }
 
-    public ArtefactSummaryConverter getArtefactSummaryConverter(ListType listType) {
+    public ArtefactSummaryData getArtefactSummaryData(ListType listType) {
         if (LIST_MAP.containsKey(listType)) {
             return LIST_MAP.get(listType).getRight();
         }

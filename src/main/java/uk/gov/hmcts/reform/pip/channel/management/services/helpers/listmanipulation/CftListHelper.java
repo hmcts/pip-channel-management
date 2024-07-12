@@ -72,7 +72,7 @@ public final class CftListHelper {
                 FamilyMixedListHelper.manipulatedListDataPartyAtHearingLevel(artefact, language);
                 context.setVariable("partyAtHearingLevel", true);
             } else {
-                FamilyMixedListHelper.manipulatedlistData(artefact, language);
+                FamilyMixedListHelper.manipulatedListData(artefact, language);
                 context.setVariable("partyAtHearingLevel", false);
             }
         } else {

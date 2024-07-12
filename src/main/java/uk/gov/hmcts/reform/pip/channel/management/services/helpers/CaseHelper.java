@@ -29,7 +29,7 @@ public final class CaseHelper {
 
     public static void manipulateCaseInformation(ObjectNode hearingCase) {
         hearingCase.put(
-            "caseName",
+            "formattedCaseName",
             appendCaseSequenceIndicator(GeneralHelper.findAndReturnNodeText(hearingCase, "caseName"),
                                         GeneralHelper.findAndReturnNodeText(hearingCase, CASE_SEQUENCE_INDICATOR))
         );

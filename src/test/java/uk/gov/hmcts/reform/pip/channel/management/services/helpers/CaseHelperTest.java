@@ -16,6 +16,7 @@ class CaseHelperTest {
     private static final String CASE_TYPE = "caseType";
     private static final String CASE_SEQUENCE_INDICATOR = "caseSequenceIndicator";
     private static final String CASE_LINKED = "caseLinked";
+    private static final String FORMATTED_CASE_NAME = "formattedCaseName";
     private static final String FORMATTED_LINKED_CASES = "formattedLinkedCases";
     private static final String TEST_DATA = "testData";
     private static final String LINKED_CASES_ERROR_MESSAGE = "Linked cases do not match";
@@ -91,7 +92,7 @@ class CaseHelperTest {
         caseNode.put(CASE_NAME, TEST_DATA);
 
         CaseHelper.manipulateCaseInformation(caseNode);
-        assertThat(caseNode.get(CASE_NAME).asText())
+        assertThat(caseNode.get(FORMATTED_CASE_NAME).asText())
             .as(CASE_DATA_ERROR_MESSAGE)
             .isEqualTo(TEST_DATA);
     }
@@ -103,7 +104,7 @@ class CaseHelperTest {
         caseNode.put(CASE_SEQUENCE_INDICATOR, "1 of 2");
 
         CaseHelper.manipulateCaseInformation(caseNode);
-        assertThat(caseNode.get(CASE_NAME).asText())
+        assertThat(caseNode.get(FORMATTED_CASE_NAME).asText())
             .as(CASE_DATA_ERROR_MESSAGE)
             .isEqualTo(TEST_DATA + " [1 of 2]");
     }
