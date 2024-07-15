@@ -16,11 +16,6 @@ import java.util.Map;
 public class CrownFirmListSummaryData implements ArtefactSummaryData {
     @Override
     public Map<String, List<Map<String, String>>> get(JsonNode payload) {
-        if (GeneralHelper.hearingHasParty(payload)) {
-            CrownFirmListHelper.crownFirmListFormattedV1(payload, Language.ENGLISH);
-            CrownFirmListHelper.splitByCourtAndDateV1(payload);
-            return processCrownFirmListV1(payload);
-        }
         CrownFirmListHelper.crownFirmListFormatted(payload, Language.ENGLISH);
         CrownFirmListHelper.splitByCourtAndDate(payload);
         return processCrownFirmList(payload);
@@ -47,33 +42,6 @@ public class CrownFirmListSummaryData implements ArtefactSummaryData {
                                 summaryCases.add(fields);
                             })
                         )
-                    )
-                )
-            )
-        );
-        return Collections.singletonMap(null, summaryCases);
-    }
-
-    @Deprecated
-    private Map<String, List<Map<String, String>>> processCrownFirmListV1(JsonNode node) {
-        List<Map<String, String>> summaryCases = new ArrayList<>();
-        node.get("courtListsByDate").forEach(
-            courtLists -> courtLists.forEach(
-                courtList -> courtList.get("courtRooms").forEach(
-                    courtRoom -> courtRoom.get("hearings").forEach(
-                        hearings -> hearings.forEach(hearing -> {
-                            Map<String, String> fields = ImmutableMap.of(
-                                "Defendant",
-                                GeneralHelper.findAndReturnNodeText(hearing, "defendant"),
-                                "Prosecutor",
-                                GeneralHelper.findAndReturnNodeText(hearing, "prosecutingAuthority"),
-                                "Case reference",
-                                GeneralHelper.findAndReturnNodeText(hearing, "caseReference"),
-                                "Hearing type",
-                                GeneralHelper.findAndReturnNodeText(hearing, "hearingType")
-                            );
-                            summaryCases.add(fields);
-                        })
                     )
                 )
             )

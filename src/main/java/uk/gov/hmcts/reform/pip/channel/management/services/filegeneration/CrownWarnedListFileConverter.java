@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWarnedList;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -27,13 +26,7 @@ public class CrownWarnedListFileConverter implements FileConverter {
         context.setVariable("i18n", languageResources);
 
         Map<String, List<CrownWarnedList>> cases;
-        if (GeneralHelper.hearingHasParty(artefact)) {
-            cases = CrownWarnedListHelper.processRawListDataV1(artefact, Language.ENGLISH);
-            context.setVariable("partyAtHearingLevel", true);
-        } else {
-            cases = CrownWarnedListHelper.processRawListData(artefact, Language.ENGLISH);
-            context.setVariable("partyAtHearingLevel", false);
-        }
+        cases = CrownWarnedListHelper.processRawListData(artefact, Language.ENGLISH);
 
         context.setVariable("cases", cases);
         context.setVariable("venueName", artefact.get("venue").get("venueName").asText());

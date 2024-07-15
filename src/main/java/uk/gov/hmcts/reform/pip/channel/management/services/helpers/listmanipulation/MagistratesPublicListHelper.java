@@ -46,29 +46,6 @@ public final class MagistratesPublicListHelper {
         );
     }
 
-    @Deprecated
-    public static void manipulatedMagistratesPublicListDataV1(JsonNode artefact, Language language) {
-        artefact.get(COURT_LIST).forEach(
-            courtList -> courtList.get(COURT_HOUSE).get(COURT_ROOM).forEach(
-                courtRoom -> courtRoom.get("session").forEach(session -> {
-                    StringBuilder formattedJudiciary = new StringBuilder();
-                    formattedJudiciary.append(JudiciaryHelper.findAndManipulateJudiciary(session));
-                    session.get("sittings").forEach(sitting -> {
-                        DateHelper.calculateDuration(sitting, language);
-                        DateHelper.formatStartTime(sitting, "h:mma");
-                        sitting.get("hearing").forEach(hearing -> {
-                            PartyRoleHelper.handleParties(hearing);
-                            formatCaseInformation(hearing);
-                            formatCaseHtmlTable(hearing);
-                        });
-                    });
-                    LocationHelper.formattedCourtRoomName(courtRoom, session, formattedJudiciary);
-                    CrimeListHelper.formattedCourtRoomName(courtRoom, session);
-                })
-            )
-        );
-    }
-
     private static void formatCaseInformation(JsonNode hearing) {
         StringBuilder listingNotes = new StringBuilder();
 

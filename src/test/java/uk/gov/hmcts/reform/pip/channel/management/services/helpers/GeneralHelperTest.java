@@ -38,7 +38,7 @@ class GeneralHelperTest {
     private static JsonNode inputJson;
 
     @BeforeAll
-    public static void setup()  throws IOException {
+    public static void setup() throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(Files.newInputStream(Paths.get("src/test/resources/mocks/familyDailyCauseList.json")), writer,
                      Charset.defaultCharset()
@@ -100,8 +100,9 @@ class GeneralHelperTest {
     void testAppendToStringBuilderMethod() {
         StringBuilder builder = new StringBuilder();
         builder.append("Test1");
-        GeneralHelper.appendToStringBuilder(builder,"Test2 ", inputJson.get("venue"),
-                                            "venueName");
+        GeneralHelper.appendToStringBuilder(builder, "Test2 ", inputJson.get("venue"),
+                                            "venueName"
+        );
         assertThat(builder)
             .as(ERR_MSG)
             .hasToString("Test1\nTest2 This is the venue name");
@@ -111,8 +112,9 @@ class GeneralHelperTest {
     void testAppendToStringBuilderWithPrefix() {
         StringBuilder builder = new StringBuilder();
         builder.append("Test1");
-        GeneralHelper.appendToStringBuilderWithPrefix(builder,"Test2: ", inputJson.get("venue"),
-                                                      "venueName", "\t\t");
+        GeneralHelper.appendToStringBuilderWithPrefix(builder, "Test2: ", inputJson.get("venue"),
+                                                      "venueName", "\t\t"
+        );
         assertThat(builder)
             .as(ERR_MSG)
             .hasToString("Test1\t\tTest2: This is the venue name");
@@ -189,7 +191,7 @@ class GeneralHelperTest {
     @Test
     void testHearingHasParty() throws IOException {
         try (InputStream inputStream = GeneralHelperTest.class
-            .getResourceAsStream("/mocks/hearingparty/crownDailyList.json")) {
+            .getResourceAsStream("/mocks/hearingparty/civilAndFamilyDailyCauseList.json")) {
             String inputRaw = IOUtils.toString(inputStream, Charset.defaultCharset());
             JsonNode inputJson = OBJECT_MAPPER.readTree(inputRaw);
             assertThat(GeneralHelper.hearingHasParty(inputJson))
