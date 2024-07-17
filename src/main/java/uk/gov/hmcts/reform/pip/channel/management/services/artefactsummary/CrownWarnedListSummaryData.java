@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.pip.channel.management.models.templatemodels.CrownWarnedList;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownWarnedListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
 
@@ -18,9 +17,7 @@ import java.util.Map;
 public class CrownWarnedListSummaryData implements ArtefactSummaryData {
     @Override
     public Map<String, List<Map<String, String>>> get(JsonNode payload) {
-        Map<String, List<CrownWarnedList>> cases = GeneralHelper.hearingHasParty(payload)
-            ? CrownWarnedListHelper.processRawListDataV1(payload, Language.ENGLISH)
-            : CrownWarnedListHelper.processRawListData(payload, Language.ENGLISH);
+        Map<String, List<CrownWarnedList>> cases = CrownWarnedListHelper.processRawListData(payload, Language.ENGLISH);
         List<Map<String, String>> summaryCases = new ArrayList<>();
 
         cases.values()

@@ -16,10 +16,6 @@ import java.util.Map;
 public class MagistratesPublicListSummaryData implements ArtefactSummaryData {
     @Override
     public Map<String, List<Map<String, String>>> get(JsonNode payload) {
-        if (GeneralHelper.hearingHasParty(payload)) {
-            MagistratesPublicListHelper.manipulatedMagistratesPublicListDataV1(payload, Language.ENGLISH);
-            return processMagistratesPublicListV1(payload);
-        }
         MagistratesPublicListHelper.manipulatedMagistratesPublicListData(payload, Language.ENGLISH);
         return processMagistratesPublicList(payload);
     }
@@ -37,35 +33,6 @@ public class MagistratesPublicListSummaryData implements ArtefactSummaryData {
                                     GeneralHelper.findAndReturnNodeText(hearingCase, "defendant"),
                                     "Prosecutor",
                                     GeneralHelper.findAndReturnNodeText(hearingCase, "prosecutingAuthority"),
-                                    "Case reference",
-                                    GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"),
-                                    "Hearing type",
-                                    GeneralHelper.findAndReturnNodeText(hearing, "hearingType")
-                                );
-                                summaryCases.add(fields);
-                            })
-                        )
-                    )
-                )
-            )
-        );
-        return Collections.singletonMap(null, summaryCases);
-    }
-
-    @Deprecated
-    public Map<String, List<Map<String, String>>> processMagistratesPublicListV1(JsonNode node) {
-        List<Map<String, String>> summaryCases = new ArrayList<>();
-        node.get("courtLists").forEach(
-            courtList -> courtList.get("courtHouse").get("courtRoom").forEach(
-                courtRoom -> courtRoom.get("session").forEach(
-                    session -> session.get("sittings").forEach(
-                        sitting -> sitting.get("hearing").forEach(
-                            hearing -> hearing.get("case").forEach(hearingCase -> {
-                                Map<String, String> fields = ImmutableMap.of(
-                                    "Defendant",
-                                    GeneralHelper.findAndReturnNodeText(hearing, "defendant"),
-                                    "Prosecutor",
-                                    GeneralHelper.findAndReturnNodeText(hearing, "prosecutingAuthority"),
                                     "Case reference",
                                     GeneralHelper.findAndReturnNodeText(hearingCase, "caseNumber"),
                                     "Hearing type",

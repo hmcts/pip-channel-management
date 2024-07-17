@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.DateHelper;
-import uk.gov.hmcts.reform.pip.channel.management.services.helpers.GeneralHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.LocationHelper;
 import uk.gov.hmcts.reform.pip.channel.management.services.helpers.listmanipulation.CrownDailyListHelper;
 import uk.gov.hmcts.reform.pip.model.publication.Language;
@@ -42,13 +41,7 @@ public class CrownDailyListFileConverter implements FileConverter {
         context.setVariable("artefact", artefact);
 
         CrownDailyListHelper.findUnallocatedCases(artefact);
-        if (GeneralHelper.hearingHasParty(artefact)) {
-            CrownDailyListHelper.manipulatedCrownDailyListDataV1(artefact, language);
-            context.setVariable("partyAtHearingLevel", true);
-        } else {
-            CrownDailyListHelper.manipulatedCrownDailyListData(artefact, language);
-            context.setVariable("partyAtHearingLevel", false);
-        }
+        CrownDailyListHelper.manipulatedCrownDailyListData(artefact, language);
         return context;
     }
 }
