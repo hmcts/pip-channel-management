@@ -227,7 +227,7 @@ class PublicationManagementTest {
 
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant - Surname 2, Forename 2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Queen"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor - Test Name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case reference - I4Y416QE"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Directions"), CONTENT_MISMATCH_ERROR);
     }
