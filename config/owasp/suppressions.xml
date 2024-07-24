@@ -22,7 +22,6 @@
   </suppress>
   <suppress>
     <notes>Vulnerability pulled in by azure-identity</notes>
-    <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/msal4j.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
   </suppress>
   <suppress>
