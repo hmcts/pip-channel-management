@@ -78,7 +78,7 @@ class PublicationManagementTest {
     private static final String ARTEFACT_ID_CIVIL_DAILY_CAUSE_LIST = "3b757c55-413b-4da5-ab88-1611a61b6252";
     private static final String ARTEFACT_ID_COP_DAILY_CAUSE_LIST = "9b5ea026-56fa-4b4e-a990-327ceec19841";
     private static final String ARTEFACT_ID_CROWN_DAILY_LIST = "8d798ae9-0770-48a3-a615-18363ec2af41";
-    private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "3b2f6c2d-e0ee-46f0-83cd-f048862e3e84";
+    private static final String ARTEFACT_ID_CROWN_FIRM_LIST = "c7003866-939f-40a2-ae46-88e890e8ba9b";
     private static final String ARTEFACT_ID_CROWN_WARNED_LIST = "ca685a57-dc4c-404c-9966-bd92b0953bd7";
     private static final String ARTEFACT_ID_ET_DAILY_LIST = "026deb0e-c5ba-4c55-85ef-368e848712fa";
     private static final String ARTEFACT_ID_ET_FORTNIGHTLY_PRESS_LIST = "50fb5f6a-c08b-4ea8-821d-d7b2e6b36e13";
@@ -227,7 +227,7 @@ class PublicationManagementTest {
 
         String responseContent = response.getResponse().getContentAsString();
         assertTrue(responseContent.contains("Defendant - Surname 2, Forename 2"), CONTENT_MISMATCH_ERROR);
-        assertTrue(responseContent.contains("Prosecutor - Queen"), CONTENT_MISMATCH_ERROR);
+        assertTrue(responseContent.contains("Prosecutor - Test Name"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Case reference - I4Y416QE"), CONTENT_MISMATCH_ERROR);
         assertTrue(responseContent.contains("Directions"), CONTENT_MISMATCH_ERROR);
     }
